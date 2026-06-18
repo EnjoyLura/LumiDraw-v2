@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lumi-Draw · AI绘画小程序原型</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+/* ============ 设计令牌 ============ */
+:root[data-theme="light"]{
+  --bg-base:#EEF4FC;--bg-soft:#E1EBF8;--bg-card:#FFFFFF;--bg-elevated:#FBFDFF;
+  --bg-glass:rgba(255,255,255,0.72);--fg-primary:#0E1F3A;--fg-secondary:#445876;--fg-muted:#8497B5;
+  --border:rgba(91,159,232,0.14);--border-strong:rgba(91,159,232,0.32);
+  --accent:#5B9FE8;--accent-deep:#3B7FC8;--accent-soft:rgba(91,159,232,0.12);--accent-glow:rgba(91,159,232,0.35);
+  --mint:#6FD4B0;--mint-soft:rgba(111,212,176,0.16);
+  --peach:#FFB59A;--peach-soft:rgba(255,181,154,0.2);
+  --lavender:#B8A5E3;--lavender-soft:rgba(184,165,227,0.2);
+  --lemon:#FFE08A;--lemon-soft:rgba(255,224,138,0.24);
+  --rose:#FFA8B8;--rose-soft:rgba(255,168,184,0.22);
+  --shadow-sm:0 2px 8px rgba(60,120,200,0.06),0 1px 2px rgba(60,120,200,0.04);
+  --shadow-md:0 8px 24px rgba(60,120,200,0.1),0 4px 8px rgba(60,120,200,0.06);
+  --shadow-lg:0 24px 56px rgba(60,120,200,0.16),0 8px 16px rgba(60,120,200,0.08);
+  --shadow-glow:0 0 40px rgba(91,159,232,0.3);
+  --gradient-dream:linear-gradient(135deg,#5B9FE8 0%,#7BC4F0 45%,#6FD4B0 100%);
+  --gradient-sky:linear-gradient(180deg,#E1EBF8 0%,#F5F9FE 100%);
+  --gradient-aurora:linear-gradient(135deg,#B8A5E3 0%,#5B9FE8 50%,#6FD4B0 100%);
+}
+:root[data-theme="dark"]{
+  --bg-base:#0A1428;--bg-soft:#0F1B33;--bg-card:#13244A;--bg-elevated:#1A2F58;
+  --bg-glass:rgba(19,36,74,0.72);--fg-primary:#EAF2FF;--fg-secondary:#A8BBD6;--fg-muted:#6B7E9E;
+  --border:rgba(123,184,240,0.16);--border-strong:rgba(123,184,240,0.36);
+  --accent:#7BB8F0;--accent-deep:#5B98D0;--accent-soft:rgba(123,184,240,0.18);--accent-glow:rgba(123,184,240,0.42);
+  --mint:#7BD4B5;--mint-soft:rgba(123,212,181,0.22);
+  --peach:#FFB59A;--peach-soft:rgba(255,181,154,0.24);
+  --lavender:#B8A5E3;--lavender-soft:rgba(184,165,227,0.24);
+  --lemon:#FFE08A;--lemon-soft:rgba(255,224,138,0.26);
+  --rose:#FFA8B8;--rose-soft:rgba(255,168,184,0.26);
+  --shadow-sm:0 2px 8px rgba(0,0,0,0.3);--shadow-md:0 8px 24px rgba(0,0,0,0.4);
+  --shadow-lg:0 24px 56px rgba(0,0,0,0.5);--shadow-glow:0 0 40px rgba(123,184,240,0.32);
+  --gradient-dream:linear-gradient(135deg,#7BB8F0 0%,#9BC8F2 45%,#7BD4B5 100%);
+  --gradient-sky:linear-gradient(180deg,#0A1428 0%,#13244A 100%);
+  --gradient-aurora:linear-gradient(135deg,#B8A5E3 0%,#7BB8F0 50%,#7BD4B5 100%);
+}
+/* ============ 基础 ============ */
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Plus Jakarta Sans',sans-serif;
+  background:linear-gradient(135deg,#D9E6F5,#E8F0FB);min-height:100vh;display:flex;align-items:center;
+  justify-content:center;color:var(--fg-primary);transition:background 0.6s,background-color 0.6s;}
+[data-theme="dark"] body{background:linear-gradient(135deg,#06101F,#0E1B30);}
+::selection{background:var(--accent-soft);color:var(--accent-deep);}
+::-webkit-scrollbar{width:0;height:0;display:none;}
+.font-display{font-family:'Georgia','Times New Roman',serif;font-optical-sizing:auto;}
+.glow-text{background:var(--gradient-dream);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;}
+/* ============ 手机框 ============ */
+.phone-frame{width:375px;height:812px;background:var(--bg-base);border-radius:40px;overflow:hidden;
+  position:relative;box-shadow:0 50px 100px rgba(0,0,0,0.15),0 0 0 12px #1a1a2e,0 0 0 13px #2d2d4a;
+  transition:background 0.6s,box-shadow 0.6s;}
+[data-theme="dark"] .phone-frame{box-shadow:0 50px 100px rgba(0,0,0,0.5),0 0 0 12px #06060f,0 0 0 13px #1a1a3a;}
+.phone-screen{width:100%;height:100%;display:flex;flex-direction:column;position:relative;overflow:hidden;}
+/* ============ 微信状态栏 + 胶囊 ============ */
+.status-bar{height:24px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 20px;font-size:13px;font-weight:600;color:var(--fg-primary);flex-shrink:0;z-index:100;
+  background:transparent;position:relative;}
+.status-bar .sb-right{display:flex;align-items:center;gap:5px;}
+.nav-header{height:44px;display:flex;align-items:center;justify-content:center;position:relative;
+  flex-shrink:0;z-index:99;background:transparent;}
+.nav-header .nav-title{font-size:17px;font-weight:600;color:var(--fg-primary);}
+.nav-header .nav-back{position:absolute;left:12px;display:flex;align-items:center;gap:2px;
+  color:var(--fg-primary);font-size:15px;cursor:pointer;padding:6px;}
+.capsule{position:absolute;right:7px;top:28px;width:87px;height:32px;border-radius:16px;
+  background:rgba(0,0,0,0.06);display:flex;align-items:center;justify-content:space-around;z-index:200;
+  border:0.5px solid rgba(0,0,0,0.08);backdrop-filter:blur(8px);}
+[data-theme="dark"] .capsule{background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.1);}
+.capsule .cap-btn{width:43.5px;height:32px;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--fg-primary);}
+.capsule .cap-divider{width:0.5px;height:16px;background:rgba(0,0,0,0.15);}
+[data-theme="dark"] .capsule .cap-divider{background:rgba(255,255,255,0.2);}
+.capsule-menu{position:absolute;top:64px;right:7px;background:var(--bg-card);border-radius:12px;
+  box-shadow:var(--shadow-lg);padding:4px 0;z-index:300;min-width:140px;display:none;
+  border:0.5px solid var(--border);}
+.capsule-menu.show{display:block;animation:menuIn 0.2s ease;}
+.capsule-menu .menu-item{padding:10px 16px;font-size:14px;color:var(--fg-primary);display:flex;
+  align-items:center;gap:8px;cursor:pointer;}
+.capsule-menu .menu-item:active{background:var(--accent-soft);}
+@keyframes menuIn{from{opacity:0;transform:translateY(-8px) scale(0.95);}to{opacity:1;transform:translateY(0) scale(1);}}
+/* ============ 内容区 ============ */
+.content-area{flex:1;overflow-y:auto;overflow-x:hidden;position:relative;-webkit-overflow-scrolling:touch;}
+.page{display:none;min-height:100%;}
+.page.active{display:block;animation:pageIn 0.35s cubic-bezier(0.16,1,0.3,1);}
+@keyframes pageIn{from{opacity:0;transform:translateX(30px);}to{opacity:1;transform:translateX(0);}}
+/* ============ Tab栏 ============ */
+.tab-bar{height:62px;display:flex;align-items:flex-start;justify-content:space-around;
+  background:var(--bg-glass);backdrop-filter:blur(20px);border-top:0.5px solid var(--border);
+  flex-shrink:0;z-index:98;padding-top:6px;transition:background 0.6s,border-color 0.6s;}
+[data-theme="dark"] .tab-bar{background:rgba(19,36,74,0.85);}
+.tab-item{display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;
+  padding:4px 8px;flex:1;position:relative;}
+.tab-item .tab-icon{width:24px;height:24px;color:var(--fg-muted);transition:color 0.3s;}
+.tab-item .tab-label{font-size:10px;color:var(--fg-muted);transition:color 0.3s;}
+.tab-item.active .tab-icon,.tab-item.active .tab-label{color:var(--accent);}
+.tab-item.center{margin-top:-18px;}
+.tab-item.center .tab-icon{width:46px;height:46px;border-radius:50%;background:var(--gradient-dream);
+  color:white;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow-glow);
+  border:3px solid var(--bg-base);transition:transform 0.3s;}
+[data-theme="dark"] .tab-item.center .tab-icon{border-color:var(--bg-base);}
+.tab-item.center:active .tab-icon{transform:scale(0.9);}
+.tab-item.center .tab-label{margin-top:2px;}
+/* ============ 通用组件 ============ */
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:20px;
+  transition:transform 0.3s cubic-bezier(0.16,1,0.3,1),box-shadow 0.3s,border-color 0.3s;overflow:hidden;}
+.card:active{transform:scale(0.98);}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;font-weight:600;
+  font-size:14px;border-radius:12px;padding:10px 18px;cursor:pointer;border:none;white-space:nowrap;
+  transition:all 0.3s cubic-bezier(0.16,1,0.3,1);}
+.btn-primary{background:var(--accent);color:white;box-shadow:0 4px 14px var(--accent-glow);}
+.btn-primary:active{transform:scale(0.96);}
+.btn-gradient{background:var(--gradient-dream);color:white;box-shadow:0 4px 14px var(--accent-glow);}
+.btn-gradient:active{transform:scale(0.96);}
+.btn-secondary{background:var(--bg-card);color:var(--fg-primary);border:1px solid var(--border-strong);}
+.btn-soft{background:var(--accent-soft);color:var(--accent-deep);}
+.btn-ghost{background:transparent;color:var(--fg-secondary);}
+.btn-sm{padding:6px 14px;font-size:12px;border-radius:10px;}
+.btn-lg{padding:14px 24px;font-size:15px;border-radius:14px;}
+.btn:disabled{opacity:0.45;cursor:not-allowed;transform:none!important;}
+.tag{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;font-size:11px;font-weight:600;
+  border-radius:999px;transition:all 0.3s;}
+.tag-accent{background:var(--accent-soft);color:var(--accent-deep);}
+.tag-mint{background:var(--mint-soft);color:var(--mint);}
+.tag-lavender{background:var(--lavender-soft);color:#8470C7;}
+.tag-peach{background:var(--peach-soft);color:#E07A5A;}
+.tag-lemon{background:var(--lemon-soft);color:#B88A1A;}
+.tag-rose{background:var(--rose-soft);color:#E07A8A;}
+[data-theme="dark"] .tag-lavender{color:var(--lavender);}
+[data-theme="dark"] .tag-peach{color:var(--peach);}
+[data-theme="dark"] .tag-lemon{color:var(--lemon);}
+[data-theme="dark"] .tag-rose{color:var(--rose);}
+.badge{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;
+  padding:0 5px;background:var(--rose);color:white;font-size:10px;font-weight:700;border-radius:999px;}
+.avatar{border-radius:50%;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;
+  background:var(--gradient-dream);color:white;font-weight:700;flex-shrink:0;position:relative;}
+.input{width:100%;background:var(--bg-elevated);border:1.5px solid var(--border);border-radius:12px;
+  padding:10px 14px;font-size:14px;color:var(--fg-primary);transition:all 0.3s;outline:none;}
+.input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft);background:var(--bg-card);}
+.input::placeholder{color:var(--fg-muted);}
+textarea.input{resize:none;line-height:1.6;}
+.switch{width:44px;height:26px;background:var(--bg-soft);border:1px solid var(--border);border-radius:999px;
+  cursor:pointer;position:relative;transition:all 0.3s;flex-shrink:0;}
+.switch::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;background:white;
+  border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,0.15);transition:all 0.3s cubic-bezier(0.16,1,0.3,1);}
+.switch.active{background:var(--accent);border-color:var(--accent);}
+.switch.active::after{left:22px;}
+.section-title{font-size:18px;font-weight:700;color:var(--fg-primary);display:flex;align-items:center;
+  justify-content:space-between;margin-bottom:12px;}
+.section-title .more{font-size:13px;color:var(--fg-muted);font-weight:400;cursor:pointer;}
+/* 瀑布流 */
+.waterfall{column-count:2;column-gap:10px;}
+.waterfall .wf-item{break-inside:avoid;margin-bottom:10px;}
+/* 水平滚动 */
+.h-scroll{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding:0 16px;}
+.h-scroll::-webkit-scrollbar{display:none;}
+/* 骨架屏 */
+.skeleton{background:linear-gradient(90deg,var(--bg-soft) 25%,var(--bg-elevated) 50%,var(--bg-soft) 75%);
+  background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:8px;}
+@keyframes shimmer{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
+/* Toast */
+.toast{position:fixed;top:80px;left:50%;transform:translateX(-50%);background:var(--bg-card);
+  border:1px solid var(--border);border-radius:12px;padding:10px 18px;box-shadow:var(--shadow-lg);
+  z-index:9999;font-size:14px;color:var(--fg-primary);display:flex;align-items:center;gap:8px;
+  animation:toastIn 0.4s cubic-bezier(0.16,1,0.3,1);pointer-events:auto;}
+.toast.out{animation:toastOut 0.3s forwards;}
+@keyframes toastIn{from{opacity:0;transform:translate(-50%,-20px);}to{opacity:1;transform:translate(-50%,0);}}
+@keyframes toastOut{to{opacity:0;transform:translate(-50%,-20px);}}
+/* 遮罩 */
+.overlay{position:absolute;inset:0;background:rgba(0,0,0,0.4);z-index:150;display:none;}
+.overlay.show{display:block;animation:fadeIn 0.3s;}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+/* 底部弹窗 */
+.bottom-sheet{position:absolute;bottom:0;left:0;right:0;background:var(--bg-card);border-radius:24px 24px 0 0;
+  box-shadow:var(--shadow-lg);z-index:200;transform:translateY(100%);visibility:hidden;transition:transform 0.4s cubic-bezier(0.16,1,0.3,1),visibility 0.4s;
+  max-height:80%;overflow-y:auto;}
+.bottom-sheet.show{transform:translateY(0);visibility:visible;}
+.bottom-sheet .sheet-handle{width:36px;height:4px;background:var(--border-strong);border-radius:2px;
+  margin:10px auto 4px;}
+/* 左侧抽屉 */
+.left-drawer{position:absolute;top:0;bottom:0;left:0;width:280px;background:var(--bg-card);
+  z-index:200;transform:translateX(-100%);transition:transform 0.4s cubic-bezier(0.16,1,0.3,1);
+  box-shadow:var(--shadow-lg);display:flex;flex-direction:column;}
+.left-drawer.show{transform:translateX(0);}
+/* 列表行 */
+.list-row{display:flex;align-items:center;gap:12px;padding:13px 16px;cursor:pointer;transition:background 0.2s;}
+.list-row:active{background:var(--accent-soft);}
+.list-row .lr-icon{width:22px;height:22px;color:var(--accent);flex-shrink:0;}
+.list-row .lr-text{flex:1;font-size:15px;color:var(--fg-primary);}
+.list-row .lr-arrow{color:var(--fg-muted);font-size:14px;}
+/* 渐变背景装饰 */
+.blob{position:absolute;border-radius:50%;filter:blur(60px);opacity:0.3;pointer-events:none;z-index:0;}
+/* 生成中动画 */
+.gen-loading{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:30px;}
+.gen-spinner{width:36px;height:36px;border:3px solid var(--accent-soft);border-top-color:var(--accent);
+  border-radius:50%;animation:spin 0.8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+/* 进度条 */
+.progress{width:100%;height:6px;background:var(--bg-soft);border-radius:999px;overflow:hidden;}
+.progress-bar{height:100%;background:var(--gradient-dream);border-radius:999px;transition:width 0.5s;}
+/* 标签页 */
+.sub-tabs{display:flex;gap:4px;padding:4px;background:var(--bg-soft);border-radius:12px;margin:0 16px;}
+.sub-tab{flex:1;padding:7px 0;font-size:13px;font-weight:600;color:var(--fg-secondary);border-radius:9px;
+  text-align:center;cursor:pointer;transition:all 0.3s;}
+.sub-tab.active{background:var(--bg-card);color:var(--accent);box-shadow:var(--shadow-sm);}
+/* 分类芯片 */
+.chip{padding:6px 14px;font-size:13px;font-weight:500;border-radius:999px;white-space:nowrap;
+  background:var(--bg-soft);color:var(--fg-secondary);cursor:pointer;transition:all 0.3s;flex-shrink:0;}
+.chip.active{background:var(--accent);color:white;}
+.chip-outline{background:transparent;border:1px solid var(--border-strong);color:var(--fg-secondary);}
+.chip-outline.active{background:var(--accent-soft);border-color:var(--accent);color:var(--accent-deep);}
+/* 创作页模型卡 */
+.model-card{width:106px;flex-shrink:0;background:var(--bg-card);border:2px solid transparent;border-radius:16px;
+  overflow:hidden;cursor:pointer;transition:all 0.3s;}
+.model-card.selected{border-color:var(--accent);box-shadow:0 4px 14px var(--accent-glow);}
+/* 风格卡 */
+.style-card{aspect-ratio:1;border-radius:12px;overflow:hidden;cursor:pointer;position:relative;
+  border:2px solid transparent;transition:all 0.3s;}
+.style-card.selected{border-color:var(--accent);box-shadow:0 4px 14px var(--accent-glow);}
+.style-card .sc-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.6),transparent 50%);}
+.style-card .sc-label{position:absolute;bottom:6px;left:0;right:0;text-align:center;color:white;
+  font-size:11px;font-weight:600;}
+/* 比例/数量卡 */
+.opt-card{width:60px;height:60px;flex-shrink:0;border-radius:14px;border:2px solid var(--border);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;
+  transition:all 0.3s;background:var(--bg-card);font-size:12px;color:var(--fg-secondary);gap:3px;}
+.opt-card.selected{border-color:var(--accent);background:var(--accent-soft);color:var(--accent-deep);}
+.opt-card .oc-icon{font-size:18px;}
+/* 创作结果图 */
+.result-img{position:relative;border-radius:14px;overflow:hidden;cursor:pointer;}
+.result-img.selected{box-shadow:0 0 0 3px var(--accent);}
+.result-img .check-mark{position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:50%;
+  background:var(--accent);display:none;align-items:center;justify-content:center;color:white;font-size:14px;}
+.result-img.selected .check-mark{display:flex;}
+/* 底部固定栏 */
+.create-bottom{padding:10px 16px 8px;background:var(--bg-glass);backdrop-filter:blur(20px);
+  border-top:0.5px solid var(--border);display:flex;align-items:center;gap:12px;flex-shrink:0;}
+[data-theme="dark"] .create-bottom{background:rgba(19,36,74,0.85);}
+/* 创作页特殊布局 */
+#page-create.active{display:flex;flex-direction:column;}
+/* 统计卡 */
+.stat-card{text-align:center;flex:1;}
+.stat-card .sc-num{font-size:20px;font-weight:700;color:var(--fg-primary);font-family:Georgia,serif;}
+.stat-card .sc-label{font-size:11px;color:var(--fg-muted);margin-top:2px;}
+/* 菜单网格 */
+.menu-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:0 16px;}
+.menu-grid-item{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;padding:10px 0;}
+.menu-grid-item .mgi-icon{width:44px;height:44px;border-radius:14px;display:flex;align-items:center;
+  justify-content:center;color:white;}
+.menu-grid-item .mgi-text{font-size:11px;color:var(--fg-secondary);}
+/* 日历 */
+.cal-day{width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:13px;
+  border-radius:50%;color:var(--fg-secondary);position:relative;}
+.cal-day.signed{background:var(--accent);color:white;}
+.cal-day.today{border:2px solid var(--accent);color:var(--accent);font-weight:700;}
+.cal-day.milestone::after{content:'';position:absolute;bottom:3px;width:4px;height:4px;border-radius:50%;background:var(--mint);}
+/* 通用过渡 */
+.transition-all{transition:all 0.6s cubic-bezier(0.4,0,0.2,1);}
+</style>
+</head>
+<body>
+<div class="phone-frame">
+  <div class="phone-screen">
+    <!-- 状态栏 -->
+    <div class="status-bar">
+      <span>9:41</span>
+      <div class="sb-right">
+        <svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor"><path d="M1 7h2v3H1zm4-2h2v5H5zm4-2h2v7H9zm4-2h2v9h-2z"/></svg>
+        <svg width="15" height="11" viewBox="0 0 15 11" fill="currentColor"><path d="M7.5 2.5c2.1 0 4 .8 5.5 2.2l1-1C12.3 1.9 10 1 7.5 1S2.7 1.9 1 2.7l1 1c1.5-1.4 3.4-2.2 5.5-2.2zM7.5 5c1.2 0 2.3.5 3.1 1.3l1-1C10.5 4.2 9.1 3.5 7.5 3.5s-3 .7-4.1 1.8l1 1C5.2 5.5 6.3 5 7.5 5zm0 3c.6 0 1.1.2 1.5.6l.7-.7C9 7.3 8.3 7 7.5 7S6 7.3 5.3 7.9l.7.7c.4-.4.9-.6 1.5-.6z"/></svg>
+        <svg width="24" height="11" viewBox="0 0 24 11" fill="none"><rect x="1" y="1" width="20" height="9" rx="2" stroke="currentColor" stroke-opacity="0.4" stroke-width="1"/><rect x="3" y="3" width="16" height="5" rx="1" fill="currentColor"/><rect x="22" y="4" width="1.5" height="3" rx="0.5" fill="currentColor" fill-opacity="0.4"/></svg>
+      </div>
+    </div>
+    <!-- 导航头 -->
+    <div class="nav-header" id="navHeader">
+      <span class="nav-back" id="navBack" style="display:none;" onclick="navigateBack()">
+        <svg width="12" height="20" viewBox="0 0 12 20" fill="none"><path d="M10 2L2 10L10 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+      <span class="nav-title" id="navTitle">Lumi-Draw</span>
+    </div>
+    <!-- 微信胶囊 -->
+    <div class="capsule">
+      <div class="cap-btn" onclick="toggleCapsuleMenu()">
+        <svg width="18" height="4" viewBox="0 0 18 4" fill="currentColor"><circle cx="2" cy="2" r="2"/><circle cx="9" cy="2" r="2"/><circle cx="16" cy="2" r="2"/></svg>
+      </div>
+      <div class="cap-divider"></div>
+      <div class="cap-btn" onclick="navigateBack()">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 2L10 10M10 2L2 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </div>
+    </div>
+    <div class="capsule-menu" id="capsuleMenu">
+      <div class="menu-item" onclick="showToast('已复制小程序链接');closeCapsuleMenu()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13"/></svg>分享小程序
+      </div>
+      <div class="menu-item" onclick="showToast('已重新进入');closeCapsuleMenu()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>重新进入
+      </div>
+      <div class="menu-item" onclick="navigateTo('settings');closeCapsuleMenu()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>设置
+      </div>
+    </div>
+    <!-- 内容区 -->
+    <div class="content-area" id="contentArea">
+
+<!-- ============ 首页 ============ -->
+<div class="page active" id="page-home" data-title="Lumi-Draw" data-show-tab="true">
+  <div style="padding:0 0 20px;">
+    <div style="padding:0 16px;margin-bottom:16px;">
+      <div class="card" style="height:150px;position:relative;overflow:hidden;cursor:pointer;" id="bannerBox">
+        <div id="bannerTrack" style="display:flex;transition:transform 0.5s cubic-bezier(0.16,1,0.3,1);height:100%;"></div>
+        <div id="bannerDots" style="position:absolute;bottom:8px;left:0;right:0;display:flex;justify-content:center;gap:6px;"></div>
+      </div>
+    </div>
+    <div class="section-title" style="padding:0 16px;">
+      <span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:middle;margin-right:4px;color:var(--peach)"><path d="M8.5 14.5A2.5 2.5 0 0011 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 11-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 002.5 2.5z"/></svg>热门玩法</span><span class="more" onclick="showToast('查看全部玩法')">全部 ›</span>
+    </div>
+    <div class="h-scroll" style="margin-bottom:18px;" id="gameplayScroll"></div>
+    <div class="section-title" style="padding:0 16px;">
+      <span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:middle;margin-right:4px;color:var(--accent)"><path d="M12 3l1.9 5.8a2 2 0 001.3 1.3L21 12l-5.8 1.9a2 2 0 00-1.3 1.3L12 21l-1.9-5.8a2 2 0 00-1.3-1.3L3 12l5.8-1.9a2 2 0 001.3-1.3L12 3z"/></svg>精选作品</span><span class="more" onclick="switchTab('plaza')">广场 ›</span>
+    </div>
+    <div style="padding:0 16px;"><div class="waterfall" id="homeWaterfall"></div></div>
+  </div>
+</div>
+
+<!-- ============ 广场 ============ -->
+<div class="page" id="page-plaza" data-title="广场" data-show-tab="true">
+  <div style="display:flex;align-items:center;padding:8px 16px;gap:10px;">
+    <div onclick="toggleLeftDrawer()" style="cursor:pointer;padding:4px;">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--fg-primary)" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+    </div>
+    <div style="flex:1;display:flex;justify-content:center;gap:20px;">
+      <span class="plaza-tab active" onclick="switchPlazaTab(this,'推荐')" style="font-size:16px;font-weight:700;color:var(--accent);cursor:pointer;">推荐</span>
+      <span class="plaza-tab" onclick="switchPlazaTab(this,'热门')" style="font-size:16px;font-weight:500;color:var(--fg-muted);cursor:pointer;">热门</span>
+      <span class="plaza-tab" onclick="switchPlazaTab(this,'最新')" style="font-size:16px;font-weight:500;color:var(--fg-muted);cursor:pointer;">最新</span>
+    </div>
+    <div onclick="navigateTo('search')" style="cursor:pointer;padding:4px;">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--fg-primary)" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+    </div>
+  </div>
+  <div class="h-scroll" style="margin-bottom:8px;" id="plazaCategories"></div>
+  <div style="padding:4px 16px 8px;display:flex;align-items:center;gap:8px;">
+    <div class="chip chip-outline" onclick="toggleFilterPanel()" id="filterChip">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:middle;margin-right:3px;"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/></svg>筛选
+    </div>
+    <div class="chip chip-outline" onclick="showToast('按模型筛选')">全部模型</div>
+    <div class="chip chip-outline" onclick="showToast('按尺寸筛选')">全部尺寸</div>
+    <div class="chip chip-outline" onclick="showToast('按精度筛选')">全部精度</div>
+  </div>
+  <div id="filterPanel" style="display:none;padding:12px 16px;background:var(--bg-elevated);border-top:0.5px solid var(--border);border-bottom:0.5px solid var(--border);margin-bottom:8px;">
+    <div style="font-size:13px;font-weight:600;margin-bottom:8px;color:var(--fg-secondary);">风格类型</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;" id="filterStyles"></div>
+    <div style="display:flex;gap:8px;">
+      <button class="btn btn-secondary btn-sm" style="flex:1;" onclick="resetFilter()">重置</button>
+      <button class="btn btn-primary btn-sm" style="flex:1;" onclick="applyFilter()">确认筛选</button>
+    </div>
+  </div>
+  <div style="padding:0 16px;"><div class="waterfall" id="plazaWaterfall"></div></div>
+</div>
+
+<!-- ============ 创作 ============ -->
+<div class="page" id="page-create" data-title="AI 创作" data-show-tab="true" data-no-scroll="true">
+  <div style="overflow-y:auto;flex:1;" id="createScroll">
+    <div style="padding:12px 0 8px;">
+      <div class="section-title" style="padding:0 16px;margin-bottom:10px;">
+        <span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:middle;margin-right:4px;color:var(--accent)"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="19" cy="13" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="10" cy="20" r="2.5"/><path d="M12 2a10 10 0 000 20 8 8 0 010-16"/></svg>选择模型</span><span class="more" onclick="navigateTo('allModels')">全部 ›</span>
+      </div>
+      <div class="h-scroll" id="modelScroll"></div>
+    </div>
+    <div style="padding:0 16px;margin-bottom:14px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+        <span style="font-size:15px;font-weight:700;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:middle;margin-right:4px;color:var(--accent)"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>描述你想要的画面</span>
+        <span class="tag tag-lavender" onclick="navigateTo('reversePrompt')" style="cursor:pointer;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>反推提示词
+        </span>
+      </div>
+      <div style="position:relative;background:var(--bg-card);border:1.5px solid var(--border);border-radius:16px;padding:12px;min-height:120px;transition:all 0.3s;" id="promptBox">
+        <div id="promptImgPreview" style="display:none;position:relative;width:64px;height:64px;border-radius:10px;overflow:hidden;margin-bottom:8px;">
+          <img id="promptImg" src="" style="width:100%;height:100%;object-fit:cover;" onclick="previewImage(this.src)"/>
+          <div onclick="removePromptImg(event)" style="position:absolute;top:2px;right:2px;width:18px;height:18px;background:rgba(0,0,0,0.5);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;">
+            <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 2L10 10M10 2L2 10" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+        </div>
+        <textarea id="promptInput" class="input" style="border:none;background:transparent;min-height:60px;padding:0;" placeholder="描述你想要生成的图片，越详细效果越好..." maxlength="500" oninput="updatePromptCount()"></textarea>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:6px;">
+          <div onclick="uploadPromptImg()" style="cursor:pointer;display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:8px;background:var(--accent-soft);color:var(--accent);">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span id="promptCount" style="font-size:12px;color:var(--fg-muted);">0/500</span>
+            <button class="btn btn-ghost btn-sm" onclick="clearPrompt()" style="padding:4px 8px;">清空</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-bottom:14px;">
+      <div class="section-title" style="padding:0 16px;margin-bottom:10px;"><span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:middle;margin-right:4px;color:var(--lavender)"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>风格类型</span></div>
+      <div style="padding:0 16px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;" id="styleGrid"></div>
+    </div>
+    <div style="margin-bottom:14px;">
+      <div class="section-title" style="padding:0 16px;margin-bottom:10px;"><span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:middle;margin-right:4px;color:var(--mint)"><rect x="2" y="6" width="20" height="12" rx="1"/><path d="M2 10h20M6 14h4"/></svg>画面比例</span></div>
+      <div class="h-scroll" id="ratioScroll"></div>
+    </div>
+    <div style="margin-bottom:14px;">
+      <div class="section-title" style="padding:0 16px;margin-bottom:10px;"><span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:middle;margin-right:4px;color:var(--lemon)"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>生成数量</span></div>
+      <div class="h-scroll" id="countScroll"></div>
+    </div>
+    <div id="resultArea" style="padding:0 16px;margin-bottom:14px;display:none;">
+      <div class="section-title"><span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:middle;margin-right:4px;color:var(--rose)"><path d="M12 3l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 16.8l-6.2 4.5 2.4-7.4L2 9.4h7.6z"/></svg>生成结果</span></div>
+      <div id="resultContent"></div>
+    </div>
+  </div>
+  <div class="create-bottom">
+    <div style="flex:1;">
+      <div style="font-size:11px;color:var(--fg-muted);">本次消耗</div>
+      <div style="font-size:18px;font-weight:700;color:var(--accent);"><span id="costCredits">10</span> <span style="font-size:12px;color:var(--fg-muted);font-weight:400;">积分</span></div>
+    </div>
+    <button class="btn btn-gradient btn-lg" onclick="startGenerate()" style="flex:1.5;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 16.8l-6.2 4.5 2.4-7.4L2 9.4h7.6z"/></svg>开始创作
+    </button>
+  </div>
+</div>
+
+<!-- ============ 画廊 ============ -->
+<div class="page" id="page-gallery" data-title="我的画廊" data-show-tab="true">
+  <div style="padding:16px;">
+    <div class="card" style="padding:20px 16px;text-align:center;background:var(--gradient-sky);">
+      <div class="avatar" style="width:72px;height:72px;font-size:28px;margin:0 auto 10px;">梦</div>
+      <div style="font-size:18px;font-weight:700;color:var(--fg-primary);">云端造梦师</div>
+      <div style="font-size:13px;color:var(--fg-muted);margin-top:4px;">用AI描绘心中的梦境</div>
+      <button class="btn btn-secondary btn-sm" style="margin-top:12px;" onclick="showToast('编辑资料功能')">编辑资料</button>
+    </div>
+    <div class="card" style="padding:14px 8px;margin-top:10px;display:flex;">
+      <div class="stat-card"><div class="sc-num">48</div><div class="sc-label">作品</div></div>
+      <div class="stat-card"><div class="sc-num">1.2k</div><div class="sc-label">获赞</div></div>
+      <div class="stat-card"><div class="sc-num">326</div><div class="sc-label">粉丝</div></div>
+      <div class="stat-card"><div class="sc-num">89</div><div class="sc-label">同款</div></div>
+    </div>
+  </div>
+  <div class="sub-tabs" style="margin-bottom:12px;">
+    <div class="sub-tab active" onclick="switchGalleryTab(this,'all')">全部作品</div>
+    <div class="sub-tab" onclick="switchGalleryTab(this,'draft')">草稿箱</div>
+    <div class="sub-tab" onclick="switchGalleryTab(this,'favorite')">收藏</div>
+  </div>
+  <div style="padding:0 16px;" id="galleryContent"><div class="waterfall" id="galleryWaterfall"></div></div>
+</div>
+
+<!-- ============ 我的 ============ -->
+<div class="page" id="page-mine" data-title="我的" data-show-tab="true">
+  <div style="padding:16px;">
+    <div class="card" style="padding:18px 16px;display:flex;align-items:center;gap:14px;">
+      <div class="avatar" style="width:56px;height:56px;font-size:22px;">梦</div>
+      <div style="flex:1;">
+        <div style="font-size:17px;font-weight:700;color:var(--fg-primary);">云端造梦师</div>
+        <div style="font-size:13px;color:var(--fg-muted);margin-top:3px;">ID: LUMI8829</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-size:11px;color:var(--fg-muted);">我的积分</div>
+        <div style="font-size:22px;font-weight:700;color:var(--accent);font-family:Georgia,serif;">2,860</div>
+      </div>
+    </div>
+  </div>
+  <div class="menu-grid" style="margin-bottom:16px;">
+    <div class="menu-grid-item" onclick="navigateTo('recharge')">
+      <div class="mgi-icon" style="background:var(--gradient-dream);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div><div class="mgi-text">充值</div>
+    </div>
+    <div class="menu-grid-item" onclick="navigateTo('checkin')">
+      <div class="mgi-icon" style="background:linear-gradient(135deg,#FFB59A,#FFA8B8);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M9 16l2 2 4-4"/></svg></div><div class="mgi-text">签到</div>
+    </div>
+    <div class="menu-grid-item" onclick="navigateTo('membership')">
+      <div class="mgi-icon" style="background:linear-gradient(135deg,#B8A5E3,#8470C7);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z"/></svg></div><div class="mgi-text">会员</div>
+    </div>
+    <div class="menu-grid-item" onclick="navigateTo('invite')">
+      <div class="mgi-icon" style="background:linear-gradient(135deg,#6FD4B0,#4FBF90);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="8.5" cy="7" r="4"/><path d="M20 8v6M23 11h-6"/></svg></div><div class="mgi-text">邀请</div>
+    </div>
+  </div>
+  <div style="padding:0 16px;margin-bottom:16px;">
+    <div class="card" style="overflow:hidden;">
+      <div class="list-row" onclick="navigateTo('messages')">
+        <div class="lr-icon" style="color:var(--rose);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
+        <div class="lr-text">消息中心</div><span class="badge" style="background:var(--rose);">5</span>
+        <svg class="lr-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+      <div style="height:0.5px;background:var(--border);margin:0 16px;"></div>
+      <div class="list-row" onclick="navigateTo('settings')">
+        <div class="lr-icon" style="color:var(--accent);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></div>
+        <div class="lr-text">设置</div>
+        <svg class="lr-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+      <div style="height:0.5px;background:var(--border);margin:0 16px;"></div>
+      <div class="list-row" onclick="navigateTo('drafts')">
+        <div class="lr-icon" style="color:var(--lavender);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg></div>
+        <div class="lr-text">草稿箱</div><span class="tag tag-lavender" style="margin-right:6px;">3</span>
+        <svg class="lr-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+      <div style="height:0.5px;background:var(--border);margin:0 16px;"></div>
+      <div class="list-row" onclick="navigateTo('history')">
+        <div class="lr-icon" style="color:var(--mint);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+        <div class="lr-text">浏览记录</div>
+        <svg class="lr-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+      <div style="height:0.5px;background:var(--border);margin:0 16px;"></div>
+      <div class="list-row" onclick="navigateTo('followList','following')">
+        <div class="lr-icon" style="color:var(--peach);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="8.5" cy="7" r="4"/><path d="M20 8v6M23 11h-6"/></svg></div>
+        <div class="lr-text">我的关注</div>
+        <svg class="lr-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+      <div style="height:0.5px;background:var(--border);margin:0 16px;"></div>
+      <div class="list-row" onclick="navigateTo('followList','followers')">
+        <div class="lr-icon" style="color:var(--lemon);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div>
+        <div class="lr-text">我的粉丝</div>
+        <svg class="lr-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+    </div>
+  </div>
+  <div style="padding:0 16px;margin-bottom:20px;">
+    <div class="card" style="overflow:hidden;">
+      <div class="list-row" onclick="showToast('打开微信客服')">
+        <div class="lr-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg></div>
+        <div class="lr-text">联系客服</div>
+        <svg class="lr-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+      <div style="height:0.5px;background:var(--border);margin:0 16px;"></div>
+      <div class="list-row" onclick="showToast('打开意见反馈')">
+        <div class="lr-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
+        <div class="lr-text">意见反馈</div>
+        <svg class="lr-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 左侧抽屉 -->
+<div class="overlay" id="leftDrawerOverlay" onclick="toggleLeftDrawer()"></div>
+<div class="left-drawer" id="leftDrawer">
+  <div style="padding:50px 20px 20px;background:var(--gradient-sky);">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div class="avatar" style="width:48px;height:48px;font-size:18px;">梦</div>
+      <div><div style="font-size:16px;font-weight:700;color:var(--fg-primary);">云端造梦师</div><div style="font-size:12px;color:var(--fg-muted);">积分: 2,860</div></div>
+    </div>
+  </div>
+  <div style="flex:1;padding:12px 0;">
+    <div class="list-row" onclick="switchTab('create');toggleLeftDrawer();"><div class="lr-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 16.8l-6.2 4.5 2.4-7.4L2 9.4h7.6z"/></svg></div><div class="lr-text">发布作品</div></div>
+    <div class="list-row" onclick="navigateTo('drafts');toggleLeftDrawer();"><div class="lr-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg></div><div class="lr-text">我的草稿</div><span class="tag tag-lavender">3</span></div>
+    <div class="list-row" onclick="navigateTo('history');toggleLeftDrawer();"><div class="lr-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><div class="lr-text">浏览记录</div></div>
+  </div>
+</div>
+
+<!-- ============ 作品详情 ============ -->
+<div class="page" id="page-workDetail" data-title="作品详情">
+  <div id="workDetailContent"></div>
+</div>
+
+<!-- ============ 搜索 ============ -->
+<div class="page" id="page-search" data-title="搜索">
+  <div style="padding:12px 16px;">
+    <div style="display:flex;gap:10px;margin-bottom:16px;">
+      <div style="flex:1;position:relative;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--fg-muted)" stroke-width="2" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input class="input" id="searchInput" style="padding-left:38px;" placeholder="搜索作品、提示词或用户" oninput="onSearchInput()"/>
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="navigateBack()">取消</button>
+    </div>
+    <div id="searchDefault">
+      <div style="margin-bottom:18px;">
+        <div class="section-title" style="margin-bottom:10px;"><span>搜索历史</span><span class="more" onclick="clearSearchHistory()">清空</span></div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;" id="searchHistory"></div>
+      </div>
+      <div style="margin-bottom:18px;">
+        <div class="section-title" style="margin-bottom:10px;"><span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:middle;margin-right:4px;color:var(--peach)"><path d="M8.5 14.5A2.5 2.5 0 0011 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 11-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 002.5 2.5z"/></svg>热门搜索</span></div>
+        <div id="hotSearch"></div>
+      </div>
+    </div>
+    <div id="searchResults" style="display:none;"><div class="waterfall" id="searchWaterfall"></div></div>
+  </div>
+</div>
+
+<!-- ============ 反推提示词 ============ -->
+<div class="page" id="page-reversePrompt" data-title="反推提示词">
+  <div style="padding:16px;">
+    <div class="card" style="padding:20px;text-align:center;margin-bottom:16px;">
+      <div onclick="uploadReverseImg()" id="reverseUploadArea" style="border:2px dashed var(--border-strong);border-radius:16px;padding:40px 20px;cursor:pointer;">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5" style="margin:0 auto 10px;display:block;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <div style="font-size:15px;font-weight:600;color:var(--fg-primary);">上传图片</div>
+        <div style="font-size:12px;color:var(--fg-muted);margin-top:4px;">AI将分析图片并生成提示词</div>
+      </div>
+      <div id="reverseImgPreview" style="display:none;margin-bottom:12px;">
+        <img id="reverseImg" src="" style="width:100%;max-height:200px;object-fit:cover;border-radius:12px;"/>
+      </div>
+      <button class="btn btn-gradient" style="width:100%;margin-top:12px;" onclick="startReverse()" id="reverseBtn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>开始分析 (消耗5积分)
+      </button>
+    </div>
+    <div id="reverseResult" style="display:none;">
+      <div class="section-title"><span>分析结果</span></div>
+      <div class="card" style="padding:14px;margin-bottom:12px;">
+        <textarea class="input" id="reverseText" style="min-height:100px;border:none;" placeholder="分析结果将显示在这里..."></textarea>
+      </div>
+      <div style="display:flex;gap:10px;">
+        <button class="btn btn-secondary" style="flex:1;" onclick="copyText(document.getElementById('reverseText').value)">复制</button>
+        <button class="btn btn-gradient" style="flex:1;" onclick="useReverseResult()">带入创作</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 充值 ============ -->
+<div class="page" id="page-recharge" data-title="积分充值">
+  <div style="padding:16px;">
+    <div class="card" style="padding:20px;background:var(--gradient-dream);margin-bottom:16px;">
+      <div style="font-size:13px;color:rgba(255,255,255,0.8);">当前积分余额</div>
+      <div style="font-size:36px;font-weight:700;color:white;font-family:Georgia,serif;margin-top:4px;">2,860</div>
+    </div>
+    <div class="section-title"><span>选择充值档位</span></div>
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:16px;" id="rechargeTiers"></div>
+    <div class="card" style="padding:16px;margin-bottom:16px;">
+      <div style="font-size:14px;font-weight:600;margin-bottom:10px;">自定义金额</div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="font-size:18px;color:var(--fg-muted);">¥</span>
+        <input class="input" type="number" id="customAmount" placeholder="输入金额" style="flex:1;"/>
+        <button class="btn btn-soft btn-sm" onclick="calcCustom()">计算</button>
+      </div>
+      <div id="customResult" style="font-size:13px;color:var(--accent);margin-top:8px;display:none;"></div>
+    </div>
+    <div class="sub-tabs" style="margin-bottom:12px;">
+      <div class="sub-tab active" onclick="switchRechargeTab(this,'recharge')">充值记录</div>
+      <div class="sub-tab" onclick="switchRechargeTab(this,'consume')">消费记录</div>
+    </div>
+    <div id="rechargeRecords"></div>
+  </div>
+</div>
+
+<!-- ============ 签到 ============ -->
+<div class="page" id="page-checkin" data-title="每日签到">
+  <div style="padding:16px;">
+    <div class="card" style="padding:24px;text-align:center;background:var(--gradient-sky);margin-bottom:16px;">
+      <div style="font-size:13px;color:var(--fg-muted);">已连续签到</div>
+      <div style="font-size:56px;font-weight:700;color:var(--accent);font-family:Georgia,serif;line-height:1.2;">7<span style="font-size:20px;color:var(--fg-muted);">天</span></div>
+      <button class="btn btn-gradient btn-lg" style="width:100%;margin-top:16px;" onclick="doCheckin()" id="checkinBtn">今日签到 +10积分</button>
+    </div>
+    <div class="section-title"><span>里程碑奖励</span></div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px;">
+      <div class="card" style="padding:12px 8px;text-align:center;"><div style="font-size:11px;color:var(--fg-muted);">3天</div><div style="font-size:16px;font-weight:700;color:var(--mint);">+20</div><div class="tag tag-mint" style="margin-top:4px;font-size:9px;">已领</div></div>
+      <div class="card" style="padding:12px 8px;text-align:center;"><div style="font-size:11px;color:var(--fg-muted);">7天</div><div style="font-size:16px;font-weight:700;color:var(--accent);">+50</div><div class="tag tag-accent" style="margin-top:4px;font-size:9px;">可领</div></div>
+      <div class="card" style="padding:12px 8px;text-align:center;opacity:0.5;"><div style="font-size:11px;color:var(--fg-muted);">14天</div><div style="font-size:16px;font-weight:700;color:var(--lavender);">+100</div><div class="tag tag-lavender" style="margin-top:4px;font-size:9px;">未达</div></div>
+      <div class="card" style="padding:12px 8px;text-align:center;opacity:0.5;"><div style="font-size:11px;color:var(--fg-muted);">30天</div><div style="font-size:16px;font-weight:700;color:var(--peach);">+300</div><div class="tag tag-peach" style="margin-top:4px;font-size:9px;">未达</div></div>
+    </div>
+    <div class="section-title"><span>本月签到</span></div>
+    <div class="card" style="padding:16px;">
+      <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--fg-muted);margin-bottom:10px;"><span>2026年6月</span></div>
+      <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center;font-size:11px;color:var(--fg-muted);margin-bottom:6px;">
+        <span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span>
+      </div>
+      <div id="calGrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;justify-items:center;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 邀请 ============ -->
+<div class="page" id="page-invite" data-title="邀请好友">
+  <div style="padding:16px;">
+    <div class="card" style="padding:24px;text-align:center;background:var(--gradient-aurora);margin-bottom:16px;">
+      <div style="margin-bottom:8px;"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5" style="margin:0 auto;display:block"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg></div>
+      <div style="font-size:20px;font-weight:700;color:white;margin-bottom:6px;">邀请好友，双方得积分</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.85);">好友填你的邀请码注册，你+50积分，好友+30积分</div>
+    </div>
+    <div class="card" style="padding:20px;text-align:center;margin-bottom:16px;">
+      <div style="font-size:13px;color:var(--fg-muted);margin-bottom:8px;">我的邀请码</div>
+      <div style="font-size:32px;font-weight:700;color:var(--accent);font-family:Georgia,serif;letter-spacing:4px;margin-bottom:12px;">LUMI8829</div>
+      <div style="display:flex;gap:10px;">
+        <button class="btn btn-secondary" style="flex:1;" onclick="copyText('LUMI8829')">复制邀请码</button>
+        <button class="btn btn-gradient" style="flex:1;" onclick="showToast('分享给微信好友')">分享邀请</button>
+      </div>
+    </div>
+    <div class="section-title"><span>已邀请 3 人</span></div>
+    <div class="card" style="overflow:hidden;">
+      <div class="list-row"><div class="avatar" style="width:36px;height:36px;font-size:14px;background:var(--mint);">星</div><div class="lr-text"><div>星辰大海</div><div style="font-size:11px;color:var(--fg-muted);">06-15 注册</div></div><span class="tag tag-mint">+50</span></div>
+      <div style="height:0.5px;background:var(--border);margin:0 16px;"></div>
+      <div class="list-row"><div class="avatar" style="width:36px;height:36px;font-size:14px;background:var(--peach);">月</div><div class="lr-text"><div>月光如水</div><div style="font-size:11px;color:var(--fg-muted);">06-12 注册</div></div><span class="tag tag-mint">+50</span></div>
+      <div style="height:0.5px;background:var(--border);margin:0 16px;"></div>
+      <div class="list-row"><div class="avatar" style="width:36px;height:36px;font-size:14px;background:var(--lavender);">风</div><div class="lr-text"><div>风之绘师</div><div style="font-size:11px;color:var(--fg-muted);">06-08 注册</div></div><span class="tag tag-mint">+50</span></div>
+    </div>
+    <div style="margin-top:16px;padding:14px;background:var(--accent-soft);border-radius:12px;font-size:12px;color:var(--fg-secondary);line-height:1.8;">
+      <div style="font-weight:600;color:var(--accent-deep);margin-bottom:6px;">活动规则</div>
+      1. 好友首次注册时填写你的邀请码，双方各获得积分奖励<br>
+      2. 每人最多可邀请50位好友<br>
+      3. 邀请奖励积分实时到账<br>
+      4. 禁止刷邀请，违规者将扣除积分并封号
+    </div>
+  </div>
+</div>
+
+<!-- ============ 会员 ============ -->
+<div class="page" id="page-membership" data-title="会员中心">
+  <div style="padding:16px;">
+    <div class="card" style="padding:24px;text-align:center;background:var(--gradient-aurora);margin-bottom:16px;">
+      <div style="margin-bottom:8px;"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--lavender)" stroke-width="1.5" style="margin:0 auto;display:block"><path d="M2 4l3 12h14l3-12-6 7-4-7-4 7-6-7z"/><path d="M5 16v4h14v-4"/><circle cx="5" cy="20" r="1"/><circle cx="19" cy="20" r="1"/></svg></div>
+      <div style="font-size:22px;font-weight:700;color:white;margin-bottom:6px;">Lumi 会员</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.85);">每日领取积分，创作更畅快</div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;">
+      <div class="card" style="padding:16px 10px;text-align:center;">
+        <div style="font-size:13px;color:var(--fg-muted);">月卡</div>
+        <div style="font-size:24px;font-weight:700;color:var(--accent);font-family:Georgia,serif;margin:4px 0;">¥18</div>
+        <div style="font-size:11px;color:var(--fg-muted);">每日50积分</div>
+        <button class="btn btn-soft btn-sm" style="width:100%;margin-top:8px;" onclick="showToast('开通月卡')">开通</button>
+      </div>
+      <div class="card" style="padding:16px 10px;text-align:center;border:2px solid var(--accent);transform:scale(1.05);">
+        <span class="tag tag-accent" style="position:absolute;top:-8px;left:50%;transform:translateX(-50%);">推荐</span>
+        <div style="font-size:13px;color:var(--fg-muted);">季卡</div>
+        <div style="font-size:24px;font-weight:700;color:var(--accent);font-family:Georgia,serif;margin:4px 0;">¥48</div>
+        <div style="font-size:11px;color:var(--mint);">省¥6</div>
+        <button class="btn btn-gradient btn-sm" style="width:100%;margin-top:8px;" onclick="showToast('开通季卡')">开通</button>
+      </div>
+      <div class="card" style="padding:16px 10px;text-align:center;">
+        <div style="font-size:13px;color:var(--fg-muted);">年卡</div>
+        <div style="font-size:24px;font-weight:700;color:var(--accent);font-family:Georgia,serif;margin:4px 0;">¥168</div>
+        <div style="font-size:11px;color:var(--mint);">省¥48</div>
+        <button class="btn btn-soft btn-sm" style="width:100%;margin-top:8px;" onclick="showToast('开通年卡')">开通</button>
+      </div>
+    </div>
+    <div class="card" style="padding:16px;margin-bottom:16px;">
+      <div style="font-size:14px;font-weight:600;margin-bottom:12px;">会员权益</div>
+      <div class="list-row" style="padding:8px 0;"><div class="lr-icon" style="color:var(--mint);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg></div><div class="lr-text">每日领取50积分</div></div>
+      <div class="list-row" style="padding:8px 0;"><div class="lr-icon" style="color:var(--mint);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg></div><div class="lr-text">全部AI模型可用</div></div>
+      <div class="list-row" style="padding:8px 0;"><div class="lr-icon" style="color:var(--mint);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg></div><div class="lr-text">全部风格/精度解锁</div></div>
+      <div class="list-row" style="padding:8px 0;"><div class="lr-icon" style="color:var(--fg-muted);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg></div><div class="lr-text" style="color:var(--fg-muted);">更多权益即将推出</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 消息中心 ============ -->
+<div class="page" id="page-messages" data-title="消息中心">
+  <div class="h-scroll" style="padding:12px 16px;margin-bottom:8px;">
+    <div class="chip active" onclick="switchMsgTab(this,'like')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:middle;margin-right:3px;"><path d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.28a2 2 0 002-1.7l1.38-9a2 2 0 00-2-2.3zM7 22H4a2 2 0 01-2-2v-7a2 2 0 012-2h3"/></svg>点赞</div>
+    <div class="chip" onclick="switchMsgTab(this,'favorite')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:middle;margin-right:3px;"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>收藏</div>
+    <div class="chip" onclick="switchMsgTab(this,'follow')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:middle;margin-right:3px;"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="8.5" cy="7" r="4"/><path d="M20 8v6M23 11h-6"/></svg>关注</div>
+    <div class="chip" onclick="switchMsgTab(this,'remake')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:middle;margin-right:3px;"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="19" cy="13" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="10" cy="20" r="2.5"/></svg>同款</div>
+    <div class="chip" onclick="switchMsgTab(this,'system')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:middle;margin-right:3px;"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>系统</div>
+    <div class="chip" onclick="switchMsgTab(this,'service')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:middle;margin-right:3px;"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>客服</div>
+  </div>
+  <div style="padding:0 16px;display:flex;justify-content:flex-end;margin-bottom:8px;">
+    <button class="btn btn-ghost btn-sm" onclick="showToast('已全部已读')">全部已读</button>
+  </div>
+  <div id="msgList"></div>
+</div>
+
+<!-- ============ 设置 ============ -->
+<div class="page" id="page-settings" data-title="设置">
+  <div style="padding:16px;">
+    <div class="section-title" style="margin-bottom:10px;"><span>外观</span></div>
+    <div class="card" style="overflow:hidden;margin-bottom:16px;">
+      <div class="list-row">
+        <div class="lr-icon" style="color:var(--accent);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/></svg></div>
+        <div class="lr-text">深色模式</div>
+        <div class="switch" id="themeSwitch" onclick="toggleTheme()"></div>
+      </div>
+    </div>
+    <div class="section-title" style="margin-bottom:10px;"><span>账号</span></div>
+    <div class="card" style="overflow:hidden;margin-bottom:16px;">
+      <div class="list-row" onclick="showToast('编辑个人资料')"><div class="lr-icon" style="color:var(--accent);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="lr-text">编辑个人资料</div><svg class="lr-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
+      <div style="height:0.5px;background:var(--border);margin:0 16px;"></div>
+      <div class="list-row" onclick="showToast('手机号已绑定')"><div class="lr-icon" style="color:var(--mint);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg></div><div class="lr-text">手机号 138****8888</div><span class="tag tag-mint">已绑定</span></div>
+    </div>
+    <div class="section-title" style="margin-bottom:10px;"><span>偏好</span></div>
+    <div class="card" style="overflow:hidden;margin-bottom:16px;">
+      <div class="list-row"><div class="lr-icon" style="color:var(--rose);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 01-3.4 0"/></svg></div><div class="lr-text">消息通知</div><div class="switch active" onclick="this.classList.toggle('active')"></div></div>
+      <div style="height:0.5px;background:var(--border);margin:0 16px;"></div>
+      <div class="list-row"><div class="lr-icon" style="color:var(--lavender);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div><div class="lr-text">个性化推荐</div><div class="switch active" onclick="this.classList.toggle('active')"></div></div>
+    </div>
+    <div class="section-title" style="margin-bottom:10px;"><span>关于</span></div>
+    <div class="card" style="overflow:hidden;margin-bottom:16px;">
+      <div class="list-row" onclick="showToast('用户协议')"><div class="lr-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg></div><div class="lr-text">用户协议</div><svg class="lr-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
+      <div style="height:0.5px;background:var(--border);margin:0 16px;"></div>
+      <div class="list-row" onclick="showToast('隐私政策')"><div class="lr-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div class="lr-text">隐私政策</div><svg class="lr-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
+      <div style="height:0.5px;background:var(--border);margin:0 16px;"></div>
+      <div class="list-row" onclick="showToast('充值协议')"><div class="lr-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div><div class="lr-text">充值协议</div><svg class="lr-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
+      <div style="height:0.5px;background:var(--border);margin:0 16px;"></div>
+      <div class="list-row" onclick="showToast('清除缓存')"><div class="lr-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></div><div class="lr-text">清除缓存</div><span style="font-size:12px;color:var(--fg-muted);margin-right:6px;">12.5MB</span><svg class="lr-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
+      <div style="height:0.5px;background:var(--border);margin:0 16px;"></div>
+      <div class="list-row"><div class="lr-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></div><div class="lr-text">当前版本</div><span style="font-size:12px;color:var(--fg-muted);">v1.0.0</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 草稿箱 ============ -->
+<div class="page" id="page-drafts" data-title="草稿箱">
+  <div style="padding:16px;" id="draftsContent"></div>
+</div>
+
+<!-- ============ 浏览记录 ============ -->
+<div class="page" id="page-history" data-title="浏览记录">
+  <div style="padding:12px 16px;display:flex;justify-content:flex-end;">
+    <button class="btn btn-ghost btn-sm" onclick="clearHistory()">清空记录</button>
+  </div>
+  <div style="padding:0 16px;" id="historyContent"></div>
+</div>
+
+<!-- ============ 他人主页 ============ -->
+<div class="page" id="page-userProfile" data-title="用户主页">
+  <div id="userProfileContent"></div>
+</div>
+
+<!-- ============ 关注/粉丝列表 ============ -->
+<div class="page" id="page-followList" data-title="关注列表">
+  <div style="padding:16px;" id="followListContent"></div>
+</div>
+
+<!-- ============ 全部模型 ============ -->
+<div class="page" id="page-allModels" data-title="全部模型">
+  <div style="padding:16px;" id="allModelsContent"></div>
+</div>
+
+<!-- ============ 管理员 ============ -->
+<div class="page" id="page-admin" data-title="管理后台">
+  <div style="padding:16px;">
+    <div class="section-title"><span>数据概览</span></div>
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:16px;">
+      <div class="card" style="padding:14px;"><div style="font-size:12px;color:var(--fg-muted);">总用户数</div><div style="font-size:24px;font-weight:700;color:var(--accent);font-family:Georgia,serif;">12,486</div></div>
+      <div class="card" style="padding:14px;"><div style="font-size:12px;color:var(--fg-muted);">总作品数</div><div style="font-size:24px;font-weight:700;color:var(--mint);font-family:Georgia,serif;">48,320</div></div>
+      <div class="card" style="padding:14px;"><div style="font-size:12px;color:var(--fg-muted);">今日生成</div><div style="font-size:24px;font-weight:700;color:var(--lavender);font-family:Georgia,serif;">1,856</div></div>
+      <div class="card" style="padding:14px;"><div style="font-size:12px;color:var(--fg-muted);">今日收入</div><div style="font-size:24px;font-weight:700;color:var(--peach);font-family:Georgia,serif;">¥856</div></div>
+    </div>
+    <div class="section-title"><span>内容管理</span></div>
+    <div class="card" style="overflow:hidden;margin-bottom:16px;">
+      <div class="list-row" onclick="showToast('Banner管理')"><div class="lr-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div><div class="lr-text">Banner管理</div><svg class="lr-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
+      <div style="height:0.5px;background:var(--border);margin:0 16px;"></div>
+      <div class="list-row" onclick="showToast('模型管理')"><div class="lr-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6v6H9z"/></svg></div><div class="lr-text">模型管理</div><svg class="lr-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
+      <div style="height:0.5px;background:var(--border);margin:0 16px;"></div>
+      <div class="list-row" onclick="showToast('风格管理')"><div class="lr-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="19" cy="13" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="10" cy="20" r="2.5"/></svg></div><div class="lr-text">风格管理</div><svg class="lr-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
+      <div style="height:0.5px;background:var(--border);margin:0 16px;"></div>
+      <div class="list-row" onclick="showToast('玩法模板管理')"><div class="lr-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 16.8l-6.2 4.5 2.4-7.4L2 9.4h7.6z"/></svg></div><div class="lr-text">玩法模板管理</div><svg class="lr-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
+    </div>
+    <div class="section-title"><span>举报处理</span></div>
+    <div class="card" style="overflow:hidden;">
+      <div class="list-row" onclick="showToast('查看举报队列')"><div class="lr-icon" style="color:var(--rose);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg></div><div class="lr-text">举报队列</div><span class="badge" style="background:var(--rose);">8</span><svg class="lr-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 发布弹窗 ============ -->
+<div class="overlay" id="publishOverlay" onclick="closePublishForm()"></div>
+<div class="bottom-sheet" id="publishSheet">
+  <div class="sheet-handle"></div>
+  <div style="padding:8px 20px 20px;">
+    <div style="font-size:18px;font-weight:700;margin-bottom:16px;text-align:center;">发布作品</div>
+    <div style="display:flex;gap:12px;margin-bottom:16px;">
+      <img id="publishPreview" src="" style="width:80px;height:80px;border-radius:12px;object-fit:cover;background:var(--bg-soft);"/>
+      <div style="flex:1;">
+        <input class="input" id="publishTitle" placeholder="给作品起个标题" style="margin-bottom:8px;font-size:15px;font-weight:600;"/>
+        <textarea class="input" id="publishDesc" placeholder="描述你的创作灵感..." style="font-size:13px;min-height:44px;resize:none;"></textarea>
+      </div>
+    </div>
+    <div style="margin-bottom:14px;">
+      <div style="font-size:13px;font-weight:600;margin-bottom:8px;color:var(--fg-secondary);">选择标签</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;" id="publishTags"></div>
+    </div>
+    <div class="list-row" style="padding:8px 0;margin-bottom:8px;">
+      <div class="lr-text" style="font-size:14px;">公开提示词</div>
+      <div class="switch active" onclick="this.classList.toggle('active')" id="publishPromptSwitch"></div>
+    </div>
+    <div style="padding:10px;background:var(--accent-soft);border-radius:10px;font-size:12px;color:var(--fg-secondary);margin-bottom:16px;display:flex;gap:6px;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" style="flex-shrink:0;margin-top:1px;"><path d="M9 18h6M10 22h4M12 2a7 7 0 00-4 12.7c.6.5 1 1.3 1 2.1V18h6v-1.2c0-.8.4-1.6 1-2.1A7 7 0 0012 2z"/></svg><span>发布到社区的作品将永久保留，历史记录中的未发布作品30天后自动清理。</span>
+    </div>
+    <button class="btn btn-gradient btn-lg" style="width:100%;" onclick="submitPublish()">发布</button>
+  </div>
+</div>
+
+<!-- ============ 全部风格弹窗 ============ -->
+<div class="overlay" id="styleOverlay" onclick="closeAllStyles()"></div>
+<div class="bottom-sheet" id="styleSheet">
+  <div class="sheet-handle"></div>
+  <div style="padding:8px 20px 20px;">
+    <div style="font-size:18px;font-weight:700;margin-bottom:16px;text-align:center;">选择风格</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;" id="allStylesGrid"></div>
+    <button class="btn btn-gradient btn-lg" style="width:100%;margin-top:16px;" onclick="confirmStyles()">确认选择</button>
+  </div>
+</div>
+
+<!-- ============ 图片预览 ============ -->
+<div class="overlay" id="imgPreviewOverlay" onclick="closeImgPreview()" style="z-index:500;background:rgba(0,0,0,0.9);display:none;align-items:center;justify-content:center;"></div>
+
+</div><!-- /content-area -->
+<!-- ============ Tab栏 ============ -->
+<div class="tab-bar" id="tabBar">
+  <div class="tab-item active" data-tab="home" onclick="switchTab('home')">
+    <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><path d="M9 22V12h6v10"/></svg>
+    <span class="tab-label">首页</span>
+  </div>
+  <div class="tab-item" data-tab="plaza" onclick="switchTab('plaza')">
+    <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 000 20M12 2a14.5 14.5 0 010 20M2 12h20"/></svg>
+    <span class="tab-label">广场</span>
+  </div>
+  <div class="tab-item center" data-tab="create" onclick="switchTab('create')">
+    <svg class="tab-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M5 21l9-9-3-3-9 9v3z"/><path d="M18 2l1 3 3 1-3 1-1 3-1-3-3-1 3-1z"/><path d="M21 14l.7 2.1 2.1.7-2.1.7-.7 2.1-.7-2.1-2.1-.7 2.1-.7z"/></svg>
+    <span class="tab-label">创作</span>
+  </div>
+  <div class="tab-item" data-tab="gallery" onclick="switchTab('gallery')">
+    <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+    <span class="tab-label">画廊</span>
+  </div>
+  <div class="tab-item" data-tab="mine" onclick="switchTab('mine')">
+    <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    <span class="tab-label">我的</span>
+  </div>
+</div>
+</div><!-- /phone-screen -->
+</div><!-- /phone-frame -->
+
+<script>
+// ============ Mock数据 ============
+const MODELS=[
+  {id:'gpt2',name:'GPT Image 2',desc:'画质细腻·理解力强',tags:['写实','高清'],cost:15,img:'https://picsum.photos/seed/gpt2/200/120'},
+  {id:'nano',name:'Nano Banana 2',desc:'速度极快·性价比高',tags:['快速','全能'],cost:8,img:'https://picsum.photos/seed/nano/200/120'},
+  {id:'flux',name:'Flux Pro',desc:'艺术感强·细节丰富',tags:['艺术','创意'],cost:12,img:'https://picsum.photos/seed/flux/200/120'},
+  {id:'sdxl',name:'SDXL',desc:'开源之王·风格多样',tags:['多样','自定义'],cost:6,img:'https://picsum.photos/seed/sdxl/200/120'},
+  {id:'dalle3',name:'DALL-E 3',desc:'语义理解·精准还原',tags:['精准','还原'],cost:14,img:'https://picsum.photos/seed/dalle/200/120'},
+  {id:'mj',name:'Midjourney',desc:'艺术天花板·极致美学',tags:['美学','艺术'],cost:20,img:'https://picsum.photos/seed/mj/200/120'}
+];
+const STYLES=['赛博朋克','赛璐碌','黑白','国风','油画','水彩','二次元','写实','3D','像素','蒸汽波','极简','梦幻','暗黑','复古','更多'];
+const STYLE_IMGS={};
+STYLES.forEach(s=>STYLE_IMGS[s]='https://picsum.photos/seed/'+encodeURIComponent(s)+'/100/100');
+const RATIOS=[{label:'1:1',w:1,h:1},{label:'3:4',w:3,h:4},{label:'4:3',w:4,h:3},{label:'16:9',w:16,h:9},{label:'9:16',w:9,h:16}];
+const COUNTS=[1,2,3,4];
+const BANNERS=[
+  {img:'https://picsum.photos/seed/b1/700/300',title:'夏日创作季'},
+  {img:'https://picsum.photos/seed/b2/700/300',title:'新模型上线'},
+  {img:'https://picsum.photos/seed/b3/700/300',title:'会员特惠'},
+  {img:'https://picsum.photos/seed/b4/700/300',title:'社区精选'}
+];
+const GAMEPLAYS=[
+  {name:'人物美颜',img:'https://picsum.photos/seed/gp1/120/120'},{name:'证件照',img:'https://picsum.photos/seed/gp2/120/120'},
+  {name:'宠物头像',img:'https://picsum.photos/seed/gp3/120/120'},{name:'古风国潮',img:'https://picsum.photos/seed/gp4/120/120'},
+  {name:'Q版头像',img:'https://picsum.photos/seed/gp5/120/120'},{name:'Logo设计',img:'https://picsum.photos/seed/gp6/120/120'},
+  {name:'壁纸',img:'https://picsum.photos/seed/gp7/120/120'},{name:'表情包',img:'https://picsum.photos/seed/gp8/120/120'}
+];
+const CATEGORIES=['全部','二次元','风景','建筑','表情包','写实','国风','人像','动物','抽象'];
+const USERS=[
+  {id:1,name:'云端造梦师',avatar:'梦',color:'var(--accent)',bio:'用AI描绘心中的梦境',works:48,likes:1200,followers:326,following:58},
+  {id:2,name:'星辰大海',avatar:'星',color:'var(--mint)',bio:'探索AI的无限可能',works:36,likes:890,followers:215,following:42},
+  {id:3,name:'月光如水',avatar:'月',color:'var(--peach)',bio:'月光下的AI画家',works:52,likes:2100,followers:580,following:73},
+  {id:4,name:'风之绘师',avatar:'风',color:'var(--lavender)',bio:'风中捕捉灵感',works:29,likes:670,followers:180,following:35},
+  {id:5,name:'光影魔术',avatar:'光',color:'var(--lemon)',bio:'玩转光与影的魔法',works:41,likes:1500,followers:410,following:67}
+];
+const WORKS=[
+  {id:1,img:'https://picsum.photos/seed/w1/300/420',userId:2,title:'霓虹都市',prompt:'cyberpunk city at night, neon lights, rain, reflective streets, ultra detailed',model:'gpt2',ratio:'3:4',style:'赛博朋克',likes:328,favorites:92,remakes:45,tags:['二次元','赛博朋克'],time:'2小时前'},
+  {id:2,img:'https://picsum.photos/seed/w2/300/200',userId:3,title:'山水之间',prompt:'Chinese ink painting, mountains, river, misty, traditional art style',model:'flux',ratio:'4:3',style:'国风',likes:512,favorites:186,remakes:78,tags:['国风','风景'],time:'3小时前'},
+  {id:3,img:'https://picsum.photos/seed/w3/300/400',userId:4,title:'少女与猫',prompt:'anime girl with cat, soft colors, studio ghibli style, warm lighting',model:'nano',ratio:'3:4',style:'二次元',likes:680,favorites:245,remakes:112,tags:['二次元','人像'],time:'5小时前'},
+  {id:4,img:'https://picsum.photos/seed/w4/300/300',userId:5,title:'抽象梦境',prompt:'abstract dream, floating islands, surreal, pastel colors, ethereal',model:'sdxl',ratio:'1:1',style:'梦幻',likes:234,favorites:78,remakes:31,tags:['抽象','梦幻'],time:'6小时前'},
+  {id:5,img:'https://picsum.photos/seed/w5/300/450',userId:2,title:'古风少女',prompt:'ancient chinese girl, hanfu, peach blossom, spring, elegant',model:'mj',ratio:'3:4',style:'国风',likes:892,favorites:356,remakes:156,tags:['国风','人像'],time:'8小时前'},
+  {id:6,img:'https://picsum.photos/seed/w6/300/220',userId:3,title:'赛博精灵',prompt:'cyberpunk elf, glowing eyes, futuristic outfit, neon, detailed',model:'gpt2',ratio:'4:3',style:'赛博朋克',likes:445,favorites:132,remakes:67,tags:['二次元','赛博朋克'],time:'10小时前'},
+  {id:7,img:'https://picsum.photos/seed/w7/300/380',userId:4,title:'水彩猫咪',prompt:'watercolor cat, soft brushstrokes, pastel, cozy, artistic',model:'flux',ratio:'3:4',style:'水彩',likes:567,favorites:201,remakes:89,tags:['动物','水彩'],time:'12小时前'},
+  {id:8,img:'https://picsum.photos/seed/w8/300/300',userId:5,title:'极简几何',prompt:'minimalist geometric art, clean lines, pastel palette, modern',model:'sdxl',ratio:'1:1',style:'极简',likes:189,favorites:56,remakes:22,tags:['抽象','极简'],time:'1天前'},
+  {id:9,img:'https://picsum.photos/seed/w9/300/420',userId:2,title:'暗黑天使',prompt:'dark angel, gothic, dramatic lighting, detailed feathers, moody',model:'mj',ratio:'3:4',style:'暗黑',likes:723,favorites:289,remakes:134,tags:['人像','暗黑'],time:'1天前'},
+  {id:10,img:'https://picsum.photos/seed/w10/300/200',userId:3,title:'蒸汽城市',prompt:'steampunk city, brass, gears, victorian, vintage, intricate',model:'gpt2',ratio:'4:3',style:'蒸汽波',likes:356,favorites:98,remakes:43,tags:['建筑','蒸汽波'],time:'2天前'},
+  {id:11,img:'https://picsum.photos/seed/w11/300/400',userId:4,title:'油画风景',prompt:'oil painting landscape, golden field, sunset, impressionist',model:'flux',ratio:'3:4',style:'油画',likes:489,favorites:167,remakes:72,tags:['风景','油画'],time:'2天前'},
+  {id:12,img:'https://picsum.photos/seed/w12/300/300',userId:5,title:'像素冒险',prompt:'pixel art adventure scene, 16-bit, retro game, colorful',model:'sdxl',ratio:'1:1',style:'像素',likes:278,favorites:89,remakes:34,tags:['像素','复古'],time:'3天前'}
+];
+const RECHARGE_TIERS=[{price:6,credits:60,bonus:0},{price:30,credits:300,bonus:30},{price:68,credits:680,bonus:100},{price:128,credits:1280,bonus:280}];
+const HOT_SEARCHES=['赛博朋克','古风少女','证件照','宠物头像','二次元','国风山水','Logo设计','表情包'];
+const SEARCH_HISTORY=['梦幻城堡','猫咪水彩','日落风景'];
+const MSGS={
+  like:[{user:USERS[2],content:'赞了你的作品《霓虹都市》',time:'10分钟前',unread:true},{user:USERS[3],content:'赞了你的作品《山水之间》',time:'1小时前',unread:true},{user:USERS[4],content:'赞了你的作品《少女与猫》',time:'3小时前',unread:false}],
+  favorite:[{user:USERS[3],content:'收藏了你的作品《霓虹都市》',time:'30分钟前',unread:true},{user:USERS[4],content:'收藏了你的作品《古风少女》',time:'2小时前',unread:false}],
+  follow:[{user:USERS[2],content:'关注了你',time:'1小时前',unread:true},{user:USERS[4],content:'关注了你',time:'5小时前',unread:false}],
+  remake:[{user:USERS[3],content:'使用了你的作品《少女与猫》的同款',time:'20分钟前',unread:true}],
+  system:[{content:'欢迎使用Lumi-Draw！新用户赠送100积分',time:'1天前',unread:false},{content:'您的作品《霓虹都市》已通过审核',time:'2小时前',unread:false}],
+  service:[{content:'客服：您好，有什么可以帮您？',time:'3小时前',unread:false}]
+};
+// ============ 状态 ============
+let pageStack=[];let currentTab='home';let selectedModel=0;let selectedStyles=[];let selectedRatio=0;let selectedCount=0;let promptHasImg=false;let bannerIdx=0;let bannerTimer=null;let isFollowing={};
+// ============ 工具函数 ============
+function showToast(msg){const t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>{t.classList.add('out');setTimeout(()=>t.remove(),300)},2000)}
+function copyText(text){navigator.clipboard?.writeText(text).then(()=>showToast('已复制到剪贴板')).catch(()=>showToast('复制失败'))}
+function $(id){return document.getElementById(id)}
+function createEl(tag,cls,html){const e=document.createElement(tag);if(cls)e.className=cls;if(html!==undefined)e.innerHTML=html;return e}
+// ============ 导航 ============
+function switchTab(tabId){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  $('page-'+tabId).classList.add('active');
+  document.querySelectorAll('.tab-item').forEach(t=>t.classList.toggle('active',t.dataset.tab===tabId));
+  const page=$('page-'+tabId);const title=page.dataset.title||'';$('navTitle').textContent=title;
+  $('navBack').style.display='none';pageStack=[];currentTab=tabId;
+  $('tabBar').style.display=page.dataset.showTab==='true'?'flex':'none';
+  $('contentArea').scrollTop=0;
+}
+function navigateTo(pageId,param){
+  const page=$('page-'+pageId);if(!page)return;
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  page.classList.add('active');pageStack.push({pageId,param});
+  const title=page.dataset.title||'';$('navTitle').textContent=title;
+  $('navBack').style.display='flex';
+  $('tabBar').style.display=page.dataset.showTab==='true'?'flex':'none';
+  $('contentArea').scrollTop=0;
+  if(pageId==='workDetail')renderWorkDetail(param);
+  if(pageId==='userProfile')renderUserProfile(param);
+  if(pageId==='followList')renderFollowList(param);
+  if(pageId==='allModels')renderAllModels();
+}
+function navigateBack(){
+  if(pageStack.length>0)pageStack.pop();
+  if(pageStack.length>0){const last=pageStack[pageStack.length-1];const page=$('page-'+last.pageId);document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));page.classList.add('active');$('navTitle').textContent=page.dataset.title||'';$('tabBar').style.display=page.dataset.showTab==='true'?'flex':'none';$('contentArea').scrollTop=0}
+  else{switchTab(currentTab)}
+}
+// ============ 主题 ============
+function toggleTheme(){const cur=document.documentElement.getAttribute('data-theme');const next=cur==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',next);$('themeSwitch').classList.toggle('active',next==='dark');try{localStorage.setItem('lumi-theme',next)}catch(e){}}
+function initTheme(){try{const saved=localStorage.getItem('lumi-theme')||'light';document.documentElement.setAttribute('data-theme',saved);if(saved==='dark')$('themeSwitch')?.classList.add('active')}catch(e){}}
+// ============ 胶囊菜单 ============
+function toggleCapsuleMenu(){$('capsuleMenu').classList.toggle('show')}
+function closeCapsuleMenu(){$('capsuleMenu').classList.remove('show')}
+// ============ 左侧抽屉 ============
+function toggleLeftDrawer(){$('leftDrawer').classList.toggle('show');$('leftDrawerOverlay').classList.toggle('show')}
+// ============ 筛选 ============
+function toggleFilterPanel(){$('filterPanel').style.display=$('filterPanel').style.display==='none'?'block':'none'}
+function resetFilter(){document.querySelectorAll('#filterStyles .chip').forEach(c=>c.classList.remove('active'));showToast('已重置筛选')}
+function applyFilter(){$('filterPanel').style.display='none';showToast('筛选已应用')}
+function switchPlazaTab(el,name){el.parentElement.querySelectorAll('.plaza-tab').forEach(t=>{t.style.fontWeight='500';t.style.color='var(--fg-muted)'});el.style.fontWeight='700';el.style.color='var(--accent)';renderPlazaWaterfall()}
+// ============ Banner轮播 ============
+function initBanner(){
+  const track=$('bannerTrack'),dots=$('bannerDots');
+  BANNERS.forEach((b,i)=>{const slide=createEl('div',null,'<img src="'+b.img+'" style="width:375px;height:150px;object-fit:cover"/><div style="position:absolute;bottom:0;left:0;right:0;padding:20px;background:linear-gradient(transparent,rgba(0,0,0,0.5));color:white;font-size:16px;font-weight:600">'+b.title+'</div>');slide.style.position='relative';slide.style.width='343px';slide.style.height='150px';slide.style.flexShrink='0';track.appendChild(slide);const dot=createEl('span',null,'');dot.style.cssText='width:6px;height:6px;border-radius:50%;background:'+(i===0?'white':'rgba(255,255,255,0.4)')+';transition:all 0.3s';dot.dataset.idx=i;dots.appendChild(dot)});
+  bannerTimer=setInterval(()=>{bannerIdx=(bannerIdx+1)%BANNERS.length;updateBanner()},4000);
+  $('bannerBox').addEventListener('click',()=>{clearInterval(bannerTimer);bannerIdx=(bannerIdx+1)%BANNERS.length;updateBanner();bannerTimer=setInterval(()=>{bannerIdx=(bannerIdx+1)%BANNERS.length;updateBanner()},4000)})
+}
+function updateBanner(){$('bannerTrack').style.transform='translateX(-'+bannerIdx*343+'px)';$('bannerDots').querySelectorAll('span').forEach((d,i)=>d.style.background=i===bannerIdx?'white':'rgba(255,255,255,0.4)')}
+// ============ 渲染热门玩法 ============
+function renderGameplay(){const sc=$('gameplayScroll');GAMEPLAYS.forEach(g=>{const card=createEl('div',null,'<img src="'+g.img+'" style="width:80px;height:80px;border-radius:14px;object-fit:cover"/><div style="font-size:11px;text-align:center;margin-top:4px;color:var(--fg-secondary)">'+g.name+'</div>');card.style.cssText='flex-shrink:0;cursor:pointer;';card.onclick=()=>{switchTab('create');showToast('已套用「'+g.name+'」模板')};sc.appendChild(card)})}
+// ============ 渲染瀑布流 ============
+function renderWaterfall(containerId,works){const c=$(containerId);if(!c)return;c.innerHTML='';works.forEach(w=>{const u=USERS.find(x=>x.id===w.userId);const item=createEl('div','wf-item');item.innerHTML='<div class="card" style="cursor:pointer"><img src="'+w.img+'" style="width:100%;display:block" onclick="navigateTo(\'workDetail\','+w.id+')"/><div style="padding:8px 10px"><div style="display:flex;align-items:center;gap:6px"><div class="avatar" style="width:18px;height:18px;font-size:9px;background:'+u.color+'">'+u.avatar+'</div><span style="font-size:11px;color:var(--fg-secondary);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+u.name+'</span><svg width="12" height="12" viewBox="0 0 24 24" fill="var(--rose)"><path d="M12 21s-7-4.5-9.5-9C1 9 3 5 7 5c2 0 3.5 1 5 3 1.5-2 3-3 5-3 4 0 6 4 4.5 7-2.5 4.5-9.5 9-9.5 9z"/></svg><span style="font-size:10px;color:var(--fg-muted)">'+w.likes+'</span></div></div></div>';c.appendChild(item)})}
+// ============ 创作页渲染 ============
+function renderCreatePage(){
+  // 模型
+  const ms=$('modelScroll');ms.innerHTML='';
+  MODELS.forEach((m,i)=>{const card=createEl('div','model-card'+(i===selectedModel?' selected':''));card.innerHTML='<img src="'+m.img+'" style="width:100%;height:60px;object-fit:cover"/><div style="padding:8px"><div style="font-size:12px;font-weight:700">'+m.name+'</div><div style="font-size:10px;color:var(--fg-muted);margin-top:2px">'+m.desc+'</div><div style="display:flex;gap:3px;margin-top:4px">'+m.tags.map(t=>'<span class="tag tag-accent" style="font-size:9px;padding:1px 5px">'+t+'</span>').join('')+'</div><div style="font-size:10px;color:var(--accent);margin-top:4px;font-weight:600">'+m.cost+'积分/张</div></div>';card.onclick=()=>{selectedModel=i;renderCreatePage();updateCost()};ms.appendChild(card)});
+  // 风格
+  const sg=$('styleGrid');sg.innerHTML='';
+  STYLES.slice(0,7).forEach((s,i)=>{const card=createEl('div','style-card'+(selectedStyles.includes(s)?' selected':''));card.innerHTML='<img src="'+STYLE_IMGS[s]+'" style="width:100%;height:100%;object-fit:cover;position:absolute"/><div class="sc-overlay"></div><div class="sc-label">'+s+'</div>';card.onclick=()=>{toggleStyle(s);renderCreatePage()};sg.appendChild(card)});
+  const moreCard=createEl('div','style-card');moreCard.style.cssText='position:relative;overflow:hidden;cursor:pointer';moreCard.innerHTML='<img src="'+STYLE_IMGS[STYLES[7]]+'" style="width:100%;height:100%;object-fit:cover;position:absolute"/><div class="sc-overlay"></div><div style="position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center;color:white;font-size:18px;font-weight:700">+8</div><div class="sc-label">更多</div>';moreCard.onclick=()=>openAllStyles();sg.appendChild(moreCard);
+  // 比例
+  const rs=$('ratioScroll');rs.innerHTML='';
+  RATIOS.forEach((r,i)=>{const card=createEl('div','opt-card'+(i===selectedRatio?' selected':''));const h=40,w=40*r.w/r.h;card.innerHTML='<div style="width:'+w+'px;height:'+h+'px;border:2px solid currentColor;border-radius:4px"></div><span>'+r.label+'</span>';card.onclick=()=>{selectedRatio=i;renderCreatePage()};rs.appendChild(card)});
+  // 数量
+  const cs=$('countScroll');cs.innerHTML='';
+  COUNTS.forEach((n,i)=>{const card=createEl('div','opt-card'+(i===selectedCount?' selected':''));card.innerHTML='<div class="oc-icon" style="font-weight:700;font-size:20px">'+n+'</div><span>张</span>';card.onclick=()=>{selectedCount=i;renderCreatePage();updateCost()};cs.appendChild(card)});
+}
+function toggleStyle(s){const idx=selectedStyles.indexOf(s);if(idx>-1)selectedStyles.splice(idx,1);else selectedStyles.push(s)}
+function updateCost(){const m=MODELS[selectedModel];const total=m.cost*COUNTS[selectedCount];$('costCredits').textContent=total}
+// ============ 提示词 ============
+function updatePromptCount(){const v=$('promptInput').value;$('promptCount').textContent=v.length+'/500'}
+function clearPrompt(){$('promptInput').value='';updatePromptCount()}
+function uploadPromptImg(){const url='https://picsum.photos/seed/upload'+Date.now()+'/200/200';$('promptImg').src=url;$('promptImgPreview').style.display='block';promptHasImg=true;showToast('图片已上传')}
+function removePromptImg(e){e.stopPropagation();$('promptImgPreview').style.display='none';promptHasImg=false}
+// ============ 生成流程 ============
+function startGenerate(){
+  const prompt=$('promptInput').value.trim();if(!prompt){showToast('请输入提示词');return}
+  const m=MODELS[selectedModel];const count=COUNTS[selectedCount];const total=m.cost*count;
+  $('resultArea').style.display='block';
+  $('resultContent').innerHTML='<div class="gen-loading"><div class="gen-spinner"></div><div style="font-size:14px;color:var(--fg-secondary)">AI创作中...</div><div style="font-size:12px;color:var(--fg-muted)">消耗 '+total+' 积分 · 预计 15 秒</div></div>';
+  $('createScroll').scrollTop=$('createScroll').scrollHeight;
+  setTimeout(()=>{
+    let html='<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px">';
+    for(let i=0;i<count;i++){const seed='gen'+Date.now()+i;html+='<div class="result-img" onclick="toggleResultSel(this)"><img src="https://picsum.photos/seed/'+seed+'/200/200" style="width:100%;border-radius:14px;display:block"/><div class="check-mark"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div></div>'}
+    html+='</div>';
+    html+='<div style="display:flex;gap:8px"><button class="btn btn-secondary" style="flex:1" onclick="saveResults()">保存图片</button><button class="btn btn-gradient" style="flex:1" onclick="openPublishForm()">发布到社区</button></div>';
+    $('resultContent').innerHTML=html;showToast('生成成功！消耗'+total+'积分')
+  },2500)
+}
+function toggleResultSel(el){el.classList.toggle('selected')}
+function saveResults(){showToast('图片已保存到相册和草稿箱')}
+// ============ 发布弹窗 ============
+let publishImgSrc='';
+function openPublishForm(){$('publishPreview').src='https://picsum.photos/seed/pub'+Date.now()+'/200/200';publishImgSrc=$('publishPreview').src;renderPublishTags();$('publishOverlay').classList.add('show');$('publishSheet').classList.add('show')}
+function closePublishForm(){$('publishOverlay').classList.remove('show');$('publishSheet').classList.remove('show')}
+function renderPublishTags(){const c=$('publishTags');c.innerHTML='';['二次元','风景','人像','动物','建筑','抽象','国风','赛博朋克','梦幻','写实','水彩','油画'].forEach(t=>{const chip=createEl('div','chip chip-outline');chip.textContent=t;chip.onclick=()=>chip.classList.toggle('active');c.appendChild(chip)})}
+function submitPublish(){const title=$('publishTitle').value.trim();if(!title){showToast('请填写标题');return}closePublishForm();showToast('发布成功！作品正在审核中');setTimeout(()=>showToast('审核通过，作品已发布'),1500)}
+// ============ 全部风格 ============
+function openAllStyles(){renderAllStylesGrid();$('styleOverlay').classList.add('show');$('styleSheet').classList.add('show')}
+function closeAllStyles(){$('styleOverlay').classList.remove('show');$('styleSheet').classList.remove('show')}
+function renderAllStylesGrid(){const c=$('allStylesGrid');c.innerHTML='';STYLES.forEach(s=>{const card=createEl('div','style-card'+(selectedStyles.includes(s)?' selected':''));card.style.cssText='aspect-ratio:1;position:relative;border-radius:12px;overflow:hidden;cursor:pointer;border:2px solid '+(selectedStyles.includes(s)?'var(--accent)':'transparent');card.innerHTML='<img src="'+STYLE_IMGS[s]+'" style="width:100%;height:100%;object-fit:cover;position:absolute"/><div class="sc-overlay"></div><div class="sc-label">'+s+'</div>';card.onclick=()=>{toggleStyle(s);renderAllStylesGrid()};c.appendChild(card)})}
+function confirmStyles(){closeAllStyles();renderCreatePage()}
+// ============ 图片预览 ============
+function previewImage(src){const o=$('imgPreviewOverlay');o.style.display='flex';o.innerHTML='<img src="'+src+'" style="max-width:90%;max-height:90%;border-radius:12px" onclick="closeImgPreview()"/>'}
+function closeImgPreview(){$('imgPreviewOverlay').style.display='none'}
+// ============ 作品详情 ============
+function renderWorkDetail(id){const w=WORKS.find(x=>x.id===id);if(!w)return;const u=USERS.find(x=>x.id===w.userId);const m=MODELS.find(x=>x.id===w.model)||{name:w.model};
+  $('workDetailContent').innerHTML='<div><img src="'+w.img+'" style="width:100%;display:block" onclick="previewImage(this.src)"/><div style="padding:16px"><div style="display:flex;align-items:center;gap:10px;margin-bottom:14px"><div class="avatar" style="width:40px;height:40px;font-size:16px;background:'+u.color+'">'+u.avatar+'</div><div style="flex:1"><div style="font-size:15px;font-weight:700">'+u.name+'</div><div style="font-size:11px;color:var(--fg-muted)">'+u.works+'作品 · '+u.likes+'获赞</div></div><button class="btn btn-soft btn-sm" onclick="toggleFollow(this,'+u.id+')" style="'+(isFollowing[u.id]?'':'')+'">'+(isFollowing[u.id]?'已关注':'+ 关注')+'</button></div><div style="font-size:18px;font-weight:700;margin-bottom:6px">'+w.title+'</div><div style="font-size:14px;color:var(--fg-secondary);line-height:1.6;margin-bottom:14px">'+(w.prompt.substring(0,50))+'...</div><div class="card" style="padding:12px;margin-bottom:14px"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px"><span style="font-size:13px;font-weight:600;color:var(--fg-secondary)">提示词</span><button class="btn btn-ghost btn-sm" onclick="copyText(\''+w.prompt.replace(/'/g,'')+'\')" style="padding:2px 8px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>复制</button></div><div style="font-size:13px;color:var(--fg-primary);line-height:1.6">'+w.prompt+'</div></div><div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px"><span class="tag tag-accent">'+m.name+'</span><span class="tag tag-mint">'+w.ratio+'</span><span class="tag tag-lavender">'+w.style+'</span>'+w.tags.map(t=>'<span class="tag tag-peach">'+t+'</span>').join('')+'</div><div style="font-size:12px;color:var(--fg-muted);margin-bottom:14px">生成于 '+w.time+'</div><div style="display:flex;gap:16px;padding:12px 0;border-top:0.5px solid var(--border);border-bottom:0.5px solid var(--border);margin-bottom:14px"><div style="text-align:center;flex:1"><div style="font-size:18px;font-weight:700;font-family:Georgia,serif;color:var(--rose)">'+w.likes+'</div><div style="font-size:11px;color:var(--fg-muted)">点赞</div></div><div style="text-align:center;flex:1"><div style="font-size:18px;font-weight:700;font-family:Georgia,serif;color:var(--accent)">'+w.favorites+'</div><div style="font-size:11px;color:var(--fg-muted)">收藏</div></div><div style="text-align:center;flex:1"><div style="font-size:18px;font-weight:700;font-family:Georgia,serif;color:var(--lavender)">'+w.remakes+'</div><div style="font-size:11px;color:var(--fg-muted)">同款</div></div></div></div></div><div style="position:sticky;bottom:0;display:flex;align-items:center;gap:8px;padding:10px 16px;background:var(--bg-glass);backdrop-filter:blur(20px);border-top:0.5px solid var(--border)"><div style="display:flex;gap:12px;flex:1"><div onclick="showToast(\'已点赞\')" style="display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--fg-secondary)" stroke-width="2"><path d="M12 21s-7-4.5-9.5-9C1 9 3 5 7 5c2 0 3.5 1 5 3 1.5-2 3-3 5-3 4 0 6 4 4.5 7-2.5 4.5-9.5 9-9.5 9z"/></svg></div><div onclick="showToast(\'已收藏\')" style="display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--fg-secondary)" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg></div><div onclick="showToast(\'分享\')" style="display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--fg-secondary)" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg></div><div onclick="showToast(\'举报\')" style="display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--fg-secondary)" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/></svg></div></div><button class="btn btn-gradient" onclick="remakeWork('+w.id+')" style="flex:1"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 16.8l-6.2 4.5 2.4-7.4L2 9.4h7.6z"/></svg>一键同款</button></div>'}
+function toggleFollow(btn,uid){isFollowing[uid]=!isFollowing[uid];btn.textContent=isFollowing[uid]?'已关注':'+ 关注';btn.className=isFollowing[uid]?'btn btn-secondary btn-sm':'btn btn-soft btn-sm'}
+function remakeWork(id){const w=WORKS.find(x=>x.id===id);switchTab('create');$('promptInput').value=w.prompt;updatePromptCount();showToast('已带入提示词，开始创作吧')}
+// ============ 广场 ============
+function renderPlazaCategories(){const c=$('plazaCategories');CATEGORIES.forEach((cat,i)=>{const chip=createEl('div','chip'+(i===0?' active':''));chip.textContent=cat;chip.onclick=()=>{c.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));chip.classList.add('active');renderPlazaWaterfall()};c.appendChild(chip)})}
+function renderFilterStyles(){const c=$('filterStyles');STYLES.forEach(s=>{const chip=createEl('div','chip chip-outline');chip.textContent=s;chip.onclick=()=>chip.classList.toggle('active');c.appendChild(chip)})}
+function renderPlazaWaterfall(){renderWaterfall('plazaWaterfall',WORKS)}
+// ============ 画廊 ============
+function switchGalleryTab(el,tab){el.parentElement.querySelectorAll('.sub-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');if(tab==='all'){$('galleryContent').innerHTML='<div class="waterfall" id="galleryWaterfall"></div>';renderWaterfall('galleryWaterfall',WORKS.slice(0,8))}else if(tab==='draft'){$('galleryContent').innerHTML='<div style="text-align:center;padding:40px 20px;color:var(--fg-muted)"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin:0 auto 10px;display:block"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg><div style="font-size:14px">3个草稿</div></div>'}else{$('galleryContent').innerHTML='<div class="waterfall" id="galleryWaterfall"></div>';renderWaterfall('galleryWaterfall',WORKS.slice(2,8))}}
+// ============ 充值 ============
+function renderRechargeTiers(){const c=$('rechargeTiers');RECHARGE_TIERS.forEach((t,i)=>{const card=createEl('div','card');card.style.cssText='padding:16px 12px;text-align:center;cursor:pointer;border:'+(i===2?'2px solid var(--accent)':'1px solid var(--border)');card.innerHTML='<div style="font-size:12px;color:var(--fg-muted)">¥'+t.price+'</div><div style="font-size:24px;font-weight:700;color:var(--accent);font-family:Georgia,serif;margin:4px 0">'+t.credits+'</div>'+(t.bonus>0?'<div class="tag tag-mint" style="font-size:9px">+'+t.bonus+'赠</div>':'<div style="height:16px"></div>')+'<div style="font-size:11px;color:var(--fg-muted);margin-top:4px">积分</div>';card.onclick=()=>showToast('支付¥'+t.price+'充值'+t.credits+'积分');c.appendChild(card)})}
+function calcCustom(){const v=parseFloat($('customAmount').value)||0;if(v<1){showToast('最小充值1元');return}const credits=Math.floor(v*10);const bonus=Math.floor(credits*0.05);$('customResult').style.display='block';$('customResult').textContent='可得 '+credits+' 积分（含'+bonus+'赠）'}
+function switchRechargeTab(el,tab){el.parentElement.querySelectorAll('.sub-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');const c=$('rechargeRecords');if(tab==='recharge'){c.innerHTML=RECHARGE_TIERS.slice(0,3).map(t=>'<div class="list-row"><div class="lr-text"><div>充值'+t.credits+'积分</div><div style="font-size:11px;color:var(--fg-muted)">06-1'+Math.floor(Math.random()*9)+' 14:30</div></div><span class="tag tag-mint">+¥'+t.price+'</span></div>').join('')}else{c.innerHTML=WORKS.slice(0,5).map(w=>'<div class="list-row"><div class="lr-text"><div>生成'+w.title+'</div><div style="font-size:11px;color:var(--fg-muted)">'+w.time+'</div></div><span class="tag tag-rose">-'+(Math.floor(Math.random()*20)+5)+'</span></div>').join('')}}
+// ============ 签到 ============
+function renderCalendar(){const c=$('calGrid');c.innerHTML='';const today=18;for(let i=1;i<=30;i++){const day=createEl('div','cal-day'+(i<=7&&i>0?' signed':'')+(i===today?' today':'')+(i===3||i===7?' milestone':''));day.textContent=i;c.appendChild(day)}}
+function doCheckin(){$('checkinBtn').textContent='今日已签到';$('checkinBtn').disabled=true;$('checkinBtn').className='btn btn-secondary btn-lg';showToast('签到成功！+10积分')}
+// ============ 消息 ============
+let currentMsgTab='like';
+function switchMsgTab(el,type){el.parentElement.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');currentMsgTab=type;renderMsgList()}
+function renderMsgList(){const list=MSGS[currentMsgTab]||[];const c=$('msgList');c.innerHTML='';if(list.length===0){c.innerHTML='<div style="text-align:center;padding:40px;color:var(--fg-muted)">暂无消息</div>';return}list.forEach(m=>{const row=createEl('div','list-row');if(m.user){row.innerHTML='<div class="avatar" style="width:36px;height:36px;font-size:14px;background:'+m.user.color+'">'+m.user.avatar+'</div><div class="lr-text"><div style="font-size:14px"><b>'+m.user.name+'</b> '+m.content+'</div><div style="font-size:11px;color:var(--fg-muted);margin-top:2px">'+m.time+'</div></div>'+(m.unread?'<span class="badge" style="background:var(--rose)"></span>':'')}else{row.innerHTML='<div class="lr-icon" style="color:var(--accent)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div><div class="lr-text"><div style="font-size:14px">'+m.content+'</div><div style="font-size:11px;color:var(--fg-muted);margin-top:2px">'+m.time+'</div></div>'+(m.unread?'<span class="badge" style="background:var(--rose)"></span>':'')}c.appendChild(row)})}
+// ============ 搜索 ============
+function renderSearchDefault(){$('searchHistory').innerHTML=SEARCH_HISTORY.map(s=>'<div class="chip chip-outline" onclick="doSearch(\''+s+'\')">'+s+'</div>').join('');$('hotSearch').innerHTML=HOT_SEARCHES.map((s,i)=>'<div class="list-row" onclick="doSearch(\''+s+'\')"><span style="font-size:16px;font-weight:700;color:'+(i<3?'var(--rose)':'var(--fg-muted)')+';font-family:Georgia,serif;width:24px">'+(i+1)+'</span><div class="lr-text">'+s+'</div></div>').join('')}
+function doSearch(kw){$('searchInput').value=kw;onSearchInput()}
+function onSearchInput(){const v=$('searchInput').value.trim();if(v){$('searchDefault').style.display='none';$('searchResults').style.display='block';const filtered=WORKS.filter(w=>w.title.includes(v)||w.prompt.includes(v)||w.tags.some(t=>t.includes(v)));renderWaterfall('searchWaterfall',filtered.length>0?filtered:WORKS)}else{$('searchDefault').style.display='block';$('searchResults').style.display='none'}}
+function clearSearchHistory(){SEARCH_HISTORY.length=0;renderSearchDefault();showToast('已清空搜索历史')}
+// ============ 他人主页 ============
+function renderUserProfile(uid){const u=USERS.find(x=>x.id===uid);if(!u)return;const works=WORKS.filter(w=>w.userId===uid);$('userProfileContent').innerHTML='<div style="padding:16px"><div class="card" style="padding:20px 16px;text-align:center;background:var(--gradient-sky)"><div class="avatar" style="width:72px;height:72px;font-size:28px;margin:0 auto 10px;background:'+u.color+'">'+u.avatar+'</div><div style="font-size:18px;font-weight:700">'+u.name+'</div><div style="font-size:13px;color:var(--fg-muted);margin-top:4px">'+u.bio+'</div><button class="btn '+(isFollowing[u.id]?'btn-secondary':'btn-gradient')+'" style="margin-top:12px;width:100%" onclick="toggleFollow(this,'+u.id+')">'+(isFollowing[u.id]?'已关注':'+ 关注')+'</button></div><div class="card" style="padding:14px 8px;margin-top:10px;display:flex"><div class="stat-card"><div class="sc-num">'+u.works+'</div><div class="sc-label">作品</div></div><div class="stat-card"><div class="sc-num">'+u.likes+'</div><div class="sc-label">获赞</div></div><div class="stat-card" onclick="navigateTo(\'followList\',\'followers\')" style="cursor:pointer"><div class="sc-num">'+u.followers+'</div><div class="sc-label">粉丝</div></div><div class="stat-card"><div class="sc-num">'+(u.remakes||0)+'</div><div class="sc-label">同款</div></div></div></div><div style="padding:0 16px"><div class="waterfall" id="userWorks"></div></div>';
+  const uw=$('userWorks');if(uw){works.forEach(w=>{const item=createEl('div','wf-item');item.innerHTML='<div class="card" style="cursor:pointer"><img src="'+w.img+'" style="width:100%;display:block" onclick="navigateTo(\'workDetail\','+w.id+')"/><div style="padding:8px 10px;font-size:12px;color:var(--fg-secondary)">'+w.title+' · '+w.likes+'赞</div></div>';uw.appendChild(item)})}}
+// ============ 关注/粉丝列表 ============
+function renderFollowList(type){const c=$('followListContent');c.innerHTML='';const title=type==='following'?'我的关注':'我的粉丝';$('page-followList').dataset.title=title;$('navTitle').textContent=title;USERS.forEach(u=>{if(u.id===1)return;const row=createEl('div','list-row');row.innerHTML='<div class="avatar" style="width:40px;height:40px;font-size:16px;background:'+u.color+'">'+u.avatar+'</div><div class="lr-text"><div style="font-size:15px;font-weight:600">'+u.name+'</div><div style="font-size:12px;color:var(--fg-muted)">'+u.bio+'</div></div><button class="btn '+(isFollowing[u.id]?'btn-secondary':'btn-soft')+' btn-sm" onclick="toggleFollow(this,'+u.id+')">'+(isFollowing[u.id]?'已关注':'+ 关注')+'</button>';c.appendChild(row)})}
+// ============ 全部模型 ============
+function renderAllModels(){const c=$('allModelsContent');c.innerHTML='';MODELS.forEach((m,i)=>{const card=createEl('div','card');card.style.cssText='padding:14px;margin-bottom:10px;display:flex;gap:12px;align-items:center;cursor:pointer;'+(i===selectedModel?'border:2px solid var(--accent)':'');card.innerHTML='<img src="'+m.img+'" style="width:60px;height:60px;border-radius:12px;object-fit:cover"/><div style="flex:1"><div style="font-size:15px;font-weight:700">'+m.name+'</div><div style="font-size:12px;color:var(--fg-muted);margin-top:2px">'+m.desc+'</div><div style="display:flex;gap:4px;margin-top:4px">'+m.tags.map(t=>'<span class="tag tag-accent" style="font-size:10px;padding:2px 6px">'+t+'</span>').join('')+'</div></div><div style="text-align:right"><div style="font-size:16px;font-weight:700;color:var(--accent);font-family:Georgia,serif">'+m.cost+'</div><div style="font-size:10px;color:var(--fg-muted)">积分/张</div></div>';card.onclick=()=>{selectedModel=i;renderCreatePage();updateCost();navigateBack();showToast('已选择'+m.name)};c.appendChild(card)})}
+// ============ 草稿箱 ============
+function renderDrafts(){const c=$('draftsContent');c.innerHTML='<div class="section-title"><span>我的草稿 (3)</span></div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">'+WORKS.slice(0,3).map(w=>'<div class="card" style="cursor:pointer"><img src="'+w.img+'" style="width:100%;aspect-ratio:1;object-fit:cover"/><div style="padding:6px;font-size:11px;color:var(--fg-secondary)">'+w.title+'</div></div>').join('')+'</div>'}
+// ============ 浏览记录 ============
+function renderHistory(){const c=$('historyContent');c.innerHTML='<div class="section-title"><span>今天</span></div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px">'+WORKS.slice(0,6).map(w=>'<div class="card" style="cursor:pointer"><img src="'+w.img+'" style="width:100%;aspect-ratio:1;object-fit:cover" onclick="navigateTo(\'workDetail\','+w.id+')"/></div>').join('')+'</div><div class="section-title"><span>昨天</span></div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">'+WORKS.slice(6,9).map(w=>'<div class="card" style="cursor:pointer"><img src="'+w.img+'" style="width:100%;aspect-ratio:1;object-fit:cover" onclick="navigateTo(\'workDetail\','+w.id+')"/></div>').join('')+'</div>'}
+function clearHistory(){showToast('已清空浏览记录')}
+// ============ 反推提示词 ============
+function uploadReverseImg(){const url='https://picsum.photos/seed/rev'+Date.now()+'/300/300';$('reverseImg').src=url;$('reverseImgPreview').style.display='block';$('reverseUploadArea').style.display='none'}
+function startReverse(){$('reverseBtn').disabled=true;$('reverseBtn').innerHTML='<div class="gen-spinner" style="width:16px;height:16px"></div> 分析中...';setTimeout(()=>{$('reverseBtn').disabled=false;$('reverseBtn').innerHTML='重新分析';$('reverseResult').style.display='block';$('reverseText').value='A beautiful scene with soft lighting, dreamy atmosphere, pastel color palette, detailed composition, artistic style, high quality, ethereal mood, serene landscape with gentle bokeh';showToast('分析完成！消耗5积分')},2000)}
+function useReverseResult(){$('promptInput').value=$('reverseText').value;updatePromptCount();switchTab('create');showToast('已带入创作页')}
+// ============ 初始化 ============
+function init(){
+  initTheme();
+  initBanner();
+  renderGameplay();
+  renderWaterfall('homeWaterfall',WORKS.slice(0,8));
+  renderPlazaCategories();
+  renderFilterStyles();
+  renderPlazaWaterfall();
+  renderCreatePage();
+  updateCost();
+  renderWaterfall('galleryWaterfall',WORKS.slice(0,8));
+  renderRechargeTiers();
+  switchRechargeTab(document.querySelector('#page-recharge .sub-tab'),'recharge');
+  renderCalendar();
+  renderMsgList();
+  renderSearchDefault();
+  renderDrafts();
+  renderHistory();
+  switchTab('home');
+}
+init();
+</script>
+</body>
+</html>

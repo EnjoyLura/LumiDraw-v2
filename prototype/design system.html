@@ -1,0 +1,1536 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<title>Aether · 清新梦幻设计系统</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/lucide-static@latest/font/lucide.css" rel="stylesheet">
+<style>
+  /* ============ 设计令牌 ============ */
+  :root[data-theme="light"] {
+    --bg-base: #EEF4FC;
+    --bg-soft: #E1EBF8;
+    --bg-card: #FFFFFF;
+    --bg-elevated: #FBFDFF;
+    --bg-glass: rgba(255, 255, 255, 0.72);
+    --fg-primary: #0E1F3A;
+    --fg-secondary: #445876;
+    --fg-muted: #8497B5;
+    --border: rgba(91, 159, 232, 0.14);
+    --border-strong: rgba(91, 159, 232, 0.32);
+    --accent: #5B9FE8;
+    --accent-deep: #3B7FC8;
+    --accent-soft: rgba(91, 159, 232, 0.12);
+    --accent-glow: rgba(91, 159, 232, 0.35);
+    --mint: #6FD4B0;
+    --mint-soft: rgba(111, 212, 176, 0.16);
+    --peach: #FFB59A;
+    --peach-soft: rgba(255, 181, 154, 0.2);
+    --lavender: #B8A5E3;
+    --lavender-soft: rgba(184, 165, 227, 0.2);
+    --lemon: #FFE08A;
+    --lemon-soft: rgba(255, 224, 138, 0.24);
+    --rose: #FFA8B8;
+    --rose-soft: rgba(255, 168, 184, 0.22);
+    --shadow-sm: 0 2px 8px rgba(60, 120, 200, 0.06), 0 1px 2px rgba(60, 120, 200, 0.04);
+    --shadow-md: 0 8px 24px rgba(60, 120, 200, 0.1), 0 4px 8px rgba(60, 120, 200, 0.06);
+    --shadow-lg: 0 24px 56px rgba(60, 120, 200, 0.16), 0 8px 16px rgba(60, 120, 200, 0.08);
+    --shadow-glow: 0 0 40px rgba(91, 159, 232, 0.3);
+    --gradient-dream: linear-gradient(135deg, #5B9FE8 0%, #7BC4F0 45%, #6FD4B0 100%);
+    --gradient-sky: linear-gradient(180deg, #E1EBF8 0%, #F5F9FE 100%);
+    --gradient-aurora: linear-gradient(135deg, #B8A5E3 0%, #5B9FE8 50%, #6FD4B0 100%);
+  }
+
+  :root[data-theme="dark"] {
+    --bg-base: #0A1428;
+    --bg-soft: #0F1B33;
+    --bg-card: #13244A;
+    --bg-elevated: #1A2F58;
+    --bg-glass: rgba(19, 36, 74, 0.72);
+    --fg-primary: #EAF2FF;
+    --fg-secondary: #A8BBD6;
+    --fg-muted: #6B7E9E;
+    --border: rgba(123, 184, 240, 0.16);
+    --border-strong: rgba(123, 184, 240, 0.36);
+    --accent: #7BB8F0;
+    --accent-deep: #5B98D0;
+    --accent-soft: rgba(123, 184, 240, 0.18);
+    --accent-glow: rgba(123, 184, 240, 0.42);
+    --mint: #7BD4B5;
+    --mint-soft: rgba(123, 212, 181, 0.22);
+    --peach: #FFB59A;
+    --peach-soft: rgba(255, 181, 154, 0.24);
+    --lavender: #B8A5E3;
+    --lavender-soft: rgba(184, 165, 227, 0.24);
+    --lemon: #FFE08A;
+    --lemon-soft: rgba(255, 224, 138, 0.26);
+    --rose: #FFA8B8;
+    --rose-soft: rgba(255, 168, 184, 0.26);
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 24px 56px rgba(0, 0, 0, 0.5);
+    --shadow-glow: 0 0 40px rgba(123, 184, 240, 0.32);
+    --gradient-dream: linear-gradient(135deg, #7BB8F0 0%, #9BC8F2 45%, #7BD4B5 100%);
+    --gradient-sky: linear-gradient(180deg, #0A1428 0%, #13244A 100%);
+    --gradient-aurora: linear-gradient(135deg, #B8A5E3 0%, #7BB8F0 50%, #7BD4B5 100%);
+  }
+
+  /* ============ 基础重置 ============ */
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    background: var(--bg-base);
+    color: var(--fg-primary);
+    transition: background-color 0.6s cubic-bezier(0.4, 0, 0.2, 1), color 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow-x: hidden;
+    min-height: 100vh;
+    font-feature-settings: "cv11", "ss01";
+  }
+  .font-display { font-family: 'Fraunces', serif; font-optical-sizing: auto; }
+  
+  ::selection { background: var(--accent-soft); color: var(--accent-deep); }
+
+  /* ============ 滚动条 ============ */
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb {
+    background: var(--accent-soft);
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent); background-clip: padding-box; border: 2px solid transparent; }
+
+  /* ============ 背景装饰 ============ */
+  .bg-decorations {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
+  }
+  .blob {
+    position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.55;
+    animation: floatBlob 24s ease-in-out infinite;
+  }
+  .blob-1 { width: 540px; height: 540px; background: var(--accent); top: -160px; left: -120px; }
+  .blob-2 { width: 420px; height: 420px; background: var(--mint); top: 28%; right: -140px; animation-delay: -6s; }
+  .blob-3 { width: 380px; height: 380px; background: var(--lavender); bottom: 8%; left: 22%; animation-delay: -12s; }
+  .blob-4 { width: 320px; height: 320px; background: var(--peach); top: 60%; right: 30%; animation-delay: -18s; opacity: 0.35; }
+  [data-theme="dark"] .blob { opacity: 0.28; }
+  [data-theme="dark"] .blob-4 { opacity: 0.18; }
+
+  @keyframes floatBlob {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(60px, -40px) scale(1.12); }
+    66% { transform: translate(-40px, 60px) scale(0.92); }
+  }
+
+  /* 漂浮粒子 */
+  .particle {
+    position: absolute; border-radius: 50%; pointer-events: none;
+    background: var(--accent); opacity: 0.4;
+    animation: floatParticle linear infinite;
+  }
+  @keyframes floatParticle {
+    0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+    10% { opacity: 0.5; }
+    90% { opacity: 0.5; }
+    100% { transform: translateY(-10vh) translateX(40px); opacity: 0; }
+  }
+
+  /* 网格背景 */
+  .grid-pattern {
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse 80% 60% at center, black 0%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse 80% 60% at center, black 0%, transparent 75%);
+  }
+
+  /* ============ 玻璃 & 卡片 ============ */
+  .glass {
+    background: var(--bg-glass);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid var(--border);
+  }
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s, border-color 0.4s;
+    position: relative;
+    overflow: hidden;
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--border-strong);
+  }
+  .card-soft { background: var(--bg-elevated); }
+
+  /* ============ 按钮 ============ */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    font-weight: 600; font-size: 14px; border-radius: 14px;
+    padding: 11px 22px; cursor: pointer; position: relative; overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    white-space: nowrap; user-select: none; border: 1px solid transparent;
+    font-family: inherit;
+  }
+  .btn-primary {
+    background: var(--accent); color: white;
+    box-shadow: 0 6px 20px var(--accent-glow), inset 0 1px 0 rgba(255,255,255,0.2);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 28px var(--accent-glow), inset 0 1px 0 rgba(255,255,255,0.25); filter: brightness(1.05); }
+  .btn-primary:active { transform: translateY(0); }
+  
+  .btn-gradient {
+    background: var(--gradient-dream); color: white;
+    box-shadow: 0 6px 20px var(--accent-glow), inset 0 1px 0 rgba(255,255,255,0.25);
+  }
+  .btn-gradient:hover { transform: translateY(-2px); box-shadow: 0 10px 28px var(--accent-glow); filter: brightness(1.05); }
+
+  .btn-secondary {
+    background: var(--bg-card); color: var(--fg-primary); border-color: var(--border-strong);
+  }
+  .btn-secondary:hover { background: var(--accent-soft); border-color: var(--accent); transform: translateY(-2px); }
+
+  .btn-ghost { background: transparent; color: var(--fg-secondary); }
+  .btn-ghost:hover { background: var(--accent-soft); color: var(--accent); }
+
+  .btn-soft { background: var(--accent-soft); color: var(--accent-deep); }
+  .btn-soft:hover { background: var(--accent); color: white; transform: translateY(-2px); }
+
+  .btn-sm { padding: 7px 14px; font-size: 12px; border-radius: 10px; }
+  .btn-lg { padding: 14px 28px; font-size: 15px; border-radius: 16px; }
+  .btn-icon { padding: 11px; aspect-ratio: 1; }
+  .btn-pill { border-radius: 999px; }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
+
+  /* 深色模式：按钮去除自发光阴影 */
+  [data-theme="dark"] .btn-primary,
+  [data-theme="dark"] .btn-gradient { box-shadow: none; }
+  [data-theme="dark"] .btn-primary:hover,
+  [data-theme="dark"] .btn-gradient:hover { box-shadow: none; }
+
+  /* 涟漪 */
+  .ripple {
+    position: absolute; border-radius: 50%; background: rgba(255, 255, 255, 0.4);
+    transform: scale(0); animation: rippleAnim 0.7s ease-out;
+    pointer-events: none;
+  }
+  .btn-secondary .ripple, .btn-ghost .ripple, .btn-soft .ripple { background: var(--accent-soft); }
+  @keyframes rippleAnim {
+    to { transform: scale(4); opacity: 0; }
+  }
+
+  /* ============ 输入框 ============ */
+  .input-wrap { position: relative; }
+  .input {
+    width: 100%; background: var(--bg-elevated); border: 1.5px solid var(--border);
+    border-radius: 14px; padding: 12px 16px; font-size: 14px; color: var(--fg-primary);
+    font-family: inherit; transition: all 0.3s;
+  }
+  .input::placeholder { color: var(--fg-muted); }
+  .input:focus {
+    outline: none; border-color: var(--accent);
+    box-shadow: 0 0 0 4px var(--accent-soft);
+    background: var(--bg-card);
+  }
+  .input-icon { padding-left: 44px; }
+  .input-wrap .input-icon-left {
+    position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+    color: var(--fg-muted); pointer-events: none; font-size: 18px;
+  }
+  .input-error { border-color: var(--rose); }
+  .input-error:focus { box-shadow: 0 0 0 4px var(--rose-soft); }
+
+  /* ============ 开关 ============ */
+  .switch {
+    position: relative; width: 48px; height: 28px; background: var(--bg-soft);
+    border: 1px solid var(--border); border-radius: 999px; cursor: pointer;
+    transition: all 0.3s;
+  }
+  .switch::after {
+    content: ''; position: absolute; top: 2px; left: 2px;
+    width: 22px; height: 22px; background: white; border-radius: 50%;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15); transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .switch.active { background: var(--accent); border-color: var(--accent); }
+  .switch.active::after { left: 24px; }
+
+  /* ============ 复选框 ============ */
+  .checkbox {
+    width: 22px; height: 22px; border: 2px solid var(--border-strong);
+    border-radius: 7px; cursor: pointer; display: inline-flex; align-items: center;
+    justify-content: center; transition: all 0.3s; background: var(--bg-elevated);
+    flex-shrink: 0;
+  }
+  .checkbox.checked { background: var(--accent); border-color: var(--accent); }
+  .checkbox.checked::after {
+    content: '✓'; color: white; font-size: 14px; font-weight: bold;
+    animation: checkPop 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @keyframes checkPop {
+    0% { transform: scale(0); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+  }
+
+  /* ============ 单选 ============ */
+  .radio {
+    width: 22px; height: 22px; border: 2px solid var(--border-strong);
+    border-radius: 50%; cursor: pointer; display: inline-flex; align-items: center;
+    justify-content: center; transition: all 0.3s; background: var(--bg-elevated);
+    flex-shrink: 0;
+  }
+  .radio.checked { border-color: var(--accent); }
+  .radio.checked::after {
+    content: ''; width: 10px; height: 10px; background: var(--accent);
+    border-radius: 50%; animation: checkPop 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* ============ 滑块 ============ */
+  .slider-track {
+    width: 100%; height: 6px; background: var(--bg-soft); border-radius: 999px;
+    position: relative; cursor: pointer;
+  }
+  .slider-fill {
+    height: 100%; background: var(--gradient-dream); border-radius: 999px;
+    transition: width 0.2s;
+  }
+  .slider-thumb {
+    position: absolute; top: 50%; width: 20px; height: 20px; background: white;
+    border: 2px solid var(--accent); border-radius: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 2px 8px var(--accent-glow);
+    transition: transform 0.2s;
+  }
+  .slider-track:hover .slider-thumb { transform: translate(-50%, -50%) scale(1.15); }
+
+  /* ============ 进度条 ============ */
+  .progress {
+    width: 100%; height: 8px; background: var(--bg-soft); border-radius: 999px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%; background: var(--gradient-dream); border-radius: 999px;
+    position: relative; overflow: hidden;
+    transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .progress-bar::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    animation: shimmer 2s infinite;
+  }
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+
+  /* ============ 标签 & 徽章 ============ */
+  .tag {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 5px 12px; font-size: 12px; font-weight: 600;
+    border-radius: 999px; transition: all 0.3s;
+  }
+  .tag-accent { background: var(--accent-soft); color: var(--accent-deep); }
+  .tag-mint { background: var(--mint-soft); color: var(--mint); }
+  .tag-peach { background: var(--peach-soft); color: #E07A5A; }
+  .tag-lavender { background: var(--lavender-soft); color: #8470C7; }
+  .tag-lemon { background: var(--lemon-soft); color: #B88A1A; }
+  .tag-rose { background: var(--rose-soft); color: #E07A8A; }
+  [data-theme="dark"] .tag-peach { color: var(--peach); }
+  [data-theme="dark"] .tag-lavender { color: var(--lavender); }
+  [data-theme="dark"] .tag-lemon { color: var(--lemon); }
+  [data-theme="dark"] .tag-rose { color: var(--rose); }
+
+  .badge {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 20px; height: 20px; padding: 0 6px;
+    background: var(--rose); color: white; font-size: 11px; font-weight: 700;
+    border-radius: 999px;
+  }
+
+  /* ============ 头像 ============ */
+  .avatar {
+    border-radius: 50%; overflow: hidden; display: inline-block;
+    background: var(--gradient-dream); color: white;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-weight: 700; border: 2px solid var(--bg-card);
+    position: relative;
+  }
+  .avatar-ring::before {
+    content: ''; position: absolute; inset: -4px; border-radius: 50%;
+    background: var(--gradient-aurora); z-index: -1;
+    animation: rotate 4s linear infinite;
+  }
+  @keyframes rotate { to { transform: rotate(360deg); } }
+
+  /* ============ 标签页 ============ */
+  .tabs { display: inline-flex; gap: 4px; padding: 4px; background: var(--bg-soft); border-radius: 14px; }
+  .tab {
+    padding: 8px 18px; font-size: 13px; font-weight: 600; color: var(--fg-secondary);
+    border-radius: 10px; cursor: pointer; transition: all 0.3s; position: relative;
+  }
+  .tab.active { background: var(--bg-card); color: var(--accent); box-shadow: var(--shadow-sm); }
+
+  /* ============ 提示框 ============ */
+  .alert {
+    display: flex; align-items: flex-start; gap: 12px; padding: 16px;
+    border-radius: 16px; border: 1px solid;
+  }
+  .alert-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+
+  /* ============ Toast ============ */
+  .toast-container {
+    position: fixed; top: 90px; right: 24px; z-index: 100;
+    display: flex; flex-direction: column; gap: 12px;
+    pointer-events: none;
+  }
+  .toast {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 14px; padding: 14px 18px; min-width: 280px;
+    box-shadow: var(--shadow-lg);
+    display: flex; align-items: center; gap: 12px;
+    animation: toastIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: auto;
+  }
+  .toast.out { animation: toastOut 0.4s cubic-bezier(0.4, 0, 1, 1) forwards; }
+  @keyframes toastIn {
+    from { transform: translateX(120%) scale(0.9); opacity: 0; }
+    to { transform: translateX(0) scale(1); opacity: 1; }
+  }
+  @keyframes toastOut {
+    to { transform: translateX(120%) scale(0.9); opacity: 0; }
+  }
+
+  /* ============ 主题切换器 ============ */
+  .theme-toggle {
+    width: 56px; height: 30px; background: var(--bg-soft);
+    border: 1px solid var(--border); border-radius: 999px;
+    position: relative; cursor: pointer; transition: all 0.4s;
+  }
+  .theme-toggle-thumb {
+    position: absolute; top: 2px; left: 2px; width: 24px; height: 24px;
+    background: var(--gradient-dream); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 2px 8px var(--accent-glow);
+    color: white; font-size: 13px;
+  }
+  [data-theme="dark"] .theme-toggle-thumb { left: 28px; }
+
+  /* ============ 工具提示 ============ */
+  .tooltip { position: relative; }
+  .tooltip::after {
+    content: attr(data-tip); position: absolute; bottom: calc(100% + 8px);
+    left: 50%; transform: translateX(-50%) translateY(4px);
+    background: var(--fg-primary); color: var(--bg-card);
+    padding: 5px 10px; font-size: 12px; border-radius: 8px;
+    white-space: nowrap; opacity: 0; pointer-events: none;
+    transition: all 0.3s; font-weight: 500;
+  }
+  .tooltip:hover::after { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ============ 滚动渐入 ============ */
+  .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ============ 装饰 ============ */
+  .glow-text {
+    background: var(--gradient-dream);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent; color: transparent;
+  }
+  .aurora-text {
+    background: var(--gradient-aurora);
+    background-size: 200% 200%;
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent; color: transparent;
+    animation: aurora 8s ease infinite;
+  }
+  @keyframes aurora {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
+  .section-label {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 14px; background: var(--accent-soft); color: var(--accent-deep);
+    border-radius: 999px; font-size: 12px; font-weight: 700;
+    letter-spacing: 0.05em; text-transform: uppercase;
+  }
+
+  /* ============ 色板 ============ */
+  .swatch {
+    border-radius: 20px; overflow: hidden; transition: transform 0.4s;
+    border: 1px solid var(--border); cursor: pointer;
+  }
+  .swatch:hover { transform: translateY(-4px) scale(1.02); }
+  .swatch-color { height: 100px; }
+  .swatch-info { padding: 12px 14px; background: var(--bg-card); }
+
+  /* ============ 漂浮动画 ============ */
+  .float-anim { animation: gentleFloat 6s ease-in-out infinite; }
+  @keyframes gentleFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+  }
+
+  /* 渐变边框卡片 */
+  .gradient-border {
+    position: relative; background: var(--bg-card);
+    border-radius: 24px;
+  }
+  .gradient-border::before {
+    content: ''; position: absolute; inset: 0; padding: 1.5px;
+    background: var(--gradient-aurora); border-radius: inherit;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor; mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  /* 数字字体 */
+  .num { font-family: 'Fraunces', serif; font-feature-settings: "tnum"; }
+
+  /* 鼠标光晕 */
+  .cursor-glow {
+    position: fixed; width: 400px; height: 400px;
+    background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+    border-radius: 50%; pointer-events: none; z-index: 1;
+    transform: translate(-50%, -50%); opacity: 0.4;
+    transition: opacity 0.3s; mix-blend-mode: screen;
+  }
+  [data-theme="dark"] .cursor-glow { display: none; }
+
+  /* 加载动画 */
+  .spinner {
+    width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: white; border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* 价格卡片高亮 */
+  .price-featured {
+    background: var(--gradient-dream); color: white;
+    box-shadow: var(--shadow-lg);
+  }
+  .price-featured .price-amount { color: white; }
+
+  /* 模拟应用界面 */
+  .mock-window {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 20px; overflow: hidden; box-shadow: var(--shadow-lg);
+  }
+  .mock-titlebar {
+    padding: 12px 16px; background: var(--bg-elevated);
+    border-bottom: 1px solid var(--border); display: flex; gap: 8px; align-items: center;
+  }
+  .mock-dot { width: 12px; height: 12px; border-radius: 50%; }
+
+  /* 响应式 */
+  @media (max-width: 768px) {
+    .blob { filter: blur(60px); }
+    .cursor-glow { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- 背景装饰 -->
+<div class="bg-decorations">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="blob blob-4"></div>
+</div>
+<div class="cursor-glow" id="cursorGlow"></div>
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- 导航栏 -->
+<nav class="glass sticky top-0 z-50" style="border-bottom: 1px solid var(--border);">
+  <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: var(--gradient-dream); box-shadow: var(--shadow-glow);">
+        <i class="ti ti-sparkles" style="color: white; font-size: 22px;"></i>
+      </div>
+      <div>
+        <div class="font-display font-bold text-xl leading-none">Aether</div>
+        <div class="text-xs" style="color: var(--fg-muted);">设计系统 v2.4</div>
+      </div>
+    </div>
+    <div class="hidden md:flex items-center gap-1">
+      <a href="#principles" class="btn btn-ghost btn-sm">设计原则</a>
+      <a href="#colors" class="btn btn-ghost btn-sm">色彩</a>
+      <a href="#typography" class="btn btn-ghost btn-sm">字体</a>
+      <a href="#components" class="btn btn-ghost btn-sm">组件</a>
+      <a href="#showcase" class="btn btn-ghost btn-sm">应用示例</a>
+    </div>
+    <div class="flex items-center gap-3">
+      <div class="theme-toggle" id="themeToggle" role="button" aria-label="切换主题">
+        <div class="theme-toggle-thumb">
+          <i class="ti ti-sun" id="themeIcon"></i>
+        </div>
+      </div>
+      <button class="btn btn-primary btn-sm hidden sm:inline-flex" onclick="showToast('欢迎使用 Aether', '开启你的设计之旅', 'sparkles')">
+        <i class="ti ti-download"></i>获取
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="relative pt-24 pb-32 px-6 overflow-hidden">
+  <div class="absolute inset-0 grid-pattern opacity-50"></div>
+  <div class="max-w-6xl mx-auto relative">
+    <div class="section-label mb-8 reveal">
+      <span class="w-2 h-2 rounded-full" style="background: var(--accent);"></span>
+      清新 · 梦幻 · 灵动
+    </div>
+    <h1 class="font-display text-6xl md:text-8xl font-light leading-[1.05] tracking-tight mb-8 reveal">
+      为柔软的<br>
+      <span class="aurora-text font-semibold italic">想象</span>而生
+    </h1>
+    <p class="text-lg md:text-xl max-w-2xl mb-10 reveal" style="color: var(--fg-secondary); line-height: 1.7;">
+      Aether 是一套以淡蓝为主调的清新梦幻设计系统。圆润的组件、灵动的动效、丝滑的主题切换 ——
+      让每一次交互都如晨雾般轻盈，如浪花般温柔。
+    </p>
+    <div class="flex flex-wrap items-center gap-4 reveal">
+      <button class="btn btn-gradient btn-lg" onclick="document.getElementById('components').scrollIntoView({behavior:'smooth'})">
+        <i class="ti ti-components"></i>浏览组件
+      </button>
+      <button class="btn btn-secondary btn-lg" onclick="showToast('已复制到剪贴板', 'NPM 包即将发布', 'check')">
+        <i class="ti ti-copy"></i>npm i @aether/ui
+      </button>
+    </div>
+    
+    <!-- Hero 统计 -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-20 reveal">
+      <div class="card p-6">
+        <div class="text-4xl font-display font-semibold glow-text num" data-count="48">0</div>
+        <div class="text-sm mt-1" style="color: var(--fg-muted);">核心组件</div>
+      </div>
+      <div class="card p-6">
+        <div class="text-4xl font-display font-semibold glow-text num" data-count="12">0</div>
+        <div class="text-sm mt-1" style="color: var(--fg-muted);">主题变量</div>
+      </div>
+      <div class="card p-6">
+        <div class="text-4xl font-display font-semibold glow-text num" data-count="120">0</div>
+        <div class="text-sm mt-1" style="color: var(--fg-muted);">动效曲线</div>
+      </div>
+      <div class="card p-6">
+        <div class="text-4xl font-display font-semibold glow-text num" data-count="99">0</div>
+        <div class="text-sm mt-1" style="color: var(--fg-muted);">无障碍评分</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 设计原则 -->
+<section id="principles" class="px-6 py-20 relative">
+  <div class="max-w-6xl mx-auto">
+    <div class="reveal mb-16">
+      <div class="section-label mb-4">设计哲学</div>
+      <h2 class="font-display text-4xl md:text-5xl font-light tracking-tight">四个原则，<span class="italic font-medium glow-text">一种气质</span></h2>
+    </div>
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+      <div class="card p-7 reveal">
+        <div class="w-12 h-12 rounded-2xl flex items-center justify-center mb-5" style="background: var(--accent-soft);">
+          <i class="ti ti-feather text-2xl" style="color: var(--accent);"></i>
+        </div>
+        <h3 class="font-display text-xl font-semibold mb-2">清新轻盈</h3>
+        <p class="text-sm leading-relaxed" style="color: var(--fg-secondary);">大量留白与柔和色调，呼吸感贯穿始终，让界面如晨光般通透。</p>
+      </div>
+      <div class="card p-7 reveal">
+        <div class="w-12 h-12 rounded-2xl flex items-center justify-center mb-5" style="background: var(--lavender-soft);">
+          <i class="ti ti-cloud text-2xl" style="color: var(--lavender);"></i>
+        </div>
+        <h3 class="font-display text-xl font-semibold mb-2">梦幻柔光</h3>
+        <p class="text-sm leading-relaxed" style="color: var(--fg-secondary);">模糊光晕与渐变叠加，营造云朵般的柔软质感与诗意氛围。</p>
+      </div>
+      <div class="card p-7 reveal">
+        <div class="w-12 h-12 rounded-2xl flex items-center justify-center mb-5" style="background: var(--mint-soft);">
+          <i class="ti ti-circle-rounded text-2xl" style="color: var(--mint);"></i>
+        </div>
+        <h3 class="font-display text-xl font-semibold mb-2">圆润亲和</h3>
+        <p class="text-sm leading-relaxed" style="color: var(--fg-secondary);">大圆角与软阴影，去掉锋利的边缘，让每次点击都温暖友好。</p>
+      </div>
+      <div class="card p-7 reveal">
+        <div class="w-12 h-12 rounded-2xl flex items-center justify-center mb-5" style="background: var(--peach-soft);">
+          <i class="ti ti-wand text-2xl" style="color: #E07A5A;"></i>
+        </div>
+        <h3 class="font-display text-xl font-semibold mb-2">灵动流转</h3>
+        <p class="text-sm leading-relaxed" style="color: var(--fg-secondary);">富有韵律的动效曲线，元素如水波般响应，让交互拥有生命感。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 色彩系统 -->
+<section id="colors" class="px-6 py-20 relative">
+  <div class="max-w-6xl mx-auto">
+    <div class="reveal mb-12">
+      <div class="section-label mb-4">色彩体系</div>
+      <h2 class="font-display text-4xl md:text-5xl font-light tracking-tight mb-4">淡蓝为骨，<span class="italic font-medium glow-text">七彩为衣</span></h2>
+      <p style="color: var(--fg-secondary);" class="max-w-2xl">主色调以淡蓝为根基，辅以薄荷、薰衣草、蜜桃等柔和点缀色，构建出梦幻而和谐的色彩谱系。</p>
+    </div>
+    
+    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4 mb-12">
+      <div class="swatch reveal">
+        <div class="swatch-color" style="background: var(--accent);"></div>
+        <div class="swatch-info">
+          <div class="font-semibold text-sm">天青蓝</div>
+          <div class="text-xs font-mono" style="color: var(--fg-muted);">#5B9FE8</div>
+        </div>
+      </div>
+      <div class="swatch reveal">
+        <div class="swatch-color" style="background: var(--mint);"></div>
+        <div class="swatch-info">
+          <div class="font-semibold text-sm">薄荷绿</div>
+          <div class="text-xs font-mono" style="color: var(--fg-muted);">#6FD4B0</div>
+        </div>
+      </div>
+      <div class="swatch reveal">
+        <div class="swatch-color" style="background: var(--lavender);"></div>
+        <div class="swatch-info">
+          <div class="font-semibold text-sm">薰衣草</div>
+          <div class="text-xs font-mono" style="color: var(--fg-muted);">#B8A5E3</div>
+        </div>
+      </div>
+      <div class="swatch reveal">
+        <div class="swatch-color" style="background: var(--peach);"></div>
+        <div class="swatch-info">
+          <div class="font-semibold text-sm">蜜桃粉</div>
+          <div class="text-xs font-mono" style="color: var(--fg-muted);">#FFB59A</div>
+        </div>
+      </div>
+      <div class="swatch reveal">
+        <div class="swatch-color" style="background: var(--lemon);"></div>
+        <div class="swatch-info">
+          <div class="font-semibold text-sm">奶油黄</div>
+          <div class="text-xs font-mono" style="color: var(--fg-muted);">#FFE08A</div>
+        </div>
+      </div>
+      <div class="swatch reveal">
+        <div class="swatch-color" style="background: var(--rose);"></div>
+        <div class="swatch-info">
+          <div class="font-semibold text-sm">玫瑰粉</div>
+          <div class="text-xs font-mono" style="color: var(--fg-muted);">#FFA8B8</div>
+        </div>
+      </div>
+      <div class="swatch reveal">
+        <div class="swatch-color" style="background: var(--gradient-dream);"></div>
+        <div class="swatch-info">
+          <div class="font-semibold text-sm">极光渐变</div>
+          <div class="text-xs font-mono" style="color: var(--fg-muted);">Dream</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 渐变展示 -->
+    <div class="grid md:grid-cols-3 gap-5">
+      <div class="card overflow-hidden reveal">
+        <div class="h-40" style="background: var(--gradient-dream);"></div>
+        <div class="p-5">
+          <div class="font-semibold mb-1">Dream 渐变</div>
+          <div class="text-xs" style="color: var(--fg-muted);">主品牌渐变，用于关键按钮与高亮元素</div>
+        </div>
+      </div>
+      <div class="card overflow-hidden reveal">
+        <div class="h-40" style="background: var(--gradient-aurora);"></div>
+        <div class="p-5">
+          <div class="font-semibold mb-1">Aurora 渐变</div>
+          <div class="text-xs" style="color: var(--fg-muted);">极光渐变，用于装饰边框与特殊高亮</div>
+        </div>
+      </div>
+      <div class="card overflow-hidden reveal">
+        <div class="h-40" style="background: var(--gradient-sky);"></div>
+        <div class="p-5">
+          <div class="font-semibold mb-1">Sky 渐变</div>
+          <div class="text-xs" style="color: var(--fg-muted);">天空渐变，用于大区域背景铺垫</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 字体系统 -->
+<section id="typography" class="px-6 py-20 relative">
+  <div class="max-w-6xl mx-auto">
+    <div class="reveal mb-12">
+      <div class="section-label mb-4">字体规范</div>
+      <h2 class="font-display text-4xl md:text-5xl font-light tracking-tight">两套字体，<span class="italic font-medium glow-text">声色分明</span></h2>
+    </div>
+
+    <div class="grid lg:grid-cols-2 gap-6">
+      <div class="card p-8 reveal">
+        <div class="flex items-center justify-between mb-6">
+          <div>
+            <div class="text-xs font-semibold uppercase tracking-wider" style="color: var(--accent);">Display</div>
+            <div class="font-display text-2xl font-semibold mt-1">Fraunces</div>
+          </div>
+          <div class="tag tag-accent">标题</div>
+        </div>
+        <div class="font-display text-7xl font-light leading-none mb-3">Aa</div>
+        <div class="font-display text-2xl italic font-light mb-6" style="color: var(--fg-secondary);">云想衣裳花想容</div>
+        <div class="space-y-2 text-sm" style="color: var(--fg-muted);">
+          <div class="flex justify-between"><span>Light 300</span><span class="font-mono">16-72px</span></div>
+          <div class="flex justify-between"><span>Regular 400</span><span class="font-mono">16-72px</span></div>
+          <div class="flex justify-between"><span>Semibold 600</span><span class="font-mono">16-72px</span></div>
+        </div>
+      </div>
+
+      <div class="card p-8 reveal">
+        <div class="flex items-center justify-between mb-6">
+          <div>
+            <div class="text-xs font-semibold uppercase tracking-wider" style="color: var(--mint);">Body</div>
+            <div class="text-2xl font-semibold mt-1" style="font-family: 'Plus Jakarta Sans';">Plus Jakarta Sans</div>
+          </div>
+          <div class="tag tag-mint">正文</div>
+        </div>
+        <div class="text-7xl font-light leading-none mb-3" style="font-family: 'Plus Jakarta Sans';">Aa</div>
+        <div class="text-2xl font-light mb-6" style="color: var(--fg-secondary); font-family: 'Plus Jakarta Sans';">清澈的清晨，露珠轻颤</div>
+        <div class="space-y-2 text-sm" style="color: var(--fg-muted); font-family: 'Plus Jakarta Sans';">
+          <div class="flex justify-between"><span>Light 300</span><span class="font-mono">12-32px</span></div>
+          <div class="flex justify-between"><span>Regular 400</span><span class="font-mono">12-32px</span></div>
+          <div class="flex justify-between"><span>Bold 700</span><span class="font-mono">12-32px</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 字号阶梯 -->
+    <div class="card p-8 mt-6 reveal">
+      <div class="text-xs font-semibold uppercase tracking-wider mb-6" style="color: var(--fg-muted);">字号阶梯 Type Scale</div>
+      <div class="space-y-4">
+        <div class="flex items-baseline gap-6 border-b pb-3" style="border-color: var(--border);">
+          <span class="text-xs font-mono w-16" style="color: var(--fg-muted);">72px</span>
+          <span class="font-display text-7xl font-light">梦幻</span>
+        </div>
+        <div class="flex items-baseline gap-6 border-b pb-3" style="border-color: var(--border);">
+          <span class="text-xs font-mono w-16" style="color: var(--fg-muted);">48px</span>
+          <span class="font-display text-5xl font-light">灵动</span>
+        </div>
+        <div class="flex items-baseline gap-6 border-b pb-3" style="border-color: var(--border);">
+          <span class="text-xs font-mono w-16" style="color: var(--fg-muted);">32px</span>
+          <span class="font-display text-3xl font-medium">柔和</span>
+        </div>
+        <div class="flex items-baseline gap-6 border-b pb-3" style="border-color: var(--border);">
+          <span class="text-xs font-mono w-16" style="color: var(--fg-muted);">20px</span>
+          <span class="text-xl font-semibold">清新自然</span>
+        </div>
+        <div class="flex items-baseline gap-6">
+          <span class="text-xs font-mono w-16" style="color: var(--fg-muted);">14px</span>
+          <span class="text-sm">这是正文样式，用于段落与说明性文字</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 组件展示 -->
+<section id="components" class="px-6 py-20 relative">
+  <div class="max-w-6xl mx-auto">
+    <div class="reveal mb-12">
+      <div class="section-label mb-4">组件库</div>
+      <h2 class="font-display text-4xl md:text-5xl font-light tracking-tight">圆润组件，<span class="italic font-medium glow-text">细节入微</span></h2>
+    </div>
+
+    <!-- 按钮组件 -->
+    <div class="card p-8 mb-6 reveal">
+      <div class="flex items-center justify-between mb-6">
+        <h3 class="font-display text-2xl font-semibold">按钮 Buttons</h3>
+        <span class="text-xs" style="color: var(--fg-muted);">6 种样式 · 3 种尺寸</span>
+      </div>
+      <div class="space-y-6">
+        <div class="flex flex-wrap gap-3 items-center">
+          <button class="btn btn-primary" onclick="showToast('提交成功', '您的更改已保存', 'check')">
+            <i class="ti ti-check"></i>主要按钮
+          </button>
+          <button class="btn btn-gradient">
+            <i class="ti ti-sparkles"></i>渐变按钮
+          </button>
+          <button class="btn btn-secondary">次要按钮</button>
+          <button class="btn btn-soft">柔和按钮</button>
+          <button class="btn btn-ghost">幽灵按钮</button>
+          <button class="btn btn-primary" disabled>禁用状态</button>
+        </div>
+        <div class="flex flex-wrap gap-3 items-center">
+          <button class="btn btn-primary btn-sm">小型</button>
+          <button class="btn btn-primary">常规</button>
+          <button class="btn btn-primary btn-lg">大型</button>
+          <button class="btn btn-secondary btn-pill">
+            <i class="ti ti-search"></i>胶囊按钮
+          </button>
+          <button class="btn btn-soft btn-icon btn-pill tooltip" data-tip="收藏">
+            <i class="ti ti-heart"></i>
+          </button>
+          <button class="btn btn-secondary btn-icon btn-pill tooltip" data-tip="分享">
+            <i class="ti ti-share"></i>
+          </button>
+          <button class="btn btn-primary" id="loadingBtn" onclick="triggerLoading(this)">
+            <span class="spinner hidden" id="loadSpinner"></span>
+            <span id="loadText">点击加载</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 表单组件 -->
+    <div class="card p-8 mb-6 reveal">
+      <div class="flex items-center justify-between mb-6">
+        <h3 class="font-display text-2xl font-semibold">表单 Form Elements</h3>
+        <span class="text-xs" style="color: var(--fg-muted);">输入 · 选择 · 开关</span>
+      </div>
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="space-y-4">
+          <div>
+            <label class="text-xs font-semibold mb-2 block" style="color: var(--fg-secondary);">用户名</label>
+            <div class="input-wrap">
+              <input type="text" class="input input-icon" placeholder="输入您的昵称" value="云中漫步">
+              <i class="ti ti-user input-icon-left"></i>
+            </div>
+          </div>
+          <div>
+            <label class="text-xs font-semibold mb-2 block" style="color: var(--fg-secondary);">邮箱地址</label>
+            <div class="input-wrap">
+              <input type="email" class="input input-icon" placeholder="you@example.com">
+              <i class="ti ti-mail input-icon-left"></i>
+            </div>
+          </div>
+          <div>
+            <label class="text-xs font-semibold mb-2 block" style="color: var(--fg-secondary);">错误状态</label>
+            <input type="text" class="input input-error" value="无效的输入">
+            <div class="text-xs mt-1.5 flex items-center gap-1" style="color: var(--rose);">
+              <i class="ti ti-alert-circle"></i>请检查输入内容
+            </div>
+          </div>
+          <div>
+            <label class="text-xs font-semibold mb-2 block" style="color: var(--fg-secondary);">留言</label>
+            <textarea class="input" rows="3" placeholder="说点什么..."></textarea>
+          </div>
+        </div>
+        <div class="space-y-5">
+          <div>
+            <label class="text-xs font-semibold mb-3 block" style="color: var(--fg-secondary);">开关</label>
+            <div class="space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="text-sm">开启通知</span>
+                <div class="switch active" onclick="this.classList.toggle('active')"></div>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-sm">深色模式</span>
+                <div class="switch" onclick="this.classList.toggle('active')"></div>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-sm">自动保存</span>
+                <div class="switch active" onclick="this.classList.toggle('active')"></div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <label class="text-xs font-semibold mb-3 block" style="color: var(--fg-secondary);">复选框</label>
+            <div class="space-y-2.5">
+              <label class="flex items-center gap-3 cursor-pointer">
+                <div class="checkbox checked" onclick="this.classList.toggle('checked')"></div>
+                <span class="text-sm">接收营销邮件</span>
+              </label>
+              <label class="flex items-center gap-3 cursor-pointer">
+                <div class="checkbox" onclick="this.classList.toggle('checked')"></div>
+                <span class="text-sm">同意服务条款</span>
+              </label>
+            </div>
+          </div>
+          <div>
+            <label class="text-xs font-semibold mb-3 block" style="color: var(--fg-secondary);">单选</label>
+            <div class="space-y-2.5">
+              <label class="flex items-center gap-3 cursor-pointer">
+                <div class="radio checked" onclick="document.querySelectorAll('.radio-group .radio').forEach(r=>r.classList.remove('checked'));this.classList.add('checked')" class="radio-group"></div>
+                <span class="text-sm">极简风格</span>
+              </label>
+              <label class="flex items-center gap-3 cursor-pointer">
+                <div class="radio radio-group" onclick="document.querySelectorAll('.radio-group').forEach(r=>r.classList.remove('checked'));this.classList.add('checked')"></div>
+                <span class="text-sm">梦幻风格</span>
+              </label>
+              <label class="flex items-center gap-3 cursor-pointer">
+                <div class="radio radio-group" onclick="document.querySelectorAll('.radio-group').forEach(r=>r.classList.remove('checked'));this.classList.add('checked')"></div>
+                <span class="text-sm">活泼风格</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 滑块 -->
+      <div class="mt-6 pt-6 border-t" style="border-color: var(--border);">
+        <label class="text-xs font-semibold mb-3 block" style="color: var(--fg-secondary);">滑块 Slider</label>
+        <div class="flex items-center gap-4">
+          <span class="text-sm" style="color: var(--fg-muted);">0</span>
+          <div class="slider-track flex-1" id="slider1">
+            <div class="slider-fill" style="width: 65%;"></div>
+            <div class="slider-thumb" style="left: 65%;"></div>
+          </div>
+          <span class="text-sm font-semibold num" id="sliderVal">65</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 标签 & 徽章 -->
+    <div class="card p-8 mb-6 reveal">
+      <div class="flex items-center justify-between mb-6">
+        <h3 class="font-display text-2xl font-semibold">标签与徽章 Tags & Badges</h3>
+      </div>
+      <div class="flex flex-wrap items-center gap-3 mb-6">
+        <span class="tag tag-accent"><i class="ti ti-sparkles"></i>主品牌</span>
+        <span class="tag tag-mint"><i class="ti ti-leaf"></i>自然</span>
+        <span class="tag tag-lavender"><i class="ti ti-moon"></i>梦境</span>
+        <span class="tag tag-peach"><i class="ti ti-sun"></i>温暖</span>
+        <span class="tag tag-lemon"><i class="ti ti-star"></i>活力</span>
+        <span class="tag tag-rose"><i class="ti ti-heart"></i>喜爱</span>
+      </div>
+      <div class="flex flex-wrap items-center gap-4">
+        <button class="btn btn-secondary">
+          收件箱
+          <span class="badge">12</span>
+        </button>
+        <button class="btn btn-soft">
+          通知
+          <span class="badge" style="background: var(--accent);">3</span>
+        </button>
+        <div class="flex items-center gap-2">
+          <div class="avatar w-8 h-8 text-xs">A</div>
+          <div class="relative">
+            <div class="avatar w-8 h-8 text-xs">B</div>
+            <span class="absolute -top-0.5 -right-0.5 w-3 h-3 rounded-full border-2" style="background: var(--mint); border-color: var(--bg-card);"></span>
+          </div>
+          <div class="avatar w-8 h-8 text-xs">C</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 进度 & 反馈 -->
+    <div class="card p-8 mb-6 reveal">
+      <div class="flex items-center justify-between mb-6">
+        <h3 class="font-display text-2xl font-semibold">进度与反馈 Progress</h3>
+      </div>
+      <div class="space-y-5">
+        <div>
+          <div class="flex justify-between text-sm mb-2">
+            <span style="color: var(--fg-secondary);">上传中...</span>
+            <span class="font-semibold num">42%</span>
+          </div>
+          <div class="progress"><div class="progress-bar" style="width: 42%;"></div></div>
+        </div>
+        <div>
+          <div class="flex justify-between text-sm mb-2">
+            <span style="color: var(--fg-secondary);">同步完成</span>
+            <span class="font-semibold num" style="color: var(--mint);">100%</span>
+          </div>
+          <div class="progress"><div class="progress-bar" style="width: 100%; background: var(--mint);"></div></div>
+        </div>
+        <div>
+          <div class="flex justify-between text-sm mb-2">
+            <span style="color: var(--fg-secondary);">存储空间</span>
+            <span class="font-semibold num">78%</span>
+          </div>
+          <div class="progress"><div class="progress-bar" style="width: 78%; background: var(--gradient-aurora);"></div></div>
+        </div>
+      </div>
+      
+      <!-- Alerts -->
+      <div class="grid md:grid-cols-2 gap-4 mt-6">
+        <div class="alert" style="background: var(--accent-soft); border-color: var(--border-strong);">
+          <i class="ti ti-info-circle alert-icon" style="color: var(--accent);"></i>
+          <div>
+            <div class="font-semibold text-sm">提示信息</div>
+            <div class="text-xs mt-0.5" style="color: var(--fg-secondary);">这是一条柔和的提示，告知用户当前状态。</div>
+          </div>
+        </div>
+        <div class="alert" style="background: var(--mint-soft); border-color: var(--mint);">
+          <i class="ti ti-circle-check alert-icon" style="color: var(--mint);"></i>
+          <div>
+            <div class="font-semibold text-sm">操作成功</div>
+            <div class="text-xs mt-0.5" style="color: var(--fg-secondary);">您的设置已成功保存并应用。</div>
+          </div>
+        </div>
+        <div class="alert" style="background: var(--lemon-soft); border-color: var(--lemon);">
+          <i class="ti ti-alert-triangle alert-icon" style="color: #B88A1A;"></i>
+          <div>
+            <div class="font-semibold text-sm">注意事项</div>
+            <div class="text-xs mt-0.5" style="color: var(--fg-secondary);">操作不可逆，请谨慎确认。</div>
+          </div>
+        </div>
+        <div class="alert" style="background: var(--rose-soft); border-color: var(--rose);">
+          <i class="ti ti-alert-octagon alert-icon" style="color: var(--rose);"></i>
+          <div>
+            <div class="font-semibold text-sm">错误状态</div>
+            <div class="text-xs mt-0.5" style="color: var(--fg-secondary);">网络连接异常，请稍后重试。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 标签页 -->
+    <div class="card p-8 mb-6 reveal">
+      <div class="flex items-center justify-between mb-6">
+        <h3 class="font-display text-2xl font-semibold">标签页 Tabs</h3>
+      </div>
+      <div class="tabs mb-6">
+        <div class="tab active" onclick="switchTab(this, 'tab1')">概览</div>
+        <div class="tab" onclick="switchTab(this, 'tab2')">活动</div>
+        <div class="tab" onclick="switchTab(this, 'tab3')">收藏</div>
+        <div class="tab" onclick="switchTab(this, 'tab4')">设置</div>
+      </div>
+      <div class="card-soft p-6" style="border-radius: 16px;">
+        <div id="tab1" class="tab-content">
+          <div class="font-semibold mb-2">项目概览</div>
+          <p class="text-sm" style="color: var(--fg-secondary);">您的项目当前状态良好，已完成 68% 的里程碑。本周新增 12 个任务，已完成 8 个。</p>
+        </div>
+        <div id="tab2" class="tab-content hidden">
+          <div class="font-semibold mb-2">最近活动</div>
+          <p class="text-sm" style="color: var(--fg-secondary);">展示您和团队成员的最近操作记录与协作动态。</p>
+        </div>
+        <div id="tab3" class="tab-content hidden">
+          <div class="font-semibold mb-2">我的收藏</div>
+          <p class="text-sm" style="color: var(--fg-secondary);">您收藏的所有项目、文档和资源都汇总在这里。</p>
+        </div>
+        <div id="tab4" class="tab-content hidden">
+          <div class="font-semibold mb-2">项目设置</div>
+          <p class="text-sm" style="color: var(--fg-secondary);">配置项目的访问权限、通知偏好和集成选项。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 头像 -->
+    <div class="card p-8 mb-6 reveal">
+      <div class="flex items-center justify-between mb-6">
+        <h3 class="font-display text-2xl font-semibold">头像 Avatars</h3>
+      </div>
+      <div class="flex flex-wrap items-center gap-6">
+        <div class="text-center">
+          <div class="avatar w-16 h-16 text-2xl mb-2 mx-auto">云</div>
+          <div class="text-xs" style="color: var(--fg-muted);">XS</div>
+        </div>
+        <div class="text-center">
+          <div class="avatar w-20 h-20 text-3xl mb-2 mx-auto" style="background: var(--gradient-aurora);">墨</div>
+          <div class="text-xs" style="color: var(--fg-muted);">SM</div>
+        </div>
+        <div class="text-center">
+          <div class="avatar avatar-ring w-24 h-24 text-4xl mb-2 mx-auto">梦</div>
+          <div class="text-xs" style="color: var(--fg-muted);">光环</div>
+        </div>
+        <div class="text-center">
+          <img src="https://picsum.photos/seed/aether1/96/96.jpg" class="w-24 h-24 rounded-full mb-2 mx-auto object-cover" style="border: 3px solid var(--bg-card); box-shadow: var(--shadow-md);" alt="头像">
+          <div class="text-xs" style="color: var(--fg-muted);">图片</div>
+        </div>
+        <div class="flex -space-x-3">
+          <div class="avatar w-12 h-12 text-base" style="background: var(--accent);">A</div>
+          <div class="avatar w-12 h-12 text-base" style="background: var(--mint);">B</div>
+          <div class="avatar w-12 h-12 text-base" style="background: var(--lavender);">C</div>
+          <div class="avatar w-12 h-12 text-base" style="background: var(--peach);">D</div>
+          <div class="avatar w-12 h-12 text-base" style="background: var(--bg-soft); color: var(--fg-secondary);">+9</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 应用示例 -->
+<section id="showcase" class="px-6 py-20 relative">
+  <div class="max-w-6xl mx-auto">
+    <div class="reveal mb-12">
+      <div class="section-label mb-4">应用示例</div>
+      <h2 class="font-display text-4xl md:text-5xl font-light tracking-tight">看见 Aether <span class="italic font-medium glow-text">在呼吸</span></h2>
+    </div>
+
+    <div class="grid lg:grid-cols-3 gap-6">
+      <!-- 价格卡片 -->
+      <div class="card p-7 reveal">
+        <div class="text-sm font-semibold mb-1" style="color: var(--fg-muted);">入门版</div>
+        <div class="font-display text-5xl font-semibold mb-1">¥<span class="num">0</span></div>
+        <div class="text-xs mb-6" style="color: var(--fg-muted);">永久免费</div>
+        <ul class="space-y-3 mb-7 text-sm">
+          <li class="flex items-center gap-2"><i class="ti ti-check" style="color: var(--mint);"></i>3 个项目</li>
+          <li class="flex items-center gap-2"><i class="ti ti-check" style="color: var(--mint);"></i>基础组件</li>
+          <li class="flex items-center gap-2"><i class="ti ti-check" style="color: var(--mint);"></i>社区支持</li>
+        </ul>
+        <button class="btn btn-secondary w-full">开始使用</button>
+      </div>
+      
+      <div class="card price-featured p-7 reveal" style="transform: scale(1.04);">
+        <div class="flex justify-between items-center mb-1">
+          <div class="text-sm font-semibold" style="color: rgba(255,255,255,0.8);">专业版</div>
+          <span class="tag" style="background: rgba(255,255,255,0.2); color: white;">推荐</span>
+        </div>
+        <div class="font-display text-5xl font-semibold mb-1 price-amount">¥<span class="num">68</span></div>
+        <div class="text-xs mb-6" style="color: rgba(255,255,255,0.7);">每月</div>
+        <ul class="space-y-3 mb-7 text-sm" style="color: rgba(255,255,255,0.95);">
+          <li class="flex items-center gap-2"><i class="ti ti-check"></i>无限项目</li>
+          <li class="flex items-center gap-2"><i class="ti ti-check"></i>全部组件与模板</li>
+          <li class="flex items-center gap-2"><i class="ti ti-check"></i>优先邮件支持</li>
+          <li class="flex items-center gap-2"><i class="ti ti-check"></i>团队协作功能</li>
+        </ul>
+        <button class="btn w-full" style="background: white; color: var(--accent-deep);" onclick="showToast('订阅成功', '感谢您选择专业版', 'check')">立即订阅</button>
+      </div>
+
+      <div class="card p-7 reveal">
+        <div class="text-sm font-semibold mb-1" style="color: var(--fg-muted);">团队版</div>
+        <div class="font-display text-5xl font-semibold mb-1">¥<span class="num">198</span></div>
+        <div class="text-xs mb-6" style="color: var(--fg-muted);">每月</div>
+        <ul class="space-y-3 mb-7 text-sm">
+          <li class="flex items-center gap-2"><i class="ti ti-check" style="color: var(--mint);"></i>所有专业版功能</li>
+          <li class="flex items-center gap-2"><i class="ti ti-check" style="color: var(--mint);"></i>10 个团队成员</li>
+          <li class="flex items-center gap-2"><i class="ti ti-check" style="color: var(--mint);"></i>专属客户经理</li>
+          <li class="flex items-center gap-2"><i class="ti ti-check" style="color: var(--mint);"></i>SLA 保障</li>
+        </ul>
+        <button class="btn btn-secondary w-full">联系销售</button>
+      </div>
+    </div>
+
+    <!-- 模拟应用窗口 -->
+    <div class="mock-window mt-8 reveal">
+      <div class="mock-titlebar">
+        <div class="mock-dot" style="background: #FF6B6B;"></div>
+        <div class="mock-dot" style="background: #FFE08A;"></div>
+        <div class="mock-dot" style="background: #6FD4B0;"></div>
+        <div class="ml-3 text-xs" style="color: var(--fg-muted);">aether.studio / 工作台</div>
+      </div>
+      <div class="grid md:grid-cols-[220px_1fr] min-h-[440px]">
+        <!-- 侧边栏 -->
+        <div class="p-5 border-r" style="border-color: var(--border); background: var(--bg-elevated);">
+          <div class="flex items-center gap-2 mb-6">
+            <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background: var(--gradient-dream);">
+              <i class="ti ti-sparkles text-white"></i>
+            </div>
+            <span class="font-display font-semibold">Aether</span>
+          </div>
+          <div class="space-y-1">
+            <div class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm" style="background: var(--accent-soft); color: var(--accent);">
+              <i class="ti ti-layout-dashboard"></i>仪表盘
+            </div>
+            <div class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm" style="color: var(--fg-secondary);">
+              <i class="ti ti-folder"></i>项目
+            </div>
+            <div class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm" style="color: var(--fg-secondary);">
+              <i class="ti ti-chart-line"></i>分析
+            </div>
+            <div class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm" style="color: var(--fg-secondary);">
+              <i class="ti ti-messages"></i>消息
+              <span class="badge ml-auto" style="background: var(--rose);">5</span>
+            </div>
+            <div class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm" style="color: var(--fg-secondary);">
+              <i class="ti ti-settings"></i>设置
+            </div>
+          </div>
+          <div class="mt-8 p-4 rounded-xl" style="background: var(--gradient-dream); color: white;">
+            <div class="text-xs font-semibold mb-1">升级专业版</div>
+            <div class="text-xs mb-3 opacity-90">解锁全部组件与动效</div>
+            <button class="btn btn-sm w-full" style="background: white; color: var(--accent-deep);">立即升级</button>
+          </div>
+        </div>
+        <!-- 主内容 -->
+        <div class="p-6">
+          <div class="flex items-center justify-between mb-6">
+            <div>
+              <div class="font-display text-2xl font-semibold">早上好，云中漫步</div>
+              <div class="text-sm" style="color: var(--fg-muted);">今天有 4 项任务等待你处理</div>
+            </div>
+            <div class="flex gap-2">
+              <button class="btn btn-secondary btn-sm"><i class="ti ti-calendar"></i>本周</button>
+              <button class="btn btn-primary btn-sm"><i class="ti ti-plus"></i>新建任务</button>
+            </div>
+          </div>
+          <div class="grid grid-cols-3 gap-3 mb-6">
+            <div class="card-soft p-4" style="border-radius: 14px;">
+              <div class="flex items-center gap-2 mb-2">
+                <i class="ti ti-checkbox" style="color: var(--accent);"></i>
+                <span class="text-xs" style="color: var(--fg-muted);">任务</span>
+              </div>
+              <div class="font-display text-2xl font-semibold num">24</div>
+              <div class="text-xs" style="color: var(--mint);">↑ 12% 较上周</div>
+            </div>
+            <div class="card-soft p-4" style="border-radius: 14px;">
+              <div class="flex items-center gap-2 mb-2">
+                <i class="ti ti-clock" style="color: var(--lavender);"></i>
+                <span class="text-xs" style="color: var(--fg-muted);">时长</span>
+              </div>
+              <div class="font-display text-2xl font-semibold num">18h</div>
+              <div class="text-xs" style="color: var(--accent);">↑ 4h 较上周</div>
+            </div>
+            <div class="card-soft p-4" style="border-radius: 14px;">
+              <div class="flex items-center gap-2 mb-2">
+                <i class="ti ti-flame" style="color: var(--peach);"></i>
+                <span class="text-xs" style="color: var(--fg-muted);">连续</span>
+              </div>
+              <div class="font-display text-2xl font-semibold num">12 天</div>
+              <div class="text-xs" style="color: var(--fg-muted);">保持节奏</div>
+            </div>
+          </div>
+          <div class="card-soft p-5" style="border-radius: 14px;">
+            <div class="flex items-center justify-between mb-4">
+              <div class="font-semibold text-sm">本周任务进度</div>
+              <span class="tag tag-accent">进行中</span>
+            </div>
+            <div class="space-y-3">
+              <div>
+                <div class="flex justify-between text-xs mb-1.5"><span>设计组件库</span><span class="font-semibold num">85%</span></div>
+                <div class="progress" style="height: 6px;"><div class="progress-bar" style="width: 85%;"></div></div>
+              </div>
+              <div>
+                <div class="flex justify-between text-xs mb-1.5"><span>用户调研报告</span><span class="font-semibold num">52%</span></div>
+                <div class="progress" style="height: 6px;"><div class="progress-bar" style="width: 52%; background: var(--lavender);"></div></div>
+              </div>
+              <div>
+                <div class="flex justify-between text-xs mb-1.5"><span>原型迭代</span><span class="font-semibold num">38%</span></div>
+                <div class="progress" style="height: 6px;"><div class="progress-bar" style="width: 38%; background: var(--peach);"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="px-6 py-16 mt-10 relative">
+  <div class="max-w-6xl mx-auto">
+    <div class="gradient-border p-10">
+      <div class="grid md:grid-cols-2 gap-8 items-center">
+        <div>
+          <div class="font-display text-3xl font-light mb-3">让界面，<span class="italic glow-text">有温度</span></div>
+          <p class="text-sm" style="color: var(--fg-secondary);">Aether 设计系统 · 为创造柔软、灵动、美好的产品而生</p>
+        </div>
+        <div class="flex flex-wrap gap-3 md:justify-end">
+          <button class="btn btn-gradient"><i class="ti ti-book"></i>文档</button>
+          <button class="btn btn-secondary"><i class="ti ti-brand-github"></i>GitHub</button>
+          <button class="btn btn-soft"><i class="ti ti-palette"></i>Figma</button>
+        </div>
+      </div>
+      <div class="mt-10 pt-6 border-t flex flex-col md:flex-row justify-between items-center gap-4" style="border-color: var(--border);">
+        <div class="text-xs" style="color: var(--fg-muted);">© 2024 Aether Design System · 用心打磨每个细节</div>
+        <div class="flex items-center gap-4 text-xs" style="color: var(--fg-muted);">
+          <a href="#" class="hover:opacity-80 transition">设计指南</a>
+          <a href="#" class="hover:opacity-80 transition">变更日志</a>
+          <a href="#" class="hover:opacity-80 transition">许可协议</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  /* ============ 主题切换 ============ */
+  const html = document.documentElement;
+  const themeToggle = document.getElementById('themeToggle');
+  const themeIcon = document.getElementById('themeIcon');
+  
+  function applyTheme(theme) {
+    html.setAttribute('data-theme', theme);
+    themeIcon.className = theme === 'dark' ? 'ti ti-moon' : 'ti ti-sun';
+    localStorage.setItem('aether-theme', theme);
+  }
+  
+  const savedTheme = localStorage.getItem('aether-theme') || 'light';
+  applyTheme(savedTheme);
+  
+  themeToggle.addEventListener('click', () => {
+    const current = html.getAttribute('data-theme');
+    const next = current === 'light' ? 'dark' : 'light';
+    applyTheme(next);
+    showToast(next === 'dark' ? '深色模式已开启' : '浅色模式已开启', '主题切换丝滑无缝', 'palette');
+  });
+
+  /* ============ 涟漪效果 ============ */
+  document.querySelectorAll('.btn').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      const ripple = document.createElement('span');
+      ripple.className = 'ripple';
+      const rect = this.getBoundingClientRect();
+      const size = Math.max(rect.width, rect.height);
+      ripple.style.width = ripple.style.height = size + 'px';
+      ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
+      ripple.style.top = (e.clientY - rect.top - size / 2) + 'px';
+      this.appendChild(ripple);
+      setTimeout(() => ripple.remove(), 700);
+    });
+  });
+
+  /* ============ Toast 通知 ============ */
+  const toastContainer = document.getElementById('toastContainer');
+  const iconMap = {
+    'check': 'ti-circle-check',
+    'sparkles': 'ti-sparkles',
+    'palette': 'ti-palette',
+    'heart': 'ti-heart',
+    'info': 'ti-info-circle'
+  };
+  const colorMap = {
+    'check': 'var(--mint)',
+    'sparkles': 'var(--accent)',
+    'palette': 'var(--lavender)',
+    'heart': 'var(--rose)',
+    'info': 'var(--accent)'
+  };
+  
+  function showToast(title, desc, icon = 'info') {
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.innerHTML = `
+      <div class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style="background: ${colorMap[icon]}20; color: ${colorMap[icon]};">
+        <i class="ti ${iconMap[icon]} text-lg"></i>
+      </div>
+      <div class="flex-1">
+        <div class="font-semibold text-sm">${title}</div>
+        <div class="text-xs" style="color: var(--fg-muted);">${desc}</div>
+      </div>
+      <button class="btn btn-ghost btn-icon btn-sm" style="padding: 4px; aspect-rauto; height: 28px; width: 28px;">
+        <i class="ti ti-x text-sm"></i>
+      </button>
+    `;
+    toastContainer.appendChild(toast);
+    
+    const closeBtn = toast.querySelector('button');
+    const close = () => {
+      toast.classList.add('out');
+      setTimeout(() => toast.remove(), 400);
+    };
+    closeBtn.addEventListener('click', close);
+    setTimeout(close, 3500);
+  }
+
+  /* ============ 滚动渐入 ============ */
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+  
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  /* ============ 数字计数动画 ============ */
+  const numObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        const target = parseInt(el.dataset.count);
+        const duration = 1800;
+        const start = performance.now();
+        const animate = (now) => {
+          const progress = Math.min((now - start) / duration, 1);
+          const easeOut = 1 - Math.pow(1 - progress, 3);
+          el.textContent = Math.floor(easeOut * target);
+          if (progress < 1) requestAnimationFrame(animate);
+          else el.textContent = target;
+        };
+        requestAnimationFrame(animate);
+        numObserver.unobserve(el);
+      }
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('[data-count]').forEach(el => numObserver.observe(el));
+
+  /* ============ 滑块 ============ */
+  const slider = document.getElementById('slider1');
+  const sliderVal = document.getElementById('sliderVal');
+  let isDragging = false;
+  
+  function updateSlider(e) {
+    const rect = slider.getBoundingClientRect();
+    const x = (e.clientX || e.touches[0].clientX) - rect.left;
+    const pct = Math.max(0, Math.min(100, (x / rect.width) * 100));
+    slider.querySelector('.slider-fill').style.width = pct + '%';
+    slider.querySelector('.slider-thumb').style.left = pct + '%';
+    sliderVal.textContent = Math.round(pct);
+  }
+  
+  slider.addEventListener('mousedown', (e) => { isDragging = true; updateSlider(e); });
+  document.addEventListener('mousemove', (e) => { if (isDragging) updateSlider(e); });
+  document.addEventListener('mouseup', () => { isDragging = false; });
+  slider.addEventListener('touchstart', (e) => { isDragging = true; updateSlider(e); });
+  document.addEventListener('touchmove', (e) => { if (isDragging) updateSlider(e); });
+  document.addEventListener('touchend', () => { isDragging = false; });
+
+  /* ============ 标签页 ============ */
+  function switchTab(tabEl, contentId) {
+    tabEl.parentElement.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    tabEl.classList.add('active');
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+    document.getElementById(contentId).classList.remove('hidden');
+  }
+  window.switchTab = switchTab;
+
+  /* ============ 加载按钮 ============ */
+  function triggerLoading(btn) {
+    const spinner = btn.querySelector('.spinner');
+    const text = btn.querySelector('#loadText');
+    spinner.classList.remove('hidden');
+    text.textContent = '加载中...';
+    btn.disabled = true;
+    setTimeout(() => {
+      spinner.classList.add('hidden');
+      text.textContent = '点击加载';
+      btn.disabled = false;
+      showToast('加载完成', '数据已成功获取', 'check');
+    }, 2000);
+  }
+  window.triggerLoading = triggerLoading;
+
+  /* ============ 鼠标光晕 ============ */
+  const cursorGlow = document.getElementById('cursorGlow');
+  let mouseX = 0, mouseY = 0, glowX = 0, glowY = 0;
+  
+  document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+  });
+  
+  function animateGlow() {
+    glowX += (mouseX - glowX) * 0.1;
+    glowY += (mouseY - glowY) * 0.1;
+    cursorGlow.style.left = glowX + 'px';
+    cursorGlow.style.top = glowY + 'px';
+    requestAnimationFrame(animateGlow);
+  }
+  animateGlow();
+
+  /* ============ 漂浮粒子 ============ */
+  function createParticles() {
+    const decor = document.querySelector('.bg-decorations');
+    for (let i = 0; i < 12; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      const size = Math.random() * 6 + 3;
+      p.style.width = p.style.height = size + 'px';
+      p.style.left = Math.random() * 100 + '%';
+      p.style.animationDuration = (Math.random() * 20 + 15) + 's';
+      p.style.animationDelay = Math.random() * 20 + 's';
+      p.style.opacity = Math.random() * 0.3 + 0.1;
+      const colors = ['var(--accent)', 'var(--mint)', 'var(--lavender)', 'var(--peach)'];
+      p.style.background = colors[Math.floor(Math.random() * colors.length)];
+      decor.appendChild(p);
+    }
+  }
+  createParticles();
+
+  /* ============ 欢迎提示 ============ */
+  setTimeout(() => {
+    showToast('欢迎来到 Aether', '点击右上角切换深浅模式', 'sparkles');
+  }, 1200);
+</script>
+
+</body>
+</html>
