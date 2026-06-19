@@ -91,6 +91,9 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Plus Jaka
 .page.active{display:block;}
 .page.anim-in{animation:pageSlideIn 0.35s cubic-bezier(0.16,1,0.3,1);}
 @keyframes pageSlideIn{from{opacity:0.3;transform:translateX(100%);}to{opacity:1;transform:translateX(0);}}
+/* ============ 作品详情抽屉动画 ============ */
+#page-workDetail{position:absolute;top:0;left:0;right:0;bottom:0;z-index:50;background:var(--bg-base);overflow-y:auto;-webkit-overflow-scrolling:touch;padding-top:74px;display:block;visibility:hidden;transform:translateX(100%);transition:transform 0.38s cubic-bezier(0.16,1,0.3,1),visibility 0s linear 0.38s;box-shadow:-3px 0 16px rgba(0,0,0,0.08);}
+#page-workDetail.drawer-open{visibility:visible;transform:translateX(0);transition:transform 0.38s cubic-bezier(0.16,1,0.3,1),visibility 0s;}
 /* ============ Tab栏 ============ */
 .tab-bar{height:62px;display:flex;align-items:flex-start;justify-content:space-around;
   background:var(--bg-glass);backdrop-filter:blur(20px);border-top:0.5px solid var(--border);
@@ -555,11 +558,6 @@ textarea.input{resize:none;line-height:1.6;}
   </div>
 </div>
 
-<!-- ============ 作品详情 ============ -->
-<div class="page" id="page-workDetail" data-title="作品详情">
-  <div id="workDetailContent"></div>
-</div>
-
 <!-- ============ 搜索 ============ -->
 <div class="page" id="page-allGameplays" data-title="全部玩法">
   <div style="padding:12px;"><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;" id="allGameplaysGrid"></div></div>
@@ -981,6 +979,10 @@ textarea.input{resize:none;line-height:1.6;}
 <div class="overlay" id="imgPreviewOverlay" onclick="closeImgPreview()" style="z-index:500;background:rgba(0,0,0,0.9);display:none;align-items:center;justify-content:center;"></div>
 
 </div><!-- /content-area -->
+<!-- ============ 作品详情（抽屉覆盖层，独立于内容区滚动） ============ -->
+<div class="page" id="page-workDetail" data-title="作品详情">
+  <div id="workDetailContent"></div>
+</div>
 <!-- ============ 常驻创作栏 ============ -->
 <div class="create-bottom" id="createBar" style="display:none;">
   <div style="flex:1;">
@@ -1078,7 +1080,7 @@ const MSGS={
   service:[{content:'客服：您好，有什么可以帮您？',time:'3小时前',unread:false}]
 };
 // ============ 状态 ============
-let pageStack=[];let currentTab='home';let selectedModel=0;let selectedStyle=null;let selectedRatio=0;let selectedCount=0;let promptHasImg=false;let bannerIdx=0;let bannerTimer=null;let isFollowing={};
+let pageStack=[];let currentTab='home';let selectedModel=0;let selectedStyle=null;let selectedRatio=0;let selectedCount=0;let promptHasImg=false;let bannerIdx=0;let bannerTimer=null;let isFollowing={};let savedScrollPositions={};
 // ============ 工具函数 ============
 function showToast(msg){const t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>{t.classList.add('out');setTimeout(()=>t.remove(),300)},2000)}
 function copyText(text){navigator.clipboard?.writeText(text).then(()=>showToast('已复制到剪贴板')).catch(()=>showToast('复制失败'))}
@@ -1098,6 +1100,9 @@ function switchTab(tabId){
 }
 function navigateTo(pageId,param){
   const page=$('page-'+pageId);if(!page)return;
+  // 保存当前活动页面的滚动位置，以便返回时恢复
+  var currentPageId=pageStack.length>0?pageStack[pageStack.length-1].pageId:currentTab;
+  savedScrollPositions[currentPageId]=$('contentArea').scrollTop;
   pageStack.push({pageId,param});
   const title=page.dataset.title||'';$('navTitle').textContent=title;
   $('navBack').style.display='flex';
@@ -1107,34 +1112,44 @@ function navigateTo(pageId,param){
   if(pageId==='userProfile')renderUserProfile(param);
   if(pageId==='followList')renderFollowList(param);
   if(pageId==='allModels')renderAllModels();
-    if(pageId==='allGameplays')renderAllGameplays();
-      if(pageId==='report')renderReportReasons();
-  page.classList.add('active');
-  page.style.cssText='position:absolute;top:0;left:0;right:0;bottom:0;overflow:hidden;z-index:50;background:var(--bg-base);padding-top:74px;transform:translateX(100%);transition:transform 0.4s cubic-bezier(0.4,0,0.2,1);will-change:transform;backface-visibility:hidden';
-  $('contentArea').scrollTop=0;
-  void page.offsetWidth;page.style.transform='translateX(0)';
-  setTimeout(function(){page.style.cssText='';document.querySelectorAll('.page').forEach(function(p){if(p!==page){p.classList.remove('active');p.classList.remove('anim-in')}})},410)
+  if(pageId==='allGameplays')renderAllGameplays();
+  if(pageId==='report')renderReportReasons();
+  if(pageId==='workDetail'){
+    // 抽屉式打开：主界面保持不动，作品详情从右滑入覆盖
+    page.scrollTop=0;
+    page.classList.add('drawer-open');
+  }else{
+    document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');p.style.cssText=''});
+    page.classList.add('active');
+    $('contentArea').scrollTop=0;
+  }
 }
 function navigateBack(){
+  var leaving=pageStack.length>0?pageStack[pageStack.length-1]:null;
   if(pageStack.length>0)pageStack.pop();
+  // 离开作品详情抽屉：播放滑出动画
+  if(leaving&&leaving.pageId==='workDetail'){$('page-workDetail').classList.remove('drawer-open')}
   if(pageStack.length>0){
     var last=pageStack[pageStack.length-1];
     var page=$('page-'+last.pageId);
-    document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');p.classList.remove('anim-in');p.style.cssText=''});
-    page.classList.add('active');
+    // 离开的不是作品详情抽屉时，才需要切换页面显隐（抽屉模式下主界面始终保持显示）
+    if(!(leaving&&leaving.pageId==='workDetail')){
+      document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');p.style.cssText=''});
+      page.classList.add('active');
+    }
     $('navTitle').textContent=page.dataset.title||'';
     $('navBack').style.display='flex';
     $('tabBar').style.display=page.dataset.showTab==='true'?'flex':'none';
     $('createBar').style.display=page.dataset.showTab==='create'?'flex':'none';
     if(page.dataset.showTab==='plaza')setTimeout(initPlazaTabIndicator,50);
-    var leavingPage=document.querySelector('.page.active:last-of-type');
-    if(leavingPage&&leavingPage!==page){
-      leavingPage.style.cssText='position:absolute;top:0;left:0;right:0;bottom:0;overflow:hidden;z-index:50;background:var(--bg-base);padding-top:74px;transform:translateX(0);transition:transform 0.4s cubic-bezier(0.4,0,0.2,1);will-change:transform;backface-visibility:hidden';
-      void leavingPage.offsetWidth;leavingPage.style.transform='translateX(100%)';
-      setTimeout(function(){leavingPage.classList.remove('active');leavingPage.style.cssText=''},410)
-    }
+    // 恢复上一页面的滚动位置
+    var savedTop=savedScrollPositions[last.pageId];
+    if(savedTop!==undefined)$('contentArea').scrollTop=savedTop;
   }else{
-    switchTab(currentTab)
+    switchTab(currentTab);
+    // 恢复tab页的滚动位置
+    var tabSavedTop=savedScrollPositions[currentTab];
+    if(tabSavedTop!==undefined)$('contentArea').scrollTop=tabSavedTop;
   }
 }
 // ============ 主题 ============
