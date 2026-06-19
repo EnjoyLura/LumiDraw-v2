@@ -88,8 +88,9 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Plus Jaka
 /* ============ 内容区 ============ */
 .content-area{flex:1;overflow-y:auto;overflow-x:hidden;position:relative;-webkit-overflow-scrolling:touch;padding-top:74px;}
 .page{display:none;}
-.page.active{display:block;animation:pageIn 0.35s cubic-bezier(0.16,1,0.3,1);}
-@keyframes pageIn{from{opacity:0;transform:translateX(30px);}to{opacity:1;transform:translateX(0);}}
+.page.active{display:block;}
+.page.anim-in{animation:pageSlideIn 0.35s cubic-bezier(0.16,1,0.3,1);}
+@keyframes pageSlideIn{from{opacity:0.3;transform:translateX(100%);}to{opacity:1;transform:translateX(0);}}
 /* ============ Tab栏 ============ */
 .tab-bar{height:62px;display:flex;align-items:flex-start;justify-content:space-around;
   background:var(--bg-glass);backdrop-filter:blur(20px);border-top:0.5px solid var(--border);
@@ -218,7 +219,7 @@ textarea.input{resize:none;line-height:1.6;}
 .chip-outline.active{background:var(--accent-soft);border-color:var(--accent);color:var(--accent-deep);}
 /* 创作页模型卡 */
 .model-card{width:106px;flex-shrink:0;background:var(--bg-card);border:2px solid transparent;border-radius:16px;
-  overflow:hidden;cursor:pointer;transition:all 0.3s;}
+  overflow:hidden;cursor:pointer;transition:all 0.3s;display:flex;flex-direction:column;}
 .model-card.selected{border-color:var(--accent);box-shadow:0 4px 14px var(--accent-glow);}
 /* 风格卡 */
 .style-card{aspect-ratio:1;border-radius:12px;overflow:hidden;cursor:pointer;position:relative;
@@ -233,6 +234,15 @@ textarea.input{resize:none;line-height:1.6;}
   transition:all 0.3s;background:var(--bg-card);font-size:12px;color:var(--fg-secondary);gap:3px;}
 .opt-card.selected{border-color:var(--accent);background:var(--accent-soft);color:var(--accent-deep);}
 .opt-card .oc-icon{font-size:18px;}
+.ratio-card{flex-shrink:0;border-radius:12px;border:2px solid var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;padding:8px 10px;background:var(--bg-card);transition:all 0.3s;min-width:56px;}
+.ratio-card.selected{border-color:var(--accent);background:var(--accent-soft);}
+.ratio-card.active{border-color:var(--accent);background:var(--accent-soft);}
+.ratio-card .ratio-shape{margin:0 auto 6px;background:var(--fg-muted);border-radius:3px;opacity:0.6;}
+.ratio-card.selected .ratio-shape{background:var(--accent);opacity:1;}
+.ratio-card.active .ratio-shape{background:var(--accent);opacity:1;}
+.ratio-card .ratio-name{font-size:11px;color:var(--fg-muted);font-weight:500;}
+.ratio-card.selected .ratio-name{color:var(--accent-deep);font-weight:600;}
+.ratio-card.active .ratio-name{color:var(--accent-deep);font-weight:600;}
 /* 创作结果图 */
 .result-img{position:relative;border-radius:14px;overflow:hidden;cursor:pointer;}
 .result-img.selected{box-shadow:0 0 0 3px var(--accent);}
@@ -338,34 +348,27 @@ textarea.input{resize:none;line-height:1.6;}
 
 <!-- ============ 广场 ============ -->
 <div class="page" id="page-plaza" data-title="广场" data-show-tab="true">
-  <div style="display:flex;align-items:center;padding:8px 16px;gap:10px;">
+  <div style="display:flex;align-items:center;padding:4px 16px;gap:10px;">
     <div onclick="toggleLeftDrawer()" style="cursor:pointer;padding:4px;">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--fg-primary)" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
     </div>
-    <div style="flex:1;display:flex;justify-content:center;gap:20px;">
-      <span class="plaza-tab active" onclick="switchPlazaTab(this,'推荐')" style="font-size:16px;font-weight:700;color:var(--accent);cursor:pointer;">推荐</span>
-      <span class="plaza-tab" onclick="switchPlazaTab(this,'热门')" style="font-size:16px;font-weight:500;color:var(--fg-muted);cursor:pointer;">热门</span>
-      <span class="plaza-tab" onclick="switchPlazaTab(this,'最新')" style="font-size:16px;font-weight:500;color:var(--fg-muted);cursor:pointer;">最新</span>
+    <div style="flex:1;display:flex;justify-content:center;gap:28px;position:relative;padding-bottom:4px;">
+      <span class="plaza-tab active" data-idx="0" onclick="switchPlazaTab(this,'推荐')" style="font-size:16px;font-weight:700;color:var(--accent);cursor:pointer;transition:color 0.3s;">推荐</span>
+      <span class="plaza-tab" data-idx="1" onclick="switchPlazaTab(this,'热门')" style="font-size:16px;font-weight:500;color:var(--fg-muted);cursor:pointer;transition:color 0.3s;">热门</span>
+      <span class="plaza-tab" data-idx="2" onclick="switchPlazaTab(this,'最新')" style="font-size:16px;font-weight:500;color:var(--fg-muted);cursor:pointer;transition:color 0.3s;">最新</span>
+      <div id="plazaTabIndicator" style="position:absolute;bottom:0;width:24px;height:3px;border-radius:999px;background:var(--accent);transition:all 0.3s cubic-bezier(0.16,1,0.3,1);"></div>
     </div>
     <div onclick="navigateTo('search')" style="cursor:pointer;padding:4px;">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--fg-primary)" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
     </div>
   </div>
-  <div class="h-scroll" style="margin-bottom:8px;" id="plazaCategories"></div>
-  <div style="padding:4px 16px 8px;display:flex;align-items:center;gap:8px;">
-    <div class="chip chip-outline" onclick="toggleFilterPanel()" id="filterChip">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:middle;margin-right:3px;"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/></svg>筛选
+  <div style="display:flex;align-items:center;margin-bottom:6px;">
+    <div style="flex:1;position:relative;overflow:hidden;">
+      <div class="h-scroll" id="plazaCategories" style="padding-right:0;"></div>
+      <div style="position:absolute;right:0;top:0;bottom:0;width:30px;background:linear-gradient(to right,transparent,var(--bg-base));pointer-events:none;"></div>
     </div>
-    <div class="chip chip-outline" onclick="showToast('按模型筛选')">全部模型</div>
-    <div class="chip chip-outline" onclick="showToast('按尺寸筛选')">全部尺寸</div>
-    <div class="chip chip-outline" onclick="showToast('按精度筛选')">全部精度</div>
-  </div>
-  <div id="filterPanel" style="display:none;padding:12px 16px;background:var(--bg-elevated);border-top:0.5px solid var(--border);border-bottom:0.5px solid var(--border);margin-bottom:8px;">
-    <div style="font-size:13px;font-weight:600;margin-bottom:8px;color:var(--fg-secondary);">风格类型</div>
-    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;" id="filterStyles"></div>
-    <div style="display:flex;gap:8px;">
-      <button class="btn btn-secondary btn-sm" style="flex:1;" onclick="resetFilter()">重置</button>
-      <button class="btn btn-primary btn-sm" style="flex:1;" onclick="applyFilter()">确认筛选</button>
+    <div onclick="openPlazaFilter()" style="width:44px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;border-left:0.5px solid var(--border);">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--fg-primary)" stroke-width="2"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
     </div>
   </div>
   <div style="padding:0 12px;"><div class="waterfall" id="plazaWaterfall"></div></div>
@@ -376,78 +379,71 @@ textarea.input{resize:none;line-height:1.6;}
   <div style="overflow-y:auto;flex:1;" id="createScroll">
     <div style="padding:12px 0 8px;">
       <div class="section-title" style="padding:0 12px;margin-bottom:10px;">
-        <span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:middle;margin-right:4px;color:var(--accent)"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="19" cy="13" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="10" cy="20" r="2.5"/><path d="M12 2a10 10 0 000 20 8 8 0 010-16"/></svg>选择模型</span><span class="more" onclick="navigateTo('allModels')">全部 ›</span>
+        <span style="font-size:16px;font-weight:700;">选择模型</span><span class="more" onclick="navigateTo('allModels')" style="color:var(--accent);font-size:14px;font-weight:600;display:flex;align-items:center;gap:2px;">全部模型 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg></span>
       </div>
       <div class="h-scroll" id="modelScroll"></div>
     </div>
     <div style="padding:0 12px;margin-bottom:14px;">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
-        <span style="font-size:15px;font-weight:700;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:middle;margin-right:4px;color:var(--accent)"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>描述你想要的画面</span>
+        <span style="font-size:16px;font-weight:700;">描述你想要的画面</span>
         <span class="tag tag-lavender" onclick="navigateTo('reversePrompt')" style="cursor:pointer;">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>反推提示词
         </span>
       </div>
-      <div style="position:relative;background:var(--bg-card);border:1.5px solid var(--border);border-radius:16px;padding:12px;min-height:120px;transition:all 0.3s;" id="promptBox">
-        <div id="promptImgPreview" style="display:none;position:relative;width:64px;height:64px;border-radius:10px;overflow:hidden;margin-bottom:8px;">
-          <img id="promptImg" src="" style="width:100%;height:100%;object-fit:cover;" onclick="previewImage(this.src)"/>
-          <div onclick="removePromptImg(event)" style="position:absolute;top:2px;right:2px;width:18px;height:18px;background:rgba(0,0,0,0.5);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;">
-            <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 2L10 10M10 2L2 10" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+      <div style="position:relative;background:var(--bg-card);border:1.5px solid var(--border);border-radius:16px;padding:12px;min-height:180px;transition:all 0.3s;display:flex;flex-direction:column;" id="promptBox">
+        <div style="position:relative;flex:1;">
+          <div id="promptImgPreview" style="display:none;position:relative;width:64px;height:64px;border-radius:10px;overflow:hidden;margin-bottom:8px;">
+            <img id="promptImg" src="" style="width:100%;height:100%;object-fit:cover;" onclick="previewImage(this.src)"/>
+            <div onclick="removePromptImg(event)" style="position:absolute;top:2px;right:2px;width:18px;height:18px;background:rgba(0,0,0,0.5);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;">
+              <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 2L10 10M10 2L2 10" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+            </div>
           </div>
-        </div>
-        <textarea id="promptInput" class="input" style="border:none;background:transparent;min-height:60px;padding:0;" placeholder="描述你想要生成的图片，越详细效果越好..." maxlength="500" oninput="updatePromptCount()"></textarea>
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:6px;">
-          <div onclick="uploadPromptImg()" style="cursor:pointer;display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:8px;background:var(--accent-soft);color:var(--accent);">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
-          </div>
-          <div style="display:flex;align-items:center;gap:10px;">
-            <span id="promptCount" style="font-size:12px;color:var(--fg-muted);">0/500</span>
-            <button class="btn btn-ghost btn-sm" onclick="clearPrompt()" style="padding:4px 8px;">清空</button>
+          <span id="promptCount" style="position:absolute;top:0;right:0;font-size:11px;color:var(--fg-muted);pointer-events:none;">0/500</span>
+          <textarea id="promptInput" class="input" style="border:none;background:transparent;min-height:140px;padding:0 0 32px 0;width:100%;" placeholder="描述你想要生成的图片，越详细效果越好..." maxlength="500" oninput="updatePromptCount()"></textarea>
+          <div style="position:absolute;bottom:4px;left:4px;right:4px;display:flex;align-items:center;justify-content:space-between;">
+            <div onclick="uploadPromptImg()" style="cursor:pointer;display:flex;align-items:center;justify-content:center;width:28px;height:28px;color:var(--accent);">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+            </div>
+            <div id="clearBtn" onclick="clearPrompt()" style="display:none;cursor:pointer;width:28px;height:28px;align-items:center;justify-content:center;color:var(--accent);">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </div>
           </div>
         </div>
       </div>
     </div>
     <div style="margin-bottom:14px;">
-      <div class="section-title" style="padding:0 12px;margin-bottom:10px;"><span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:middle;margin-right:4px;color:var(--lavender)"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>风格类型</span></div>
+      <div class="section-title" style="padding:0 12px;margin-bottom:10px;font-size:16px;"><span>风格类型</span></div>
       <div style="padding:0 12px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;" id="styleGrid"></div>
     </div>
     <div style="margin-bottom:14px;">
-      <div class="section-title" style="padding:0 12px;margin-bottom:10px;"><span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:middle;margin-right:4px;color:var(--mint)"><rect x="2" y="6" width="20" height="12" rx="1"/><path d="M2 10h20M6 14h4"/></svg>画面比例</span></div>
-      <div class="h-scroll" id="ratioScroll"></div>
+      <div class="section-title" style="padding:0 12px;margin-bottom:10px;font-size:16px;"><span>画面比例</span><span class="more" onclick="openRatioSheet()" style="color:var(--accent);font-size:14px;font-weight:600;display:flex;align-items:center;gap:2px;">全部尺寸 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg></span></div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:0 12px;" id="ratioScroll"></div>
     </div>
     <div style="margin-bottom:14px;">
-      <div class="section-title" style="padding:0 12px;margin-bottom:10px;"><span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:middle;margin-right:4px;color:var(--lemon)"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>生成数量</span></div>
-      <div class="h-scroll" id="countScroll"></div>
+      <div class="section-title" style="padding:0 12px;margin-bottom:10px;font-size:16px;"><span>生成数量</span></div>
+      <div style="display:flex;gap:8px;padding:0 12px;" id="countScroll"></div>
     </div>
     <div id="resultArea" style="padding:0 12px;margin-bottom:14px;display:none;">
       <div class="section-title"><span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:middle;margin-right:4px;color:var(--rose)"><path d="M12 3l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 16.8l-6.2 4.5 2.4-7.4L2 9.4h7.6z"/></svg>生成结果</span></div>
       <div id="resultContent"></div>
     </div>
   </div>
-  <div class="create-bottom">
-    <div style="flex:1;">
-      <div style="font-size:11px;color:var(--fg-muted);">本次消耗</div>
-      <div style="font-size:18px;font-weight:700;color:var(--accent);"><span id="costCredits">10</span> <span style="font-size:12px;color:var(--fg-muted);font-weight:400;">积分</span></div>
-    </div>
-    <button class="btn btn-gradient btn-lg" onclick="startGenerate()" style="flex:1.5;">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 16.8l-6.2 4.5 2.4-7.4L2 9.4h7.6z"/></svg>开始创作
-    </button>
-  </div>
 </div>
 
 <!-- ============ 画廊 ============ -->
-<div class="page" id="page-gallery" data-title="我的画廊" data-show-tab="true">
+<div class="page" id="page-gallery" data-title="画廊" data-show-tab="true">
   <div style="padding:16px;">
     <div class="card" style="padding:20px 16px;text-align:center;background:var(--gradient-sky);">
       <div class="avatar" style="width:72px;height:72px;font-size:28px;margin:0 auto 10px;">梦</div>
       <div style="font-size:18px;font-weight:700;color:var(--fg-primary);">云端造梦师</div>
       <div style="font-size:13px;color:var(--fg-muted);margin-top:4px;">用AI描绘心中的梦境</div>
+      <div style="display:flex;justify-content:center;gap:24px;margin-top:14px;">
+        <div><div style="font-size:18px;font-weight:700;color:var(--fg-primary);">48</div><div style="font-size:12px;color:var(--fg-muted);">作品</div></div>
+        <div><div style="font-size:18px;font-weight:700;color:var(--fg-primary);">1.2k</div><div style="font-size:12px;color:var(--fg-muted);">获赞</div></div>
+        <div><div style="font-size:18px;font-weight:700;color:var(--fg-primary);">326</div><div style="font-size:12px;color:var(--fg-muted);">粉丝</div></div>
+        <div><div style="font-size:18px;font-weight:700;color:var(--fg-primary);">89</div><div style="font-size:12px;color:var(--fg-muted);">同款</div></div>
+      </div>
       <button class="btn btn-secondary btn-sm" style="margin-top:12px;" onclick="showToast('编辑资料功能')">编辑资料</button>
-    </div>
-    <div class="card" style="padding:14px 8px;margin-top:10px;display:flex;">
-      <div class="stat-card"><div class="sc-num">48</div><div class="sc-label">作品</div></div>
-      <div class="stat-card"><div class="sc-num">1.2k</div><div class="sc-label">获赞</div></div>
-      <div class="stat-card"><div class="sc-num">326</div><div class="sc-label">粉丝</div></div>
-      <div class="stat-card"><div class="sc-num">89</div><div class="sc-label">同款</div></div>
     </div>
   </div>
   <div class="sub-tabs" style="margin-bottom:12px;">
@@ -566,7 +562,7 @@ textarea.input{resize:none;line-height:1.6;}
 
 <!-- ============ 搜索 ============ -->
 <div class="page" id="page-allGameplays" data-title="全部玩法">
-  <div style="padding:16px;"><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;" id="allGameplaysGrid"></div></div>
+  <div style="padding:12px;"><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;" id="allGameplaysGrid"></div></div>
 </div>
 
 <div class="page" id="page-search" data-title="搜索">
@@ -894,6 +890,56 @@ textarea.input{resize:none;line-height:1.6;}
   </div>
 </div>
 
+<!-- ============ 尺寸选择抽屉 ============ -->
+<div class="overlay" id="ratioOverlay" onclick="closeRatioSheet()"></div>
+<div class="bottom-sheet" id="ratioSheet">
+  <div class="sheet-handle"></div>
+  <div style="padding:8px 20px 20px">
+    <div style="font-size:16px;font-weight:600;margin-bottom:16px;color:var(--fg-primary)">选择尺寸</div>
+    <div id="ratioGrid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;"></div>
+  </div>
+</div>
+
+<!-- ============ 广场筛选抽屉 ============ -->
+<div class="overlay" id="plazaFilterOverlay" onclick="closePlazaFilter()"></div>
+<div class="bottom-sheet" id="plazaFilterSheet">
+  <div class="sheet-handle"></div>
+  <div style="padding:8px 20px 20px;max-height:60vh;overflow-y:auto;">
+    <div style="font-size:15px;font-weight:600;margin-bottom:12px;color:var(--fg-primary)">分类</div>
+    <div id="plazaFilterCategories" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;"></div>
+    <div style="font-size:15px;font-weight:600;margin-bottom:12px;color:var(--fg-primary)">模型</div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;">
+      <div class="chip chip-outline" onclick="this.classList.toggle('active')">全部</div>
+      <div class="chip chip-outline" onclick="this.classList.toggle('active')">GPT Image 2</div>
+      <div class="chip chip-outline" onclick="this.classList.toggle('active')">Nano Banana 2</div>
+      <div class="chip chip-outline" onclick="this.classList.toggle('active')">Flux Pro</div>
+      <div class="chip chip-outline" onclick="this.classList.toggle('active')">SDXL</div>
+      <div class="chip chip-outline" onclick="this.classList.toggle('active')">DALL-E 3</div>
+      <div class="chip chip-outline" onclick="this.classList.toggle('active')">Midjourney</div>
+    </div>
+    <div style="font-size:15px;font-weight:600;margin-bottom:12px;color:var(--fg-primary)">尺寸</div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;">
+      <div class="chip chip-outline" onclick="this.classList.toggle('active')">全部</div>
+      <div class="chip chip-outline" onclick="this.classList.toggle('active')">1:1</div>
+      <div class="chip chip-outline" onclick="this.classList.toggle('active')">3:4</div>
+      <div class="chip chip-outline" onclick="this.classList.toggle('active')">4:3</div>
+      <div class="chip chip-outline" onclick="this.classList.toggle('active')">16:9</div>
+      <div class="chip chip-outline" onclick="this.classList.toggle('active')">9:16</div>
+    </div>
+    <div style="font-size:15px;font-weight:600;margin-bottom:12px;color:var(--fg-primary)">精度</div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;">
+      <div class="chip chip-outline" onclick="this.classList.toggle('active')">全部</div>
+      <div class="chip chip-outline" onclick="this.classList.toggle('active')">标清</div>
+      <div class="chip chip-outline" onclick="this.classList.toggle('active')">高清</div>
+      <div class="chip chip-outline" onclick="this.classList.toggle('active')">超清</div>
+    </div>
+    <div style="display:flex;gap:10px;">
+      <button class="btn btn-secondary" style="flex:1;" onclick="resetPlazaFilter()">重置</button>
+      <button class="btn btn-gradient" style="flex:1;" onclick="applyPlazaFilter()">确认</button>
+    </div>
+  </div>
+</div>
+
 <!-- ============ 长按抽屉 ============ -->
 <div class="overlay" id="longPressOverlay" onclick="closeLongPress()"></div>
 <div class="bottom-sheet" id="longPressSheet">
@@ -935,6 +981,16 @@ textarea.input{resize:none;line-height:1.6;}
 <div class="overlay" id="imgPreviewOverlay" onclick="closeImgPreview()" style="z-index:500;background:rgba(0,0,0,0.9);display:none;align-items:center;justify-content:center;"></div>
 
 </div><!-- /content-area -->
+<!-- ============ 常驻创作栏 ============ -->
+<div class="create-bottom" id="createBar" style="display:none;">
+  <div style="flex:1;">
+    <div style="font-size:11px;color:var(--fg-muted);">本次消耗</div>
+    <div style="font-size:18px;font-weight:700;color:var(--accent);"><span id="costCredits">10</span> <span style="font-size:12px;color:var(--fg-muted);font-weight:400;">积分</span></div>
+  </div>
+  <button class="btn btn-gradient btn-lg" onclick="handleCreateBtn()" style="flex:1.5;">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 16.8l-6.2 4.5 2.4-7.4L2 9.4h7.6z"/></svg>开始创作
+  </button>
+</div>
 <!-- ============ Tab栏 ============ -->
 <div class="tab-bar" id="tabBar">
   <div class="tab-item active" data-tab="home" onclick="switchTab('home')">
@@ -1022,7 +1078,7 @@ const MSGS={
   service:[{content:'客服：您好，有什么可以帮您？',time:'3小时前',unread:false}]
 };
 // ============ 状态 ============
-let pageStack=[];let currentTab='home';let selectedModel=0;let selectedStyles=[];let selectedRatio=0;let selectedCount=0;let promptHasImg=false;let bannerIdx=0;let bannerTimer=null;let isFollowing={};
+let pageStack=[];let currentTab='home';let selectedModel=0;let selectedStyle=null;let selectedRatio=0;let selectedCount=0;let promptHasImg=false;let bannerIdx=0;let bannerTimer=null;let isFollowing={};
 // ============ 工具函数 ============
 function showToast(msg){const t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>{t.classList.add('out');setTimeout(()=>t.remove(),300)},2000)}
 function copyText(text){navigator.clipboard?.writeText(text).then(()=>showToast('已复制到剪贴板')).catch(()=>showToast('复制失败'))}
@@ -1030,33 +1086,56 @@ function $(id){return document.getElementById(id)}
 function createEl(tag,cls,html){const e=document.createElement(tag);if(cls)e.className=cls;if(html!==undefined)e.innerHTML=html;return e}
 // ============ 导航 ============
 function switchTab(tabId){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(p=>{p.classList.remove('active');p.classList.remove('anim-in');p.style.cssText=''});
   $('page-'+tabId).classList.add('active');
   document.querySelectorAll('.tab-item').forEach(t=>t.classList.toggle('active',t.dataset.tab===tabId));
   const page=$('page-'+tabId);const title=page.dataset.title||'';$('navTitle').textContent=title;
   $('navBack').style.display='none';pageStack=[];currentTab=tabId;
   $('tabBar').style.display=page.dataset.showTab==='true'?'flex':'none';
+  if(tabId==='plaza')setTimeout(initPlazaTabIndicator,50);
+  $('createBar').style.display=tabId==='create'?'flex':'none';
   $('contentArea').scrollTop=0;
 }
 function navigateTo(pageId,param){
   const page=$('page-'+pageId);if(!page)return;
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  page.classList.add('active');pageStack.push({pageId,param});
+  pageStack.push({pageId,param});
   const title=page.dataset.title||'';$('navTitle').textContent=title;
   $('navBack').style.display='flex';
   $('tabBar').style.display=page.dataset.showTab==='true'?'flex':'none';
-  $('contentArea').scrollTop=0;
+  $('createBar').style.display='none';
   if(pageId==='workDetail')renderWorkDetail(param);
   if(pageId==='userProfile')renderUserProfile(param);
   if(pageId==='followList')renderFollowList(param);
   if(pageId==='allModels')renderAllModels();
     if(pageId==='allGameplays')renderAllGameplays();
       if(pageId==='report')renderReportReasons();
+  page.classList.add('active');
+  page.style.cssText='position:absolute;top:0;left:0;right:0;bottom:0;overflow:hidden;z-index:50;background:var(--bg-base);padding-top:74px;transform:translateX(100%);transition:transform 0.4s cubic-bezier(0.4,0,0.2,1);will-change:transform;backface-visibility:hidden';
+  $('contentArea').scrollTop=0;
+  void page.offsetWidth;page.style.transform='translateX(0)';
+  setTimeout(function(){page.style.cssText='';document.querySelectorAll('.page').forEach(function(p){if(p!==page){p.classList.remove('active');p.classList.remove('anim-in')}})},410)
 }
 function navigateBack(){
   if(pageStack.length>0)pageStack.pop();
-  if(pageStack.length>0){const last=pageStack[pageStack.length-1];const page=$('page-'+last.pageId);document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));page.classList.add('active');$('navTitle').textContent=page.dataset.title||'';$('tabBar').style.display=page.dataset.showTab==='true'?'flex':'none';$('contentArea').scrollTop=0}
-  else{switchTab(currentTab)}
+  if(pageStack.length>0){
+    var last=pageStack[pageStack.length-1];
+    var page=$('page-'+last.pageId);
+    document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');p.classList.remove('anim-in');p.style.cssText=''});
+    page.classList.add('active');
+    $('navTitle').textContent=page.dataset.title||'';
+    $('navBack').style.display='flex';
+    $('tabBar').style.display=page.dataset.showTab==='true'?'flex':'none';
+    $('createBar').style.display=page.dataset.showTab==='create'?'flex':'none';
+    if(page.dataset.showTab==='plaza')setTimeout(initPlazaTabIndicator,50);
+    var leavingPage=document.querySelector('.page.active:last-of-type');
+    if(leavingPage&&leavingPage!==page){
+      leavingPage.style.cssText='position:absolute;top:0;left:0;right:0;bottom:0;overflow:hidden;z-index:50;background:var(--bg-base);padding-top:74px;transform:translateX(0);transition:transform 0.4s cubic-bezier(0.4,0,0.2,1);will-change:transform;backface-visibility:hidden';
+      void leavingPage.offsetWidth;leavingPage.style.transform='translateX(100%)';
+      setTimeout(function(){leavingPage.classList.remove('active');leavingPage.style.cssText=''},410)
+    }
+  }else{
+    switchTab(currentTab)
+  }
 }
 // ============ 主题 ============
 function toggleTheme(){const cur=document.documentElement.getAttribute('data-theme');const next=cur==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',next);$('themeSwitch').classList.toggle('active',next==='dark');try{localStorage.setItem('lumi-theme',next)}catch(e){}}
@@ -1070,7 +1149,13 @@ function toggleLeftDrawer(){$('leftDrawer').classList.toggle('show');$('leftDraw
 function toggleFilterPanel(){$('filterPanel').style.display=$('filterPanel').style.display==='none'?'block':'none'}
 function resetFilter(){document.querySelectorAll('#filterStyles .chip').forEach(c=>c.classList.remove('active'));showToast('已重置筛选')}
 function applyFilter(){$('filterPanel').style.display='none';showToast('筛选已应用')}
-function switchPlazaTab(el,name){el.parentElement.querySelectorAll('.plaza-tab').forEach(t=>{t.style.fontWeight='500';t.style.color='var(--fg-muted)'});el.style.fontWeight='700';el.style.color='var(--accent)';renderPlazaWaterfall()}
+function switchPlazaTab(el,name){el.parentElement.querySelectorAll('.plaza-tab').forEach(function(t){t.style.fontWeight='500';t.style.color='var(--fg-muted)'});el.style.fontWeight='700';el.style.color='var(--accent)';var idx=parseInt(el.dataset.idx);var indicator=$('plazaTabIndicator');if(indicator){indicator.style.left=el.offsetLeft+el.offsetWidth/2-12+'px'}var c=$('plazaWaterfall');c.innerHTML='<div style="display:flex;justify-content:center;padding:20px 0;column-span:all"><div style="width:28px;height:28px;border:2.5px solid var(--accent-soft);border-top-color:var(--accent);border-radius:50%;animation:spin 0.7s linear infinite"></div></div>';setTimeout(function(){renderPlazaWaterfall();c.classList.remove('wf-slide-left','wf-slide-right');void c.offsetWidth;c.classList.add(idx>0?'wf-slide-left':'wf-slide-right');setTimeout(function(){c.classList.remove('wf-slide-left','wf-slide-right')},400)},300)}
+function initPlazaTabIndicator(){var active=document.querySelector('.plaza-tab.active');if(active&&$('plazaTabIndicator')){$('plazaTabIndicator').style.left=active.offsetLeft+active.offsetWidth/2-12+'px'}}
+function renderPlazaFilterCategories(){var c=$('plazaFilterCategories');if(!c)return;c.innerHTML='';CATEGORIES.forEach(function(cat,i){var chip=createEl('div','chip chip-outline'+(i===0?' active':''));chip.textContent=cat;chip.onclick=function(){chip.classList.toggle('active')};c.appendChild(chip)})}
+function openPlazaFilter(){$('plazaFilterOverlay').classList.add('show');$('plazaFilterSheet').classList.add('show')}
+function closePlazaFilter(){$('plazaFilterOverlay').classList.remove('show');$('plazaFilterSheet').classList.remove('show')}
+function resetPlazaFilter(){$('plazaFilterSheet').querySelectorAll('.chip').forEach(function(c){c.classList.remove('active')});showToast('已重置筛选')}
+function applyPlazaFilter(){closePlazaFilter();showToast('筛选已应用')}
 let currentHomeTab='recommend';let likedWorks={};let favoritedWorks={};var longPressTimer=null;var longPressTriggered=false;var currentLongPressId=0;
 var WORK_DESCS=['霆虹灯下的赛博都市，雨夜中的未来世界','山水之间，水墨丹青的国风意境','少女与猫的温暖日常，二次元风格','抽象梦境，漂浮的岛屿与柔和色调','古风少女与桃花，春天的气息','赛博朋克精灵，发光的眼睛与未来感','水彩猫咪，柔软的笔触与温暖色调','极简几何艺术，干净的线条与柔和配色','暗黑天使，哥特风格与戏剧性光影','蒸汽朋克城市，黄铜与齿轮的复古未来','油画风景，金色麦田与日落印象','像素冒险，16位复古游戏风格'];
 WORKS.forEach(function(w,i){w.desc=WORK_DESCS[i]||''});
@@ -1086,33 +1171,34 @@ function initBanner(){
 function updateBanner(){$('bannerTrack').style.transform='translateX(-'+bannerIdx*351+'px)';$('bannerDots').querySelectorAll('span').forEach((d,i)=>{if(i===bannerIdx){d.style.width='20px';d.style.borderRadius='999px';d.style.background='var(--accent)'}else{d.style.width='6px';d.style.borderRadius='50%';d.style.background='var(--accent-soft)'}})}
 // ============ 渲染热门玩法 ============
 function renderGameplay(){const sc=$('gameplayScroll');GAMEPLAYS.forEach(g=>{const card=createEl('div',null,'<img src="'+g.img+'" style="width:80px;height:80px;border-radius:14px;object-fit:cover"/><div style="font-size:11px;text-align:center;margin-top:4px;color:var(--fg-secondary)">'+g.name+'</div>');card.style.cssText='flex-shrink:0;cursor:pointer;';card.onclick=()=>{switchTab('create');showToast('已套用「'+g.name+'」模板')};sc.appendChild(card)})}
-function renderAllGameplays(){var c=$('allGameplaysGrid');if(!c)return;c.innerHTML='';GAMEPLAYS.forEach(function(g){var card=createEl('div','card');card.style.cssText='cursor:pointer;overflow:hidden';card.innerHTML='<img src="'+g.img+'" style="width:100%;aspect-ratio:1;object-fit:cover"/><div style="padding:10px;text-align:center"><div style="font-size:13px;font-weight:600;color:var(--fg-primary)">'+g.name+'</div></div>';card.onclick=function(){navigateBack();switchTab('create');showToast('已套用「'+g.name+'」模板')};c.appendChild(card)})}
+function renderAllGameplays(){var c=$('allGameplaysGrid');if(!c)return;c.innerHTML='';GAMEPLAYS.forEach(function(g){var card=createEl('div','card');card.style.cssText='cursor:pointer;overflow:hidden';card.innerHTML='<img src="'+g.img+'" style="width:100%;aspect-ratio:1;object-fit:cover"/><div style="padding:6px;text-align:center"><div style="font-size:13px;font-weight:600;color:var(--fg-primary)">'+g.name+'</div></div>';card.onclick=function(){navigateBack();switchTab('create');showToast('已套用「'+g.name+'」模板')};c.appendChild(card)})}
 // ============ 渲染瀑布流 ============
 function renderWaterfall(containerId,works){var c=$(containerId);if(!c)return;c.innerHTML='';works.forEach(function(w){var u=USERS.find(function(x){return x.id===w.userId});var liked=likedWorks[w.id];var item=createEl('div','wf-item');item.innerHTML='<div class="card"><img src="'+w.img+'" style="width:100%;display:block;cursor:pointer" onclick="navigateTo(\'workDetail\','+w.id+')"/><div style="padding:12px 10px 6px"><div style="font-size:13px;font-weight:600;color:var(--fg-primary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:4px">'+w.title+'</div><div style="display:flex;align-items:center;gap:6px"><div onclick="navigateTo(\'userProfile\','+u.id+')" style="display:flex;align-items:center;gap:6px;flex:1;overflow:hidden;cursor:pointer"><div class="avatar" style="width:20px;height:20px;font-size:10px;background:'+u.color+'">'+u.avatar+'</div><span style="font-size:11px;color:var(--fg-secondary);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+u.name+'</span></div><div onclick="toggleLike(event,'+w.id+')" style="display:flex;align-items:center;gap:3px;cursor:pointer;padding:2px 4px;border-radius:8px;transition:background 0.2s" onmouseover="this.style.background=\'var(--accent-soft)\'" onmouseout="this.style.background=\'transparent\'"><svg width="16" height="16" viewBox="0 0 24 24" fill="'+(liked?'var(--rose)':'none')+'" stroke="'+(liked?'var(--rose)':'var(--fg-muted)')+'" stroke-width="1.5"><path d="M12 21s-7-4.5-9.5-9C1 9 3 5 7 5c2 0 3.5 1 5 3 1.5-2 3-3 5-3 4 0 6 4 4.5 7-2.5 4.5-9.5 9-9.5 9z"/></svg><span style="font-size:13px;font-weight:600;color:'+(liked?'var(--rose)':'var(--fg-muted)')+'">'+w.likes+'</span></div></div></div></div>';c.appendChild(item)})}
 // ============ 创作页渲染 ============
 function renderCreatePage(){
   // 模型
   const ms=$('modelScroll');ms.innerHTML='';
-  MODELS.forEach((m,i)=>{const card=createEl('div','model-card'+(i===selectedModel?' selected':''));card.innerHTML='<img src="'+m.img+'" style="width:100%;height:60px;object-fit:cover"/><div style="padding:8px"><div style="font-size:12px;font-weight:700">'+m.name+'</div><div style="font-size:10px;color:var(--fg-muted);margin-top:2px">'+m.desc+'</div><div style="display:flex;gap:3px;margin-top:4px">'+m.tags.map(t=>'<span class="tag tag-accent" style="font-size:9px;padding:1px 5px">'+t+'</span>').join('')+'</div><div style="font-size:10px;color:var(--accent);margin-top:4px;font-weight:600">'+m.cost+'积分/张</div></div>';card.onclick=()=>{selectedModel=i;renderCreatePage();updateCost()};ms.appendChild(card)});
+  MODELS.forEach((m,i)=>{const card=createEl('div','model-card'+(i===selectedModel?' selected':''));card.innerHTML='<img src="'+m.img+'" style="width:100%;height:76px;object-fit:cover"/><div style="padding:8px;flex:1;display:flex;flex-direction:column;justify-content:flex-end"><div style="font-size:12px;font-weight:700">'+m.name+'</div><div style="font-size:10px;color:var(--fg-muted);margin-top:2px">'+m.desc+'</div><div style="display:flex;gap:3px;margin-top:4px">'+m.tags.map(t=>'<span class="tag tag-accent" style="font-size:9px;padding:1px 5px">'+t+'</span>').join('')+'</div></div>';card.onclick=()=>{selectedModel=i;renderCreatePage();updateCost()};ms.appendChild(card)})
   // 风格
   const sg=$('styleGrid');sg.innerHTML='';
-  STYLES.slice(0,7).forEach((s,i)=>{const card=createEl('div','style-card'+(selectedStyles.includes(s)?' selected':''));card.innerHTML='<img src="'+STYLE_IMGS[s]+'" style="width:100%;height:100%;object-fit:cover;position:absolute"/><div class="sc-overlay"></div><div class="sc-label">'+s+'</div>';card.onclick=()=>{toggleStyle(s);renderCreatePage()};sg.appendChild(card)});
+  STYLES.slice(0,7).forEach((s,i)=>{const card=createEl('div','style-card'+(selectedStyle===s?' selected':''));card.innerHTML='<img src="'+STYLE_IMGS[s]+'" style="width:100%;height:100%;object-fit:cover;position:absolute"/><div class="sc-overlay"></div><div class="sc-label">'+s+'</div>';card.onclick=()=>{selectedStyle=s;renderCreatePage()};sg.appendChild(card)});
   const moreCard=createEl('div','style-card');moreCard.style.cssText='position:relative;overflow:hidden;cursor:pointer';moreCard.innerHTML='<img src="'+STYLE_IMGS[STYLES[7]]+'" style="width:100%;height:100%;object-fit:cover;position:absolute"/><div class="sc-overlay"></div><div style="position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center;color:white;font-size:18px;font-weight:700">+8</div><div class="sc-label">更多</div>';moreCard.onclick=()=>openAllStyles();sg.appendChild(moreCard);
   // 比例
   const rs=$('ratioScroll');rs.innerHTML='';
-  RATIOS.forEach((r,i)=>{const card=createEl('div','opt-card'+(i===selectedRatio?' selected':''));const h=40,w=40*r.w/r.h;card.innerHTML='<div style="width:'+w+'px;height:'+h+'px;border:2px solid currentColor;border-radius:4px"></div><span>'+r.label+'</span>';card.onclick=()=>{selectedRatio=i;renderCreatePage()};rs.appendChild(card)});
+  RATIOS.forEach(function(r,i){var card=createEl('div','ratio-card'+(i===selectedRatio?' active':''));var sw,sh;if(r.label==='1:1'){sw=28;sh=28}else if(r.label==='3:4'){sw=24;sh=32}else if(r.label==='4:3'||r.label==='16:9'){sw=36;sh=20}else{sw=20;sh=36}card.innerHTML='<div class="ratio-shape" style="width:'+sw+'px;height:'+sh+'px"></div><div class="ratio-name">'+r.label+'</div>';card.onclick=function(){selectedRatio=i;renderCreatePage()};rs.appendChild(card)})
   // 数量
   const cs=$('countScroll');cs.innerHTML='';
-  COUNTS.forEach((n,i)=>{const card=createEl('div','opt-card'+(i===selectedCount?' selected':''));card.innerHTML='<div class="oc-icon" style="font-weight:700;font-size:20px">'+n+'</div><span>张</span>';card.onclick=()=>{selectedCount=i;renderCreatePage();updateCost()};cs.appendChild(card)});
+  COUNTS.forEach(function(n,i){var card=createEl('div','ratio-card'+(i===selectedCount?' selected':''));card.style.flex='1';card.innerHTML='<div class="ratio-name">'+n+'张</div>';card.onclick=function(){selectedCount=i;renderCreatePage();updateCost()};cs.appendChild(card)})
 }
-function toggleStyle(s){const idx=selectedStyles.indexOf(s);if(idx>-1)selectedStyles.splice(idx,1);else selectedStyles.push(s)}
+function selectStyle(s){selectedStyle=s}
 function updateCost(){const m=MODELS[selectedModel];const total=m.cost*COUNTS[selectedCount];$('costCredits').textContent=total}
 // ============ 提示词 ============
-function updatePromptCount(){const v=$('promptInput').value;$('promptCount').textContent=v.length+'/500'}
-function clearPrompt(){$('promptInput').value='';updatePromptCount()}
+function updatePromptCount(){var v=$('promptInput').value;$('promptCount').textContent=v.length+'/500';var cb=$('clearBtn');if(cb)cb.style.display=v.length>0?'flex':'none'}
+function clearPrompt(){$('promptInput').value='';updatePromptCount();$('promptInput').focus()}
 function uploadPromptImg(){const url='https://picsum.photos/seed/upload'+Date.now()+'/200/200';$('promptImg').src=url;$('promptImgPreview').style.display='block';promptHasImg=true;showToast('图片已上传')}
 function removePromptImg(e){e.stopPropagation();$('promptImgPreview').style.display='none';promptHasImg=false}
 // ============ 生成流程 ============
+function handleCreateBtn(){if(currentTab!=='create'){switchTab('create')}else{startGenerate()}}
 function startGenerate(){
   const prompt=$('promptInput').value.trim();if(!prompt){showToast('请输入提示词');return}
   const m=MODELS[selectedModel];const count=COUNTS[selectedCount];const total=m.cost*count;
@@ -1138,14 +1224,16 @@ function submitPublish(){const title=$('publishTitle').value.trim();if(!title){s
 // ============ 全部风格 ============
 function openAllStyles(){renderAllStylesGrid();$('styleOverlay').classList.add('show');$('styleSheet').classList.add('show')}
 function closeAllStyles(){$('styleOverlay').classList.remove('show');$('styleSheet').classList.remove('show')}
-function renderAllStylesGrid(){const c=$('allStylesGrid');c.innerHTML='';STYLES.forEach(s=>{const card=createEl('div','style-card'+(selectedStyles.includes(s)?' selected':''));card.style.cssText='aspect-ratio:1;position:relative;border-radius:12px;overflow:hidden;cursor:pointer;border:2px solid '+(selectedStyles.includes(s)?'var(--accent)':'transparent');card.innerHTML='<img src="'+STYLE_IMGS[s]+'" style="width:100%;height:100%;object-fit:cover;position:absolute"/><div class="sc-overlay"></div><div class="sc-label">'+s+'</div>';card.onclick=()=>{toggleStyle(s);renderAllStylesGrid()};c.appendChild(card)})}
+function renderAllStylesGrid(){const c=$('allStylesGrid');c.innerHTML='';STYLES.forEach(s=>{const card=createEl('div','style-card'+(selectedStyle===s?' selected':''));card.style.cssText='aspect-ratio:1;position:relative;border-radius:12px;overflow:hidden;cursor:pointer;border:2px solid '+(selectedStyle===s?'var(--accent)':'transparent');card.innerHTML='<img src="'+STYLE_IMGS[s]+'" style="width:100%;height:100%;object-fit:cover;position:absolute"/><div class="sc-overlay"></div><div class="sc-label">'+s+'</div>';card.onclick=function(){selectedStyle=s;closeAllStyles();renderCreatePage()};c.appendChild(card)})}
 function confirmStyles(){closeAllStyles();renderCreatePage()}
+function openRatioSheet(){var c=$('ratioGrid');if(!c)return;c.innerHTML='';RATIOS.forEach(function(r,i){var card=createEl('div','ratio-card'+(i===selectedRatio?' selected':''));card.style.padding='12px 8px';var sw,sh;if(r.w===r.h){sw=32;sh=32}else if(r.w>r.h){sw=40;sh=22}else{sw=22;sh=40}card.innerHTML='<div class="ratio-shape" style="width:'+sw+'px;height:'+sh+'px"></div><div class="ratio-name">'+r.label+'</div>';card.onclick=function(){selectedRatio=i;renderCreatePage();closeRatioSheet()};c.appendChild(card)});$('ratioOverlay').classList.add('show');$('ratioSheet').classList.add('show')}
+function closeRatioSheet(){$('ratioOverlay').classList.remove('show');$('ratioSheet').classList.remove('show')}
 // ============ 图片预览 ============
 function previewImage(src){const o=$('imgPreviewOverlay');o.style.display='flex';o.innerHTML='<img src="'+src+'" style="max-width:90%;max-height:90%;border-radius:12px" onclick="closeImgPreview()"/>'}
 function closeImgPreview(){$('imgPreviewOverlay').style.display='none'}
 // ============ 作品详情 ============
 function renderWorkDetail(id){var w=WORKS.find(function(x){return x.id===id});if(!w)return;var u=USERS.find(function(x){return x.id===w.userId});var m=MODELS.find(function(x){return x.id===w.model})||{name:w.model};var liked=!!likedWorks[id];var faved=!!favoritedWorks[id];
-$('workDetailContent').innerHTML='<div><img src="'+w.img+'" style="width:100%;max-height:400px;object-fit:cover;display:block" onclick="if(!longPressTriggered)previewImage(this.src)" ontouchstart="startLongPress('+id+')" ontouchend="cancelLongPress()" onmousedown="startLongPress('+id+')" onmouseup="cancelLongPress()"/><div style="padding:16px"><div style="display:flex;align-items:center;gap:10px;margin-bottom:16px"><div class="avatar" style="width:40px;height:40px;font-size:16px;background:'+u.color+'">'+u.avatar+'</div><div style="flex:1"><div style="font-size:15px;font-weight:700">'+u.name+'</div><div style="font-size:11px;color:var(--fg-muted)">'+u.works+'作品 · '+u.likes+'获赞</div></div><button onclick="toggleFollow(this,'+u.id+')" style="border:none;border-radius:999px;padding:6px 16px;font-size:13px;font-weight:600;cursor:pointer;'+(isFollowing[u.id]?'background:var(--bg-soft);color:var(--fg-muted)':'background:var(--accent);color:white')+'">'+(isFollowing[u.id]?'已关注':'+ 关注')+'</button></div><div style="font-size:18px;font-weight:700;margin-bottom:8px">'+w.title+'</div><div style="font-size:14px;color:var(--fg-secondary);line-height:1.7;margin-bottom:14px">'+w.desc+'</div><div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px"><span class="tag tag-accent">'+m.name+'</span><span class="tag tag-mint">'+w.ratio+'</span><span class="tag tag-lavender">'+w.style+'</span>'+w.tags.map(function(t){return'<span class="tag tag-peach">'+t+'</span>'}).join('')+'</div><div class="card" style="padding:12px;margin-bottom:14px"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px"><span style="font-size:13px;font-weight:600;color:var(--fg-secondary)">提示词</span><button class="btn btn-ghost btn-sm" onclick="copyText(\''+w.prompt.replace(/'/g,'')+'\')" style="padding:2px 8px;color:var(--accent)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>复制</button></div><div style="font-size:13px;color:var(--fg-primary);line-height:1.6">'+w.prompt+'</div></div><div style="font-size:12px;color:var(--fg-muted);margin-bottom:14px">生成于 '+w.time+'</div><div style="display:flex;gap:16px;padding:12px 0;border-top:0.5px solid var(--border);border-bottom:0.5px solid var(--border);margin-bottom:14px"><div style="text-align:center;flex:1"><div style="font-size:18px;font-weight:700;color:var(--rose)">'+w.likes+'</div><div style="font-size:11px;color:var(--fg-muted)">点赞</div></div><div style="text-align:center;flex:1"><div style="font-size:18px;font-weight:700;color:var(--accent)">'+w.favorites+'</div><div style="font-size:11px;color:var(--fg-muted)">收藏</div></div><div style="text-align:center;flex:1"><div style="font-size:18px;font-weight:700;color:var(--lavender)">'+w.remakes+'</div><div style="font-size:11px;color:var(--fg-muted)">同款</div></div></div></div></div><div style="position:sticky;bottom:0;display:flex;align-items:center;gap:16px;padding:10px 16px;background:var(--bg-glass);backdrop-filter:blur(20px);border-top:0.5px solid var(--border)"><div onclick="toggleLikeDetail(event,'+id+')" style="display:flex;align-items:center;gap:4px;cursor:pointer"><svg id="detailLikeIcon" width="24" height="24" viewBox="0 0 24 24" fill="'+(liked?'var(--rose)':'none')+'" stroke="'+(liked?'var(--rose)':'var(--fg-muted)')+'" stroke-width="2" style="transition:all 0.3s"><path d="M12 21s-7-4.5-9.5-9C1 9 3 5 7 5c2 0 3.5 1 5 3 1.5-2 3-3 5-3 4 0 6 4 4.5 7-2.5 4.5-9.5 9-9.5 9z"/></svg><span id="detailLikeNum" style="font-size:15px;font-weight:600;color:'+(liked?'var(--rose)':'var(--fg-muted)')+'">'+w.likes+'</span></div><div onclick="toggleFavDetail(event,'+id+')" style="display:flex;align-items:center;gap:4px;cursor:pointer"><svg id="detailFavIcon" width="24" height="24" viewBox="0 0 24 24" fill="'+(faved?'var(--lemon)':'none')+'" stroke="'+(faved?'var(--lemon)':'var(--fg-muted)')+'" stroke-width="2" style="transition:all 0.3s"><path d="M12 2l3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z"/></svg><span id="detailFavNum" style="font-size:15px;font-weight:600;color:'+(faved?'var(--lemon)':'var(--fg-muted)')+'">'+w.favorites+'</span></div><button class="btn btn-gradient" onclick="remakeWork('+id+')" style="flex:1;margin-left:auto">一键同款</button></div>'}
+$('workDetailContent').innerHTML='<div><img src="'+w.img+'" style="width:100%;max-height:400px;object-fit:cover;display:block" onclick="if(!longPressTriggered)previewImage(this.src)" ontouchstart="startLongPress('+id+')" ontouchend="cancelLongPress()" onmousedown="startLongPress('+id+')" onmouseup="cancelLongPress()"/><div style="padding:16px"><div style="display:flex;align-items:center;gap:10px;margin-bottom:16px"><div class="avatar" style="width:40px;height:40px;font-size:16px;background:'+u.color+'">'+u.avatar+'</div><div style="flex:1"><div style="font-size:15px;font-weight:700">'+u.name+'</div><div style="font-size:11px;color:var(--fg-muted)">'+u.works+'作品 · '+u.likes+'获赞</div></div><button onclick="toggleFollow(this,'+u.id+')" style="border:none;border-radius:999px;padding:6px 16px;font-size:13px;font-weight:600;cursor:pointer;'+(isFollowing[u.id]?'background:var(--bg-soft);color:var(--fg-muted)':'background:var(--accent);color:white')+'">'+(isFollowing[u.id]?'已关注':'+ 关注')+'</button></div><div style="font-size:18px;font-weight:700;margin-bottom:8px">'+w.title+'</div><div style="font-size:14px;color:var(--fg-secondary);line-height:1.7;margin-bottom:14px">'+w.desc+'</div><div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px"><span class="tag tag-accent">'+m.name+'</span><span class="tag tag-mint">'+w.ratio+'</span><span class="tag tag-lavender">'+w.style+'</span>'+w.tags.map(function(t){return'<span class="tag tag-peach">'+t+'</span>'}).join('')+'</div><div class="card" style="padding:12px;margin-bottom:14px"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px"><span style="font-size:13px;font-weight:600;color:var(--fg-secondary)">提示词</span><button class="btn btn-ghost btn-sm" onclick="copyText(\''+w.prompt.replace(/'/g,'')+'\')" style="padding:2px 8px;color:var(--accent)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>复制</button></div><div style="font-size:13px;color:var(--fg-primary);line-height:1.6">'+w.prompt+'</div></div><div style="font-size:12px;color:var(--fg-muted);margin-bottom:14px">生成于 '+w.time+'</div><div style="display:flex;gap:16px;padding:12px 0;border-top:0.5px solid var(--border);border-bottom:0.5px solid var(--border);margin-bottom:14px"><div style="text-align:center;flex:1"><div style="font-size:18px;font-weight:700;color:var(--rose)">'+w.likes+'</div><div style="font-size:11px;color:var(--fg-muted)">点赞</div></div><div style="text-align:center;flex:1"><div style="font-size:18px;font-weight:700;color:var(--accent)">'+w.favorites+'</div><div style="font-size:11px;color:var(--fg-muted)">收藏</div></div><div style="text-align:center;flex:1"><div style="font-size:18px;font-weight:700;color:var(--lavender)">'+w.remakes+'</div><div style="font-size:11px;color:var(--fg-muted)">同款</div></div></div></div></div><div style="position:sticky;bottom:0;display:flex;align-items:center;gap:16px;padding:14px 16px 30px 16px;background:var(--bg-glass);backdrop-filter:blur(20px);border-top:0.5px solid var(--border)"><div onclick="toggleLikeDetail(event,'+id+')" style="display:flex;align-items:center;gap:6px;cursor:pointer"><svg id="detailLikeIcon" width="28" height="28" viewBox="0 0 24 24" fill="'+(liked?'var(--rose)':'none')+'" stroke="'+(liked?'var(--rose)':'var(--fg-muted)')+'" stroke-width="2" style="transition:all 0.3s"><path d="M12 21s-7-4.5-9.5-9C1 9 3 5 7 5c2 0 3.5 1 5 3 1.5-2 3-3 5-3 4 0 6 4 4.5 7-2.5 4.5-9.5 9-9.5 9z"/></svg><span id="detailLikeNum" style="font-size:17px;font-weight:600;color:'+(liked?'var(--rose)':'var(--fg-muted)')+'">'+w.likes+'</span></div><div onclick="toggleFavDetail(event,'+id+')" style="display:flex;align-items:center;gap:6px;cursor:pointer"><svg id="detailFavIcon" width="28" height="28" viewBox="0 0 24 24" fill="'+(faved?'var(--lemon)':'none')+'" stroke="'+(faved?'var(--lemon)':'var(--fg-muted)')+'" stroke-width="2" style="transition:all 0.3s"><path d="M12 2l3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z"/></svg><span id="detailFavNum" style="font-size:17px;font-weight:600;color:'+(faved?'var(--lemon)':'var(--fg-muted)')+'">'+w.favorites+'</span></div><button class="btn btn-gradient" onclick="remakeWork('+id+')" style="flex:1;margin-left:auto">一键同款</button></div>'}
 function toggleFollow(btn,uid){if(isFollowing[uid]){if(btn.dataset.confirming==='true'){isFollowing[uid]=false;btn.dataset.confirming='false';updateFollowBtn(btn,uid)}else{btn.dataset.confirming='true';btn.textContent='确认取消?';btn.style.background='var(--rose-soft)';btn.style.color='var(--rose)';setTimeout(function(){if(btn.dataset.confirming==='true'){btn.dataset.confirming='false';updateFollowBtn(btn,uid)}},3000)}}else{isFollowing[uid]=true;updateFollowBtn(btn,uid);showToast('关注成功')}}
 function updateFollowBtn(btn,uid){if(isFollowing[uid]){btn.textContent='已关注';btn.style.background='var(--bg-soft)';btn.style.color='var(--fg-muted)';btn.style.border='none'}else{btn.textContent='+ 关注';btn.style.background='var(--accent)';btn.style.color='white';btn.style.border='none'}}
 function toggleLikeDetail(e,id){e.stopPropagation();var w=WORKS.find(function(x){return x.id===id});if(!w)return;var svg=$('detailLikeIcon');var num=$('detailLikeNum');svg.style.transition='transform 0.4s cubic-bezier(0.34,1.56,0.64,1)';if(likedWorks[id]){delete likedWorks[id];w.likes--;svg.setAttribute('fill','none');svg.setAttribute('stroke','var(--fg-muted)');num.style.color='var(--fg-muted)'}else{likedWorks[id]=true;w.likes++;svg.setAttribute('fill','var(--rose)');svg.setAttribute('stroke','var(--rose)');num.style.color='var(--rose)';svg.style.transform='scale(1.4)';setTimeout(function(){svg.style.transform='scale(1)'},150)}num.textContent=w.likes}
@@ -1158,7 +1246,7 @@ function renderReportReasons(){var c=$('reportReasons');if(!c)return;c.innerHTML
 function submitReport(){if(selectedReportReason<0){showToast('请选择举报原因');return}navigateBack();showToast('举报已提交，我们会尽快处理')}
 function remakeWork(id){const w=WORKS.find(x=>x.id===id);switchTab('create');$('promptInput').value=w.prompt;updatePromptCount();showToast('已带入提示词，开始创作吧')}
 // ============ 广场 ============
-function renderPlazaCategories(){const c=$('plazaCategories');CATEGORIES.forEach((cat,i)=>{const chip=createEl('div','chip'+(i===0?' active':''));chip.textContent=cat;chip.onclick=()=>{c.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));chip.classList.add('active');renderPlazaWaterfall()};c.appendChild(chip)})}
+function renderPlazaCategories(){const c=$('plazaCategories');CATEGORIES.forEach((cat,i)=>{const chip=createEl('div',null,'<span style="font-size:14px;font-weight:'+(i===0?'600':'400')+';color:'+(i===0?'var(--accent)':'var(--fg-secondary)')+'">'+cat+'</span>');chip.style.cssText='flex-shrink:0;cursor:pointer;padding:6px 12px;transition:all 0.3s;';chip.onclick=()=>{c.querySelectorAll('span').forEach(s=>{s.style.fontWeight='400';s.style.color='var(--fg-secondary)'});chip.querySelector('span').style.fontWeight='600';chip.querySelector('span').style.color='var(--accent)'};c.appendChild(chip)})}
 function renderFilterStyles(){const c=$('filterStyles');STYLES.forEach(s=>{const chip=createEl('div','chip chip-outline');chip.textContent=s;chip.onclick=()=>chip.classList.toggle('active');c.appendChild(chip)})}
 function renderPlazaWaterfall(){renderWaterfall('plazaWaterfall',WORKS)}
 // ============ 画廊 ============
@@ -1203,8 +1291,9 @@ function init(){
   renderGameplay();
   renderWaterfall('homeWaterfall',WORKS.slice(0,8));
   renderPlazaCategories();
-  renderFilterStyles();
   renderPlazaWaterfall();
+  renderPlazaFilterCategories();
+  setTimeout(initPlazaTabIndicator,100);
   renderCreatePage();
   updateCost();
   renderWaterfall('galleryWaterfall',WORKS.slice(0,8));
