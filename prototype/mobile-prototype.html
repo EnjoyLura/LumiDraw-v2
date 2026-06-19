@@ -436,15 +436,18 @@ textarea.input{resize:none;line-height:1.6;}
 
 <!-- ============ 画廊 ============ -->
 <div class="page" id="page-gallery" data-title="画廊" data-show-tab="true">
-  <!-- 顶部操作栏：左侧汉堡菜单 + 右侧按钮 -->
-  <div style="display:flex;align-items:center;padding:4px 16px;">
-    <div onclick="toggleLeftDrawer()" style="cursor:pointer;padding:4px;">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--fg-primary)" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
-    </div>
-    <div style="flex:1;"></div>
+  <!-- 顶部操作栏：左侧设置+搜索 | 右侧菜单 -->
+  <div style="display:flex;align-items:center;gap:8px;padding:4px 16px;">
     <div class="btn btn-soft btn-sm" onclick="showToast('设置背景功能')" style="display:flex;align-items:center;gap:4px;">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
       <span>设置背景</span>
+    </div>
+    <div onclick="navigateTo('search')" style="cursor:pointer;padding:4px;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--fg-primary)" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+    </div>
+    <div style="flex:1;"></div>
+    <div onclick="toggleLeftDrawer()" style="cursor:pointer;padding:4px;">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--fg-primary)" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
     </div>
   </div>
   <!-- 头像（左）+ 信息（右）两列布局 -->
@@ -480,15 +483,16 @@ textarea.input{resize:none;line-height:1.6;}
     </div>
     <button class="btn btn-primary btn-sm" onclick="navigateTo('editProfile')">编辑资料</button>
   </div>
-  <!-- 子标签页 + 管理按钮 -->
+  <!-- 子标签页(下划线风格) + 管理按钮 -->
   <div style="display:flex;align-items:center;padding:0 16px;margin-bottom:12px;gap:8px;">
-    <div class="sub-tabs" style="flex:1;margin:0;">
-      <div class="sub-tab active" onclick="switchGalleryTab(this,'all')">全部</div>
-      <div class="sub-tab" onclick="switchGalleryTab(this,'published')">已发布</div>
-      <div class="sub-tab" onclick="switchGalleryTab(this,'draft')">草稿箱</div>
-      <div class="sub-tab" onclick="switchGalleryTab(this,'favorite')">收藏</div>
+    <div style="flex:1;display:flex;align-items:center;gap:20px;position:relative;padding-bottom:6px;" id="galleryTabs">
+      <span class="gallery-tab active" data-idx="0" onclick="switchGalleryTab(this,'all')" style="font-size:13px;font-weight:700;color:var(--accent);cursor:pointer;transition:color 0.3s;">全部</span>
+      <span class="gallery-tab" data-idx="1" onclick="switchGalleryTab(this,'published')" style="font-size:13px;font-weight:500;color:var(--fg-muted);cursor:pointer;transition:color 0.3s;">已发布</span>
+      <span class="gallery-tab" data-idx="2" onclick="switchGalleryTab(this,'draft')" style="font-size:13px;font-weight:500;color:var(--fg-muted);cursor:pointer;transition:color 0.3s;">草稿箱</span>
+      <span class="gallery-tab" data-idx="3" onclick="switchGalleryTab(this,'favorite')" style="font-size:13px;font-weight:500;color:var(--fg-muted);cursor:pointer;transition:color 0.3s;">收藏</span>
+      <div id="galleryTabIndicator" style="position:absolute;bottom:0;width:20px;height:3px;border-radius:999px;background:var(--accent);transition:all 0.3s cubic-bezier(0.16,1,0.3,1);"></div>
     </div>
-    <button class="btn btn-ghost btn-sm" onclick="toggleGalleryManage()" id="galleryManageBtn" style="flex-shrink:0;font-size:12px;display:flex;align-items:center;gap:4px;">
+    <button class="btn btn-ghost btn-sm" onclick="toggleGalleryManage()" id="galleryManageBtn" style="flex-shrink:0;font-size:13px;display:flex;align-items:center;gap:4px;">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
       管理
     </button>
@@ -1183,6 +1187,7 @@ function switchTab(tabId){
   $('navBack').style.display='none';pageStack=[];currentTab=tabId;
   $('tabBar').style.display=page.dataset.showTab==='true'?'flex':'none';
   if(tabId==='plaza')setTimeout(initPlazaTabIndicator,50);
+  if(tabId==='gallery')setTimeout(initGalleryTabIndicator,50);
   $('createBar').style.display=tabId==='create'?'flex':'none';
   $('contentArea').scrollTop=0;
 }
@@ -1352,7 +1357,8 @@ function renderPlazaCategories(){const c=$('plazaCategories');CATEGORIES.forEach
 function renderFilterStyles(){const c=$('filterStyles');STYLES.forEach(s=>{const chip=createEl('div','chip chip-outline');chip.textContent=s;chip.onclick=()=>chip.classList.toggle('active');c.appendChild(chip)})}
 function renderPlazaWaterfall(){renderWaterfall('plazaWaterfall',WORKS)}
 // ============ 画廊 ============
-function switchGalleryTab(el,tab){el.parentElement.querySelectorAll('.sub-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');if(tab==='all'){$('galleryContent').innerHTML='<div class="waterfall" id="galleryWaterfall"></div>';renderWaterfall('galleryWaterfall',WORKS.slice(0,8))}else if(tab==='published'){$('galleryContent').innerHTML='<div class="waterfall" id="galleryWaterfall"></div>';renderWaterfall('galleryWaterfall',WORKS.slice(0,6))}else if(tab==='draft'){$('galleryContent').innerHTML='<div style="text-align:center;padding:40px 20px;color:var(--fg-muted)"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin:0 auto 10px;display:block"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg><div style="font-size:14px">3个草稿</div></div>'}else{$('galleryContent').innerHTML='<div class="waterfall" id="galleryWaterfall"></div>';renderWaterfall('galleryWaterfall',WORKS.slice(2,8))}}
+function switchGalleryTab(el,tab){el.parentElement.querySelectorAll('.gallery-tab').forEach(t=>{t.style.fontWeight='500';t.style.color='var(--fg-muted)'});el.style.fontWeight='700';el.style.color='var(--accent)';var indicator=$('galleryTabIndicator');if(indicator){indicator.style.left=el.offsetLeft+el.offsetWidth/2-10+'px'}if(tab==='all'){$('galleryContent').innerHTML='<div class="waterfall" id="galleryWaterfall"></div>';renderWaterfall('galleryWaterfall',WORKS.slice(0,8))}else if(tab==='published'){$('galleryContent').innerHTML='<div class="waterfall" id="galleryWaterfall"></div>';renderWaterfall('galleryWaterfall',WORKS.slice(0,6))}else if(tab==='draft'){$('galleryContent').innerHTML='<div style="text-align:center;padding:40px 20px;color:var(--fg-muted)"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin:0 auto 10px;display:block"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg><div style="font-size:14px">3个草稿</div></div>'}else{$('galleryContent').innerHTML='<div class="waterfall" id="galleryWaterfall"></div>';renderWaterfall('galleryWaterfall',WORKS.slice(2,8))}}
+function initGalleryTabIndicator(){var active=document.querySelector('.gallery-tab.active');if(active&&$('galleryTabIndicator')){$('galleryTabIndicator').style.left=active.offsetLeft+active.offsetWidth/2-10+'px'}}
 let galleryManageMode=false;
 function toggleGalleryManage(){galleryManageMode=!galleryManageMode;const btn=$('galleryManageBtn');if(galleryManageMode){btn.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>完成';btn.classList.remove('btn-ghost');btn.classList.add('btn-soft');showToast('进入管理模式，点击作品可删除')}else{btn.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>管理';btn.classList.remove('btn-soft');btn.classList.add('btn-ghost')}}
 // ============ 编辑资料 ============
@@ -1400,6 +1406,7 @@ function init(){
   renderPlazaWaterfall();
   renderPlazaFilterCategories();
   setTimeout(initPlazaTabIndicator,100);
+  setTimeout(initGalleryTabIndicator,100);
   renderCreatePage();
   updateCost();
   renderWaterfall('galleryWaterfall',WORKS.slice(0,8));
