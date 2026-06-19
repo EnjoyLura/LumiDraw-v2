@@ -58,13 +58,14 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Plus Jaka
   transition:background 0.6s,box-shadow 0.6s;}
 [data-theme="dark"] .phone-frame{box-shadow:0 50px 100px rgba(0,0,0,0.5),0 0 0 12px #06060f,0 0 0 13px #1a1a3a;}
 .phone-screen{width:100%;height:100%;display:flex;flex-direction:column;position:relative;overflow:hidden;}
+.phone-screen::before{content:'';position:absolute;top:0;left:0;right:0;height:74px;background-color:var(--bg-glass);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);z-index:98;border-bottom:0.5px solid var(--border);}
 /* ============ 微信状态栏 + 胶囊 ============ */
 .status-bar{height:24px;display:flex;align-items:center;justify-content:space-between;
-  padding:0 20px;font-size:13px;font-weight:600;color:var(--fg-primary);flex-shrink:0;z-index:100;
-  background:transparent;position:relative;}
+  padding:0 20px;font-size:13px;font-weight:600;color:var(--fg-primary);z-index:100;
+  position:absolute;top:0;left:0;right:0;}
 .status-bar .sb-right{display:flex;align-items:center;gap:5px;}
-.nav-header{height:44px;display:flex;align-items:center;justify-content:center;position:relative;
-  flex-shrink:0;z-index:99;background:transparent;}
+.nav-header{height:50px;display:flex;align-items:center;justify-content:center;position:absolute;
+  top:24px;left:0;right:0;z-index:99;}
 .nav-header .nav-title{font-size:17px;font-weight:600;color:var(--fg-primary);}
 .nav-header .nav-back{position:absolute;left:12px;display:flex;align-items:center;gap:2px;
   color:var(--fg-primary);font-size:15px;cursor:pointer;padding:6px;}
@@ -85,8 +86,8 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Plus Jaka
 .capsule-menu .menu-item:active{background:var(--accent-soft);}
 @keyframes menuIn{from{opacity:0;transform:translateY(-8px) scale(0.95);}to{opacity:1;transform:translateY(0) scale(1);}}
 /* ============ 内容区 ============ */
-.content-area{flex:1;overflow-y:auto;overflow-x:hidden;position:relative;-webkit-overflow-scrolling:touch;}
-.page{display:none;min-height:100%;}
+.content-area{flex:1;overflow-y:auto;overflow-x:hidden;position:relative;-webkit-overflow-scrolling:touch;padding-top:74px;}
+.page{display:none;}
 .page.active{display:block;animation:pageIn 0.35s cubic-bezier(0.16,1,0.3,1);}
 @keyframes pageIn{from{opacity:0;transform:translateX(30px);}to{opacity:1;transform:translateX(0);}}
 /* ============ Tab栏 ============ */
@@ -109,7 +110,7 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Plus Jaka
 /* ============ 通用组件 ============ */
 .card{background:var(--bg-card);border:1px solid var(--border);border-radius:20px;
   transition:transform 0.3s cubic-bezier(0.16,1,0.3,1),box-shadow 0.3s,border-color 0.3s;overflow:hidden;}
-.card:active{transform:scale(0.98);}
+/* 卡片按压效果仅用于图片点击 */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;font-weight:600;
   font-size:14px;border-radius:12px;padding:10px 18px;cursor:pointer;border:none;white-space:nowrap;
   transition:all 0.3s cubic-bezier(0.16,1,0.3,1);}
@@ -154,10 +155,11 @@ textarea.input{resize:none;line-height:1.6;}
   justify-content:space-between;margin-bottom:12px;}
 .section-title .more{font-size:13px;color:var(--fg-muted);font-weight:400;cursor:pointer;}
 /* 瀑布流 */
-.waterfall{column-count:2;column-gap:10px;}
-.waterfall .wf-item{break-inside:avoid;margin-bottom:10px;}
+.waterfall{column-count:2;column-gap:8px;}
+.waterfall .wf-item{break-inside:avoid;margin-bottom:8px;}
 /* 水平滚动 */
-.h-scroll{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding:0 16px;}
+.h-scroll{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding:0 0 0 12px;}
+.h-scroll::after{content:'';display:block;width:12px;flex-shrink:0;}
 .h-scroll::-webkit-scrollbar{display:none;}
 /* 骨架屏 */
 .skeleton{background:linear-gradient(90deg,var(--bg-soft) 25%,var(--bg-elevated) 50%,var(--bg-soft) 75%);
@@ -197,8 +199,8 @@ textarea.input{resize:none;line-height:1.6;}
 .blob{position:absolute;border-radius:50%;filter:blur(60px);opacity:0.3;pointer-events:none;z-index:0;}
 /* 生成中动画 */
 .gen-loading{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:30px;}
-.gen-spinner{width:36px;height:36px;border:3px solid var(--accent-soft);border-top-color:var(--accent);
-  border-radius:50%;animation:spin 0.8s linear infinite;}
+.gen-spinner{width:24px;height:24px;border:2px solid var(--accent-soft);border-top-color:var(--accent);
+  border-radius:50%;animation:spin 0.8s linear infinite;display:inline-block;}
 @keyframes spin{to{transform:rotate(360deg);}}
 /* 进度条 */
 .progress{width:100%;height:6px;background:var(--bg-soft);border-radius:999px;overflow:hidden;}
@@ -248,7 +250,7 @@ textarea.input{resize:none;line-height:1.6;}
 .stat-card .sc-num{font-size:20px;font-weight:700;color:var(--fg-primary);font-family:Georgia,serif;}
 .stat-card .sc-label{font-size:11px;color:var(--fg-muted);margin-top:2px;}
 /* 菜单网格 */
-.menu-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:0 16px;}
+.menu-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:0 12px;}
 .menu-grid-item{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;padding:10px 0;}
 .menu-grid-item .mgi-icon{width:44px;height:44px;border-radius:14px;display:flex;align-items:center;
   justify-content:center;color:white;}
@@ -261,6 +263,10 @@ textarea.input{resize:none;line-height:1.6;}
 .cal-day.milestone::after{content:'';position:absolute;bottom:3px;width:4px;height:4px;border-radius:50%;background:var(--mint);}
 /* 通用过渡 */
 .transition-all{transition:all 0.6s cubic-bezier(0.4,0,0.2,1);}
+@keyframes slideInLeft{from{opacity:0;transform:translateX(-30px);}to{opacity:1;transform:translateX(0);}}
+@keyframes slideInRight{from{opacity:0;transform:translateX(30px);}to{opacity:1;transform:translateX(0);}}
+.wf-slide-left{animation:slideInLeft 0.4s cubic-bezier(0.16,1,0.3,1);}
+.wf-slide-right{animation:slideInRight 0.4s cubic-bezier(0.16,1,0.3,1);}
 </style>
 </head>
 <body>
@@ -309,20 +315,24 @@ textarea.input{resize:none;line-height:1.6;}
 <!-- ============ 首页 ============ -->
 <div class="page active" id="page-home" data-title="Lumi-Draw" data-show-tab="true">
   <div style="padding:0 0 20px;">
-    <div style="padding:0 16px;margin-bottom:16px;">
+    <div style="padding:0 12px;margin-bottom:16px;">
       <div class="card" style="height:150px;position:relative;overflow:hidden;cursor:pointer;" id="bannerBox">
         <div id="bannerTrack" style="display:flex;transition:transform 0.5s cubic-bezier(0.16,1,0.3,1);height:100%;"></div>
         <div id="bannerDots" style="position:absolute;bottom:8px;left:0;right:0;display:flex;justify-content:center;gap:6px;"></div>
       </div>
     </div>
-    <div class="section-title" style="padding:0 16px;">
-      <span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:middle;margin-right:4px;color:var(--peach)"><path d="M8.5 14.5A2.5 2.5 0 0011 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 11-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 002.5 2.5z"/></svg>热门玩法</span><span class="more" onclick="showToast('查看全部玩法')">全部 ›</span>
+    <div class="section-title" style="padding:0 12px;">
+      <span>热门玩法</span><span class="more" onclick="navigateTo('allGameplays')" style="color:var(--accent);font-size:14px;font-weight:600;display:flex;align-items:center;gap:2px;">全部 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg></span>
     </div>
     <div class="h-scroll" style="margin-bottom:18px;" id="gameplayScroll"></div>
-    <div class="section-title" style="padding:0 16px;">
-      <span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:middle;margin-right:4px;color:var(--accent)"><path d="M12 3l1.9 5.8a2 2 0 001.3 1.3L21 12l-5.8 1.9a2 2 0 00-1.3 1.3L12 21l-1.9-5.8a2 2 0 00-1.3-1.3L3 12l5.8-1.9a2 2 0 001.3-1.3L12 3z"/></svg>精选作品</span><span class="more" onclick="switchTab('plaza')">广场 ›</span>
+    <div class="section-title" style="padding:0 12px;">
+      <span>精选作品</span>
+      <div style="display:flex;gap:4px;background:var(--bg-soft);padding:3px;border-radius:999px;">
+        <span style="font-size:12px;padding:4px 12px;background:var(--bg-card);border-radius:999px;font-weight:600;color:var(--accent);box-shadow:var(--shadow-sm);cursor:pointer;" onclick="switchHomeTab(this,'recommend')">推荐</span>
+        <span style="font-size:12px;padding:4px 12px;color:var(--fg-muted);cursor:pointer;" onclick="switchHomeTab(this,'new')">最新</span>
+      </div>
     </div>
-    <div style="padding:0 16px;"><div class="waterfall" id="homeWaterfall"></div></div>
+    <div style="padding:0 12px;"><div class="waterfall" id="homeWaterfall"></div></div>
   </div>
 </div>
 
@@ -358,19 +368,19 @@ textarea.input{resize:none;line-height:1.6;}
       <button class="btn btn-primary btn-sm" style="flex:1;" onclick="applyFilter()">确认筛选</button>
     </div>
   </div>
-  <div style="padding:0 16px;"><div class="waterfall" id="plazaWaterfall"></div></div>
+  <div style="padding:0 12px;"><div class="waterfall" id="plazaWaterfall"></div></div>
 </div>
 
 <!-- ============ 创作 ============ -->
 <div class="page" id="page-create" data-title="AI 创作" data-show-tab="true" data-no-scroll="true">
   <div style="overflow-y:auto;flex:1;" id="createScroll">
     <div style="padding:12px 0 8px;">
-      <div class="section-title" style="padding:0 16px;margin-bottom:10px;">
+      <div class="section-title" style="padding:0 12px;margin-bottom:10px;">
         <span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:middle;margin-right:4px;color:var(--accent)"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="19" cy="13" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="10" cy="20" r="2.5"/><path d="M12 2a10 10 0 000 20 8 8 0 010-16"/></svg>选择模型</span><span class="more" onclick="navigateTo('allModels')">全部 ›</span>
       </div>
       <div class="h-scroll" id="modelScroll"></div>
     </div>
-    <div style="padding:0 16px;margin-bottom:14px;">
+    <div style="padding:0 12px;margin-bottom:14px;">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
         <span style="font-size:15px;font-weight:700;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:middle;margin-right:4px;color:var(--accent)"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>描述你想要的画面</span>
         <span class="tag tag-lavender" onclick="navigateTo('reversePrompt')" style="cursor:pointer;">
@@ -397,18 +407,18 @@ textarea.input{resize:none;line-height:1.6;}
       </div>
     </div>
     <div style="margin-bottom:14px;">
-      <div class="section-title" style="padding:0 16px;margin-bottom:10px;"><span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:middle;margin-right:4px;color:var(--lavender)"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>风格类型</span></div>
-      <div style="padding:0 16px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;" id="styleGrid"></div>
+      <div class="section-title" style="padding:0 12px;margin-bottom:10px;"><span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:middle;margin-right:4px;color:var(--lavender)"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>风格类型</span></div>
+      <div style="padding:0 12px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;" id="styleGrid"></div>
     </div>
     <div style="margin-bottom:14px;">
-      <div class="section-title" style="padding:0 16px;margin-bottom:10px;"><span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:middle;margin-right:4px;color:var(--mint)"><rect x="2" y="6" width="20" height="12" rx="1"/><path d="M2 10h20M6 14h4"/></svg>画面比例</span></div>
+      <div class="section-title" style="padding:0 12px;margin-bottom:10px;"><span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:middle;margin-right:4px;color:var(--mint)"><rect x="2" y="6" width="20" height="12" rx="1"/><path d="M2 10h20M6 14h4"/></svg>画面比例</span></div>
       <div class="h-scroll" id="ratioScroll"></div>
     </div>
     <div style="margin-bottom:14px;">
-      <div class="section-title" style="padding:0 16px;margin-bottom:10px;"><span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:middle;margin-right:4px;color:var(--lemon)"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>生成数量</span></div>
+      <div class="section-title" style="padding:0 12px;margin-bottom:10px;"><span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:middle;margin-right:4px;color:var(--lemon)"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>生成数量</span></div>
       <div class="h-scroll" id="countScroll"></div>
     </div>
-    <div id="resultArea" style="padding:0 16px;margin-bottom:14px;display:none;">
+    <div id="resultArea" style="padding:0 12px;margin-bottom:14px;display:none;">
       <div class="section-title"><span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:middle;margin-right:4px;color:var(--rose)"><path d="M12 3l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 16.8l-6.2 4.5 2.4-7.4L2 9.4h7.6z"/></svg>生成结果</span></div>
       <div id="resultContent"></div>
     </div>
@@ -445,7 +455,7 @@ textarea.input{resize:none;line-height:1.6;}
     <div class="sub-tab" onclick="switchGalleryTab(this,'draft')">草稿箱</div>
     <div class="sub-tab" onclick="switchGalleryTab(this,'favorite')">收藏</div>
   </div>
-  <div style="padding:0 16px;" id="galleryContent"><div class="waterfall" id="galleryWaterfall"></div></div>
+  <div style="padding:0 12px;" id="galleryContent"><div class="waterfall" id="galleryWaterfall"></div></div>
 </div>
 
 <!-- ============ 我的 ============ -->
@@ -477,7 +487,7 @@ textarea.input{resize:none;line-height:1.6;}
       <div class="mgi-icon" style="background:linear-gradient(135deg,#6FD4B0,#4FBF90);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="8.5" cy="7" r="4"/><path d="M20 8v6M23 11h-6"/></svg></div><div class="mgi-text">邀请</div>
     </div>
   </div>
-  <div style="padding:0 16px;margin-bottom:16px;">
+  <div style="padding:0 12px;margin-bottom:16px;">
     <div class="card" style="overflow:hidden;">
       <div class="list-row" onclick="navigateTo('messages')">
         <div class="lr-icon" style="color:var(--rose);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
@@ -516,7 +526,7 @@ textarea.input{resize:none;line-height:1.6;}
       </div>
     </div>
   </div>
-  <div style="padding:0 16px;margin-bottom:20px;">
+  <div style="padding:0 12px;margin-bottom:20px;">
     <div class="card" style="overflow:hidden;">
       <div class="list-row" onclick="showToast('打开微信客服')">
         <div class="lr-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg></div>
@@ -555,6 +565,10 @@ textarea.input{resize:none;line-height:1.6;}
 </div>
 
 <!-- ============ 搜索 ============ -->
+<div class="page" id="page-allGameplays" data-title="全部玩法">
+  <div style="padding:16px;"><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;" id="allGameplaysGrid"></div></div>
+</div>
+
 <div class="page" id="page-search" data-title="搜索">
   <div style="padding:12px 16px;">
     <div style="display:flex;gap:10px;margin-bottom:16px;">
@@ -742,7 +756,7 @@ textarea.input{resize:none;line-height:1.6;}
     <div class="chip" onclick="switchMsgTab(this,'system')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:middle;margin-right:3px;"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>系统</div>
     <div class="chip" onclick="switchMsgTab(this,'service')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:middle;margin-right:3px;"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>客服</div>
   </div>
-  <div style="padding:0 16px;display:flex;justify-content:flex-end;margin-bottom:8px;">
+  <div style="padding:0 12px;display:flex;justify-content:flex-end;margin-bottom:8px;">
     <button class="btn btn-ghost btn-sm" onclick="showToast('已全部已读')">全部已读</button>
   </div>
   <div id="msgList"></div>
@@ -796,7 +810,7 @@ textarea.input{resize:none;line-height:1.6;}
   <div style="padding:12px 16px;display:flex;justify-content:flex-end;">
     <button class="btn btn-ghost btn-sm" onclick="clearHistory()">清空记录</button>
   </div>
-  <div style="padding:0 16px;" id="historyContent"></div>
+  <div style="padding:0 12px;" id="historyContent"></div>
 </div>
 
 <!-- ============ 他人主页 ============ -->
@@ -877,6 +891,43 @@ textarea.input{resize:none;line-height:1.6;}
     <div style="font-size:18px;font-weight:700;margin-bottom:16px;text-align:center;">选择风格</div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;" id="allStylesGrid"></div>
     <button class="btn btn-gradient btn-lg" style="width:100%;margin-top:16px;" onclick="confirmStyles()">确认选择</button>
+  </div>
+</div>
+
+<!-- ============ 长按抽屉 ============ -->
+<div class="overlay" id="longPressOverlay" onclick="closeLongPress()"></div>
+<div class="bottom-sheet" id="longPressSheet">
+  <div class="sheet-handle"></div>
+  <div style="padding:8px 20px 24px">
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;text-align:center">
+      <div onclick="toggleLikeDetail(event,currentLongPressId);closeLongPress()" style="display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;padding:12px 0">
+        <div style="width:48px;height:48px;border-radius:50%;background:var(--rose-soft);display:flex;align-items:center;justify-content:center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" stroke-width="2"><path d="M12 21s-7-4.5-9.5-9C1 9 3 5 7 5c2 0 3.5 1 5 3 1.5-2 3-3 5-3 4 0 6 4 4.5 7-2.5 4.5-9.5 9-9.5 9z"/></svg></div>
+        <span style="font-size:12px;color:var(--fg-secondary)">点赞</span>
+      </div>
+      <div onclick="toggleFavDetail(event,currentLongPressId);closeLongPress()" style="display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;padding:12px 0">
+        <div style="width:48px;height:48px;border-radius:50%;background:var(--lemon-soft);display:flex;align-items:center;justify-content:center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--lemon)" stroke-width="2"><path d="M12 2l3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z"/></svg></div>
+        <span style="font-size:12px;color:var(--fg-secondary)">收藏</span>
+      </div>
+      <div onclick="showToast('分享');closeLongPress()" style="display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;padding:12px 0">
+        <div style="width:48px;height:48px;border-radius:50%;background:var(--accent-soft);display:flex;align-items:center;justify-content:center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg></div>
+        <span style="font-size:12px;color:var(--fg-secondary)">分享</span>
+      </div>
+      <div onclick="closeLongPress();navigateTo('report')" style="display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;padding:12px 0">
+        <div style="width:48px;height:48px;border-radius:50%;background:var(--peach-soft);display:flex;align-items:center;justify-content:center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--peach)" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/></svg></div>
+        <span style="font-size:12px;color:var(--fg-secondary)">举报</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 举报页 ============ -->
+<div class="page" id="page-report" data-title="举报">
+  <div style="padding:16px">
+    <div style="font-size:15px;font-weight:600;margin-bottom:12px;color:var(--fg-primary)">请选择举报原因</div>
+    <div id="reportReasons" style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px"></div>
+    <div style="font-size:15px;font-weight:600;margin-bottom:8px;color:var(--fg-primary)">补充描述（选填）</div>
+    <textarea class="input" id="reportDesc" style="min-height:80px;margin-bottom:20px;resize:none" placeholder="请描述具体问题..."></textarea>
+    <button class="btn btn-gradient btn-lg" style="width:100%" onclick="submitReport()">提交举报</button>
   </div>
 </div>
 
@@ -999,6 +1050,8 @@ function navigateTo(pageId,param){
   if(pageId==='userProfile')renderUserProfile(param);
   if(pageId==='followList')renderFollowList(param);
   if(pageId==='allModels')renderAllModels();
+    if(pageId==='allGameplays')renderAllGameplays();
+      if(pageId==='report')renderReportReasons();
 }
 function navigateBack(){
   if(pageStack.length>0)pageStack.pop();
@@ -1018,18 +1071,24 @@ function toggleFilterPanel(){$('filterPanel').style.display=$('filterPanel').sty
 function resetFilter(){document.querySelectorAll('#filterStyles .chip').forEach(c=>c.classList.remove('active'));showToast('已重置筛选')}
 function applyFilter(){$('filterPanel').style.display='none';showToast('筛选已应用')}
 function switchPlazaTab(el,name){el.parentElement.querySelectorAll('.plaza-tab').forEach(t=>{t.style.fontWeight='500';t.style.color='var(--fg-muted)'});el.style.fontWeight='700';el.style.color='var(--accent)';renderPlazaWaterfall()}
+let currentHomeTab='recommend';let likedWorks={};let favoritedWorks={};var longPressTimer=null;var longPressTriggered=false;var currentLongPressId=0;
+var WORK_DESCS=['霆虹灯下的赛博都市，雨夜中的未来世界','山水之间，水墨丹青的国风意境','少女与猫的温暖日常，二次元风格','抽象梦境，漂浮的岛屿与柔和色调','古风少女与桃花，春天的气息','赛博朋克精灵，发光的眼睛与未来感','水彩猫咪，柔软的笔触与温暖色调','极简几何艺术，干净的线条与柔和配色','暗黑天使，哥特风格与戏剧性光影','蒸汽朋克城市，黄铜与齿轮的复古未来','油画风景，金色麦田与日落印象','像素冒险，16位复古游戏风格'];
+WORKS.forEach(function(w,i){w.desc=WORK_DESCS[i]||''});
+function switchHomeTab(el,tab){el.parentElement.querySelectorAll('span').forEach(s=>{s.style.background='transparent';s.style.color='var(--fg-muted)';s.style.fontWeight='400';s.style.boxShadow='none'});el.style.background='var(--bg-card)';el.style.color='var(--accent)';el.style.fontWeight='600';el.style.boxShadow='var(--shadow-sm)';el.style.borderRadius='999px';var dir=(tab==='new'&&currentHomeTab==='recommend')?'left':'right';currentHomeTab=tab;var c=$('homeWaterfall');c.innerHTML='<div style="display:flex;justify-content:center;padding:20px 0;column-span:all"><div style="width:28px;height:28px;border:2.5px solid var(--accent-soft);border-top-color:var(--accent);border-radius:50%;animation:spin 0.7s linear infinite"></div></div>';setTimeout(()=>{renderWaterfall('homeWaterfall',tab==='new'?WORKS.slice().reverse():WORKS.slice(0,8));c.classList.remove('wf-slide-left','wf-slide-right');void c.offsetWidth;c.classList.add(dir==='left'?'wf-slide-left':'wf-slide-right');setTimeout(()=>{c.classList.remove('wf-slide-left','wf-slide-right')},400)},300)}
+function toggleLike(e,id){e.stopPropagation();var w=WORKS.find(function(x){return x.id===id});if(!w)return;var btn=e.currentTarget;var svg=btn.querySelector('svg');var num=btn.querySelector('span');svg.style.transition='transform 0.4s cubic-bezier(0.34,1.56,0.64,1)';if(likedWorks[id]){delete likedWorks[id];w.likes--;svg.setAttribute('fill','none');svg.setAttribute('stroke','var(--fg-muted)');num.style.color='var(--fg-muted)'}else{likedWorks[id]=true;w.likes++;svg.setAttribute('fill','var(--rose)');svg.setAttribute('stroke','var(--rose)');num.style.color='var(--rose)';svg.style.transform='scale(1.4)';setTimeout(function(){svg.style.transform='scale(1)'},150)}num.textContent=w.likes}
 // ============ Banner轮播 ============
 function initBanner(){
   const track=$('bannerTrack'),dots=$('bannerDots');
-  BANNERS.forEach((b,i)=>{const slide=createEl('div',null,'<img src="'+b.img+'" style="width:375px;height:150px;object-fit:cover"/><div style="position:absolute;bottom:0;left:0;right:0;padding:20px;background:linear-gradient(transparent,rgba(0,0,0,0.5));color:white;font-size:16px;font-weight:600">'+b.title+'</div>');slide.style.position='relative';slide.style.width='343px';slide.style.height='150px';slide.style.flexShrink='0';track.appendChild(slide);const dot=createEl('span',null,'');dot.style.cssText='width:6px;height:6px;border-radius:50%;background:'+(i===0?'white':'rgba(255,255,255,0.4)')+';transition:all 0.3s';dot.dataset.idx=i;dots.appendChild(dot)});
+  BANNERS.forEach((b,i)=>{const slide=createEl('div',null,'<img src="'+b.img+'" style="width:100%;height:150px;object-fit:cover"/><div style="position:absolute;bottom:0;left:0;right:0;padding:20px 16px;background:linear-gradient(transparent,rgba(0,0,0,0.5));color:white;font-size:16px;font-weight:600">'+b.title+'</div><button onclick="event.stopPropagation();switchTab(\'create\')" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.18);backdrop-filter:blur(12px) saturate(180%);-webkit-backdrop-filter:blur(12px) saturate(180%);border:1px solid rgba(255,255,255,0.35);color:white;border-radius:999px;padding:8px 18px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,0.15)">前往创作</button>');slide.style.position='relative';slide.style.width='351px';slide.style.height='150px';slide.style.flexShrink='0';slide.style.overflow='hidden';slide.style.borderRadius='20px';track.appendChild(slide);const dot=createEl('span',null,'');dot.style.cssText='height:6px;border-radius:'+(i===0?'999px':'50%')+';background:'+(i===0?'var(--accent)':'var(--accent-soft)')+';transition:all 0.3s;display:inline-block';if(i===0)dot.style.width='20px';else dot.style.width='6px';dot.dataset.idx=i;dots.appendChild(dot)});
   bannerTimer=setInterval(()=>{bannerIdx=(bannerIdx+1)%BANNERS.length;updateBanner()},4000);
   $('bannerBox').addEventListener('click',()=>{clearInterval(bannerTimer);bannerIdx=(bannerIdx+1)%BANNERS.length;updateBanner();bannerTimer=setInterval(()=>{bannerIdx=(bannerIdx+1)%BANNERS.length;updateBanner()},4000)})
 }
-function updateBanner(){$('bannerTrack').style.transform='translateX(-'+bannerIdx*343+'px)';$('bannerDots').querySelectorAll('span').forEach((d,i)=>d.style.background=i===bannerIdx?'white':'rgba(255,255,255,0.4)')}
+function updateBanner(){$('bannerTrack').style.transform='translateX(-'+bannerIdx*351+'px)';$('bannerDots').querySelectorAll('span').forEach((d,i)=>{if(i===bannerIdx){d.style.width='20px';d.style.borderRadius='999px';d.style.background='var(--accent)'}else{d.style.width='6px';d.style.borderRadius='50%';d.style.background='var(--accent-soft)'}})}
 // ============ 渲染热门玩法 ============
 function renderGameplay(){const sc=$('gameplayScroll');GAMEPLAYS.forEach(g=>{const card=createEl('div',null,'<img src="'+g.img+'" style="width:80px;height:80px;border-radius:14px;object-fit:cover"/><div style="font-size:11px;text-align:center;margin-top:4px;color:var(--fg-secondary)">'+g.name+'</div>');card.style.cssText='flex-shrink:0;cursor:pointer;';card.onclick=()=>{switchTab('create');showToast('已套用「'+g.name+'」模板')};sc.appendChild(card)})}
+function renderAllGameplays(){var c=$('allGameplaysGrid');if(!c)return;c.innerHTML='';GAMEPLAYS.forEach(function(g){var card=createEl('div','card');card.style.cssText='cursor:pointer;overflow:hidden';card.innerHTML='<img src="'+g.img+'" style="width:100%;aspect-ratio:1;object-fit:cover"/><div style="padding:10px;text-align:center"><div style="font-size:13px;font-weight:600;color:var(--fg-primary)">'+g.name+'</div></div>';card.onclick=function(){navigateBack();switchTab('create');showToast('已套用「'+g.name+'」模板')};c.appendChild(card)})}
 // ============ 渲染瀑布流 ============
-function renderWaterfall(containerId,works){const c=$(containerId);if(!c)return;c.innerHTML='';works.forEach(w=>{const u=USERS.find(x=>x.id===w.userId);const item=createEl('div','wf-item');item.innerHTML='<div class="card" style="cursor:pointer"><img src="'+w.img+'" style="width:100%;display:block" onclick="navigateTo(\'workDetail\','+w.id+')"/><div style="padding:8px 10px"><div style="display:flex;align-items:center;gap:6px"><div class="avatar" style="width:18px;height:18px;font-size:9px;background:'+u.color+'">'+u.avatar+'</div><span style="font-size:11px;color:var(--fg-secondary);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+u.name+'</span><svg width="12" height="12" viewBox="0 0 24 24" fill="var(--rose)"><path d="M12 21s-7-4.5-9.5-9C1 9 3 5 7 5c2 0 3.5 1 5 3 1.5-2 3-3 5-3 4 0 6 4 4.5 7-2.5 4.5-9.5 9-9.5 9z"/></svg><span style="font-size:10px;color:var(--fg-muted)">'+w.likes+'</span></div></div></div>';c.appendChild(item)})}
+function renderWaterfall(containerId,works){var c=$(containerId);if(!c)return;c.innerHTML='';works.forEach(function(w){var u=USERS.find(function(x){return x.id===w.userId});var liked=likedWorks[w.id];var item=createEl('div','wf-item');item.innerHTML='<div class="card"><img src="'+w.img+'" style="width:100%;display:block;cursor:pointer" onclick="navigateTo(\'workDetail\','+w.id+')"/><div style="padding:12px 10px 6px"><div style="font-size:13px;font-weight:600;color:var(--fg-primary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:4px">'+w.title+'</div><div style="display:flex;align-items:center;gap:6px"><div onclick="navigateTo(\'userProfile\','+u.id+')" style="display:flex;align-items:center;gap:6px;flex:1;overflow:hidden;cursor:pointer"><div class="avatar" style="width:20px;height:20px;font-size:10px;background:'+u.color+'">'+u.avatar+'</div><span style="font-size:11px;color:var(--fg-secondary);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+u.name+'</span></div><div onclick="toggleLike(event,'+w.id+')" style="display:flex;align-items:center;gap:3px;cursor:pointer;padding:2px 4px;border-radius:8px;transition:background 0.2s" onmouseover="this.style.background=\'var(--accent-soft)\'" onmouseout="this.style.background=\'transparent\'"><svg width="16" height="16" viewBox="0 0 24 24" fill="'+(liked?'var(--rose)':'none')+'" stroke="'+(liked?'var(--rose)':'var(--fg-muted)')+'" stroke-width="1.5"><path d="M12 21s-7-4.5-9.5-9C1 9 3 5 7 5c2 0 3.5 1 5 3 1.5-2 3-3 5-3 4 0 6 4 4.5 7-2.5 4.5-9.5 9-9.5 9z"/></svg><span style="font-size:13px;font-weight:600;color:'+(liked?'var(--rose)':'var(--fg-muted)')+'">'+w.likes+'</span></div></div></div></div>';c.appendChild(item)})}
 // ============ 创作页渲染 ============
 function renderCreatePage(){
   // 模型
@@ -1085,9 +1144,18 @@ function confirmStyles(){closeAllStyles();renderCreatePage()}
 function previewImage(src){const o=$('imgPreviewOverlay');o.style.display='flex';o.innerHTML='<img src="'+src+'" style="max-width:90%;max-height:90%;border-radius:12px" onclick="closeImgPreview()"/>'}
 function closeImgPreview(){$('imgPreviewOverlay').style.display='none'}
 // ============ 作品详情 ============
-function renderWorkDetail(id){const w=WORKS.find(x=>x.id===id);if(!w)return;const u=USERS.find(x=>x.id===w.userId);const m=MODELS.find(x=>x.id===w.model)||{name:w.model};
-  $('workDetailContent').innerHTML='<div><img src="'+w.img+'" style="width:100%;display:block" onclick="previewImage(this.src)"/><div style="padding:16px"><div style="display:flex;align-items:center;gap:10px;margin-bottom:14px"><div class="avatar" style="width:40px;height:40px;font-size:16px;background:'+u.color+'">'+u.avatar+'</div><div style="flex:1"><div style="font-size:15px;font-weight:700">'+u.name+'</div><div style="font-size:11px;color:var(--fg-muted)">'+u.works+'作品 · '+u.likes+'获赞</div></div><button class="btn btn-soft btn-sm" onclick="toggleFollow(this,'+u.id+')" style="'+(isFollowing[u.id]?'':'')+'">'+(isFollowing[u.id]?'已关注':'+ 关注')+'</button></div><div style="font-size:18px;font-weight:700;margin-bottom:6px">'+w.title+'</div><div style="font-size:14px;color:var(--fg-secondary);line-height:1.6;margin-bottom:14px">'+(w.prompt.substring(0,50))+'...</div><div class="card" style="padding:12px;margin-bottom:14px"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px"><span style="font-size:13px;font-weight:600;color:var(--fg-secondary)">提示词</span><button class="btn btn-ghost btn-sm" onclick="copyText(\''+w.prompt.replace(/'/g,'')+'\')" style="padding:2px 8px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>复制</button></div><div style="font-size:13px;color:var(--fg-primary);line-height:1.6">'+w.prompt+'</div></div><div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px"><span class="tag tag-accent">'+m.name+'</span><span class="tag tag-mint">'+w.ratio+'</span><span class="tag tag-lavender">'+w.style+'</span>'+w.tags.map(t=>'<span class="tag tag-peach">'+t+'</span>').join('')+'</div><div style="font-size:12px;color:var(--fg-muted);margin-bottom:14px">生成于 '+w.time+'</div><div style="display:flex;gap:16px;padding:12px 0;border-top:0.5px solid var(--border);border-bottom:0.5px solid var(--border);margin-bottom:14px"><div style="text-align:center;flex:1"><div style="font-size:18px;font-weight:700;font-family:Georgia,serif;color:var(--rose)">'+w.likes+'</div><div style="font-size:11px;color:var(--fg-muted)">点赞</div></div><div style="text-align:center;flex:1"><div style="font-size:18px;font-weight:700;font-family:Georgia,serif;color:var(--accent)">'+w.favorites+'</div><div style="font-size:11px;color:var(--fg-muted)">收藏</div></div><div style="text-align:center;flex:1"><div style="font-size:18px;font-weight:700;font-family:Georgia,serif;color:var(--lavender)">'+w.remakes+'</div><div style="font-size:11px;color:var(--fg-muted)">同款</div></div></div></div></div><div style="position:sticky;bottom:0;display:flex;align-items:center;gap:8px;padding:10px 16px;background:var(--bg-glass);backdrop-filter:blur(20px);border-top:0.5px solid var(--border)"><div style="display:flex;gap:12px;flex:1"><div onclick="showToast(\'已点赞\')" style="display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--fg-secondary)" stroke-width="2"><path d="M12 21s-7-4.5-9.5-9C1 9 3 5 7 5c2 0 3.5 1 5 3 1.5-2 3-3 5-3 4 0 6 4 4.5 7-2.5 4.5-9.5 9-9.5 9z"/></svg></div><div onclick="showToast(\'已收藏\')" style="display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--fg-secondary)" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg></div><div onclick="showToast(\'分享\')" style="display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--fg-secondary)" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg></div><div onclick="showToast(\'举报\')" style="display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--fg-secondary)" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/></svg></div></div><button class="btn btn-gradient" onclick="remakeWork('+w.id+')" style="flex:1"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 16.8l-6.2 4.5 2.4-7.4L2 9.4h7.6z"/></svg>一键同款</button></div>'}
-function toggleFollow(btn,uid){isFollowing[uid]=!isFollowing[uid];btn.textContent=isFollowing[uid]?'已关注':'+ 关注';btn.className=isFollowing[uid]?'btn btn-secondary btn-sm':'btn btn-soft btn-sm'}
+function renderWorkDetail(id){var w=WORKS.find(function(x){return x.id===id});if(!w)return;var u=USERS.find(function(x){return x.id===w.userId});var m=MODELS.find(function(x){return x.id===w.model})||{name:w.model};var liked=!!likedWorks[id];var faved=!!favoritedWorks[id];
+$('workDetailContent').innerHTML='<div><img src="'+w.img+'" style="width:100%;max-height:400px;object-fit:cover;display:block" onclick="if(!longPressTriggered)previewImage(this.src)" ontouchstart="startLongPress('+id+')" ontouchend="cancelLongPress()" onmousedown="startLongPress('+id+')" onmouseup="cancelLongPress()"/><div style="padding:16px"><div style="display:flex;align-items:center;gap:10px;margin-bottom:16px"><div class="avatar" style="width:40px;height:40px;font-size:16px;background:'+u.color+'">'+u.avatar+'</div><div style="flex:1"><div style="font-size:15px;font-weight:700">'+u.name+'</div><div style="font-size:11px;color:var(--fg-muted)">'+u.works+'作品 · '+u.likes+'获赞</div></div><button onclick="toggleFollow(this,'+u.id+')" style="border:none;border-radius:999px;padding:6px 16px;font-size:13px;font-weight:600;cursor:pointer;'+(isFollowing[u.id]?'background:var(--bg-soft);color:var(--fg-muted)':'background:var(--accent);color:white')+'">'+(isFollowing[u.id]?'已关注':'+ 关注')+'</button></div><div style="font-size:18px;font-weight:700;margin-bottom:8px">'+w.title+'</div><div style="font-size:14px;color:var(--fg-secondary);line-height:1.7;margin-bottom:14px">'+w.desc+'</div><div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px"><span class="tag tag-accent">'+m.name+'</span><span class="tag tag-mint">'+w.ratio+'</span><span class="tag tag-lavender">'+w.style+'</span>'+w.tags.map(function(t){return'<span class="tag tag-peach">'+t+'</span>'}).join('')+'</div><div class="card" style="padding:12px;margin-bottom:14px"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px"><span style="font-size:13px;font-weight:600;color:var(--fg-secondary)">提示词</span><button class="btn btn-ghost btn-sm" onclick="copyText(\''+w.prompt.replace(/'/g,'')+'\')" style="padding:2px 8px;color:var(--accent)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>复制</button></div><div style="font-size:13px;color:var(--fg-primary);line-height:1.6">'+w.prompt+'</div></div><div style="font-size:12px;color:var(--fg-muted);margin-bottom:14px">生成于 '+w.time+'</div><div style="display:flex;gap:16px;padding:12px 0;border-top:0.5px solid var(--border);border-bottom:0.5px solid var(--border);margin-bottom:14px"><div style="text-align:center;flex:1"><div style="font-size:18px;font-weight:700;color:var(--rose)">'+w.likes+'</div><div style="font-size:11px;color:var(--fg-muted)">点赞</div></div><div style="text-align:center;flex:1"><div style="font-size:18px;font-weight:700;color:var(--accent)">'+w.favorites+'</div><div style="font-size:11px;color:var(--fg-muted)">收藏</div></div><div style="text-align:center;flex:1"><div style="font-size:18px;font-weight:700;color:var(--lavender)">'+w.remakes+'</div><div style="font-size:11px;color:var(--fg-muted)">同款</div></div></div></div></div><div style="position:sticky;bottom:0;display:flex;align-items:center;gap:16px;padding:10px 16px;background:var(--bg-glass);backdrop-filter:blur(20px);border-top:0.5px solid var(--border)"><div onclick="toggleLikeDetail(event,'+id+')" style="display:flex;align-items:center;gap:4px;cursor:pointer"><svg id="detailLikeIcon" width="24" height="24" viewBox="0 0 24 24" fill="'+(liked?'var(--rose)':'none')+'" stroke="'+(liked?'var(--rose)':'var(--fg-muted)')+'" stroke-width="2" style="transition:all 0.3s"><path d="M12 21s-7-4.5-9.5-9C1 9 3 5 7 5c2 0 3.5 1 5 3 1.5-2 3-3 5-3 4 0 6 4 4.5 7-2.5 4.5-9.5 9-9.5 9z"/></svg><span id="detailLikeNum" style="font-size:15px;font-weight:600;color:'+(liked?'var(--rose)':'var(--fg-muted)')+'">'+w.likes+'</span></div><div onclick="toggleFavDetail(event,'+id+')" style="display:flex;align-items:center;gap:4px;cursor:pointer"><svg id="detailFavIcon" width="24" height="24" viewBox="0 0 24 24" fill="'+(faved?'var(--lemon)':'none')+'" stroke="'+(faved?'var(--lemon)':'var(--fg-muted)')+'" stroke-width="2" style="transition:all 0.3s"><path d="M12 2l3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z"/></svg><span id="detailFavNum" style="font-size:15px;font-weight:600;color:'+(faved?'var(--lemon)':'var(--fg-muted)')+'">'+w.favorites+'</span></div><button class="btn btn-gradient" onclick="remakeWork('+id+')" style="flex:1;margin-left:auto">一键同款</button></div>'}
+function toggleFollow(btn,uid){if(isFollowing[uid]){if(btn.dataset.confirming==='true'){isFollowing[uid]=false;btn.dataset.confirming='false';updateFollowBtn(btn,uid)}else{btn.dataset.confirming='true';btn.textContent='确认取消?';btn.style.background='var(--rose-soft)';btn.style.color='var(--rose)';setTimeout(function(){if(btn.dataset.confirming==='true'){btn.dataset.confirming='false';updateFollowBtn(btn,uid)}},3000)}}else{isFollowing[uid]=true;updateFollowBtn(btn,uid);showToast('关注成功')}}
+function updateFollowBtn(btn,uid){if(isFollowing[uid]){btn.textContent='已关注';btn.style.background='var(--bg-soft)';btn.style.color='var(--fg-muted)';btn.style.border='none'}else{btn.textContent='+ 关注';btn.style.background='var(--accent)';btn.style.color='white';btn.style.border='none'}}
+function toggleLikeDetail(e,id){e.stopPropagation();var w=WORKS.find(function(x){return x.id===id});if(!w)return;var svg=$('detailLikeIcon');var num=$('detailLikeNum');svg.style.transition='transform 0.4s cubic-bezier(0.34,1.56,0.64,1)';if(likedWorks[id]){delete likedWorks[id];w.likes--;svg.setAttribute('fill','none');svg.setAttribute('stroke','var(--fg-muted)');num.style.color='var(--fg-muted)'}else{likedWorks[id]=true;w.likes++;svg.setAttribute('fill','var(--rose)');svg.setAttribute('stroke','var(--rose)');num.style.color='var(--rose)';svg.style.transform='scale(1.4)';setTimeout(function(){svg.style.transform='scale(1)'},150)}num.textContent=w.likes}
+function toggleFavDetail(e,id){e.stopPropagation();var w=WORKS.find(function(x){return x.id===id});if(!w)return;var svg=$('detailFavIcon');var num=$('detailFavNum');svg.style.transition='transform 0.4s cubic-bezier(0.34,1.56,0.64,1)';if(favoritedWorks[id]){delete favoritedWorks[id];w.favorites--;svg.setAttribute('fill','none');svg.setAttribute('stroke','var(--fg-muted)');num.style.color='var(--fg-muted)'}else{favoritedWorks[id]=true;w.favorites++;svg.setAttribute('fill','var(--lemon)');svg.setAttribute('stroke','var(--lemon)');num.style.color='var(--lemon)';svg.style.transform='scale(1.4)';setTimeout(function(){svg.style.transform='scale(1)'},150)}num.textContent=w.favorites}
+function startLongPress(id){longPressTimer=setTimeout(function(){longPressTriggered=true;currentLongPressId=id;$('longPressOverlay').classList.add('show');$('longPressSheet').classList.add('show')},600)}
+function cancelLongPress(){if(longPressTimer){clearTimeout(longPressTimer);longPressTimer=null}setTimeout(function(){longPressTriggered=false},100)}
+function closeLongPress(){$('longPressOverlay').classList.remove('show');$('longPressSheet').classList.remove('show')}
+var REPORT_REASONS=['垃圾广告','色情低俗','违法违规','侵权盗版','煽动仇恨','虚假信息','其他原因'];var selectedReportReason=-1;
+function renderReportReasons(){var c=$('reportReasons');if(!c)return;c.innerHTML='';selectedReportReason=-1;REPORT_REASONS.forEach(function(r,i){var row=createEl('div','list-row');row.style.cssText='border:1.5px solid var(--border);border-radius:12px;padding:14px 16px;cursor:pointer;transition:all 0.2s';row.innerHTML='<span style="font-size:15px;color:var(--fg-primary);flex:1">'+r+'</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--fg-muted)" stroke-width="2" style="opacity:0"><circle cx="12" cy="12" r="10"/><path d="M20 6L9 17l-5-5"/></svg>';row.onclick=function(){selectedReportReason=i;c.querySelectorAll('.list-row').forEach(function(el){el.style.borderColor='var(--border)';el.querySelector('svg').style.opacity='0'});row.style.borderColor='var(--accent)';row.querySelector('svg').style.opacity='1';row.querySelector('svg').setAttribute('stroke','var(--accent)')};c.appendChild(row)})}
+function submitReport(){if(selectedReportReason<0){showToast('请选择举报原因');return}navigateBack();showToast('举报已提交，我们会尽快处理')}
 function remakeWork(id){const w=WORKS.find(x=>x.id===id);switchTab('create');$('promptInput').value=w.prompt;updatePromptCount();showToast('已带入提示词，开始创作吧')}
 // ============ 广场 ============
 function renderPlazaCategories(){const c=$('plazaCategories');CATEGORIES.forEach((cat,i)=>{const chip=createEl('div','chip'+(i===0?' active':''));chip.textContent=cat;chip.onclick=()=>{c.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));chip.classList.add('active');renderPlazaWaterfall()};c.appendChild(chip)})}
@@ -1112,7 +1180,7 @@ function doSearch(kw){$('searchInput').value=kw;onSearchInput()}
 function onSearchInput(){const v=$('searchInput').value.trim();if(v){$('searchDefault').style.display='none';$('searchResults').style.display='block';const filtered=WORKS.filter(w=>w.title.includes(v)||w.prompt.includes(v)||w.tags.some(t=>t.includes(v)));renderWaterfall('searchWaterfall',filtered.length>0?filtered:WORKS)}else{$('searchDefault').style.display='block';$('searchResults').style.display='none'}}
 function clearSearchHistory(){SEARCH_HISTORY.length=0;renderSearchDefault();showToast('已清空搜索历史')}
 // ============ 他人主页 ============
-function renderUserProfile(uid){const u=USERS.find(x=>x.id===uid);if(!u)return;const works=WORKS.filter(w=>w.userId===uid);$('userProfileContent').innerHTML='<div style="padding:16px"><div class="card" style="padding:20px 16px;text-align:center;background:var(--gradient-sky)"><div class="avatar" style="width:72px;height:72px;font-size:28px;margin:0 auto 10px;background:'+u.color+'">'+u.avatar+'</div><div style="font-size:18px;font-weight:700">'+u.name+'</div><div style="font-size:13px;color:var(--fg-muted);margin-top:4px">'+u.bio+'</div><button class="btn '+(isFollowing[u.id]?'btn-secondary':'btn-gradient')+'" style="margin-top:12px;width:100%" onclick="toggleFollow(this,'+u.id+')">'+(isFollowing[u.id]?'已关注':'+ 关注')+'</button></div><div class="card" style="padding:14px 8px;margin-top:10px;display:flex"><div class="stat-card"><div class="sc-num">'+u.works+'</div><div class="sc-label">作品</div></div><div class="stat-card"><div class="sc-num">'+u.likes+'</div><div class="sc-label">获赞</div></div><div class="stat-card" onclick="navigateTo(\'followList\',\'followers\')" style="cursor:pointer"><div class="sc-num">'+u.followers+'</div><div class="sc-label">粉丝</div></div><div class="stat-card"><div class="sc-num">'+(u.remakes||0)+'</div><div class="sc-label">同款</div></div></div></div><div style="padding:0 16px"><div class="waterfall" id="userWorks"></div></div>';
+function renderUserProfile(uid){const u=USERS.find(x=>x.id===uid);if(!u)return;const works=WORKS.filter(w=>w.userId===uid);$('userProfileContent').innerHTML='<div style="padding:16px"><div class="card" style="padding:20px 16px;text-align:center;background:var(--gradient-sky)"><div class="avatar" style="width:72px;height:72px;font-size:28px;margin:0 auto 10px;background:'+u.color+'">'+u.avatar+'</div><div style="font-size:18px;font-weight:700">'+u.name+'</div><div style="font-size:13px;color:var(--fg-muted);margin-top:4px">'+u.bio+'</div><button class="btn '+(isFollowing[u.id]?'btn-secondary':'btn-gradient')+'" style="margin-top:12px;width:100%" onclick="toggleFollow(this,'+u.id+')">'+(isFollowing[u.id]?'已关注':'+ 关注')+'</button></div><div class="card" style="padding:14px 8px;margin-top:10px;display:flex"><div class="stat-card"><div class="sc-num">'+u.works+'</div><div class="sc-label">作品</div></div><div class="stat-card"><div class="sc-num">'+u.likes+'</div><div class="sc-label">获赞</div></div><div class="stat-card" onclick="navigateTo(\'followList\',\'followers\')" style="cursor:pointer"><div class="sc-num">'+u.followers+'</div><div class="sc-label">粉丝</div></div><div class="stat-card"><div class="sc-num">'+(u.remakes||0)+'</div><div class="sc-label">同款</div></div></div></div><div style="padding:0 12px"><div class="waterfall" id="userWorks"></div></div>';
   const uw=$('userWorks');if(uw){works.forEach(w=>{const item=createEl('div','wf-item');item.innerHTML='<div class="card" style="cursor:pointer"><img src="'+w.img+'" style="width:100%;display:block" onclick="navigateTo(\'workDetail\','+w.id+')"/><div style="padding:8px 10px;font-size:12px;color:var(--fg-secondary)">'+w.title+' · '+w.likes+'赞</div></div>';uw.appendChild(item)})}}
 // ============ 关注/粉丝列表 ============
 function renderFollowList(type){const c=$('followListContent');c.innerHTML='';const title=type==='following'?'我的关注':'我的粉丝';$('page-followList').dataset.title=title;$('navTitle').textContent=title;USERS.forEach(u=>{if(u.id===1)return;const row=createEl('div','list-row');row.innerHTML='<div class="avatar" style="width:40px;height:40px;font-size:16px;background:'+u.color+'">'+u.avatar+'</div><div class="lr-text"><div style="font-size:15px;font-weight:600">'+u.name+'</div><div style="font-size:12px;color:var(--fg-muted)">'+u.bio+'</div></div><button class="btn '+(isFollowing[u.id]?'btn-secondary':'btn-soft')+' btn-sm" onclick="toggleFollow(this,'+u.id+')">'+(isFollowing[u.id]?'已关注':'+ 关注')+'</button>';c.appendChild(row)})}
@@ -1130,6 +1198,7 @@ function useReverseResult(){$('promptInput').value=$('reverseText').value;update
 // ============ 初始化 ============
 function init(){
   initTheme();
+  document.querySelectorAll('.bottom-sheet,.overlay,#leftDrawer,#leftDrawerOverlay').forEach(function(el){el.parentNode.removeChild(el);document.querySelector('.phone-screen').appendChild(el)});
   initBanner();
   renderGameplay();
   renderWaterfall('homeWaterfall',WORKS.slice(0,8));
@@ -1146,6 +1215,7 @@ function init(){
   renderSearchDefault();
   renderDrafts();
   renderHistory();
+  renderAllGameplays();
   switchTab('home');
 }
 init();
