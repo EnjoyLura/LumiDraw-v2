@@ -301,6 +301,9 @@ textarea.input{resize:none;line-height:1.6;}
         <svg width="12" height="20" viewBox="0 0 12 20" fill="none"><path d="M10 2L2 10L10 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </span>
       <span class="nav-title" id="navTitle">Lumi-Draw</span>
+      <span class="nav-back" id="navSearch" style="display:none;left:auto;right:50px;cursor:pointer;" onclick="navigateTo('search')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      </span>
     </div>
     <!-- 微信胶囊 -->
     <div class="capsule">
@@ -436,18 +439,18 @@ textarea.input{resize:none;line-height:1.6;}
 
 <!-- ============ 画廊 ============ -->
 <div class="page" id="page-gallery" data-title="画廊" data-show-tab="true">
-  <!-- 顶部操作栏：左侧设置+搜索 | 右侧菜单 -->
+  <!-- 顶部操作栏：菜单 | 设置背景 | 搜索 -->
   <div style="display:flex;align-items:center;gap:8px;padding:4px 16px;">
+    <div onclick="toggleLeftDrawer()" style="cursor:pointer;padding:4px;">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--fg-primary)" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+    </div>
     <div class="btn btn-soft btn-sm" onclick="showToast('设置背景功能')" style="display:flex;align-items:center;gap:4px;">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
       <span>设置背景</span>
     </div>
+    <div style="flex:1;"></div>
     <div onclick="navigateTo('search')" style="cursor:pointer;padding:4px;">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--fg-primary)" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-    </div>
-    <div style="flex:1;"></div>
-    <div onclick="toggleLeftDrawer()" style="cursor:pointer;padding:4px;">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--fg-primary)" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
     </div>
   </div>
   <!-- 头像（左）+ 信息（右）两列布局 -->
@@ -497,6 +500,14 @@ textarea.input{resize:none;line-height:1.6;}
       管理
     </button>
   </div>
+  <!-- 管理模式下底部操作栏 -->
+  <div id="galleryManageBar" style="display:none;position:sticky;bottom:0;left:0;right:0;background:var(--bg-glass);backdrop-filter:blur(16px);border-top:0.5px solid var(--border);padding:8px 16px;z-index:50;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span id="gallerySelectedCount" style="font-size:13px;color:var(--fg-secondary);flex:1;">已选择 0 项</span>
+      <button class="btn btn-soft btn-sm" onclick="selectAllGallery()" id="gallerySelectAllBtn">全选</button>
+      <button class="btn btn-sm" onclick="deleteSelectedGallery()" style="background:var(--rose);color:white;border:none;">删除</button>
+    </div>
+  </div>
   <div style="padding:0 12px;" id="galleryContent"><div class="waterfall" id="galleryWaterfall"></div></div>
 </div>
 
@@ -522,12 +533,8 @@ textarea.input{resize:none;line-height:1.6;}
     <div style="margin-bottom:18px;">
       <div style="font-size:13px;font-weight:600;color:var(--fg-secondary);margin-bottom:6px;">性别</div>
       <div style="display:flex;gap:10px;" id="genderSelect">
-        <div class="gender-option" onclick="selectGender(this,'male')" style="flex:1;padding:10px 0;text-align:center;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;border:2px solid var(--accent);background:var(--accent-soft);color:var(--accent-deep);transition:all 0.3s;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:4px;"><circle cx="10" cy="14" r="6"/><path d="M16 8l4-4m0 0h-5m5 0v5"/></svg>男
-        </div>
-        <div class="gender-option" onclick="selectGender(this,'female')" style="flex:1;padding:10px 0;text-align:center;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;border:2px solid var(--border);background:var(--bg-elevated);color:var(--fg-secondary);transition:all 0.3s;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:4px;"><circle cx="12" cy="9" r="6"/><path d="M12 15v6m-3-3h6"/></svg>女
-        </div>
+        <div class="gender-option" onclick="selectGender(this,'male')" style="flex:1;padding:6px 0;text-align:center;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;border:2px solid var(--accent);background:var(--accent-soft);color:var(--accent-deep);transition:all 0.3s;">男</div>
+        <div class="gender-option" onclick="selectGender(this,'female')" style="flex:1;padding:6px 0;text-align:center;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;border:2px solid var(--border);background:var(--bg-elevated);color:var(--fg-secondary);transition:all 0.3s;">女</div>
       </div>
     </div>
     <!-- 个性签名 -->
@@ -1199,6 +1206,7 @@ function navigateTo(pageId,param){
   pageStack.push({pageId,param});
   const title=page.dataset.title||'';$('navTitle').textContent=title;
   $('navBack').style.display='flex';
+  $('navSearch').style.display=pageId==='editProfile'?'flex':'none';
   if(pageId==='workDetail')renderWorkDetail(param);
   if(pageId==='userProfile')renderUserProfile(param);
   if(pageId==='followList')renderFollowList(param);
@@ -1231,6 +1239,7 @@ function navigateBack(){
     }
     $('navTitle').textContent=page.dataset.title||'';
     $('navBack').style.display='flex';
+    $('navSearch').style.display=last.pageId==='editProfile'?'flex':'none';
     $('tabBar').style.display=page.dataset.showTab==='true'?'flex':'none';
     $('createBar').style.display=page.dataset.showTab==='create'?'flex':'none';
     if(page.dataset.showTab==='plaza')setTimeout(initPlazaTabIndicator,50);
@@ -1238,6 +1247,7 @@ function navigateBack(){
     var savedTop=savedScrollPositions[last.pageId];
     if(savedTop!==undefined)$('contentArea').scrollTop=savedTop;
   }else{
+    $('navSearch').style.display='none';
     switchTab(currentTab);
     // 恢复tab页的滚动位置
     var tabSavedTop=savedScrollPositions[currentTab];
@@ -1359,8 +1369,14 @@ function renderPlazaWaterfall(){renderWaterfall('plazaWaterfall',WORKS)}
 // ============ 画廊 ============
 function switchGalleryTab(el,tab){el.parentElement.querySelectorAll('.gallery-tab').forEach(t=>{t.style.fontWeight='500';t.style.color='var(--fg-muted)'});el.style.fontWeight='700';el.style.color='var(--accent)';var indicator=$('galleryTabIndicator');if(indicator){indicator.style.left=el.offsetLeft+el.offsetWidth/2-10+'px'}if(tab==='all'){$('galleryContent').innerHTML='<div class="waterfall" id="galleryWaterfall"></div>';renderWaterfall('galleryWaterfall',WORKS.slice(0,8))}else if(tab==='published'){$('galleryContent').innerHTML='<div class="waterfall" id="galleryWaterfall"></div>';renderWaterfall('galleryWaterfall',WORKS.slice(0,6))}else if(tab==='draft'){$('galleryContent').innerHTML='<div style="text-align:center;padding:40px 20px;color:var(--fg-muted)"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin:0 auto 10px;display:block"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg><div style="font-size:14px">3个草稿</div></div>'}else{$('galleryContent').innerHTML='<div class="waterfall" id="galleryWaterfall"></div>';renderWaterfall('galleryWaterfall',WORKS.slice(2,8))}}
 function initGalleryTabIndicator(){var active=document.querySelector('.gallery-tab.active');if(active&&$('galleryTabIndicator')){$('galleryTabIndicator').style.left=active.offsetLeft+active.offsetWidth/2-10+'px'}}
-let galleryManageMode=false;
-function toggleGalleryManage(){galleryManageMode=!galleryManageMode;const btn=$('galleryManageBtn');if(galleryManageMode){btn.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>完成';btn.classList.remove('btn-ghost');btn.classList.add('btn-soft');showToast('进入管理模式，点击作品可删除')}else{btn.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>管理';btn.classList.remove('btn-soft');btn.classList.add('btn-ghost')}}
+let galleryManageMode=false;let gallerySelectedItems={};
+function toggleGalleryManage(){galleryManageMode=!galleryManageMode;gallerySelectedItems={};const btn=$('galleryManageBtn');const bar=$('galleryManageBar');if(galleryManageMode){btn.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>完成';btn.classList.remove('btn-ghost');btn.classList.add('btn-soft');bar.style.display='block';addManageOverlays();updateGallerySelectedCount()}else{btn.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>管理';btn.classList.remove('btn-soft');btn.classList.add('btn-ghost');bar.style.display='none';removeManageOverlays()}}
+function addManageOverlays(){var items=document.querySelectorAll('#galleryWaterfall .wf-item');items.forEach(function(item,idx){var overlay=document.createElement('div');overlay.className='manage-overlay';overlay.setAttribute('data-idx',idx);overlay.style.cssText='position:absolute;top:8px;left:8px;width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,0.9);border:2px solid var(--border-strong);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10;transition:all 0.2s';overlay.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--fg-muted)" stroke-width="2.5" style="opacity:0"><path d="M20 6L9 17l-5-5"/></svg>';overlay.onclick=function(e){e.stopPropagation();toggleGalleryItemSelect(this,idx)};item.querySelector('.card').style.position='relative';item.querySelector('.card').appendChild(overlay)})}
+function removeManageOverlays(){document.querySelectorAll('.manage-overlay').forEach(function(el){el.remove()})}
+function toggleGalleryItemSelect(el,idx){if(gallerySelectedItems[idx]){delete gallerySelectedItems[idx];el.style.background='rgba(255,255,255,0.9)';el.style.borderColor='var(--border-strong)';el.querySelector('svg').style.opacity='0'}else{gallerySelectedItems[idx]=true;el.style.background='var(--accent)';el.style.borderColor='var(--accent)';el.querySelector('svg').setAttribute('stroke','white');el.querySelector('svg').style.opacity='1'}updateGallerySelectedCount()}
+function updateGallerySelectedCount(){var count=Object.keys(gallerySelectedItems).length;$('gallerySelectedCount').textContent='已选择 '+count+' 项'}
+function selectAllGallery(){var items=document.querySelectorAll('#galleryWaterfall .manage-overlay');var allSelected=Object.keys(gallerySelectedItems).length===items.length;items.forEach(function(el,idx){if(allSelected){delete gallerySelectedItems[idx];el.style.background='rgba(255,255,255,0.9)';el.style.borderColor='var(--border-strong)';el.querySelector('svg').style.opacity='0'}else{gallerySelectedItems[idx]=true;el.style.background='var(--accent)';el.style.borderColor='var(--accent)';el.querySelector('svg').setAttribute('stroke','white');el.querySelector('svg').style.opacity='1'}});updateGallerySelectedCount()}
+function deleteSelectedGallery(){var count=Object.keys(gallerySelectedItems).length;if(count===0){showToast('请先选择要删除的作品');return}showToast('已删除 '+count+' 个作品');gallerySelectedItems={};removeManageOverlays();toggleGalleryManage();renderWaterfall('galleryWaterfall',WORKS.slice(0,6))}
 // ============ 编辑资料 ============
 function selectGender(el,gender){document.querySelectorAll('.gender-option').forEach(function(opt){opt.style.border='2px solid var(--border)';opt.style.background='var(--bg-elevated)';opt.style.color='var(--fg-secondary)'});el.style.border='2px solid var(--accent)';el.style.background='var(--accent-soft)';el.style.color='var(--accent-deep)'}
 // ============ 充值 ============
