@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lumi-Draw · AI绘画小程序原型</title>
 <script src="https://cdn.tailwindcss.com"></script>
+<link href="https://cdn.jsdelivr.net/npm/remixicon@4.1.0/fonts/remixicon.css" rel="stylesheet">
 <style>
 /* ============ 设计令牌 ============ */
 :root[data-theme="light"]{
@@ -91,6 +92,11 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Plus Jaka
 .page.active{display:block;}
 .page.anim-in{animation:pageSlideIn 0.35s cubic-bezier(0.16,1,0.3,1);}
 @keyframes pageSlideIn{from{opacity:0.3;transform:translateX(100%);}to{opacity:1;transform:translateX(0);}}
+.page.anim-out{animation:pageSlideOut 0.35s cubic-bezier(0.16,1,0.3,1) forwards;}
+@keyframes pageSlideOut{from{opacity:1;transform:translateX(0);}to{opacity:0;transform:translateX(100%);}}
+/* ============ 子抽屉（从作品详情跳转的页面，复用作品详情动画） ============ */
+.page.sub-drawer{display:flex!important;flex-direction:column;position:absolute!important;inset:0;z-index:95;background:var(--bg-base);visibility:hidden;transform:translateX(100%);transition:transform 0.5s cubic-bezier(0.16,1,0.3,1),visibility 0s linear 0.5s;box-shadow:-3px 0 16px rgba(0,0,0,0.08);overflow-y:auto;padding-top:74px;}
+.page.sub-drawer.drawer-open{visibility:visible;transform:translateX(0);transition:transform 0.38s cubic-bezier(0.16,1,0.3,1),visibility 0s;}
 /* ============ 作品详情抽屉动画 ============ */
 #page-workDetail{position:absolute;top:0;left:0;right:0;bottom:0;z-index:90;background:var(--bg-base);display:flex;flex-direction:column;overflow:hidden;padding-top:74px;visibility:hidden;transform:translateX(100%);transition:transform 0.5s cubic-bezier(0.16,1,0.3,1),visibility 0s linear 0.5s;box-shadow:-3px 0 16px rgba(0,0,0,0.08);}
 #page-workDetail.drawer-open{visibility:visible;transform:translateX(0);transition:transform 0.38s cubic-bezier(0.16,1,0.3,1),visibility 0s;}
@@ -103,6 +109,7 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Plus Jaka
 .tab-item{display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;
   padding:4px 8px;flex:1;position:relative;}
 .tab-item .tab-icon{width:24px;height:24px;color:var(--fg-muted);transition:color 0.3s;}
+i.tab-icon{font-size:24px;line-height:1;width:auto;height:auto;}
 .tab-item .tab-label{font-size:10px;color:var(--fg-muted);transition:color 0.3s;}
 .tab-item.active .tab-icon,.tab-item.active .tab-label{color:var(--accent);}
 .tab-item.center{margin-top:-18px;}
@@ -397,26 +404,7 @@ textarea.input{resize:none;line-height:1.6;}
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>反推提示词
         </span>
       </div>
-      <div style="position:relative;background:var(--bg-card);border:1.5px solid var(--border);border-radius:16px;padding:12px;min-height:180px;transition:all 0.3s;display:flex;flex-direction:column;cursor:text;" id="promptBox" onclick="$('promptInput').focus()">
-        <div style="position:relative;flex:1;">
-          <div id="promptImgPreview" style="display:none;position:relative;width:64px;height:64px;border-radius:10px;overflow:hidden;margin-bottom:8px;">
-            <img id="promptImg" src="" style="width:100%;height:100%;object-fit:cover;" onclick="previewImage(this.src)"/>
-            <div onclick="removePromptImg(event)" style="position:absolute;top:2px;right:2px;width:18px;height:18px;background:rgba(0,0,0,0.5);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;">
-              <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 2L10 10M10 2L2 10" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
-            </div>
-          </div>
-          <span id="promptCount" style="position:absolute;top:0;right:0;font-size:11px;color:var(--fg-muted);pointer-events:none;">0/500</span>
-          <textarea id="promptInput" class="input" style="border:none;background:transparent;width:100%;min-height:140px;padding:0 0 32px 0;font-size:14px;line-height:1.6;cursor:text;" placeholder="描述你想要生成的图片，越详细效果越好..." maxlength="500" oninput="updatePromptCount()"></textarea>
-          <div style="position:absolute;bottom:4px;left:4px;right:4px;display:flex;align-items:center;justify-content:space-between;">
-            <div onclick="uploadPromptImg()" style="cursor:pointer;display:flex;align-items:center;justify-content:center;width:28px;height:28px;color:var(--accent);">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
-            </div>
-            <div id="clearBtn" onclick="clearPrompt()" style="display:none;cursor:pointer;width:28px;height:28px;align-items:center;justify-content:center;color:var(--accent);">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
-            </div>
-          </div>
-        </div>
-      </div>
+      <textarea id="promptInput" class="input" style="min-height:180px;font-size:14px;line-height:1.6;border-radius:16px;padding:12px;resize:none;" placeholder="描述你想要生成的图片，越详细效果越好..." maxlength="500" oninput="updatePromptCount()"></textarea>
     </div>
     <div style="margin-bottom:14px;">
       <div class="section-title" style="padding:0 12px;margin-bottom:10px;font-size:16px;"><span>风格类型</span></div>
@@ -1095,29 +1083,29 @@ textarea.input{resize:none;line-height:1.6;}
     <div style="font-size:18px;font-weight:700;color:var(--accent);"><span id="costCredits">10</span> <span style="font-size:12px;color:var(--fg-muted);font-weight:400;">积分</span></div>
   </div>
   <button class="btn btn-gradient btn-lg" onclick="handleCreateBtn()" style="flex:1.5;">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4V2"/><path d="M15 16v-2"/><path d="M8 9h2"/><path d="M20 9h2"/><path d="M17.8 11.8L19 13"/><path d="M15 9h.01"/><path d="M17.8 6.2L19 5"/><path d="M3 21l9-9"/><path d="M12.2 6.2L11 5"/></svg>开始创作
+    <i class="ri-sparkling-line" style="font-size:20px;margin-right:4px;"></i>开始创作
   </button>
 </div>
 <!-- ============ Tab栏 ============ -->
 <div class="tab-bar" id="tabBar">
   <div class="tab-item active" data-tab="home" onclick="switchTab('home')">
-    <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><path d="M9 22V12h6v10"/></svg>
+    <i class="ri-home-5-line tab-icon"></i>
     <span class="tab-label">首页</span>
   </div>
   <div class="tab-item" data-tab="plaza" onclick="switchTab('plaza')">
-    <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 000 20M12 2a14.5 14.5 0 010 20M2 12h20"/></svg>
+    <i class="ri-compass-discover-line tab-icon"></i>
     <span class="tab-label">广场</span>
   </div>
   <div class="tab-item center" data-tab="create" onclick="switchTab('create')">
-    <svg class="tab-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M5 21l9-9-3-3-9 9v3z"/><path d="M18 2l1 3 3 1-3 1-1 3-1-3-3-1 3-1z"/><path d="M21 14l.7 2.1 2.1.7-2.1.7-.7 2.1-.7-2.1-2.1-.7 2.1-.7z"/></svg>
+    <i class="ri-sparkling-2-fill tab-icon"></i>
     <span class="tab-label">创作</span>
   </div>
   <div class="tab-item" data-tab="gallery" onclick="switchTab('gallery')">
-    <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+    <i class="ri-gallery-line tab-icon"></i>
     <span class="tab-label">画廊</span>
   </div>
   <div class="tab-item" data-tab="mine" onclick="switchTab('mine')">
-    <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    <i class="ri-user-smile-line tab-icon"></i>
     <span class="tab-label">我的</span>
   </div>
 </div>
@@ -1219,43 +1207,64 @@ function navigateTo(pageId,param){
   if(pageId==='allGameplays')renderAllGameplays();
   if(pageId==='report')renderReportReasons();
   if(pageId==='workDetail'){
-    // 抽屉式打开：主界面（含tabbar）保持不动，作品详情从右滑入覆盖
+    var pushEls=[$('contentArea'),$('tabBar'),$('createBar')];
+    pushEls.forEach(function(el){if(el)el.style.transition='transform 0.38s cubic-bezier(0.16,1,0.3,1)';});
     page.classList.add('drawer-open');
+    pushEls.forEach(function(el){if(el)el.style.transform='translateX(-100%)';});
   }else{
-    // 如果当前有作品详情抽屉打开，不关闭它，只是隐藏在上面
-    $('tabBar').style.display=page.dataset.showTab==='true'?'flex':'none';
-    $('createBar').style.display='none';
-    document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');p.style.cssText=''});
-    page.classList.add('active');
-    $('contentArea').scrollTop=0;
+    var wd=$('page-workDetail');
+    var wasDrawerOpen=wd.classList.contains('drawer-open');
+    if(wasDrawerOpen||page.dataset.showTab!=='true'){
+      var pushEls=wasDrawerOpen?[$('page-workDetail')]:[$('contentArea'),$('tabBar'),$('createBar')];
+      page.classList.add('active','sub-drawer');
+      $('contentArea').parentElement.appendChild(page);
+      pushEls.forEach(function(el){if(el)el.style.transition='transform 0.38s cubic-bezier(0.16,1,0.3,1)';});
+      requestAnimationFrame(function(){requestAnimationFrame(function(){
+        page.classList.add('drawer-open');
+        pushEls.forEach(function(el){if(el)el.style.transform='translateX(-100%)';});
+      });});
+    }else{
+      $('tabBar').style.display=page.dataset.showTab==='true'?'flex':'none';
+      $('createBar').style.display='none';
+      document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');p.classList.remove('anim-in');p.classList.remove('anim-out');p.style.cssText=''});
+      page.classList.add('active');
+      $('contentArea').scrollTop=0;
+    }
   }
 }
 function navigateBack(){
   var leaving=pageStack.length>0?pageStack[pageStack.length-1]:null;
   if(pageStack.length>0)pageStack.pop();
-  // 离开作品详情抽屉：播放滑出动画
-  if(leaving&&leaving.pageId==='workDetail'){$('page-workDetail').classList.remove('drawer-open')}
+  if(leaving&&leaving.pageId==='workDetail'){var wdPushEls=[$('contentArea'),$('tabBar'),$('createBar')];wdPushEls.forEach(function(el){if(el)el.style.transition='transform 0.5s cubic-bezier(0.16,1,0.3,1)';});wdPushEls.forEach(function(el){if(el)el.style.transform='translateX(0)';});var wdPage=$('page-workDetail');wdPage.classList.remove('drawer-open');wdPage.addEventListener('transitionend',function(e){if(e.propertyName==='transform'){wdPushEls.forEach(function(el){if(el){el.style.transition='';el.style.transform='';}});}},{once:true});}
+  var lp=leaving?$('page-'+leaving.pageId):null;
+  var leavingIsSubDrawer=lp&&lp.classList.contains('sub-drawer');
+  if(leavingIsSubDrawer){
+    var dest=pageStack.length>0?pageStack[pageStack.length-1]:null;
+    var returnsToWD=dest&&dest.pageId==='workDetail';
+    var pushEls=returnsToWD?[$('page-workDetail')]:[$('contentArea'),$('tabBar'),$('createBar')];
+    pushEls.forEach(function(el){if(el)el.style.transition='transform 0.5s cubic-bezier(0.16,1,0.3,1)';});
+    pushEls.forEach(function(el){if(el)el.style.transform='translateX(0)';});
+    lp.classList.remove('drawer-open');lp.addEventListener('transitionend',function(e){if(e.propertyName==='transform'){lp.classList.remove('active','sub-drawer');$('contentArea').appendChild(lp);pushEls.forEach(function(el){if(el){el.style.transition='';el.style.transform='';}});}},{once:true});
+  }
   if(pageStack.length>0){
     var last=pageStack[pageStack.length-1];
     var page=$('page-'+last.pageId);
-    // 离开的不是作品详情抽屉时，才需要切换页面显隐（抽屉模式下主界面始终保持显示）
-    if(!(leaving&&leaving.pageId==='workDetail')){
-      document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');p.style.cssText=''});
-      page.classList.add('active');
+    if(!leavingIsSubDrawer){
+      if(!(leaving&&leaving.pageId==='workDetail')){
+        document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active','anim-in','anim-out','sub-drawer','drawer-open');p.style.cssText=''});
+        page.classList.add('active');
+      }
+      if(last.pageId==='workDetail'){page.style.transition='none';page.classList.add('drawer-open');page.offsetHeight;page.style.transition='';$('tabBar').style.display='flex'}else{$('tabBar').style.display=page.dataset.showTab==='true'?'flex':'none'}
     }
     $('navTitle').textContent=page.dataset.title||'';
     $('navBack').style.display='flex';
-    // 如果返回到作品详情，重新打开抽屉
-    if(last.pageId==='workDetail'){page.classList.add('drawer-open');$('tabBar').style.display='flex'}else{$('tabBar').style.display=page.dataset.showTab==='true'?'flex':'none'}
     $('createBar').style.display=page.dataset.showTab==='create'?'flex':'none';
     if(page.dataset.showTab==='plaza')setTimeout(initPlazaTabIndicator,50);
-    // 恢复上一页面的滚动位置
     var savedTop=savedScrollPositions[last.pageId];
     if(savedTop!==undefined)$('contentArea').scrollTop=savedTop;
   }else{
     $('navSearch').style.display='none';
     switchTab(currentTab);
-    // 恢复tab页的滚动位置
     var tabSavedTop=savedScrollPositions[currentTab];
     if(tabSavedTop!==undefined)$('contentArea').scrollTop=tabSavedTop;
   }
@@ -1301,7 +1310,7 @@ function renderWaterfall(containerId,works,showPublished){var c=$(containerId);i
 function renderCreatePage(){
   // 模型
   const ms=$('modelScroll');ms.innerHTML='';
-  MODELS.forEach((m,i)=>{const card=createEl('div','model-card'+(i===selectedModel?' selected':''));card.innerHTML='<img src="'+m.img+'" style="width:100%;height:40px;object-fit:cover"/><div style="padding:6px;flex:1;display:flex;flex-direction:column;justify-content:flex-end"><div style="font-size:12px;font-weight:700">'+m.name+'</div><div style="font-size:10px;color:var(--fg-muted);margin-top:1px">'+m.desc+'</div><div style="display:flex;gap:3px;margin-top:3px">'+m.tags.map(t=>'<span class="tag tag-accent" style="font-size:9px;padding:1px 5px">'+t+'</span>').join('')+'</div></div>';card.onclick=()=>{selectedModel=i;renderCreatePage();updateCost()};ms.appendChild(card)})
+  MODELS.forEach((m,i)=>{const card=createEl('div','model-card'+(i===selectedModel?' selected':''));card.innerHTML='<img src="'+m.img+'" style="width:100%;height:72px;object-fit:cover"/><div style="padding:5px 6px"><div style="font-size:11px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+m.name+'</div><div style="font-size:9px;color:var(--fg-muted);margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+m.desc+'</div><div style="display:flex;gap:3px;margin-top:3px;overflow:hidden">'+m.tags.map(t=>'<span class="tag tag-accent" style="font-size:9px;padding:1px 5px;flex-shrink:0">'+t+'</span>').join('')+'</div></div>';card.onclick=()=>{selectedModel=i;renderCreatePage();updateCost()};ms.appendChild(card)})
   // 风格
   const sg=$('styleGrid');sg.innerHTML='';
   STYLES.slice(0,7).forEach((s,i)=>{const card=createEl('div','style-card'+(selectedStyle===s?' selected':''));card.innerHTML='<img src="'+STYLE_IMGS[s]+'" style="width:100%;height:100%;object-fit:cover;position:absolute"/><div class="sc-overlay"></div><div class="sc-label">'+s+'</div>';card.onclick=()=>{selectedStyle=s;renderCreatePage()};sg.appendChild(card)});
@@ -1369,11 +1378,13 @@ function renderReportReasons(){var c=$('reportReasons');if(!c)return;c.innerHTML
 function submitReport(){if(selectedReportReason<0){showToast('请选择举报原因');return}navigateBack();showToast('举报已提交，我们会尽快处理')}
 function remakeWork(id){const w=WORKS.find(x=>x.id===id);if(!w)return;var mIdx=MODELS.findIndex(function(m){return m.id===w.model||m.name===w.model});if(mIdx>=0)selectedModel=mIdx;var rIdx=RATIOS.findIndex(function(r){return r.label===w.ratio});if(rIdx>=0)selectedRatio=rIdx;selectedStyle=w.style||null;var wdPage=$('page-workDetail');if(wdPage)wdPage.classList.remove('drawer-open');pageStack=[];switchTab('create');$('promptInput').value=w.prompt;updatePromptCount();renderCreatePage();updateCost();showToast('已带入提示词和参数，开始创作吧')}
 // ============ 广场 ============
-function renderPlazaCategories(){const c=$('plazaCategories');CATEGORIES.forEach((cat,i)=>{const chip=createEl('div',null,'<span style="font-size:14px;font-weight:'+(i===0?'600':'400')+';color:'+(i===0?'var(--accent)':'var(--fg-secondary)')+'">'+cat+'</span>');chip.style.cssText='flex-shrink:0;cursor:pointer;padding:6px 12px;transition:all 0.3s;';chip.onclick=()=>{c.querySelectorAll('span').forEach(s=>{s.style.fontWeight='400';s.style.color='var(--fg-secondary)'});chip.querySelector('span').style.fontWeight='600';chip.querySelector('span').style.color='var(--accent)'};c.appendChild(chip)})}
+var lastPlazaCatIdx=0;
+function renderPlazaCategories(){const c=$('plazaCategories');CATEGORIES.forEach((cat,i)=>{const chip=createEl('div',null,'<span style="font-size:14px;font-weight:'+(i===0?'600':'400')+';color:'+(i===0?'var(--accent)':'var(--fg-secondary)')+'">'+cat+'</span>');chip.style.cssText='flex-shrink:0;cursor:pointer;padding:6px 12px;transition:all 0.3s;';chip.onclick=()=>{c.querySelectorAll('span').forEach(s=>{s.style.fontWeight='400';s.style.color='var(--fg-secondary)'});chip.querySelector('span').style.fontWeight='600';chip.querySelector('span').style.color='var(--accent)';var wf=$('plazaWaterfall');var slideDir=i>lastPlazaCatIdx?'wf-slide-left':'wf-slide-right';lastPlazaCatIdx=i;wf.innerHTML='<div style="display:flex;justify-content:center;padding:20px 0;column-span:all"><div style="width:28px;height:28px;border:2.5px solid var(--accent-soft);border-top-color:var(--accent);border-radius:50%;animation:spin 0.7s linear infinite"></div></div>';setTimeout(function(){renderPlazaWaterfall();wf.classList.remove('wf-slide-left','wf-slide-right');void wf.offsetWidth;wf.classList.add(slideDir);setTimeout(function(){wf.classList.remove('wf-slide-left','wf-slide-right')},400)},300)};c.appendChild(chip)})}
 function renderFilterStyles(){const c=$('filterStyles');STYLES.forEach(s=>{const chip=createEl('div','chip chip-outline');chip.textContent=s;chip.onclick=()=>chip.classList.toggle('active');c.appendChild(chip)})}
 function renderPlazaWaterfall(){renderWaterfall('plazaWaterfall',WORKS)}
 // ============ 画廊 ============
-function switchGalleryTab(el,tab){el.parentElement.querySelectorAll('.gallery-tab').forEach(t=>{t.style.fontWeight='500';t.style.color='var(--fg-muted)'});el.style.fontWeight='700';el.style.color='var(--accent)';var indicator=$('galleryTabIndicator');if(indicator){indicator.style.left=el.offsetLeft+el.offsetWidth/2-10+'px'}if(tab==='all'){$('galleryContent').innerHTML='<div class="waterfall" id="galleryWaterfall"></div>';renderWaterfall('galleryWaterfall',WORKS.slice(0,8))}else if(tab==='published'){$('galleryContent').innerHTML='<div class="waterfall" id="galleryWaterfall"></div>';renderWaterfall('galleryWaterfall',WORKS.slice(0,6),true)}else if(tab==='draft'){$('galleryContent').innerHTML='<div class="waterfall" id="galleryWaterfall"></div>';renderWaterfall('galleryWaterfall',WORKS.slice(0,3))}else{$('galleryContent').innerHTML='<div class="waterfall" id="galleryWaterfall"></div>';renderWaterfall('galleryWaterfall',WORKS.slice(2,8))}}
+var lastGalleryTabIdx=0;
+function switchGalleryTab(el,tab){var idx=parseInt(el.dataset.idx);el.parentElement.querySelectorAll('.gallery-tab').forEach(t=>{t.style.fontWeight='500';t.style.color='var(--fg-muted)'});el.style.fontWeight='700';el.style.color='var(--accent)';var indicator=$('galleryTabIndicator');if(indicator){indicator.style.left=el.offsetLeft+el.offsetWidth/2-10+'px'}var c=$('galleryContent');c.innerHTML='<div style="display:flex;justify-content:center;padding:20px 0"><div style="width:28px;height:28px;border:2.5px solid var(--accent-soft);border-top-color:var(--accent);border-radius:50%;animation:spin 0.7s linear infinite"></div></div>';var slideDir=idx>lastGalleryTabIdx?'wf-slide-left':'wf-slide-right';lastGalleryTabIdx=idx;setTimeout(function(){c.innerHTML='<div class="waterfall" id="galleryWaterfall"></div>';if(tab==='all'){renderWaterfall('galleryWaterfall',WORKS.slice(0,8))}else if(tab==='published'){renderWaterfall('galleryWaterfall',WORKS.slice(0,6),true)}else if(tab==='draft'){renderWaterfall('galleryWaterfall',WORKS.slice(0,3))}else{renderWaterfall('galleryWaterfall',WORKS.slice(2,8))}c.classList.remove('wf-slide-left','wf-slide-right');void c.offsetWidth;c.classList.add(slideDir);setTimeout(function(){c.classList.remove('wf-slide-left','wf-slide-right')},400)},300)}
 function initGalleryTabIndicator(){var active=document.querySelector('.gallery-tab.active');if(active&&$('galleryTabIndicator')){$('galleryTabIndicator').style.left=active.offsetLeft+active.offsetWidth/2-10+'px'}}
 let galleryManageMode=false;let gallerySelectedItems={};
 function toggleGalleryManage(){galleryManageMode=!galleryManageMode;gallerySelectedItems={};const btn=$('galleryManageBtn');const bar=$('galleryManageBar');if(galleryManageMode){btn.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>完成';btn.classList.remove('btn-ghost');btn.classList.add('btn-soft');bar.style.display='block';addManageOverlays();updateGallerySelectedCount()}else{btn.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>管理';btn.classList.remove('btn-soft');btn.classList.add('btn-ghost');bar.style.display='none';removeManageOverlays()}}
