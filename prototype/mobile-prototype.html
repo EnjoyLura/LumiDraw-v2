@@ -204,7 +204,7 @@ textarea.input{resize:none;line-height:1.6;}
 .h-scroll::-webkit-scrollbar{display:none;}
 /* 骨架屏 */
 .skeleton{background:linear-gradient(90deg,var(--bg-soft) 25%,var(--bg-elevated) 50%,var(--bg-soft) 75%);
-  background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:8px;}
+  background-size:200% 100%;animation:shimmer 2.5s ease-in-out infinite;border-radius:8px;}
 @keyframes shimmer{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
 /* Toast */
 .toast{position:fixed;top:180px;left:50%;transform:translateX(-50%);background:var(--bg-card);
@@ -332,6 +332,24 @@ textarea.input{resize:none;line-height:1.6;}
 @keyframes slideInRight{from{opacity:0;transform:translateX(30px);}to{opacity:1;transform:translateX(0);}}
 .wf-slide-left{animation:slideInLeft 0.4s cubic-bezier(0.16,1,0.3,1);}
 .wf-slide-right{animation:slideInRight 0.4s cubic-bezier(0.16,1,0.3,1);}
+/* ============ 按钮点击态 ============ */
+.btn-secondary:active,.btn-soft:active,.btn-ghost:active{transform:scale(0.97);}
+.list-row:active{transform:scale(0.99);}
+/* ============ 深色模式卡片阴影 ============ */
+[data-theme="dark"] .card{box-shadow:0 2px 8px rgba(0,0,0,0.25),0 1px 3px rgba(0,0,0,0.15);}
+/* ============ 图片淡入加载 ============ */
+.wf-item img,.detail-carousel img{opacity:0;transition:opacity 0.35s ease;}
+.wf-item img.loaded,.detail-carousel img.loaded{opacity:1;}
+/* ============ 加载更多提示 ============ */
+.load-more-hint{width:100%;padding:18px 0 10px;text-align:center;font-size:12px;color:var(--fg-muted);}
+/* ============ 骨架屏首页 ============ */
+.skeleton-home .sk-banner{height:150px;border-radius:20px;margin:0 16px 16px;}
+.skeleton-home .sk-section{height:18px;width:80px;margin:0 16px 12px;border-radius:4px;}
+.skeleton-home .sk-gameplay{display:flex;gap:12px;padding:0 16px;margin-bottom:18px;}
+.skeleton-home .sk-gp-item{width:80px;height:100px;border-radius:14px;flex-shrink:0;}
+.skeleton-home .sk-wf{display:flex;gap:8px;padding:0 16px;}
+.skeleton-home .sk-wf-col{flex:1;display:flex;flex-direction:column;gap:8px;}
+.skeleton-home .sk-wf-item{border-radius:20px;}
 </style>
 </head>
 <body>
@@ -401,7 +419,7 @@ textarea.input{resize:none;line-height:1.6;}
         <div id="homeTabIndicator" style="position:absolute;bottom:0;width:20px;height:3px;border-radius:999px;background:var(--accent);transition:all 0.3s cubic-bezier(0.16,1,0.3,1);"></div>
       </div>
     </div>
-    <div style="padding:0 16px;"><div class="waterfall" id="homeWaterfall"></div></div>
+    <div style="padding:0 12px;"><div class="waterfall" id="homeWaterfall"></div><div id="homeLoadMore"></div></div>
   </div>
 </div>
 
@@ -430,7 +448,7 @@ textarea.input{resize:none;line-height:1.6;}
       <i class="ri-equalizer-line" style="font-size:18px;color:var(--fg-primary);"></i>
     </div>
   </div>
-  <div style="padding:0 16px;"><div class="waterfall" id="plazaWaterfall"></div></div>
+  <div style="padding:0 12px;"><div class="waterfall" id="plazaWaterfall"></div><div id="plazaLoadMore"></div></div>
 </div>
 
 <!-- ============ 创作 ============ -->
@@ -561,7 +579,7 @@ textarea.input{resize:none;line-height:1.6;}
       <button class="btn btn-sm" onclick="deleteSelectedGallery()" id="galleryDeleteBtn" style="background:var(--rose);color:white;border:none;opacity:0.5;cursor:not-allowed;transition:all 0.3s;">删除</button>
     </div>
   </div>
-  <div style="padding:0 9px;" id="galleryContent"><div class="waterfall" id="galleryWaterfall"></div></div>
+  <div style="padding:0 12px;" id="galleryContent"><div class="waterfall" id="galleryWaterfall"></div><div id="galleryLoadMore"></div></div>
 
 </div>
 
@@ -579,13 +597,13 @@ textarea.input{resize:none;line-height:1.6;}
       <div style="font-size:12px;color:var(--fg-muted);margin-top:6px;">点击更换头像</div>
     </div>
     <!-- 昵称 -->
-    <div style="margin-bottom:18px;">
+    <div style="margin-bottom:20px;">
       <div style="font-size:13px;font-weight:600;color:var(--fg-secondary);margin-bottom:6px;">昵称</div>
       <input class="input" type="text" value="云端造梦师" placeholder="请输入昵称" maxlength="20" oninput="updateNickCount(this)"/>
       <div id="nickCount" style="text-align:right;font-size:11px;color:var(--fg-muted);margin-top:4px;">5/20</div>
     </div>
     <!-- 性别 -->
-    <div style="margin-bottom:18px;">
+    <div style="margin-bottom:20px;">
       <div style="font-size:13px;font-weight:600;color:var(--fg-secondary);margin-bottom:6px;">性别</div>
       <div style="display:flex;gap:10px;" id="genderSelect">
         <div class="gender-option" onclick="selectGender(this,'male')" style="flex:1;padding:6px 0;text-align:center;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;border:2px solid var(--accent);background:var(--accent-soft);color:var(--accent-deep);transition:all 0.3s;">男</div>
@@ -593,7 +611,7 @@ textarea.input{resize:none;line-height:1.6;}
       </div>
     </div>
     <!-- 个性签名 -->
-    <div style="margin-bottom:18px;">
+    <div style="margin-bottom:20px;">
       <div style="font-size:13px;font-weight:600;color:var(--fg-secondary);margin-bottom:6px;">个性签名</div>
       <textarea class="input" rows="3" placeholder="写一句个性签名吧" maxlength="100" oninput="updateSignCount(this)">用AI描绘心中的梦境，每一笔都是想象力的延伸</textarea>
       <div id="signCount" style="text-align:right;font-size:11px;color:var(--fg-muted);margin-top:4px;">22/100</div>
@@ -1081,15 +1099,10 @@ textarea.input{resize:none;line-height:1.6;}
 
       <div class="list-row" onclick="showToast('清除缓存')"><div class="lr-icon"><i class="ri-delete-bin-line" style="font-size:22px;"></i></div><div class="lr-text">清除缓存</div><span style="font-size:12px;color:var(--fg-muted);margin-right:6px;">12.5MB</span><i class="ri-arrow-right-s-line lr-arrow" style="font-size:18px;color:var(--fg-muted);"></i></div>
 
-      <div class="list-row"><div class="lr-icon"><i class="ri-information-line" style="font-size:22px;"></i></div><div class="lr-text">当前版本</div><span style="font-size:12px;color:var(--fg-muted);">v1.0.0</span></div>
+      <div class="list-row" onclick="navigateTo('admin')" style="cursor:pointer;"><div class="lr-icon"><i class="ri-information-line" style="font-size:22px;"></i></div><div class="lr-text">当前版本</div><span style="font-size:12px;color:var(--fg-muted);">v1.0.0</span><i class="ri-arrow-right-s-line lr-arrow" style="font-size:18px;color:var(--fg-muted);"></i></div>
     </div>
     <button class="btn" style="width:100%;height:44px;margin-top:8px;background:var(--bg-elevated);color:var(--rose);border:1px solid var(--border);font-size:15px;" onclick="showToast('已退出登录')"><i class="ri-logout-box-r-line" style="margin-right:6px;font-size:18px;"></i>退出登录</button>
   </div>
-</div>
-
-<!-- ============ 草稿箱 ============ -->
-<div class="page" id="page-drafts" data-title="草稿箱">
-  <div style="padding:16px;" id="draftsContent"></div>
 </div>
 
 <!-- ============ 发布作品 ============ -->
@@ -1217,54 +1230,54 @@ textarea.input{resize:none;line-height:1.6;}
   <div style="padding:16px;">
     <div class="section-title"><span>数据概览</span></div>
     <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:16px;">
-      <div class="card" style="padding:14px;"><div style="font-size:12px;color:var(--fg-muted);">总用户数</div><div style="font-size:24px;font-weight:700;color:var(--accent);font-family:Georgia,serif;">12,486</div></div>
-      <div class="card" style="padding:14px;"><div style="font-size:12px;color:var(--fg-muted);">总作品数</div><div style="font-size:24px;font-weight:700;color:var(--mint);font-family:Georgia,serif;">48,320</div></div>
-      <div class="card" style="padding:14px;"><div style="font-size:12px;color:var(--fg-muted);">今日生成</div><div style="font-size:24px;font-weight:700;color:var(--lavender);font-family:Georgia,serif;">1,856</div></div>
-      <div class="card" style="padding:14px;"><div style="font-size:12px;color:var(--fg-muted);">今日收入</div><div style="font-size:24px;font-weight:700;color:var(--peach);font-family:Georgia,serif;">¥856</div></div>
+      <div class="card" style="padding:14px;position:relative;overflow:hidden;"><div style="position:absolute;top:-10px;right:-10px;width:40px;height:40px;border-radius:50%;background:var(--accent-soft);"></div><div style="font-size:12px;color:var(--fg-muted);">总用户数</div><div style="font-size:24px;font-weight:700;color:var(--accent);font-family:Georgia,serif;">12,486</div><div style="font-size:11px;color:var(--mint);margin-top:2px;"><i class="ri-arrow-up-line" style="font-size:12px;"></i>+128 今日</div></div>
+      <div class="card" style="padding:14px;position:relative;overflow:hidden;"><div style="position:absolute;top:-10px;right:-10px;width:40px;height:40px;border-radius:50%;background:var(--mint-soft);"></div><div style="font-size:12px;color:var(--fg-muted);">总作品数</div><div style="font-size:24px;font-weight:700;color:var(--mint);font-family:Georgia,serif;">48,320</div><div style="font-size:11px;color:var(--mint);margin-top:2px;"><i class="ri-arrow-up-line" style="font-size:12px;"></i>+856 今日</div></div>
+      <div class="card" style="padding:14px;position:relative;overflow:hidden;"><div style="position:absolute;top:-10px;right:-10px;width:40px;height:40px;border-radius:50%;background:var(--lavender-soft);"></div><div style="font-size:12px;color:var(--fg-muted);">今日生成</div><div style="font-size:24px;font-weight:700;color:var(--lavender);font-family:Georgia,serif;">1,856</div><div style="font-size:11px;color:var(--fg-muted);margin-top:2px;">日均 1,420</div></div>
+      <div class="card" style="padding:14px;position:relative;overflow:hidden;"><div style="position:absolute;top:-10px;right:-10px;width:40px;height:40px;border-radius:50%;background:var(--peach-soft);"></div><div style="font-size:12px;color:var(--fg-muted);">今日收入</div><div style="font-size:24px;font-weight:700;color:var(--peach);font-family:Georgia,serif;">¥856</div><div style="font-size:11px;color:var(--mint);margin-top:2px;"><i class="ri-arrow-up-line" style="font-size:12px;"></i>+12%</div></div>
     </div>
     <div class="section-title"><span>内容管理</span></div>
     <div class="card" style="overflow:hidden;margin-bottom:16px;">
-      <div class="list-row" onclick="showToast('Banner管理')"><div class="lr-icon"><i class="ri-image-line" style="font-size:22px;"></i></div><div class="lr-text">Banner管理</div><i class="ri-arrow-right-s-line lr-arrow" style="font-size:18px;color:var(--fg-muted);"></i></div>
-
-      <div class="list-row" onclick="showToast('模型管理')"><div class="lr-icon"><i class="ri-cpu-line" style="font-size:22px;"></i></div><div class="lr-text">模型管理</div><i class="ri-arrow-right-s-line lr-arrow" style="font-size:18px;color:var(--fg-muted);"></i></div>
-
-      <div class="list-row" onclick="showToast('风格管理')"><div class="lr-icon"><i class="ri-palette-line" style="font-size:22px;"></i></div><div class="lr-text">风格管理</div><i class="ri-arrow-right-s-line lr-arrow" style="font-size:18px;color:var(--fg-muted);"></i></div>
-
-      <div class="list-row" onclick="showToast('玩法模板管理')"><div class="lr-icon"><i class="ri-magic-line" style="font-size:22px;"></i></div><div class="lr-text">玩法模板管理</div><i class="ri-arrow-right-s-line lr-arrow" style="font-size:18px;color:var(--fg-muted);"></i></div>
+      <div class="list-row" onclick="navigateTo('adminBanner')"><div class="lr-icon" style="color:var(--accent);"><i class="ri-image-line" style="font-size:22px;"></i></div><div class="lr-text">Banner管理</div><span style="font-size:12px;color:var(--fg-muted);margin-right:4px;">4个</span><i class="ri-arrow-right-s-line lr-arrow" style="font-size:18px;color:var(--fg-muted);"></i></div>
+      <div class="list-row" onclick="navigateTo('adminModel')"><div class="lr-icon" style="color:var(--lavender);"><i class="ri-cpu-line" style="font-size:22px;"></i></div><div class="lr-text">模型管理</div><span style="font-size:12px;color:var(--fg-muted);margin-right:4px;">6个</span><i class="ri-arrow-right-s-line lr-arrow" style="font-size:18px;color:var(--fg-muted);"></i></div>
+      <div class="list-row" onclick="navigateTo('adminStyle')"><div class="lr-icon" style="color:var(--mint);"><i class="ri-palette-line" style="font-size:22px;"></i></div><div class="lr-text">风格管理</div><span style="font-size:12px;color:var(--fg-muted);margin-right:4px;">15个</span><i class="ri-arrow-right-s-line lr-arrow" style="font-size:18px;color:var(--fg-muted);"></i></div>
+      <div class="list-row" onclick="navigateTo('adminGameplay')"><div class="lr-icon" style="color:var(--peach);"><i class="ri-magic-line" style="font-size:22px;"></i></div><div class="lr-text">玩法模板管理</div><span style="font-size:12px;color:var(--fg-muted);margin-right:4px;">8个</span><i class="ri-arrow-right-s-line lr-arrow" style="font-size:18px;color:var(--fg-muted);"></i></div>
     </div>
-    <div class="section-title"><span>举报处理</span></div>
+    <div class="section-title"><span>用户管理</span></div>
+    <div class="card" style="overflow:hidden;margin-bottom:16px;">
+      <div class="list-row" onclick="navigateTo('adminReports')"><div class="lr-icon" style="color:var(--rose);"><i class="ri-flag-line" style="font-size:22px;"></i></div><div class="lr-text">举报队列</div><span class="badge" style="background:var(--rose);">8</span><i class="ri-arrow-right-s-line lr-arrow" style="font-size:18px;color:var(--fg-muted);"></i></div>
+      <div class="list-row" onclick="showToast('用户列表')"><div class="lr-icon" style="color:var(--accent);"><i class="ri-group-line" style="font-size:22px;"></i></div><div class="lr-text">用户列表</div><span style="font-size:12px;color:var(--fg-muted);margin-right:4px;">12,486</span><i class="ri-arrow-right-s-line lr-arrow" style="font-size:18px;color:var(--fg-muted);"></i></div>
+    </div>
+    <div class="section-title"><span>系统设置</span></div>
     <div class="card" style="overflow:hidden;">
-      <div class="list-row" onclick="showToast('查看举报队列')"><div class="lr-icon" style="color:var(--rose);"><i class="ri-flag-line" style="font-size:22px;"></i></div><div class="lr-text">举报队列</div><span class="badge" style="background:var(--rose);">8</span><i class="ri-arrow-right-s-line lr-arrow" style="font-size:18px;color:var(--fg-muted);"></i></div>
+      <div class="list-row" onclick="showToast('积分规则设置')"><div class="lr-icon" style="color:var(--lemon);"><i class="ri-copper-coin-line" style="font-size:22px;"></i></div><div class="lr-text">积分规则</div><i class="ri-arrow-right-s-line lr-arrow" style="font-size:18px;color:var(--fg-muted);"></i></div>
+      <div class="list-row" onclick="showToast('审核设置')"><div class="lr-icon" style="color:var(--fg-muted);"><i class="ri-shield-check-line" style="font-size:22px;"></i></div><div class="lr-text">审核设置</div><i class="ri-arrow-right-s-line lr-arrow" style="font-size:18px;color:var(--fg-muted);"></i></div>
     </div>
   </div>
 </div>
 
-<!-- ============ 发布弹窗 ============ -->
-<div class="overlay" id="publishOverlay" onclick="closePublishForm()"></div>
-<div class="bottom-sheet" id="publishSheet">
-  <div class="sheet-handle"></div>
-  <div style="padding:8px 20px 20px;">
-    <div style="font-size:18px;font-weight:700;margin-bottom:16px;text-align:center;">发布作品</div>
-    <div style="display:flex;gap:12px;margin-bottom:16px;">
-      <img id="publishPreview" src="" style="width:80px;height:80px;border-radius:12px;object-fit:cover;background:var(--bg-soft);"/>
-      <div style="flex:1;">
-        <input class="input" id="publishTitle" placeholder="给作品起个标题" style="margin-bottom:8px;font-size:15px;font-weight:600;"/>
-        <textarea class="input" id="publishDesc" placeholder="描述你的创作灵感..." style="font-size:13px;min-height:44px;resize:none;"></textarea>
-      </div>
-    </div>
-    <div style="margin-bottom:14px;">
-      <div style="font-size:13px;font-weight:600;margin-bottom:8px;color:var(--fg-secondary);">选择标签</div>
-      <div style="display:flex;flex-wrap:wrap;gap:6px;" id="publishTags"></div>
-    </div>
-    <div class="list-row" style="padding:8px 0;margin-bottom:8px;">
-      <div class="lr-text" style="font-size:14px;">公开提示词</div>
-      <div class="switch active" onclick="this.classList.toggle('active')" id="publishPromptSwitch"></div>
-    </div>
-    <div style="padding:10px;background:var(--accent-soft);border-radius:10px;font-size:12px;color:var(--fg-secondary);margin-bottom:16px;display:flex;gap:6px;">
-      <i class="ri-lightbulb-line" style="font-size:16px;color:var(--accent);flex-shrink:0;margin-top:1px;"></i><span>发布到社区的作品将永久保留，历史记录中的未发布作品30天后自动清理。</span>
-    </div>
-    <button class="btn btn-gradient btn-lg" style="width:100%;" onclick="submitPublish()">发布</button>
-  </div>
+<!-- ============ 管理后台-Banner管理 ============ -->
+<div class="page" id="page-adminBanner" data-title="Banner管理">
+  <div style="padding:16px;" id="adminBannerContent"></div>
+</div>
+
+<!-- ============ 管理后台-模型管理 ============ -->
+<div class="page" id="page-adminModel" data-title="模型管理">
+  <div style="padding:16px;" id="adminModelContent"></div>
+</div>
+
+<!-- ============ 管理后台-风格管理 ============ -->
+<div class="page" id="page-adminStyle" data-title="风格管理">
+  <div style="padding:16px;" id="adminStyleContent"></div>
+</div>
+
+<!-- ============ 管理后台-玩法模板管理 ============ -->
+<div class="page" id="page-adminGameplay" data-title="玩法模板管理">
+  <div style="padding:16px;" id="adminGameplayContent"></div>
+</div>
+
+<!-- ============ 管理后台-举报队列 ============ -->
+<div class="page" id="page-adminReports" data-title="举报队列">
+  <div style="padding:16px;" id="adminReportsContent"></div>
 </div>
 
 <!-- ============ 背景选择弹窗 ============ -->
@@ -1675,6 +1688,11 @@ function navigateTo(pageId,param){
   if(pageId==='msgDetail')renderMsgDetail(param);
   if(pageId==='publish')renderPublish();
   if(pageId==='editWork')renderEditWork(param);
+  if(pageId==='adminBanner')renderAdminBanner();
+  if(pageId==='adminModel')renderAdminModel();
+  if(pageId==='adminStyle')renderAdminStyle();
+  if(pageId==='adminGameplay')renderAdminGameplay();
+  if(pageId==='adminReports')renderAdminReports();
   var stackZ=100+pageStack.length;
   if(pageStack.length===1){$('contentArea').classList.add('pushed-back');$('tabBar').classList.add('pushed-back');$('createBar').classList.add('pushed-back')}
   if(pageId==='workDetail'){
@@ -1794,6 +1812,7 @@ function renderAllGameplays(){var c=$('allGameplaysGrid');if(!c)return;c.innerHT
 // ============ 渲染瀑布流 ============
 function getAspectRatio(ratio){var map={'1:1':'1/1','3:4':'3/4','4:3':'4/3','2:3':'2/3','3:2':'4/3','9:16':'9/16','16:9':'4/3'};return map[ratio]||'3/4'}
 function renderWaterfall(containerId,works,showPublished){var c=$(containerId);if(!c)return;c.innerHTML='';works.forEach(function(w){var u=USERS.find(function(x){return x.id===w.userId});var liked=likedWorks[w.id];var item=createEl('div','wf-item');var ar=getAspectRatio(w.ratio);var displayTitle=w.title||(w.prompt?w.prompt.substring(0,20):'未命名作品');var badge=showPublished?'<div style="position:absolute;top:8px;right:8px;background:rgba(255,255,255,0.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:var(--accent);font-size:10px;font-weight:600;padding:3px 8px;border-radius:8px;z-index:5;display:flex;align-items:center;gap:3px;box-shadow:0 2px 8px rgba(0,0,0,0.08);"><i class="ri-check-line" style="font-size:12px;line-height:1;"></i><span style="line-height:1;">已发布</span></div>':'';item.innerHTML='<div class="card" style="position:relative;">'+badge+'<div style="width:100%;aspect-ratio:'+ar+';overflow:hidden;"><img src="'+w.img+'" style="width:100%;height:100%;object-fit:cover;display:block;cursor:pointer" onclick="navigateTo(\'workDetail\','+w.id+')"/></div><div style="padding:10px 10px 6px"><div style="font-size:13px;font-weight:600;color:var(--fg-primary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:4px">'+displayTitle+'</div><div style="display:flex;align-items:center;gap:6px"><div onclick="navigateTo(\'userProfile\','+u.id+')" style="display:flex;align-items:center;gap:6px;flex:1;overflow:hidden;cursor:pointer"><div class="avatar" style="width:20px;height:20px;font-size:10px;background:'+u.color+'">'+u.avatar+'</div><span style="font-size:11px;color:var(--fg-secondary);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+u.name+'</span></div><div onclick="toggleLike(event,'+w.id+')" style="display:flex;align-items:center;gap:3px;cursor:pointer;padding:2px 4px;border-radius:8px;transition:background 0.2s" onmouseover="this.style.background=\'var(--accent-soft)\'" onmouseout="this.style.background=\'transparent\'"><i class="'+(liked?'ri-heart-fill':'ri-heart-line')+'" style="font-size:16px;color:'+(liked?'var(--rose)':'var(--fg-muted)')+';transition:all 0.3s;"></i><span style="font-size:13px;font-weight:600;color:'+(liked?'var(--rose)':'var(--fg-muted)')+'">'+w.likes+'</span></div></div></div></div>';var card=item.querySelector('.card');bindLongPress(card,w);c.appendChild(item)})}
+setTimeout(observeImages,50);
 var _lpTimer=null;var _lpWork=null;
 function bindLongPress(el,work){var timer=null;var moved=false;el.addEventListener('touchstart',function(e){moved=false;timer=setTimeout(function(){if(!moved){e.preventDefault();openWorkManage(work)}},500)},{passive:false});el.addEventListener('touchmove',function(){moved=true;clearTimeout(timer)},{passive:true});el.addEventListener('touchend',function(){clearTimeout(timer)},{passive:true});el.addEventListener('touchcancel',function(){clearTimeout(timer)},{passive:true});el.addEventListener('contextmenu',function(e){e.preventDefault();openWorkManage(work)})}
 var _manageWork=null;
@@ -1897,12 +1916,6 @@ function saveAllResults(){
     }
   },300);
 }
-// ============ 发布弹窗 ============
-let publishImgSrc='';
-function openPublishForm(){$('publishPreview').src='https://picsum.photos/seed/pub'+Date.now()+'/200/200';publishImgSrc=$('publishPreview').src;renderPublishTags();$('publishOverlay').classList.add('show');$('publishSheet').classList.add('show')}
-function closePublishForm(){$('publishOverlay').classList.remove('show');$('publishSheet').classList.remove('show')}
-function renderPublishTags(){const c=$('publishTags');c.innerHTML='';['二次元','风景','人像','动物','建筑','抽象','国风','赛博朋克','梦幻','写实','水彩','油画'].forEach(t=>{const chip=createEl('div','chip chip-outline');chip.textContent=t;chip.onclick=()=>chip.classList.toggle('active');c.appendChild(chip)})}
-function submitPublish(){const title=$('publishTitle').value.trim();if(!title){showToast('请填写标题');return}closePublishForm();showToast('发布成功！作品正在审核中');setTimeout(()=>showToast('审核通过，作品已发布'),1500)}
 // ============ 全部风格 ============
 function openAllStyles(){renderAllStylesGrid();$('styleOverlay').classList.add('show');$('styleSheet').classList.add('show')}
 function closeAllStyles(){$('styleOverlay').classList.remove('show');$('styleSheet').classList.remove('show')}
@@ -1968,7 +1981,7 @@ function renderFilterStyles(){const c=$('filterStyles');STYLES.forEach(s=>{const
 function renderPlazaWaterfall(){renderWaterfall('plazaWaterfall',WORKS)}
 // ============ 画廊 ============
 var lastGalleryTabIdx=0;
-function switchGalleryTab(el,tab){var idx=parseInt(el.dataset.idx);el.parentElement.querySelectorAll('.gallery-tab').forEach(t=>{t.style.fontWeight='500';t.style.color='var(--fg-muted)'});el.style.fontWeight='700';el.style.color='var(--accent)';var indicator=$('galleryTabIndicator');if(indicator){indicator.style.left=el.offsetLeft+el.offsetWidth/2-10+'px'}var c=$('galleryContent');c.innerHTML='<div style="display:flex;justify-content:center;padding:20px 0"><div style="width:28px;height:28px;border:2.5px solid var(--accent-soft);border-top-color:var(--accent);border-radius:50%;animation:spin 0.7s linear infinite"></div></div>';var slideDir=idx>lastGalleryTabIdx?'wf-slide-left':'wf-slide-right';lastGalleryTabIdx=idx;setTimeout(function(){c.innerHTML='<div class="waterfall" id="galleryWaterfall"></div>';var myWorks=WORKS.filter(function(w){return w.userId===CURRENT_USER_ID});if(tab==='all'){renderWaterfall('galleryWaterfall',myWorks)}else if(tab==='published'){renderWaterfall('galleryWaterfall',myWorks.filter(function(w){return w.published}),true)}else if(tab==='draft'){renderWaterfall('galleryWaterfall',myWorks.filter(function(w){return !w.published}))}else{renderWaterfall('galleryWaterfall',WORKS.filter(function(w){return favoritedWorks[w.id]}))}c.classList.remove('wf-slide-left','wf-slide-right');void c.offsetWidth;c.classList.add(slideDir);setTimeout(function(){c.classList.remove('wf-slide-left','wf-slide-right')},450)},300)}
+function switchGalleryTab(el,tab){var idx=parseInt(el.dataset.idx);el.parentElement.querySelectorAll('.gallery-tab').forEach(t=>{t.style.fontWeight='500';t.style.color='var(--fg-muted)'});el.style.fontWeight='700';el.style.color='var(--accent)';var indicator=$('galleryTabIndicator');if(indicator){indicator.style.left=el.offsetLeft+el.offsetWidth/2-10+'px'}var c=$('galleryContent');c.innerHTML='<div style="display:flex;justify-content:center;padding:20px 0"><div style="width:28px;height:28px;border:2.5px solid var(--accent-soft);border-top-color:var(--accent);border-radius:50%;animation:spin 0.7s linear infinite"></div></div>';var slideDir=idx>lastGalleryTabIdx?'wf-slide-left':'wf-slide-right';lastGalleryTabIdx=idx;setTimeout(function(){c.innerHTML='<div class="waterfall" id="galleryWaterfall"></div><div id="galleryLoadMore"></div>';var myWorks=WORKS.filter(function(w){return w.userId===CURRENT_USER_ID});if(tab==='all'){renderWaterfall('galleryWaterfall',myWorks)}else if(tab==='published'){renderWaterfall('galleryWaterfall',myWorks.filter(function(w){return w.published}),true)}else if(tab==='draft'){renderWaterfall('galleryWaterfall',myWorks.filter(function(w){return !w.published}))}else{renderWaterfall('galleryWaterfall',WORKS.filter(function(w){return favoritedWorks[w.id]}))}addLoadMoreBtn('galleryLoadMore');c.classList.remove('wf-slide-left','wf-slide-right');void c.offsetWidth;c.classList.add(slideDir);setTimeout(function(){c.classList.remove('wf-slide-left','wf-slide-right')},450)},300)}
 function initGalleryTabIndicator(){var active=document.querySelector('.gallery-tab.active');if(active&&$('galleryTabIndicator')){$('galleryTabIndicator').style.left=active.offsetLeft+active.offsetWidth/2-10+'px'}}
 let galleryManageMode=false;let gallerySelectedItems={};
 function toggleGalleryManage(){galleryManageMode=!galleryManageMode;gallerySelectedItems={};const btn=$('galleryManageBtn');const bar=$('galleryManageBar');if(galleryManageMode){btn.innerHTML='<i class="ri-check-line" style="font-size:14px;"></i>完成';btn.classList.remove('btn-ghost');btn.classList.add('btn-soft');addManageOverlays();updateGallerySelectedCount();requestAnimationFrame(function(){bar.style.maxHeight='60px';bar.style.padding='8px 16px';bar.style.opacity='1';bar.style.pointerEvents='auto';})}else{btn.innerHTML='<i class="ri-list-unordered" style="font-size:16px;"></i>管理';btn.classList.remove('btn-soft');btn.classList.add('btn-ghost');bar.style.maxHeight='0';bar.style.padding='0';bar.style.opacity='0';bar.style.pointerEvents='none';removeManageOverlays()}}
@@ -2192,9 +2205,9 @@ function submitEditWork(){
   setTimeout(function(){navigateBack()},600);
 }
 // ============ 搜索 ============
-function renderSearchDefault(){$('searchHistory').innerHTML=SEARCH_HISTORY.map(s=>'<div class="chip chip-outline" onclick="doSearch(\''+s+'\')">'+s+'</div>').join('');$('hotSearch').innerHTML=HOT_SEARCHES.map((s,i)=>'<div class="list-row" onclick="doSearch(\''+s+'\')"><span style="font-size:16px;font-weight:700;color:'+(i<3?'var(--rose)':'var(--fg-muted)')+';font-family:Georgia,serif;width:24px">'+(i+1)+'</span><div class="lr-text">'+s+'</div></div>').join('')}
+function renderSearchDefault(){var hotColors=['#E03050','#E87040','#F0A060'];$('searchHistory').innerHTML=SEARCH_HISTORY.map(s=>'<div class="chip chip-outline" onclick="doSearch(\''+s+'\')">'+s+'</div>').join('');$('hotSearch').innerHTML=HOT_SEARCHES.map((s,i)=>'<div class="list-row" onclick="doSearch(\''+s+'\')"><span style="font-size:16px;font-weight:700;color:'+(i<3?hotColors[i]:'var(--fg-muted)')+';font-family:Georgia,serif;width:24px">'+(i+1)+'</span><div class="lr-text">'+s+'</div></div>').join('')}
 function doSearch(kw){$('searchInput').value=kw;onSearchInput()}
-function onSearchInput(){const v=$('searchInput').value.trim();if(v){$('searchDefault').style.display='none';$('searchResults').style.display='block';const filtered=WORKS.filter(w=>w.title.includes(v)||w.prompt.includes(v)||w.tags.some(t=>t.includes(v)));renderWaterfall('searchWaterfall',filtered.length>0?filtered:WORKS)}else{$('searchDefault').style.display='block';$('searchResults').style.display='none'}}
+function onSearchInput(){const v=$('searchInput').value.trim();if(v){$('searchDefault').style.display='none';$('searchResults').style.display='block';const filtered=WORKS.filter(w=>w.title.includes(v)||w.prompt.includes(v)||w.tags.some(t=>t.includes(v)));if(filtered.length>0){renderWaterfall('searchWaterfall',filtered)}else{$('searchWaterfall').innerHTML='<div class="empty-state" style="column-span:all;"><div class="empty-state-icon"><i class="ri-search-line" style="font-size:28px;color:var(--accent);"></i></div><div class="empty-state-text">没有找到相关作品</div><div style="font-size:12px;color:var(--fg-muted);">试试其他关键词吧</div></div>'}}else{$('searchDefault').style.display='block';$('searchResults').style.display='none'}}
 function clearSearchHistory(){SEARCH_HISTORY.length=0;renderSearchDefault();showToast('已清空搜索历史')}
 // ============ 他人主页 ============
 function renderUserProfile(uid){const u=USERS.find(x=>x.id===uid);if(!u)return;const works=WORKS.filter(w=>w.userId===uid&&w.published);var html='';
@@ -2218,15 +2231,14 @@ html+='</div>';
 html+='<button onclick="toggleFollow(this,'+u.id+')" style="border:none;border-radius:999px;padding:6px 16px;font-size:13px;font-weight:600;cursor:pointer;flex-shrink:0;'+(isFollowing[u.id]?'background:var(--bg-soft);color:var(--fg-muted)':'background:var(--accent);color:white')+'">'+(isFollowing[u.id]?'已关注':'+ 关注')+'</button>';
 html+='</div></div>';
 html+='<div style="padding:12px 16px 6px;font-size:14px;font-weight:600;color:var(--fg-primary);">TA的作品 ('+works.length+')</div>';
-html+='<div style="padding:0 16px"><div class="waterfall" id="userWorks"></div></div>';
+html+='<div style="padding:0 12px"><div class="waterfall" id="userWorks"></div><div id="userWorksLoadMore"></div></div>';
 $('userProfileContent').innerHTML=html;
-renderWaterfall('userWorks',works)}
+renderWaterfall('userWorks',works);addLoadMoreBtn('userWorksLoadMore')}
 // ============ 关注/粉丝列表 ============
 function renderFollowList(type){const c=$('followListContent');c.innerHTML='';const title=type==='following'?'我的关注':'我的粉丝';$('page-followList').dataset.title=title;$('navTitle').textContent=title;USERS.forEach(u=>{if(u.id===1)return;const row=createEl('div','list-row');row.innerHTML='<div class="avatar" style="width:40px;height:40px;font-size:16px;background:'+u.color+';cursor:pointer;" onclick="navigateTo(\'userProfile\','+u.id+')">'+u.avatar+'</div><div class="lr-text" style="cursor:pointer;" onclick="navigateTo(\'userProfile\','+u.id+')"><div style="font-size:15px;font-weight:600">'+u.name+'</div><div style="font-size:12px;color:var(--fg-muted)">'+u.bio+'</div></div><button class="btn '+(isFollowing[u.id]?'btn-secondary':'btn-soft')+' btn-sm" onclick="toggleFollow(this,'+u.id+')">'+(isFollowing[u.id]?'已关注':'+ 关注')+'</button>';c.appendChild(row)})}
 // ============ 全部模型 ============
 function renderAllModels(){const c=$('allModelsContent');c.innerHTML='';MODELS.forEach((m,i)=>{const card=createEl('div','card');card.style.cssText='padding:14px;margin-bottom:10px;display:flex;gap:12px;align-items:center;cursor:pointer;'+(i===selectedModel?'border:2px solid var(--accent)':'');card.innerHTML='<img src="'+m.img+'" style="width:60px;height:60px;border-radius:12px;object-fit:cover"/><div style="flex:1"><div style="font-size:15px;font-weight:700">'+m.name+'</div><div style="font-size:12px;color:var(--fg-muted);margin-top:2px">'+m.desc+'</div><div style="display:flex;gap:4px;margin-top:4px">'+m.tags.map(t=>'<span class="tag tag-accent" style="font-size:10px;padding:2px 6px">'+t+'</span>').join('')+'</div></div><div style="text-align:right"><div style="font-size:16px;font-weight:700;color:var(--accent);font-family:Georgia,serif">'+m.cost+'</div><div style="font-size:10px;color:var(--fg-muted)">积分起</div></div>';card.onclick=()=>{selectedModel=i;renderCreatePage();updateCost();navigateBack();showToast('已选择'+m.name)};c.appendChild(card)})}
 // ============ 草稿箱 ============
-function renderDrafts(){const c=$('draftsContent');c.innerHTML='<div class="section-title"><span>我的草稿 (3)</span></div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">'+WORKS.slice(0,3).map(w=>'<div class="card" style="cursor:pointer"><img src="'+w.img+'" style="width:100%;aspect-ratio:1;object-fit:cover"/><div style="padding:6px;font-size:11px;color:var(--fg-secondary)">'+(w.title||(w.prompt?w.prompt.substring(0,20):'未命名作品'))+'</div></div>').join('')+'</div>'}
 // ============ 浏览记录 ============
 function renderHistory(){const c=$('historyContent');c.innerHTML='<div class="section-title"><span>今天</span></div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px">'+WORKS.slice(0,6).map(w=>'<div class="card" style="cursor:pointer"><img src="'+w.img+'" style="width:100%;aspect-ratio:1;object-fit:cover" onclick="navigateTo(\'workDetail\','+w.id+')"/></div>').join('')+'</div><div class="section-title"><span>昨天</span></div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">'+WORKS.slice(6,9).map(w=>'<div class="card" style="cursor:pointer"><img src="'+w.img+'" style="width:100%;aspect-ratio:1;object-fit:cover" onclick="navigateTo(\'workDetail\','+w.id+')"/></div>').join('')+'</div>'}
 function clearHistory(){showToast('已清空浏览记录')}
@@ -2234,15 +2246,122 @@ function clearHistory(){showToast('已清空浏览记录')}
 function uploadReverseImg(){const url='https://picsum.photos/seed/rev'+Date.now()+'/300/300';$('reverseImg').src=url;$('reverseImgPreview').style.display='block';$('reverseUploadArea').style.display='none'}
 function startReverse(){$('reverseBtn').disabled=true;$('reverseBtn').innerHTML='<div class="gen-spinner" style="width:16px;height:16px"></div> 分析中...';setTimeout(()=>{$('reverseBtn').disabled=false;$('reverseBtn').innerHTML='重新分析';$('reverseResult').style.display='block';$('reverseText').value='A beautiful scene with soft lighting, dreamy atmosphere, pastel color palette, detailed composition, artistic style, high quality, ethereal mood, serene landscape with gentle bokeh';showToast('分析完成！消耗5积分')},2000)}
 function useReverseResult(){$('promptInput').value=$('reverseText').value;updatePromptCount();var rp=$('page-reversePrompt');if(rp.classList.contains('sub-drawer')){rp.classList.remove('drawer-open');var done=false;function finish(){if(done)return;done=true;rp.classList.remove('active','sub-drawer','drawer-open');rp.style.cssText='';$('contentArea').appendChild(rp);switchTab('create');showToast('已带入创作页')}rp.addEventListener('transitionend',function(e){if(e.propertyName==='transform')finish()},{once:true});setTimeout(finish,550)}else{switchTab('create');showToast('已带入创作页')}}
+// ============ 管理后台子页面 ============
+var ADMIN_BANNERS=[
+  {id:1,title:'夏日创作季',status:'上架中',img:'https://picsum.photos/seed/b1/700/300',link:'创作页',sort:1,startDate:'2026-06-01',endDate:'2026-08-31'},
+  {id:2,title:'新模型上线',status:'上架中',img:'https://picsum.photos/seed/b2/700/300',link:'模型详情',sort:2,startDate:'2026-06-15',endDate:'2026-07-15'},
+  {id:3,title:'会员特惠',status:'上架中',img:'https://picsum.photos/seed/b3/700/300',link:'会员中心',sort:3,startDate:'2026-06-10',endDate:'2026-06-30'},
+  {id:4,title:'社区精选',status:'已下架',img:'https://picsum.photos/seed/b4/700/300',link:'广场',sort:4,startDate:'2026-05-01',endDate:'2026-05-31'}
+];
+function renderAdminBanner(){
+  var c=$('adminBannerContent');if(!c)return;
+  var html='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;"><span style="font-size:14px;color:var(--fg-muted);">共 '+ADMIN_BANNERS.length+' 个Banner</span><button class="btn btn-primary btn-sm" onclick="showToast(\'新增Banner\')"><i class="ri-add-line" style="font-size:14px;margin-right:2px;"></i>新增</button></div>';
+  ADMIN_BANNERS.forEach(function(b){
+    var statusColor=b.status==='上架中'?'var(--mint)':'var(--fg-muted)';
+    var statusBg=b.status==='上架中'?'var(--mint-soft)':'var(--bg-soft)';
+    html+='<div class="card" style="margin-bottom:12px;overflow:hidden;"><img src="'+b.img+'" style="width:100%;height:100px;object-fit:cover;display:block;"/><div style="padding:12px 14px;"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;"><div style="font-size:15px;font-weight:700;color:var(--fg-primary);">'+b.title+'</div><span class="tag" style="background:'+statusBg+';color:'+statusColor+';font-size:11px;">'+b.status+'</span></div><div style="display:flex;flex-wrap:wrap;gap:12px;font-size:12px;color:var(--fg-muted);margin-bottom:10px;"><span><i class="ri-links-line" style="margin-right:2px;"></i>'+b.link+'</span><span><i class="ri-sort-asc" style="margin-right:2px;"></i>排序 '+b.sort+'</span><span><i class="ri-calendar-line" style="margin-right:2px;"></i>'+b.startDate+' ~ '+b.endDate+'</span></div><div style="display:flex;gap:8px;"><button class="btn btn-soft btn-sm" style="flex:1;" onclick="showToast(\'编辑Banner\')"><i class="ri-edit-line" style="font-size:14px;margin-right:2px;"></i>编辑</button><button class="btn btn-sm" style="flex:1;background:'+(b.status==='上架中'?'var(--bg-soft)':'var(--accent-soft)')+';color:'+(b.status==='上架中'?'var(--fg-secondary)':'var(--accent)')+';border:none;" onclick="showToast(\''+(b.status==='上架中'?'已下架':'已上架')+'\')">'+(b.status==='上架中'?'下架':'上架')+'</button><button class="btn btn-sm" style="background:var(--rose-soft);color:var(--rose);border:none;" onclick="showToast(\'已删除\')"><i class="ri-delete-bin-line" style="font-size:14px;"></i></button></div></div></div>';
+  });
+  c.innerHTML=html;
+}
+function renderAdminModel(){
+  var c=$('adminModelContent');if(!c)return;
+  var html='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;"><span style="font-size:14px;color:var(--fg-muted);">共 '+MODELS.length+' 个模型</span><button class="btn btn-primary btn-sm" onclick="showToast(\'新增模型\')"><i class="ri-add-line" style="font-size:14px;margin-right:2px;"></i>新增</button></div>';
+  MODELS.forEach(function(m){
+    var badgeHtml=m.badge?'<span class="tag" style="font-size:10px;padding:2px 6px;background:color-mix(in srgb,'+m.badgeColor+' 12%,transparent);color:'+m.badgeColor+';">'+m.badge+'</span>':'';
+    html+='<div class="card" style="padding:14px;margin-bottom:10px;display:flex;gap:12px;align-items:center;"><img src="'+m.img+'" style="width:56px;height:56px;border-radius:12px;object-fit:cover;flex-shrink:0;"/><div style="flex:1;min-width:0;"><div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;"><span style="font-size:15px;font-weight:700;color:var(--fg-primary);">'+m.name+'</span>'+badgeHtml+'</div><div style="font-size:12px;color:var(--fg-muted);">'+m.desc+'</div><div style="display:flex;gap:4px;margin-top:4px;">'+m.tags.map(function(t){return'<span class="tag tag-accent" style="font-size:10px;padding:2px 6px;">'+t+'</span>'}).join('')+'</div></div><div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0;"><span style="font-size:16px;font-weight:700;color:var(--accent);">'+m.cost+'</span><span style="font-size:10px;color:var(--fg-muted);">积分</span><div style="display:flex;gap:4px;margin-top:4px;"><button class="btn btn-soft btn-sm" style="padding:4px 8px;" onclick="showToast(\'编辑'+m.name+'\')"><i class="ri-edit-line" style="font-size:14px;"></i></button><div class="switch active" style="width:36px;height:20px;" onclick="this.classList.toggle(\'active\');showToast(this.classList.contains(\'active\')?\'已启用\':\'已禁用\')"></div></div></div></div>';
+  });
+  c.innerHTML=html;
+}
+function renderAdminStyle(){
+  var c=$('adminStyleContent');if(!c)return;
+  var html='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;"><span style="font-size:14px;color:var(--fg-muted);">共 '+STYLES.length+' 种风格</span><button class="btn btn-primary btn-sm" onclick="showToast(\'新增风格\')"><i class="ri-add-line" style="font-size:14px;margin-right:2px;"></i>新增</button></div>';
+  html+='<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">';
+  STYLES.forEach(function(s,i){
+    if(s==='更多')return;
+    html+='<div class="card" style="overflow:hidden;position:relative;"><div style="position:relative;"><img src="'+STYLE_IMGS[s]+'" style="width:100%;aspect-ratio:1;object-fit:cover;display:block;"/><div style="position:absolute;top:6px;right:6px;"><div class="switch active" style="width:32px;height:18px;transform:scale(0.85);" onclick="event.stopPropagation();this.classList.toggle(\'active\');showToast(this.classList.contains(\'active\')?\'已启用\':\'已禁用\')"></div></div></div><div style="padding:8px 10px;display:flex;align-items:center;justify-content:space-between;"><span style="font-size:13px;font-weight:600;color:var(--fg-primary);">'+s+'</span><i class="ri-edit-line" style="font-size:14px;color:var(--fg-muted);cursor:pointer;" onclick="showToast(\'编辑'+s+'\')"></i></div></div>';
+  });
+  html+='</div>';
+  c.innerHTML=html;
+}
+function renderAdminGameplay(){
+  var c=$('adminGameplayContent');if(!c)return;
+  var html='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;"><span style="font-size:14px;color:var(--fg-muted);">共 '+GAMEPLAYS.length+' 个玩法</span><button class="btn btn-primary btn-sm" onclick="showToast(\'新增玩法模板\')"><i class="ri-add-line" style="font-size:14px;margin-right:2px;"></i>新增</button></div>';
+  GAMEPLAYS.forEach(function(g,i){
+    html+='<div class="card" style="padding:14px;margin-bottom:10px;display:flex;gap:12px;align-items:center;"><img src="'+g.img+'" style="width:56px;height:56px;border-radius:14px;object-fit:cover;flex-shrink:0;"/><div style="flex:1;min-width:0;"><div style="font-size:15px;font-weight:700;color:var(--fg-primary);margin-bottom:3px;">'+g.name+'</div><div style="display:flex;gap:8px;font-size:12px;color:var(--fg-muted);"><span>排序 '+(i+1)+'</span><span>使用 '+(Math.floor(Math.random()*500)+100)+' 次</span></div></div><div style="display:flex;gap:6px;flex-shrink:0;"><button class="btn btn-soft btn-sm" style="padding:6px 10px;" onclick="showToast(\'编辑'+g.name+'\')"><i class="ri-edit-line" style="font-size:14px;"></i></button><div class="switch active" style="width:36px;height:20px;" onclick="this.classList.toggle(\'active\');showToast(this.classList.contains(\'active\')?\'已启用\':\'已禁用\')"></div></div></div>';
+  });
+  c.innerHTML=html;
+}
+var ADMIN_REPORTS=[
+  {id:1,workTitle:'违规图片1',reporter:'星辰大海',reason:'色情低俗',time:'2小时前',status:'待处理',img:'https://picsum.photos/seed/rp1/100/100'},
+  {id:2,workTitle:'抄袭作品',reporter:'月光如水',reason:'侵权盗版',time:'3小时前',status:'待处理',img:'https://picsum.photos/seed/rp2/100/100'},
+  {id:3,workTitle:'广告推广',reporter:'风之绘师',reason:'垃圾广告',time:'5小时前',status:'待处理',img:'https://picsum.photos/seed/rp3/100/100'},
+  {id:4,workTitle:'不当言论',reporter:'光影魔术',reason:'煽动仇恨',time:'6小时前',status:'待处理',img:'https://picsum.photos/seed/rp4/100/100'},
+  {id:5,workTitle:'违规头像',reporter:'星辰大海',reason:'色情低俗',time:'8小时前',status:'已处理',img:'https://picsum.photos/seed/rp5/100/100'},
+  {id:6,workTitle:'虚假信息',reporter:'月光如水',reason:'虚假信息',time:'1天前',status:'已处理',img:'https://picsum.photos/seed/rp6/100/100'},
+  {id:7,workTitle:'违规内容',reporter:'风之绘师',reason:'违法违规',time:'1天前',status:'已驳回',img:'https://picsum.photos/seed/rp7/100/100'},
+  {id:8,workTitle:'盗用作品',reporter:'光影魔术',reason:'侵权盗版',time:'2天前',status:'已处理',img:'https://picsum.photos/seed/rp8/100/100'}
+];
+function renderAdminReports(){
+  var c=$('adminReportsContent');if(!c)return;
+  var pending=ADMIN_REPORTS.filter(function(r){return r.status==='待处理'}).length;
+  var html='<div style="display:flex;gap:8px;margin-bottom:16px;"><div class="card" style="flex:1;padding:12px;text-align:center;"><div style="font-size:20px;font-weight:700;color:var(--rose);">'+pending+'</div><div style="font-size:11px;color:var(--fg-muted);">待处理</div></div><div class="card" style="flex:1;padding:12px;text-align:center;"><div style="font-size:20px;font-weight:700;color:var(--mint);">'+ADMIN_REPORTS.filter(function(r){return r.status==='已处理'}).length+'</div><div style="font-size:11px;color:var(--fg-muted);">已处理</div></div><div class="card" style="flex:1;padding:12px;text-align:center;"><div style="font-size:20px;font-weight:700;color:var(--fg-muted);">'+ADMIN_REPORTS.filter(function(r){return r.status==='已驳回'}).length+'</div><div style="font-size:11px;color:var(--fg-muted);">已驳回</div></div></div>';
+  ADMIN_REPORTS.forEach(function(r){
+    var statusColor=r.status==='待处理'?'var(--rose)':r.status==='已处理'?'var(--mint)':'var(--fg-muted)';
+    var statusBg=r.status==='待处理'?'var(--rose-soft)':r.status==='已处理'?'var(--mint-soft)':'var(--bg-soft)';
+    html+='<div class="card" style="padding:14px;margin-bottom:10px;"><div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:10px;"><img src="'+r.img+'" style="width:48px;height:48px;border-radius:10px;object-fit:cover;flex-shrink:0;" onclick="previewImage(\''+r.img+'\')"/><div style="flex:1;min-width:0;"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;"><span style="font-size:14px;font-weight:700;color:var(--fg-primary);">'+r.workTitle+'</span><span class="tag" style="background:'+statusBg+';color:'+statusColor+';font-size:11px;">'+r.status+'</span></div><div style="font-size:12px;color:var(--fg-muted);line-height:1.6;"><div><i class="ri-user-line" style="margin-right:3px;"></i>举报人: '+r.reporter+'</div><div><i class="ri-error-warning-line" style="margin-right:3px;"></i>原因: '+r.reason+'</div><div><i class="ri-time-line" style="margin-right:3px;"></i>'+r.time+'</div></div></div></div>';
+    if(r.status==='待处理'){
+      html+='<div style="display:flex;gap:8px;"><button class="btn btn-sm" style="flex:1;background:var(--rose-soft);color:var(--rose);border:none;" onclick="showToast(\'已删除作品并封禁\')"><i class="ri-delete-bin-line" style="font-size:14px;margin-right:2px;"></i>删除+封禁</button><button class="btn btn-sm" style="flex:1;background:var(--accent-soft);color:var(--accent);border:none;" onclick="showToast(\'已删除作品\')"><i class="ri-close-line" style="font-size:14px;margin-right:2px;"></i>仅删除</button><button class="btn btn-sm" style="flex:1;background:var(--bg-soft);color:var(--fg-muted);border:none;" onclick="showToast(\'已驳回举报\')"><i class="ri-check-line" style="font-size:14px;margin-right:2px;"></i>驳回</button></div>';
+    }
+    html+='</div>';
+  });
+  c.innerHTML=html;
+}
+// ============ 加载更多 ============
+function addLoadMoreBtn(containerId){
+  var c=$(containerId);if(!c)return;
+  c.innerHTML='<div class="load-more-hint">继续往下滑获取更多作品</div>';
+}
+// ============ 图片淡入 ============
+function observeImages(){
+  document.querySelectorAll('.wf-item img:not(.loaded),.detail-carousel img:not(.loaded)').forEach(function(img){
+    if(img.complete){img.classList.add('loaded')}else{img.onload=function(){img.classList.add('loaded')};img.onerror=function(){img.classList.add('loaded')}}
+  });
+}
+// ============ 骨架屏 ============
+var _homeFirstLoad=true;
+function showHomeSkeleton(){
+  var c=$('page-home').querySelector('div');
+  c.innerHTML='<div class="skeleton-home" id="homeSkeleton"><div class="sk-banner skeleton" style="margin-top:0;"></div><div class="sk-section skeleton"></div><div class="sk-gameplay">'+Array(5).fill('<div class="sk-gp-item skeleton"></div>').join('')+'</div><div class="sk-section skeleton"></div><div class="sk-wf"><div class="sk-wf-col"><div class="sk-wf-item skeleton" style="height:200px;"></div><div class="sk-wf-item skeleton" style="height:150px;"></div></div><div class="sk-wf-col"><div class="sk-wf-item skeleton" style="height:160px;"></div><div class="sk-wf-item skeleton" style="height:190px;"></div></div></div></div>';
+}
+function hideHomeSkeleton(){
+  var sk=$('homeSkeleton');if(sk)sk.remove();
+}
 // ============ 初始化 ============
 function init(){
   initTheme();
   document.querySelectorAll('.bottom-sheet,.overlay,#leftDrawer,#leftDrawerOverlay').forEach(function(el){el.parentNode.removeChild(el);document.querySelector('.phone-screen').appendChild(el)});
-  initBanner();
-  renderGameplay();
-  renderWaterfall('homeWaterfall',WORKS.slice(0,8));
+  if(_homeFirstLoad){
+    showHomeSkeleton();
+    setTimeout(function(){
+      _homeFirstLoad=false;
+      hideHomeSkeleton();
+      var pageDiv=$('page-home').querySelector('div');
+      pageDiv.innerHTML='<div style="padding:0 16px;margin-bottom:16px;"><div class="card" style="height:150px;position:relative;overflow:hidden;cursor:pointer;" id="bannerBox"><div id="bannerTrack" style="display:flex;transition:transform 0.5s cubic-bezier(0.16,1,0.3,1);height:100%;"></div><div id="bannerDots" style="position:absolute;bottom:8px;left:0;right:0;display:flex;justify-content:center;gap:6px;"></div></div></div><div class="section-title" style="padding:0 16px;"><span>热门玩法</span><span class="more" onclick="navigateTo(\'allGameplays\')" style="color:var(--accent);font-size:14px;font-weight:600;display:flex;align-items:center;gap:2px;">全部 <i class="ri-arrow-right-s-line" style="font-size:18px;"></i></span></div><div class="h-scroll" style="margin-bottom:18px;" id="gameplayScroll"></div><div class="section-title" style="padding:0 16px;"><span>精选作品</span><div style="display:flex;gap:16px;position:relative;padding-bottom:4px;"><span class="home-tab active" data-idx="0" onclick="switchHomeTab(this,\'recommend\')" style="font-size:14px;font-weight:700;color:var(--accent);cursor:pointer;transition:color 0.3s;">推荐</span><span class="home-tab" data-idx="1" onclick="switchHomeTab(this,\'new\')" style="font-size:14px;font-weight:500;color:var(--fg-muted);cursor:pointer;transition:color 0.3s;">最新</span><div id="homeTabIndicator" style="position:absolute;bottom:0;width:20px;height:3px;border-radius:999px;background:var(--accent);transition:all 0.3s cubic-bezier(0.16,1,0.3,1);"></div></div></div><div style="padding:0 12px;"><div class="waterfall" id="homeWaterfall"></div><div id="homeLoadMore"></div></div>';
+      initBanner();
+      renderGameplay();
+      renderWaterfall('homeWaterfall',WORKS.slice(0,8));
+      addLoadMoreBtn('homeLoadMore');
+      setTimeout(function(){initHomeTabIndicator();observeImages()},100);
+    },800);
+  }else{
+    initBanner();
+    renderGameplay();
+    renderWaterfall('homeWaterfall',WORKS.slice(0,8));
+    addLoadMoreBtn('homeLoadMore');
+  }
   renderPlazaCategories();
   renderPlazaWaterfall();
+  addLoadMoreBtn('plazaLoadMore');
   renderPlazaFilterCategories();
   setTimeout(initPlazaTabIndicator,100);
   setTimeout(initGalleryTabIndicator,100);
@@ -2250,15 +2369,16 @@ function init(){
   renderCreatePage();
   updateCost();
   renderWaterfall('galleryWaterfall',WORKS.filter(function(w){return w.userId===CURRENT_USER_ID}));
+  addLoadMoreBtn('galleryLoadMore');
   renderRechargeTiers();
   switchRechargeTab(document.querySelector('#page-recharge .sub-tab'),'earn');
   renderCalendar();
   renderMsgList();
   renderSearchDefault();
-  renderDrafts();
   renderHistory();
   renderAllGameplays();
   switchTab('home');
+  setTimeout(observeImages,200);
 }
 init();
 </script>
