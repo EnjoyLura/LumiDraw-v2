@@ -416,7 +416,7 @@ textarea.input{resize:none;line-height:1.6;}
       <div style="display:flex;gap:16px;position:relative;padding-bottom:4px;">
         <span class="home-tab active" data-idx="0" onclick="switchHomeTab(this,'recommend')" style="font-size:14px;font-weight:700;color:var(--accent);cursor:pointer;transition:color 0.3s;">推荐</span>
         <span class="home-tab" data-idx="1" onclick="switchHomeTab(this,'new')" style="font-size:14px;font-weight:500;color:var(--fg-muted);cursor:pointer;transition:color 0.3s;">最新</span>
-        <div id="homeTabIndicator" style="position:absolute;bottom:0;width:20px;height:3px;border-radius:999px;background:var(--accent);transition:all 0.3s cubic-bezier(0.16,1,0.3,1);"></div>
+        <div id="homeTabIndicator" style="position:absolute;bottom:0;width:20px;height:3px;border-radius:999px;background:var(--accent);transition:none;opacity:0;"></div>
       </div>
     </div>
     <div style="padding:0 12px;"><div class="waterfall" id="homeWaterfall"></div><div id="homeLoadMore"></div></div>
@@ -433,7 +433,7 @@ textarea.input{resize:none;line-height:1.6;}
       <span class="plaza-tab active" data-idx="0" onclick="switchPlazaTab(this,'推荐')" style="font-size:16px;font-weight:700;color:var(--accent);cursor:pointer;transition:color 0.3s;">推荐</span>
       <span class="plaza-tab" data-idx="1" onclick="switchPlazaTab(this,'热门')" style="font-size:16px;font-weight:500;color:var(--fg-muted);cursor:pointer;transition:color 0.3s;">热门</span>
       <span class="plaza-tab" data-idx="2" onclick="switchPlazaTab(this,'最新')" style="font-size:16px;font-weight:500;color:var(--fg-muted);cursor:pointer;transition:color 0.3s;">最新</span>
-      <div id="plazaTabIndicator" style="position:absolute;bottom:0;width:24px;height:3px;border-radius:999px;background:var(--accent);transition:all 0.3s cubic-bezier(0.16,1,0.3,1);"></div>
+      <div id="plazaTabIndicator" style="position:absolute;bottom:0;width:24px;height:3px;border-radius:999px;background:var(--accent);transition:none;opacity:0;"></div>
     </div>
     <div onclick="navigateTo('search')" style="cursor:pointer;padding:4px;">
       <i class="ri-search-line" style="font-size:22px;color:var(--fg-primary);"></i>
@@ -564,7 +564,7 @@ textarea.input{resize:none;line-height:1.6;}
       <span class="gallery-tab" data-idx="1" onclick="switchGalleryTab(this,'published')" style="font-size:13px;font-weight:500;color:var(--fg-muted);cursor:pointer;transition:color 0.3s;">已发布</span>
       <span class="gallery-tab" data-idx="2" onclick="switchGalleryTab(this,'draft')" style="font-size:13px;font-weight:500;color:var(--fg-muted);cursor:pointer;transition:color 0.3s;">草稿箱</span>
       <span class="gallery-tab" data-idx="3" onclick="switchGalleryTab(this,'favorite')" style="font-size:13px;font-weight:500;color:var(--fg-muted);cursor:pointer;transition:color 0.3s;">收藏</span>
-      <div id="galleryTabIndicator" style="position:absolute;bottom:0;width:20px;height:3px;border-radius:999px;background:var(--accent);transition:all 0.3s cubic-bezier(0.16,1,0.3,1);"></div>
+      <div id="galleryTabIndicator" style="position:absolute;bottom:0;width:20px;height:3px;border-radius:999px;background:var(--accent);transition:none;opacity:0;"></div>
     </div>
     <button class="btn btn-ghost btn-sm" onclick="toggleGalleryManage()" id="galleryManageBtn" style="flex-shrink:0;font-size:13px;display:flex;align-items:center;gap:4px;">
       <i class="ri-list-unordered" style="font-size:16px;"></i>
@@ -683,8 +683,7 @@ textarea.input{resize:none;line-height:1.6;}
 <!-- ============ 我的 ============ -->
 <div class="page" id="page-mine" data-title="我的" data-show-tab="true">
   <div style="padding:16px;">
-    <div class="card" style="padding:18px 16px;background:linear-gradient(135deg,rgba(91,159,232,0.08) 0%,rgba(111,212,176,0.06) 50%,rgba(184,165,227,0.06) 100%);border:none;position:relative;overflow:hidden;">
-      <div style="position:absolute;top:-20px;right:-20px;width:80px;height:80px;border-radius:50%;background:radial-gradient(circle,var(--accent-soft),transparent 70%);pointer-events:none;"></div>
+    <div style="padding:18px 16px;position:relative;">
       <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;">
         <div class="avatar" style="width:56px;height:56px;font-size:22px;box-shadow:0 4px 12px var(--accent-glow);">梦</div>
         <div style="flex:1;">
@@ -760,7 +759,7 @@ textarea.input{resize:none;line-height:1.6;}
 <!-- 左侧抽屉 -->
 <div class="overlay" id="leftDrawerOverlay" onclick="toggleLeftDrawer()"></div>
 <div class="left-drawer" id="leftDrawer">
-  <div style="padding:50px 20px 24px;background:var(--gradient-sky);border-bottom:1px solid var(--border);">
+  <div style="padding:90px 20px 24px;background:var(--gradient-sky);border-bottom:1px solid var(--border);">
     <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;">
       <div class="avatar" style="width:52px;height:52px;font-size:20px;">梦</div>
       <div><div style="font-size:17px;font-weight:700;color:var(--fg-primary);">云端造梦师</div><div style="font-size:16px;margin-top:3px;"><span style="color:var(--accent);font-weight:700;">2860</span> <span style="color:var(--fg-muted);">积分</span></div></div>
@@ -969,7 +968,7 @@ textarea.input{resize:none;line-height:1.6;}
         </div>
         <div>
           <div style="font-size:20px;font-weight:700;color:white;">Lumi 会员</div>
-          <div style="font-size:12px;color:rgba(255,255,255,0.6);margin-top:2px;">每日领取积分，解锁全部创作能力</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.6);margin-top:2px;">每天自动领取积分，畅享AI创作</div>
         </div>
       </div>
       <div style="display:flex;gap:16px;">
@@ -978,12 +977,12 @@ textarea.input{resize:none;line-height:1.6;}
           <div style="font-size:10px;color:rgba(255,255,255,0.5);margin-top:2px;">每日积分</div>
         </div>
         <div style="flex:1;text-align:center;padding:10px 0;background:rgba(255,255,255,0.06);border-radius:10px;">
-          <div style="font-size:20px;font-weight:700;color:#B8A5E3;">6</div>
-          <div style="font-size:10px;color:rgba(255,255,255,0.5);margin-top:2px;">专属模型</div>
+          <div style="font-size:20px;font-weight:700;color:#B8A5E3;">×2</div>
+          <div style="font-size:10px;color:rgba(255,255,255,0.5);margin-top:2px;">签到加成</div>
         </div>
         <div style="flex:1;text-align:center;padding:10px 0;background:rgba(255,255,255,0.06);border-radius:10px;">
-          <div style="font-size:20px;font-weight:700;color:#6FD4B0;">15</div>
-          <div style="font-size:10px;color:rgba(255,255,255,0.5);margin-top:2px;">全部风格</div>
+          <div style="font-size:20px;font-weight:700;color:#6FD4B0;">优先</div>
+          <div style="font-size:10px;color:rgba(255,255,255,0.5);margin-top:2px;">生成队列</div>
         </div>
       </div>
     </div>
@@ -1047,12 +1046,12 @@ textarea.input{resize:none;line-height:1.6;}
         <div><div style="font-size:13px;font-weight:700;color:var(--fg-primary);">每日积分</div><div style="font-size:11px;color:var(--fg-muted);margin-top:2px;">每天领取50积分</div></div>
       </div>
       <div class="card" style="padding:14px;display:flex;align-items:flex-start;gap:10px;">
-        <div style="width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,rgba(91,159,232,0.15),rgba(91,159,232,0.05));display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="ri-robot-line" style="font-size:16px;color:var(--accent);"></i></div>
-        <div><div style="font-size:13px;font-weight:700;color:var(--fg-primary);">全部模型</div><div style="font-size:11px;color:var(--fg-muted);margin-top:2px;">解锁6款AI模型</div></div>
+        <div style="width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,rgba(91,159,232,0.15),rgba(91,159,232,0.05));display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="ri-star-smile-line" style="font-size:16px;color:var(--accent);"></i></div>
+        <div><div style="font-size:13px;font-weight:700;color:var(--fg-primary);">签到加成</div><div style="font-size:11px;color:var(--fg-muted);margin-top:2px;">签到积分翻倍</div></div>
       </div>
       <div class="card" style="padding:14px;display:flex;align-items:flex-start;gap:10px;">
-        <div style="width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,rgba(184,165,227,0.15),rgba(184,165,227,0.05));display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="ri-palette-line" style="font-size:16px;color:var(--lavender);"></i></div>
-        <div><div style="font-size:13px;font-weight:700;color:var(--fg-primary);">全部风格</div><div style="font-size:11px;color:var(--fg-muted);margin-top:2px;">15种风格随意用</div></div>
+        <div style="width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,rgba(184,165,227,0.15),rgba(184,165,227,0.05));display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="ri-vip-crown-line" style="font-size:16px;color:var(--lavender);"></i></div>
+        <div><div style="font-size:13px;font-weight:700;color:var(--fg-primary);">专属徽章</div><div style="font-size:11px;color:var(--fg-muted);margin-top:2px;">VIP身份标识</div></div>
       </div>
       <div class="card" style="padding:14px;display:flex;align-items:flex-start;gap:10px;">
         <div style="width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,rgba(255,181,154,0.15),rgba(255,181,154,0.05));display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="ri-speed-line" style="font-size:16px;color:var(--peach);"></i></div>
@@ -1230,10 +1229,10 @@ textarea.input{resize:none;line-height:1.6;}
   <div style="padding:16px;">
     <div class="section-title"><span>数据概览</span></div>
     <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:16px;">
-      <div class="card" style="padding:14px;position:relative;overflow:hidden;"><div style="position:absolute;top:-10px;right:-10px;width:40px;height:40px;border-radius:50%;background:var(--accent-soft);"></div><div style="font-size:12px;color:var(--fg-muted);">总用户数</div><div style="font-size:24px;font-weight:700;color:var(--accent);font-family:Georgia,serif;">12,486</div><div style="font-size:11px;color:var(--mint);margin-top:2px;"><i class="ri-arrow-up-line" style="font-size:12px;"></i>+128 今日</div></div>
-      <div class="card" style="padding:14px;position:relative;overflow:hidden;"><div style="position:absolute;top:-10px;right:-10px;width:40px;height:40px;border-radius:50%;background:var(--mint-soft);"></div><div style="font-size:12px;color:var(--fg-muted);">总作品数</div><div style="font-size:24px;font-weight:700;color:var(--mint);font-family:Georgia,serif;">48,320</div><div style="font-size:11px;color:var(--mint);margin-top:2px;"><i class="ri-arrow-up-line" style="font-size:12px;"></i>+856 今日</div></div>
-      <div class="card" style="padding:14px;position:relative;overflow:hidden;"><div style="position:absolute;top:-10px;right:-10px;width:40px;height:40px;border-radius:50%;background:var(--lavender-soft);"></div><div style="font-size:12px;color:var(--fg-muted);">今日生成</div><div style="font-size:24px;font-weight:700;color:var(--lavender);font-family:Georgia,serif;">1,856</div><div style="font-size:11px;color:var(--fg-muted);margin-top:2px;">日均 1,420</div></div>
-      <div class="card" style="padding:14px;position:relative;overflow:hidden;"><div style="position:absolute;top:-10px;right:-10px;width:40px;height:40px;border-radius:50%;background:var(--peach-soft);"></div><div style="font-size:12px;color:var(--fg-muted);">今日收入</div><div style="font-size:24px;font-weight:700;color:var(--peach);font-family:Georgia,serif;">¥856</div><div style="font-size:11px;color:var(--mint);margin-top:2px;"><i class="ri-arrow-up-line" style="font-size:12px;"></i>+12%</div></div>
+      <div class="card" style="padding:14px;cursor:pointer;" onclick="navigateTo('adminStatUsers')"><div style="display:flex;align-items:center;justify-content:space-between;"><div style="font-size:12px;color:var(--fg-muted);">总用户数</div><i class="ri-arrow-right-s-line" style="font-size:14px;color:var(--fg-muted);"></i></div><div style="font-size:24px;font-weight:700;color:var(--fg-primary);">12,486</div><div style="font-size:11px;color:var(--mint);margin-top:2px;"><i class="ri-arrow-up-line" style="font-size:12px;"></i>+128 今日</div></div>
+      <div class="card" style="padding:14px;cursor:pointer;" onclick="navigateTo('adminStatWorks')"><div style="display:flex;align-items:center;justify-content:space-between;"><div style="font-size:12px;color:var(--fg-muted);">总作品数</div><i class="ri-arrow-right-s-line" style="font-size:14px;color:var(--fg-muted);"></i></div><div style="font-size:24px;font-weight:700;color:var(--fg-primary);">48,320</div><div style="font-size:11px;color:var(--mint);margin-top:2px;"><i class="ri-arrow-up-line" style="font-size:12px;"></i>+856 今日</div></div>
+      <div class="card" style="padding:14px;cursor:pointer;" onclick="navigateTo('adminStatGen')"><div style="display:flex;align-items:center;justify-content:space-between;"><div style="font-size:12px;color:var(--fg-muted);">今日生成</div><i class="ri-arrow-right-s-line" style="font-size:14px;color:var(--fg-muted);"></i></div><div style="font-size:24px;font-weight:700;color:var(--fg-primary);">1,856</div><div style="font-size:11px;color:var(--fg-muted);margin-top:2px;">日均 1,420</div></div>
+      <div class="card" style="padding:14px;cursor:pointer;" onclick="navigateTo('adminStatRevenue')"><div style="display:flex;align-items:center;justify-content:space-between;"><div style="font-size:12px;color:var(--fg-muted);">今日收入</div><i class="ri-arrow-right-s-line" style="font-size:14px;color:var(--fg-muted);"></i></div><div style="font-size:24px;font-weight:700;color:var(--fg-primary);">¥856</div><div style="font-size:11px;color:var(--mint);margin-top:2px;"><i class="ri-arrow-up-line" style="font-size:12px;"></i>+12%</div></div>
     </div>
     <div class="section-title"><span>内容管理</span></div>
     <div class="card" style="overflow:hidden;margin-bottom:16px;">
@@ -1241,18 +1240,39 @@ textarea.input{resize:none;line-height:1.6;}
       <div class="list-row" onclick="navigateTo('adminModel')"><div class="lr-icon" style="color:var(--lavender);"><i class="ri-cpu-line" style="font-size:22px;"></i></div><div class="lr-text">模型管理</div><span style="font-size:12px;color:var(--fg-muted);margin-right:4px;">6个</span><i class="ri-arrow-right-s-line lr-arrow" style="font-size:18px;color:var(--fg-muted);"></i></div>
       <div class="list-row" onclick="navigateTo('adminStyle')"><div class="lr-icon" style="color:var(--mint);"><i class="ri-palette-line" style="font-size:22px;"></i></div><div class="lr-text">风格管理</div><span style="font-size:12px;color:var(--fg-muted);margin-right:4px;">15个</span><i class="ri-arrow-right-s-line lr-arrow" style="font-size:18px;color:var(--fg-muted);"></i></div>
       <div class="list-row" onclick="navigateTo('adminGameplay')"><div class="lr-icon" style="color:var(--peach);"><i class="ri-magic-line" style="font-size:22px;"></i></div><div class="lr-text">玩法模板管理</div><span style="font-size:12px;color:var(--fg-muted);margin-right:4px;">8个</span><i class="ri-arrow-right-s-line lr-arrow" style="font-size:18px;color:var(--fg-muted);"></i></div>
+      <div class="list-row" onclick="navigateTo('adminWorks')"><div class="lr-icon" style="color:var(--rose);"><i class="ri-gallery-line" style="font-size:22px;"></i></div><div class="lr-text">作品管理</div><span style="font-size:12px;color:var(--fg-muted);margin-right:4px;">22个</span><i class="ri-arrow-right-s-line lr-arrow" style="font-size:18px;color:var(--fg-muted);"></i></div>
     </div>
     <div class="section-title"><span>用户管理</span></div>
     <div class="card" style="overflow:hidden;margin-bottom:16px;">
       <div class="list-row" onclick="navigateTo('adminReports')"><div class="lr-icon" style="color:var(--rose);"><i class="ri-flag-line" style="font-size:22px;"></i></div><div class="lr-text">举报队列</div><span class="badge" style="background:var(--rose);">8</span><i class="ri-arrow-right-s-line lr-arrow" style="font-size:18px;color:var(--fg-muted);"></i></div>
-      <div class="list-row" onclick="showToast('用户列表')"><div class="lr-icon" style="color:var(--accent);"><i class="ri-group-line" style="font-size:22px;"></i></div><div class="lr-text">用户列表</div><span style="font-size:12px;color:var(--fg-muted);margin-right:4px;">12,486</span><i class="ri-arrow-right-s-line lr-arrow" style="font-size:18px;color:var(--fg-muted);"></i></div>
+      <div class="list-row" onclick="navigateTo('adminUsers')"><div class="lr-icon" style="color:var(--accent);"><i class="ri-group-line" style="font-size:22px;"></i></div><div class="lr-text">用户列表</div><span style="font-size:12px;color:var(--fg-muted);margin-right:4px;">12,486</span><i class="ri-arrow-right-s-line lr-arrow" style="font-size:18px;color:var(--fg-muted);"></i></div>
     </div>
     <div class="section-title"><span>系统设置</span></div>
     <div class="card" style="overflow:hidden;">
-      <div class="list-row" onclick="showToast('积分规则设置')"><div class="lr-icon" style="color:var(--lemon);"><i class="ri-copper-coin-line" style="font-size:22px;"></i></div><div class="lr-text">积分规则</div><i class="ri-arrow-right-s-line lr-arrow" style="font-size:18px;color:var(--fg-muted);"></i></div>
-      <div class="list-row" onclick="showToast('审核设置')"><div class="lr-icon" style="color:var(--fg-muted);"><i class="ri-shield-check-line" style="font-size:22px;"></i></div><div class="lr-text">审核设置</div><i class="ri-arrow-right-s-line lr-arrow" style="font-size:18px;color:var(--fg-muted);"></i></div>
+      <div class="list-row" onclick="navigateTo('adminPoints')"><div class="lr-icon" style="color:var(--lemon);"><i class="ri-copper-coin-line" style="font-size:22px;"></i></div><div class="lr-text">积分规则</div><i class="ri-arrow-right-s-line lr-arrow" style="font-size:18px;color:var(--fg-muted);"></i></div>
+      <div class="list-row" onclick="navigateTo('adminAudit')"><div class="lr-icon" style="color:var(--fg-muted);"><i class="ri-shield-check-line" style="font-size:22px;"></i></div><div class="lr-text">审核设置</div><i class="ri-arrow-right-s-line lr-arrow" style="font-size:18px;color:var(--fg-muted);"></i></div>
     </div>
   </div>
+</div>
+
+<!-- ============ 管理后台-用户统计 ============ -->
+<div class="page" id="page-adminStatUsers" data-title="用户统计">
+  <div style="padding:16px;" id="adminStatUsersContent"></div>
+</div>
+
+<!-- ============ 管理后台-作品统计 ============ -->
+<div class="page" id="page-adminStatWorks" data-title="作品统计">
+  <div style="padding:16px;" id="adminStatWorksContent"></div>
+</div>
+
+<!-- ============ 管理后台-生成统计 ============ -->
+<div class="page" id="page-adminStatGen" data-title="生成统计">
+  <div style="padding:16px;" id="adminStatGenContent"></div>
+</div>
+
+<!-- ============ 管理后台-收入统计 ============ -->
+<div class="page" id="page-adminStatRevenue" data-title="收入统计">
+  <div style="padding:16px;" id="adminStatRevenueContent"></div>
 </div>
 
 <!-- ============ 管理后台-Banner管理 ============ -->
@@ -1270,6 +1290,11 @@ textarea.input{resize:none;line-height:1.6;}
   <div style="padding:16px;" id="adminStyleContent"></div>
 </div>
 
+<!-- ============ 管理后台-风格编辑 ============ -->
+<div class="page" id="page-adminStyleEdit" data-title="编辑风格">
+  <div style="padding:16px;" id="adminStyleEditContent"></div>
+</div>
+
 <!-- ============ 管理后台-玩法模板管理 ============ -->
 <div class="page" id="page-adminGameplay" data-title="玩法模板管理">
   <div style="padding:16px;" id="adminGameplayContent"></div>
@@ -1278,6 +1303,61 @@ textarea.input{resize:none;line-height:1.6;}
 <!-- ============ 管理后台-举报队列 ============ -->
 <div class="page" id="page-adminReports" data-title="举报队列">
   <div style="padding:16px;" id="adminReportsContent"></div>
+</div>
+
+<!-- ============ 管理后台-用户列表 ============ -->
+<div class="page" id="page-adminUsers" data-title="用户列表">
+  <div style="padding:16px;" id="adminUsersContent"></div>
+</div>
+
+<!-- ============ 管理后台-积分规则 ============ -->
+<div class="page" id="page-adminPoints" data-title="积分规则">
+  <div style="padding:16px;" id="adminPointsContent"></div>
+</div>
+
+<!-- ============ 管理后台-审核设置 ============ -->
+<div class="page" id="page-adminAudit" data-title="审核设置">
+  <div style="padding:16px;" id="adminAuditContent"></div>
+</div>
+
+<!-- ============ 管理后台-Banner编辑 ============ -->
+<div class="page" id="page-adminBannerEdit" data-title="编辑Banner">
+  <div style="padding:16px;" id="adminBannerEditContent"></div>
+</div>
+
+<!-- ============ 管理后台-模型编辑 ============ -->
+<div class="page" id="page-adminModelEdit" data-title="编辑模型">
+  <div style="padding:16px;" id="adminModelEditContent"></div>
+</div>
+
+<!-- ============ 管理后台-玩法编辑 ============ -->
+<div class="page" id="page-adminGameplayEdit" data-title="编辑玩法">
+  <div style="padding:16px;" id="adminGameplayEditContent"></div>
+</div>
+
+<!-- ============ 管理后台-用户详情 ============ -->
+<div class="page" id="page-adminUserDetail" data-title="用户详情">
+  <div style="padding:16px;" id="adminUserDetailContent"></div>
+</div>
+
+<!-- ============ 管理后台-用户作品 ============ -->
+<div class="page" id="page-adminUserWorks" data-title="用户作品">
+  <div style="padding:16px;" id="adminUserWorksContent"></div>
+</div>
+
+<!-- ============ 管理后台-作品管理 ============ -->
+<div class="page" id="page-adminWorks" data-title="作品管理">
+  <div style="padding:16px;" id="adminWorksContent"></div>
+</div>
+
+<!-- ============ 管理后台-作品详情 ============ -->
+<div class="page" id="page-adminWorkDetail" data-title="作品详情">
+  <div style="padding:16px;" id="adminWorkDetailContent"></div>
+</div>
+
+<!-- ============ 管理后台-举报详情 ============ -->
+<div class="page" id="page-adminReportDetail" data-title="举报详情">
+  <div style="padding:16px;" id="adminReportDetailContent"></div>
 </div>
 
 <!-- ============ 背景选择弹窗 ============ -->
@@ -1661,9 +1741,9 @@ function switchTab(tabId){
   const title=page.dataset.title||'';$('navTitle').textContent=title;
   $('navBack').style.display='none';pageStack=[];currentTab=tabId;
   $('tabBar').style.display=page.dataset.showTab==='true'?'flex':'none';
-  if(tabId==='home')setTimeout(initHomeTabIndicator,50);
-  if(tabId==='plaza')setTimeout(initPlazaTabIndicator,50);
-  if(tabId==='gallery')setTimeout(initGalleryTabIndicator,50);
+  if(tabId==='home')setTimeout(initHomeTabIndicator,350);
+  if(tabId==='plaza')setTimeout(initPlazaTabIndicator,350);
+  if(tabId==='gallery')setTimeout(initGalleryTabIndicator,350);
   $('createBar').style.display=tabId==='create'?'flex':'none';
   $('galleryPublishBtn').style.display=tabId==='gallery'?'flex':'none';
   $('contentArea').scrollTop=0;
@@ -1693,6 +1773,22 @@ function navigateTo(pageId,param){
   if(pageId==='adminStyle')renderAdminStyle();
   if(pageId==='adminGameplay')renderAdminGameplay();
   if(pageId==='adminReports')renderAdminReports();
+  if(pageId==='adminUsers')renderAdminUsers();
+  if(pageId==='adminPoints')renderAdminPoints();
+  if(pageId==='adminAudit')renderAdminAudit();
+  if(pageId==='adminBannerEdit')renderAdminBannerEdit(param);
+  if(pageId==='adminModelEdit')renderAdminModelEdit(param);
+  if(pageId==='adminStyleEdit')renderAdminStyleEdit(param);
+  if(pageId==='adminGameplayEdit')renderAdminGameplayEdit(param);
+  if(pageId==='adminUserDetail')renderAdminUserDetail(param);
+  if(pageId==='adminUserWorks')renderAdminUserWorks(param);
+  if(pageId==='adminReportDetail')renderAdminReportDetail(param);
+  if(pageId==='adminWorks')renderAdminWorks();
+  if(pageId==='adminWorkDetail')renderAdminWorkDetail(param);
+  if(pageId==='adminStatUsers')renderAdminStatUsers();
+  if(pageId==='adminStatWorks')renderAdminStatWorks();
+  if(pageId==='adminStatGen')renderAdminStatGen();
+  if(pageId==='adminStatRevenue')renderAdminStatRevenue();
   var stackZ=100+pageStack.length;
   if(pageStack.length===1){$('contentArea').classList.add('pushed-back');$('tabBar').classList.add('pushed-back');$('createBar').classList.add('pushed-back')}
   if(pageId==='workDetail'){
@@ -1783,7 +1879,7 @@ function toggleFilterPanel(){$('filterPanel').style.display=$('filterPanel').sty
 function resetFilter(){document.querySelectorAll('#filterStyles .chip').forEach(c=>c.classList.remove('active'));showToast('已重置筛选')}
 function applyFilter(){$('filterPanel').style.display='none';showToast('筛选已应用')}
 function switchPlazaTab(el,name){el.parentElement.querySelectorAll('.plaza-tab').forEach(function(t){t.style.fontWeight='500';t.style.color='var(--fg-muted)'});el.style.fontWeight='700';el.style.color='var(--accent)';var idx=parseInt(el.dataset.idx);var indicator=$('plazaTabIndicator');if(indicator){indicator.style.left=el.offsetLeft+el.offsetWidth/2-12+'px'}var c=$('plazaWaterfall');c.innerHTML='<div style="display:flex;justify-content:center;padding:20px 0;column-span:all"><div style="width:28px;height:28px;border:2.5px solid var(--accent-soft);border-top-color:var(--accent);border-radius:50%;animation:spin 0.7s linear infinite"></div></div>';setTimeout(function(){renderPlazaWaterfall();c.classList.remove('wf-slide-left','wf-slide-right');void c.offsetWidth;c.classList.add(idx>0?'wf-slide-left':'wf-slide-right');setTimeout(function(){c.classList.remove('wf-slide-left','wf-slide-right')},450)},300)}
-function initPlazaTabIndicator(){var active=document.querySelector('.plaza-tab.active');if(active&&$('plazaTabIndicator')){$('plazaTabIndicator').style.left=active.offsetLeft+active.offsetWidth/2-12+'px'}}
+function initPlazaTabIndicator(){var active=document.querySelector('.plaza-tab.active');var ind=$('plazaTabIndicator');if(active&&ind){ind.style.transition='none';ind.style.left=active.offsetLeft+active.offsetWidth/2-12+'px';ind.style.opacity='1';ind.offsetHeight;ind.style.transition='all 0.3s cubic-bezier(0.16,1,0.3,1)'}}
 function renderPlazaFilterCategories(){var c=$('plazaFilterCategories');if(!c)return;c.innerHTML='';CATEGORIES.forEach(function(cat,i){var chip=createEl('div','chip chip-outline'+(i===0?' active':''));chip.textContent=cat;chip.onclick=function(){chip.classList.toggle('active')};c.appendChild(chip)})}
 function openPlazaFilter(){$('plazaFilterOverlay').classList.add('show');$('plazaFilterSheet').classList.add('show')}
 function closePlazaFilter(){$('plazaFilterOverlay').classList.remove('show');$('plazaFilterSheet').classList.remove('show')}
@@ -1793,25 +1889,25 @@ let currentHomeTab='recommend';let likedWorks={};let favoritedWorks={1:true,2:tr
 var WORK_DESCS=['霆虹灯下的赛博都市，雨夜中的未来世界','山水之间，水墨丹青的国风意境','少女与猫的温暖日常，二次元风格','抽象梦境，漂浮的岛屿与柔和色调','古风少女与桃花，春天的气息','赛博朋克精灵，发光的眼睛与未来感','水彩猫咪，柔软的笔触与温暖色调','极简几何艺术，干净的线条与柔和配色','暗黑天使，哥特风格与戏剧性光影','蒸汽朋克城市，黄铜与齿轮的复古未来','油画风景，金色麦田与日落印象','像素冒险，16位复古游戏风格'];
 WORKS.forEach(function(w,i){if(!w.desc)w.desc=WORK_DESCS[i]||''});
 function switchHomeTab(el,tab){el.parentElement.querySelectorAll('.home-tab').forEach(function(t){t.style.fontWeight='500';t.style.color='var(--fg-muted)'});el.style.fontWeight='700';el.style.color='var(--accent)';var idx=parseInt(el.dataset.idx);var indicator=$('homeTabIndicator');if(indicator){indicator.style.left=el.offsetLeft+el.offsetWidth/2-10+'px'}var dir=(tab==='new'&&currentHomeTab==='recommend')?'left':'right';currentHomeTab=tab;var c=$('homeWaterfall');c.innerHTML='<div style="display:flex;justify-content:center;padding:20px 0;column-span:all"><div style="width:28px;height:28px;border:2.5px solid var(--accent-soft);border-top-color:var(--accent);border-radius:50%;animation:spin 0.7s linear infinite"></div></div>';setTimeout(()=>{renderWaterfall('homeWaterfall',tab==='new'?WORKS.slice().reverse():WORKS.slice(0,8));c.classList.remove('wf-slide-left','wf-slide-right');void c.offsetWidth;c.classList.add(dir==='left'?'wf-slide-left':'wf-slide-right');setTimeout(()=>{c.classList.remove('wf-slide-left','wf-slide-right')},400)},300)}
-function initHomeTabIndicator(){var active=document.querySelector('.home-tab.active');if(active&&$('homeTabIndicator')){$('homeTabIndicator').style.left=active.offsetLeft+active.offsetWidth/2-10+'px'}}
+function initHomeTabIndicator(){var active=document.querySelector('.home-tab.active');var ind=$('homeTabIndicator');if(active&&ind){ind.style.transition='none';ind.style.left=active.offsetLeft+active.offsetWidth/2-10+'px';ind.style.opacity='1';ind.offsetHeight;ind.style.transition='all 0.3s cubic-bezier(0.16,1,0.3,1)'}}
 function toggleLike(e,id){e.stopPropagation();var w=WORKS.find(function(x){return x.id===id});if(!w)return;var btn=e.currentTarget;var icon=btn.querySelector('i');var num=btn.querySelector('span');icon.style.transition='transform 0.4s cubic-bezier(0.34,1.56,0.64,1)';if(likedWorks[id]){delete likedWorks[id];w.likes--;icon.className='ri-heart-line';icon.style.color='var(--fg-muted)';num.style.color='var(--fg-muted)'}else{likedWorks[id]=true;w.likes++;icon.className='ri-heart-fill';icon.style.color='var(--rose)';num.style.color='var(--rose)';icon.style.transform='scale(1.4)';setTimeout(function(){icon.style.transform='scale(1)'},150)}num.textContent=w.likes}
 // ============ Banner轮播 ============
 function initBanner(){
   const track=$('bannerTrack'),dots=$('bannerDots');
-  BANNERS.forEach((b,i)=>{const slide=createEl('div',null,'<img src="'+b.img+'" style="width:100%;height:150px;object-fit:cover"/><div style="position:absolute;bottom:0;left:0;right:0;padding:20px 16px;background:linear-gradient(transparent,rgba(0,0,0,0.5));color:white;font-size:16px;font-weight:600">'+b.title+'</div><button onclick="event.stopPropagation();switchTab(\'create\')" style="position:absolute;right:20px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.18);backdrop-filter:blur(12px) saturate(180%);-webkit-backdrop-filter:blur(12px) saturate(180%);border:1px solid rgba(255,255,255,0.35);color:white;border-radius:999px;padding:7px 14px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,0.15)">前往创作</button>');slide.style.position='relative';slide.style.width='351px';slide.style.height='150px';slide.style.flexShrink='0';slide.style.overflow='hidden';slide.style.borderRadius='20px';track.appendChild(slide);const dot=createEl('span',null,'');dot.style.cssText='height:6px;border-radius:'+(i===0?'999px':'50%')+';background:'+(i===0?'var(--accent)':'var(--accent-soft)')+';transition:all 0.3s;display:inline-block';if(i===0)dot.style.width='20px';else dot.style.width='6px';dot.dataset.idx=i;dots.appendChild(dot)});
-  bannerTimer=setInterval(()=>{bannerIdx=(bannerIdx+1)%BANNERS.length;updateBanner()},4000);
   var box=$('bannerBox');
+  BANNERS.forEach((b,i)=>{const slide=createEl('div',null,'<img src="'+b.img+'" style="width:100%;height:150px;object-fit:cover"/><div style="position:absolute;bottom:0;left:0;right:0;padding:20px 16px;background:linear-gradient(transparent,rgba(0,0,0,0.5));color:white;font-size:16px;font-weight:600">'+b.title+'</div><button onclick="event.stopPropagation();switchTab(\'create\')" style="position:absolute;right:20px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.18);backdrop-filter:blur(12px) saturate(180%);-webkit-backdrop-filter:blur(12px) saturate(180%);border:1px solid rgba(255,255,255,0.35);color:white;border-radius:999px;padding:7px 14px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,0.15)">前往创作</button>');slide.style.position='relative';slide.style.width=box.offsetWidth+'px';slide.style.height='150px';slide.style.flexShrink='0';slide.style.overflow='hidden';slide.style.borderRadius='20px';track.appendChild(slide);const dot=createEl('span',null,'');dot.style.cssText='height:6px;border-radius:'+(i===0?'999px':'50%')+';background:'+(i===0?'var(--accent)':'var(--accent-soft)')+';transition:all 0.3s;display:inline-block';if(i===0)dot.style.width='20px';else dot.style.width='6px';dot.dataset.idx=i;dots.appendChild(dot)});
+  bannerTimer=setInterval(()=>{bannerIdx=(bannerIdx+1)%BANNERS.length;updateBanner()},4000);
   box.addEventListener('click',()=>{clearInterval(bannerTimer);bannerIdx=(bannerIdx+1)%BANNERS.length;updateBanner();bannerTimer=setInterval(()=>{bannerIdx=(bannerIdx+1)%BANNERS.length;updateBanner()},4000)});
   box.addEventListener('touchstart',()=>{clearInterval(bannerTimer)},{passive:true});
   box.addEventListener('touchend',()=>{bannerTimer=setInterval(()=>{bannerIdx=(bannerIdx+1)%BANNERS.length;updateBanner()},4000)},{passive:true});
 }
-function updateBanner(){$('bannerTrack').style.transform='translateX(-'+bannerIdx*351+'px)';$('bannerDots').querySelectorAll('span').forEach((d,i)=>{if(i===bannerIdx){d.style.width='20px';d.style.borderRadius='999px';d.style.background='var(--accent)'}else{d.style.width='6px';d.style.borderRadius='50%';d.style.background='var(--accent-soft)'}})}
+function updateBanner(){var bw=$('bannerBox').offsetWidth;$('bannerTrack').style.transform='translateX(-'+bannerIdx*bw+'px)';$('bannerDots').querySelectorAll('span').forEach((d,i)=>{if(i===bannerIdx){d.style.width='20px';d.style.borderRadius='999px';d.style.background='var(--accent)'}else{d.style.width='6px';d.style.borderRadius='50%';d.style.background='var(--accent-soft)'}})}
 // ============ 渲染热门玩法 ============
 function renderGameplay(){const sc=$('gameplayScroll');GAMEPLAYS.forEach(g=>{const card=createEl('div',null,'<img src="'+g.img+'" style="width:80px;height:80px;border-radius:14px;object-fit:cover"/><div style="font-size:11px;text-align:center;margin-top:4px;color:var(--fg-secondary)">'+g.name+'</div>');card.style.cssText='flex-shrink:0;cursor:pointer;';card.onclick=()=>{switchTab('create');showToast('已套用「'+g.name+'」模板')};sc.appendChild(card)})}
 function renderAllGameplays(){var c=$('allGameplaysGrid');if(!c)return;c.innerHTML='';GAMEPLAYS.forEach(function(g){var card=createEl('div','card');card.style.cssText='cursor:pointer;overflow:hidden';card.innerHTML='<img src="'+g.img+'" style="width:100%;aspect-ratio:1;object-fit:cover"/><div style="padding:6px;text-align:center"><div style="font-size:13px;font-weight:600;color:var(--fg-primary)">'+g.name+'</div></div>';card.onclick=function(){navigateBack();switchTab('create');showToast('已套用「'+g.name+'」模板')};c.appendChild(card)})}
 // ============ 渲染瀑布流 ============
 function getAspectRatio(ratio){var map={'1:1':'1/1','3:4':'3/4','4:3':'4/3','2:3':'2/3','3:2':'4/3','9:16':'9/16','16:9':'4/3'};return map[ratio]||'3/4'}
-function renderWaterfall(containerId,works,showPublished){var c=$(containerId);if(!c)return;c.innerHTML='';works.forEach(function(w){var u=USERS.find(function(x){return x.id===w.userId});var liked=likedWorks[w.id];var item=createEl('div','wf-item');var ar=getAspectRatio(w.ratio);var displayTitle=w.title||(w.prompt?w.prompt.substring(0,20):'未命名作品');var badge=showPublished?'<div style="position:absolute;top:8px;right:8px;background:rgba(255,255,255,0.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:var(--accent);font-size:10px;font-weight:600;padding:3px 8px;border-radius:8px;z-index:5;display:flex;align-items:center;gap:3px;box-shadow:0 2px 8px rgba(0,0,0,0.08);"><i class="ri-check-line" style="font-size:12px;line-height:1;"></i><span style="line-height:1;">已发布</span></div>':'';item.innerHTML='<div class="card" style="position:relative;">'+badge+'<div style="width:100%;aspect-ratio:'+ar+';overflow:hidden;"><img src="'+w.img+'" style="width:100%;height:100%;object-fit:cover;display:block;cursor:pointer" onclick="navigateTo(\'workDetail\','+w.id+')"/></div><div style="padding:10px 10px 6px"><div style="font-size:13px;font-weight:600;color:var(--fg-primary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:4px">'+displayTitle+'</div><div style="display:flex;align-items:center;gap:6px"><div onclick="navigateTo(\'userProfile\','+u.id+')" style="display:flex;align-items:center;gap:6px;flex:1;overflow:hidden;cursor:pointer"><div class="avatar" style="width:20px;height:20px;font-size:10px;background:'+u.color+'">'+u.avatar+'</div><span style="font-size:11px;color:var(--fg-secondary);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+u.name+'</span></div><div onclick="toggleLike(event,'+w.id+')" style="display:flex;align-items:center;gap:3px;cursor:pointer;padding:2px 4px;border-radius:8px;transition:background 0.2s" onmouseover="this.style.background=\'var(--accent-soft)\'" onmouseout="this.style.background=\'transparent\'"><i class="'+(liked?'ri-heart-fill':'ri-heart-line')+'" style="font-size:16px;color:'+(liked?'var(--rose)':'var(--fg-muted)')+';transition:all 0.3s;"></i><span style="font-size:13px;font-weight:600;color:'+(liked?'var(--rose)':'var(--fg-muted)')+'">'+w.likes+'</span></div></div></div></div>';var card=item.querySelector('.card');bindLongPress(card,w);c.appendChild(item)})}
+function renderWaterfall(containerId,works,showPublished){var c=$(containerId);if(!c)return;c.innerHTML='';works.forEach(function(w){var u=USERS.find(function(x){return x.id===w.userId});var liked=likedWorks[w.id];var item=createEl('div','wf-item');var ar=getAspectRatio(w.ratio);var displayTitle=w.title||(w.prompt?w.prompt.substring(0,20):'未命名作品');var badge=showPublished?'<div style="position:absolute;top:8px;right:8px;background:rgba(255,255,255,0.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:var(--accent);font-size:10px;font-weight:600;padding:3px 8px;border-radius:8px;z-index:5;display:flex;align-items:center;gap:3px;box-shadow:0 2px 8px rgba(0,0,0,0.08);"><i class="ri-check-line" style="font-size:12px;line-height:1;"></i><span style="line-height:1;">已发布</span></div>':'';item.innerHTML='<div class="card" style="position:relative;">'+badge+'<div style="width:100%;aspect-ratio:'+ar+';overflow:hidden;"><img src="'+w.img+'" style="width:100%;height:100%;object-fit:cover;display:block;cursor:pointer" onclick="navigateTo(\'workDetail\','+w.id+')"/></div><div style="padding:10px 10px 6px"><div style="font-size:13px;font-weight:600;color:var(--fg-primary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:4px">'+displayTitle+'</div><div style="display:flex;align-items:center;gap:6px"><div onclick="navigateTo(\'userProfile\','+u.id+')" style="display:flex;align-items:center;gap:6px;flex:1;overflow:hidden;cursor:pointer"><div class="avatar" style="width:20px;height:20px;font-size:10px;background:'+u.color+'">'+u.avatar+'</div><span style="font-size:11px;color:var(--fg-secondary);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+u.name+'</span></div><div onclick="toggleLike(event,'+w.id+')" style="display:flex;align-items:center;gap:3px;cursor:pointer;padding:2px 4px;border-radius:8px;transition:background 0.2s" onmouseover="this.style.background=\'var(--accent-soft)\'" onmouseout="this.style.background=\'transparent\'"><i class="'+(liked?'ri-heart-fill':'ri-heart-line')+'" style="font-size:16px;color:'+(liked?'var(--rose)':'var(--fg-muted)')+';transition:all 0.3s;"></i><span style="font-size:13px;font-weight:600;color:'+(liked?'var(--rose)':'var(--fg-muted)')+'">'+w.likes+'</span></div></div></div></div>';var card=item.querySelector('.card');bindLongPress(card,w);c.appendChild(item)});setTimeout(observeImages,50)}
 setTimeout(observeImages,50);
 var _lpTimer=null;var _lpWork=null;
 function bindLongPress(el,work){var timer=null;var moved=false;el.addEventListener('touchstart',function(e){moved=false;timer=setTimeout(function(){if(!moved){e.preventDefault();openWorkManage(work)}},500)},{passive:false});el.addEventListener('touchmove',function(){moved=true;clearTimeout(timer)},{passive:true});el.addEventListener('touchend',function(){clearTimeout(timer)},{passive:true});el.addEventListener('touchcancel',function(){clearTimeout(timer)},{passive:true});el.addEventListener('contextmenu',function(e){e.preventDefault();openWorkManage(work)})}
@@ -1830,7 +1926,7 @@ function renderCreatePage(){
   const moreCard=createEl('div','style-card');var moreSelected=selectedStyle&&STYLES.indexOf(selectedStyle)>6;moreCard.style.cssText='position:relative;overflow:hidden;cursor:pointer'+(moreSelected?';border:2px solid var(--accent)':'');moreCard.innerHTML='<img src="'+STYLE_IMGS[STYLES[7]]+'" style="width:100%;height:100%;object-fit:cover;position:absolute"/><div class="sc-overlay"></div><div style="position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,'+(moreSelected?'0.5':'0.4')+');display:flex;align-items:center;justify-content:center;color:white;font-size:18px;font-weight:700">+8</div><div class="sc-label">更多</div>';moreCard.onclick=()=>openAllStyles();sg.appendChild(moreCard);
   // 精度
   var qs=$('qualityScroll');qs.innerHTML='';
-  QUALITIES.forEach(function(q,i){var sel=i===selectedQuality;var card=createEl('div','');card.style.cssText='height:38px;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;border:2px solid '+(sel?'var(--accent)':'var(--border)')+';background:'+(sel?'var(--accent-soft)':'var(--bg-card)')+';transition:all 0.3s;';card.innerHTML='<span style="font-size:14px;font-weight:'+(sel?'700':'500')+';color:'+(sel?'var(--accent)':'var(--fg-primary)')+';">'+q.label+'</span>';card.onclick=function(){selectedQuality=i;renderCreatePage();updateCost()};qs.appendChild(card)});
+  QUALITIES.forEach(function(q,i){var sel=i===selectedQuality;var card=createEl('div','');card.style.cssText='height:38px;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;border:2px solid '+(sel?'var(--accent)':'var(--border)')+';background:'+(sel?'var(--accent-soft)':'var(--bg-card)')+';transition:all 0.3s;';card.innerHTML='<span style="font-size:14px;font-weight:500;color:'+(sel?'var(--accent)':'var(--fg-primary)')+';">'+q.label+'</span>';card.onclick=function(){selectedQuality=i;renderCreatePage();updateCost()};qs.appendChild(card)});
   // 比例
   const rs=$('ratioScroll');rs.innerHTML='';
   RATIOS.forEach(function(r,i){var card=createEl('div','ratio-card'+(i===selectedRatio?' active':''));var sw,sh;if(r.label==='1:1'){sw=28;sh=28}else if(r.label==='3:4'){sw=24;sh=32}else if(r.label==='4:3'||r.label==='16:9'){sw=36;sh=20}else{sw=20;sh=36}card.innerHTML='<div class="ratio-shape" style="width:'+sw+'px;height:'+sh+'px"></div><div class="ratio-name">'+r.label+'</div>';card.onclick=function(){selectedRatio=i;renderCreatePage()};rs.appendChild(card)})
@@ -1982,7 +2078,7 @@ function renderPlazaWaterfall(){renderWaterfall('plazaWaterfall',WORKS)}
 // ============ 画廊 ============
 var lastGalleryTabIdx=0;
 function switchGalleryTab(el,tab){var idx=parseInt(el.dataset.idx);el.parentElement.querySelectorAll('.gallery-tab').forEach(t=>{t.style.fontWeight='500';t.style.color='var(--fg-muted)'});el.style.fontWeight='700';el.style.color='var(--accent)';var indicator=$('galleryTabIndicator');if(indicator){indicator.style.left=el.offsetLeft+el.offsetWidth/2-10+'px'}var c=$('galleryContent');c.innerHTML='<div style="display:flex;justify-content:center;padding:20px 0"><div style="width:28px;height:28px;border:2.5px solid var(--accent-soft);border-top-color:var(--accent);border-radius:50%;animation:spin 0.7s linear infinite"></div></div>';var slideDir=idx>lastGalleryTabIdx?'wf-slide-left':'wf-slide-right';lastGalleryTabIdx=idx;setTimeout(function(){c.innerHTML='<div class="waterfall" id="galleryWaterfall"></div><div id="galleryLoadMore"></div>';var myWorks=WORKS.filter(function(w){return w.userId===CURRENT_USER_ID});if(tab==='all'){renderWaterfall('galleryWaterfall',myWorks)}else if(tab==='published'){renderWaterfall('galleryWaterfall',myWorks.filter(function(w){return w.published}),true)}else if(tab==='draft'){renderWaterfall('galleryWaterfall',myWorks.filter(function(w){return !w.published}))}else{renderWaterfall('galleryWaterfall',WORKS.filter(function(w){return favoritedWorks[w.id]}))}addLoadMoreBtn('galleryLoadMore');c.classList.remove('wf-slide-left','wf-slide-right');void c.offsetWidth;c.classList.add(slideDir);setTimeout(function(){c.classList.remove('wf-slide-left','wf-slide-right')},450)},300)}
-function initGalleryTabIndicator(){var active=document.querySelector('.gallery-tab.active');if(active&&$('galleryTabIndicator')){$('galleryTabIndicator').style.left=active.offsetLeft+active.offsetWidth/2-10+'px'}}
+function initGalleryTabIndicator(){var active=document.querySelector('.gallery-tab.active');var ind=$('galleryTabIndicator');if(active&&ind){ind.style.transition='none';ind.style.left=active.offsetLeft+active.offsetWidth/2-10+'px';ind.style.opacity='1';ind.offsetHeight;ind.style.transition='all 0.3s cubic-bezier(0.16,1,0.3,1)'}}
 let galleryManageMode=false;let gallerySelectedItems={};
 function toggleGalleryManage(){galleryManageMode=!galleryManageMode;gallerySelectedItems={};const btn=$('galleryManageBtn');const bar=$('galleryManageBar');if(galleryManageMode){btn.innerHTML='<i class="ri-check-line" style="font-size:14px;"></i>完成';btn.classList.remove('btn-ghost');btn.classList.add('btn-soft');addManageOverlays();updateGallerySelectedCount();requestAnimationFrame(function(){bar.style.maxHeight='60px';bar.style.padding='8px 16px';bar.style.opacity='1';bar.style.pointerEvents='auto';})}else{btn.innerHTML='<i class="ri-list-unordered" style="font-size:16px;"></i>管理';btn.classList.remove('btn-soft');btn.classList.add('btn-ghost');bar.style.maxHeight='0';bar.style.padding='0';bar.style.opacity='0';bar.style.pointerEvents='none';removeManageOverlays()}}
 function addManageOverlays(){var items=document.querySelectorAll('#galleryWaterfall .wf-item');items.forEach(function(item,idx){var overlay=document.createElement('div');overlay.className='manage-overlay';overlay.setAttribute('data-idx',idx);overlay.style.cssText='position:absolute;top:8px;left:8px;width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,0.9);border:2px solid var(--border-strong);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10;transition:all 0.2s;transform:scale(0);opacity:0';overlay.innerHTML='<i class="ri-check-line" style="font-size:14px;color:var(--fg-muted);opacity:0;"></i>';overlay.onclick=function(e){e.stopPropagation();toggleGalleryItemSelect(this,idx)};var card=item.querySelector('.card');card.style.position='relative';card.appendChild(overlay);var img=card.querySelector('img');if(img){var origClick=img.getAttribute('onclick');img.setAttribute('onclick','');img.style.cursor='pointer';img.onclick=function(e){e.stopPropagation();toggleGalleryItemSelect(overlay,idx)}}setTimeout(function(){overlay.style.transform='scale(1)';overlay.style.opacity='1'},idx*40)})}
@@ -2253,41 +2349,64 @@ var ADMIN_BANNERS=[
   {id:3,title:'会员特惠',status:'上架中',img:'https://picsum.photos/seed/b3/700/300',link:'会员中心',sort:3,startDate:'2026-06-10',endDate:'2026-06-30'},
   {id:4,title:'社区精选',status:'已下架',img:'https://picsum.photos/seed/b4/700/300',link:'广场',sort:4,startDate:'2026-05-01',endDate:'2026-05-31'}
 ];
+function toggleBannerStatus(id){var b=ADMIN_BANNERS.find(function(x){return x.id===id});if(!b)return;b.status=b.status==='上架中'?'已下架':'上架中';renderAdminBanner();showToast(b.status==='上架中'?'已上架':'已下架')}
 function renderAdminBanner(){
   var c=$('adminBannerContent');if(!c)return;
-  var html='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;"><span style="font-size:14px;color:var(--fg-muted);">共 '+ADMIN_BANNERS.length+' 个Banner</span><button class="btn btn-primary btn-sm" onclick="showToast(\'新增Banner\')"><i class="ri-add-line" style="font-size:14px;margin-right:2px;"></i>新增</button></div>';
+  var html='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;"><span style="font-size:14px;color:var(--fg-muted);">共 '+ADMIN_BANNERS.length+' 个Banner</span><button class="btn btn-primary btn-sm" onclick="navigateTo(\'adminBannerEdit\',0)"><i class="ri-add-line" style="font-size:14px;margin-right:2px;"></i>新增</button></div>';
   ADMIN_BANNERS.forEach(function(b){
     var statusColor=b.status==='上架中'?'var(--mint)':'var(--fg-muted)';
     var statusBg=b.status==='上架中'?'var(--mint-soft)':'var(--bg-soft)';
-    html+='<div class="card" style="margin-bottom:12px;overflow:hidden;"><img src="'+b.img+'" style="width:100%;height:100px;object-fit:cover;display:block;"/><div style="padding:12px 14px;"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;"><div style="font-size:15px;font-weight:700;color:var(--fg-primary);">'+b.title+'</div><span class="tag" style="background:'+statusBg+';color:'+statusColor+';font-size:11px;">'+b.status+'</span></div><div style="display:flex;flex-wrap:wrap;gap:12px;font-size:12px;color:var(--fg-muted);margin-bottom:10px;"><span><i class="ri-links-line" style="margin-right:2px;"></i>'+b.link+'</span><span><i class="ri-sort-asc" style="margin-right:2px;"></i>排序 '+b.sort+'</span><span><i class="ri-calendar-line" style="margin-right:2px;"></i>'+b.startDate+' ~ '+b.endDate+'</span></div><div style="display:flex;gap:8px;"><button class="btn btn-soft btn-sm" style="flex:1;" onclick="showToast(\'编辑Banner\')"><i class="ri-edit-line" style="font-size:14px;margin-right:2px;"></i>编辑</button><button class="btn btn-sm" style="flex:1;background:'+(b.status==='上架中'?'var(--bg-soft)':'var(--accent-soft)')+';color:'+(b.status==='上架中'?'var(--fg-secondary)':'var(--accent)')+';border:none;" onclick="showToast(\''+(b.status==='上架中'?'已下架':'已上架')+'\')">'+(b.status==='上架中'?'下架':'上架')+'</button><button class="btn btn-sm" style="background:var(--rose-soft);color:var(--rose);border:none;" onclick="showToast(\'已删除\')"><i class="ri-delete-bin-line" style="font-size:14px;"></i></button></div></div></div>';
+    html+='<div class="card" style="margin-bottom:12px;overflow:hidden;"><img src="'+b.img+'" style="width:100%;height:100px;object-fit:cover;display:block;"/><div style="padding:12px 14px;"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;"><div style="font-size:15px;font-weight:700;color:var(--fg-primary);">'+b.title+'</div><span class="tag" style="background:'+statusBg+';color:'+statusColor+';font-size:11px;">'+b.status+'</span></div><div style="display:flex;flex-wrap:wrap;gap:12px;font-size:12px;color:var(--fg-muted);margin-bottom:10px;"><span><i class="ri-links-line" style="margin-right:2px;"></i>'+b.link+'</span><span><i class="ri-sort-asc" style="margin-right:2px;"></i>排序 '+b.sort+'</span><span><i class="ri-calendar-line" style="margin-right:2px;"></i>'+b.startDate+' ~ '+b.endDate+'</span></div><div style="display:flex;gap:8px;"><button class="btn btn-soft btn-sm" style="flex:1;" onclick="navigateTo(\'adminBannerEdit\','+b.id+')"><i class="ri-edit-line" style="font-size:14px;margin-right:2px;"></i>编辑</button><button class="btn btn-sm" style="flex:1;background:'+(b.status==='上架中'?'var(--bg-soft)':'var(--accent-soft)')+';color:'+(b.status==='上架中'?'var(--fg-secondary)':'var(--accent)')+';border:none;" onclick="toggleBannerStatus('+b.id+')">'+(b.status==='上架中'?'下架':'上架')+'</button><button class="btn btn-sm" style="background:var(--rose-soft);color:var(--rose);border:none;" onclick="showConfirmDelete(\'确定删除此Banner？\',function(){ADMIN_BANNERS=ADMIN_BANNERS.filter(function(x){return x.id!=='+b.id+'});renderAdminBanner();showToast(\'已删除\')})"><i class="ri-delete-bin-line" style="font-size:14px;"></i></button></div></div></div>';
   });
   c.innerHTML=html;
 }
 function renderAdminModel(){
   var c=$('adminModelContent');if(!c)return;
-  var html='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;"><span style="font-size:14px;color:var(--fg-muted);">共 '+MODELS.length+' 个模型</span><button class="btn btn-primary btn-sm" onclick="showToast(\'新增模型\')"><i class="ri-add-line" style="font-size:14px;margin-right:2px;"></i>新增</button></div>';
+  var html='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;"><span style="font-size:14px;color:var(--fg-muted);">共 '+MODELS.length+' 个模型</span><button class="btn btn-primary btn-sm" onclick="navigateTo(\'adminModelEdit\',\'new\')"><i class="ri-add-line" style="font-size:14px;margin-right:2px;"></i>新增</button></div>';
   MODELS.forEach(function(m){
     var badgeHtml=m.badge?'<span class="tag" style="font-size:10px;padding:2px 6px;background:color-mix(in srgb,'+m.badgeColor+' 12%,transparent);color:'+m.badgeColor+';">'+m.badge+'</span>':'';
-    html+='<div class="card" style="padding:14px;margin-bottom:10px;display:flex;gap:12px;align-items:center;"><img src="'+m.img+'" style="width:56px;height:56px;border-radius:12px;object-fit:cover;flex-shrink:0;"/><div style="flex:1;min-width:0;"><div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;"><span style="font-size:15px;font-weight:700;color:var(--fg-primary);">'+m.name+'</span>'+badgeHtml+'</div><div style="font-size:12px;color:var(--fg-muted);">'+m.desc+'</div><div style="display:flex;gap:4px;margin-top:4px;">'+m.tags.map(function(t){return'<span class="tag tag-accent" style="font-size:10px;padding:2px 6px;">'+t+'</span>'}).join('')+'</div></div><div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0;"><span style="font-size:16px;font-weight:700;color:var(--accent);">'+m.cost+'</span><span style="font-size:10px;color:var(--fg-muted);">积分</span><div style="display:flex;gap:4px;margin-top:4px;"><button class="btn btn-soft btn-sm" style="padding:4px 8px;" onclick="showToast(\'编辑'+m.name+'\')"><i class="ri-edit-line" style="font-size:14px;"></i></button><div class="switch active" style="width:36px;height:20px;" onclick="this.classList.toggle(\'active\');showToast(this.classList.contains(\'active\')?\'已启用\':\'已禁用\')"></div></div></div></div>';
+    html+='<div class="card" style="padding:14px;margin-bottom:10px;display:flex;gap:12px;align-items:center;"><img src="'+m.img+'" style="width:56px;height:56px;border-radius:12px;object-fit:cover;flex-shrink:0;"/><div style="flex:1;min-width:0;"><div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;"><span style="font-size:15px;font-weight:700;color:var(--fg-primary);">'+m.name+'</span>'+badgeHtml+'</div><div style="font-size:12px;color:var(--fg-muted);">'+m.desc+'</div><div style="display:flex;gap:4px;margin-top:4px;">'+m.tags.map(function(t){return'<span class="tag tag-accent" style="font-size:10px;padding:2px 6px;">'+t+'</span>'}).join('')+'</div></div><div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0;"><span style="font-size:16px;font-weight:700;color:var(--accent);">'+m.cost+'</span><span style="font-size:10px;color:var(--fg-muted);">积分</span><div style="display:flex;gap:4px;margin-top:4px;"><button class="btn btn-soft btn-sm" style="padding:4px 8px;" onclick="navigateTo(\'adminModelEdit\',\''+m.id+'\')"><i class="ri-edit-line" style="font-size:14px;"></i></button><div class="switch active" style="width:36px;height:20px;" onclick="this.classList.toggle(\'active\');showToast(this.classList.contains(\'active\')?\'已启用\':\'已禁用\')"></div></div></div></div>';
   });
   c.innerHTML=html;
 }
 function renderAdminStyle(){
   var c=$('adminStyleContent');if(!c)return;
-  var html='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;"><span style="font-size:14px;color:var(--fg-muted);">共 '+STYLES.length+' 种风格</span><button class="btn btn-primary btn-sm" onclick="showToast(\'新增风格\')"><i class="ri-add-line" style="font-size:14px;margin-right:2px;"></i>新增</button></div>';
+  var html='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;"><span style="font-size:14px;color:var(--fg-muted);">共 '+STYLES.length+' 种风格</span><button class="btn btn-primary btn-sm" onclick="navigateTo(\'adminStyleEdit\',\'new\')"><i class="ri-add-line" style="font-size:14px;margin-right:2px;"></i>新增</button></div>';
   html+='<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">';
   STYLES.forEach(function(s,i){
     if(s==='更多')return;
-    html+='<div class="card" style="overflow:hidden;position:relative;"><div style="position:relative;"><img src="'+STYLE_IMGS[s]+'" style="width:100%;aspect-ratio:1;object-fit:cover;display:block;"/><div style="position:absolute;top:6px;right:6px;"><div class="switch active" style="width:32px;height:18px;transform:scale(0.85);" onclick="event.stopPropagation();this.classList.toggle(\'active\');showToast(this.classList.contains(\'active\')?\'已启用\':\'已禁用\')"></div></div></div><div style="padding:8px 10px;display:flex;align-items:center;justify-content:space-between;"><span style="font-size:13px;font-weight:600;color:var(--fg-primary);">'+s+'</span><i class="ri-edit-line" style="font-size:14px;color:var(--fg-muted);cursor:pointer;" onclick="showToast(\'编辑'+s+'\')"></i></div></div>';
+    html+='<div class="card" style="overflow:hidden;position:relative;"><div style="position:relative;"><img src="'+STYLE_IMGS[s]+'" style="width:100%;aspect-ratio:1;object-fit:cover;display:block;"/><div style="position:absolute;top:6px;right:6px;"><div class="switch active" style="width:32px;height:18px;transform:scale(0.85);" onclick="event.stopPropagation();this.classList.toggle(\'active\');showToast(this.classList.contains(\'active\')?\'已启用\':\'已禁用\')"></div></div></div><div style="padding:8px 10px;display:flex;align-items:center;justify-content:space-between;"><span style="font-size:13px;font-weight:600;color:var(--fg-primary);">'+s+'</span><i class="ri-edit-line" style="font-size:14px;color:var(--fg-muted);cursor:pointer;" onclick="navigateTo(\'adminStyleEdit\','+i+')"></i></div></div>';
   });
   html+='</div>';
   c.innerHTML=html;
 }
+function renderAdminStyleEdit(styleIdx){
+  var c=$('adminStyleEditContent');if(!c)return;
+  var s=STYLES[styleIdx];var isNew=!s||s==='更多';
+  $('page-adminStyleEdit').dataset.title=isNew?'新增风格':'编辑风格';
+  $('navTitle').textContent=isNew?'新增风格':'编辑风格';
+  var html='<div class="card" style="overflow:hidden;margin-bottom:16px;"><div style="padding:14px;display:flex;gap:14px;align-items:center;">';
+  if(!isNew){html+='<img src="'+STYLE_IMGS[s]+'" style="width:72px;height:72px;border-radius:14px;object-fit:cover;flex-shrink:0;"/>';}
+  html+='<div style="flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:20px 0;cursor:pointer;border:1.5px dashed var(--border);border-radius:12px;color:var(--fg-muted);font-size:13px;" onclick="showToast(\'选择封面\')"><i class="ri-image-add-line" style="font-size:20px;"></i>'+(isNew?'上传封面':'更换封面')+'</div></div></div>';
+  html+='<div class="section-title"><span>基本信息</span></div><div class="card" style="overflow:hidden;margin-bottom:16px;"><div style="padding:14px;display:flex;flex-direction:column;gap:14px;">';
+  html+='<div><div style="font-size:13px;font-weight:600;color:var(--fg-secondary);margin-bottom:6px;">风格名称</div><input class="input" value="'+(isNew?'':s)+'" placeholder="请输入风格名称"/></div>';
+  html+='<div><div style="font-size:13px;font-weight:600;color:var(--fg-secondary);margin-bottom:6px;">风格描述</div><input class="input" value="'+(isNew?'':'适合'+s+'风格的画面')+'" placeholder="请输入风格描述"/></div>';
+  html+='<div><div style="font-size:13px;font-weight:600;color:var(--fg-secondary);margin-bottom:6px;">排序权重</div><input class="input" type="number" value="'+(isNew?'':styleIdx+1)+'" placeholder="数字越小越靠前"/></div>';
+  html+='<div><div style="font-size:13px;font-weight:600;color:var(--fg-secondary);margin-bottom:6px;">默认提示词后缀</div><textarea class="input" rows="3" placeholder="使用此风格时自动附加的提示词">'+(isNew?'':s+' style, high quality, detailed')+'</textarea></div>';
+  html+='</div></div>';
+  html+='<div class="section-title"><span>设置</span></div><div class="card" style="overflow:hidden;margin-bottom:16px;">';
+  html+='<div class="list-row"><div style="flex:1;"><div class="lr-text">启用状态</div></div><div class="switch active" style="width:44px;height:26px;" onclick="this.classList.toggle(\'active\');showToast(this.classList.contains(\'active\')?\'已启用\':\'已禁用\')"></div></div>';
+  html+='</div>';
+  html+='<button class="btn btn-primary" style="width:100%;margin-top:8px;" onclick="navigateBack();showToast(\'已保存\')"><i class="ri-check-line" style="font-size:16px;margin-right:4px;"></i>保存</button>';
+  if(!isNew){html+='<button class="btn" style="width:100%;margin-top:8px;background:var(--rose-soft);color:var(--rose);border:none;" onclick="showConfirmDelete(\'确定删除此风格？\',function(){navigateBack();showToast(\'已删除\')})">删除风格</button>';}
+  c.innerHTML=html;
+}
 function renderAdminGameplay(){
   var c=$('adminGameplayContent');if(!c)return;
-  var html='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;"><span style="font-size:14px;color:var(--fg-muted);">共 '+GAMEPLAYS.length+' 个玩法</span><button class="btn btn-primary btn-sm" onclick="showToast(\'新增玩法模板\')"><i class="ri-add-line" style="font-size:14px;margin-right:2px;"></i>新增</button></div>';
+  var gpUsage=GAMEPLAYS.map(function(){return Math.floor(Math.random()*500)+100});
+  var html='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;"><span style="font-size:14px;color:var(--fg-muted);">共 '+GAMEPLAYS.length+' 个玩法</span><button class="btn btn-primary btn-sm" onclick="navigateTo(\'adminGameplayEdit\',\'new\')"><i class="ri-add-line" style="font-size:14px;margin-right:2px;"></i>新增</button></div>';
   GAMEPLAYS.forEach(function(g,i){
-    html+='<div class="card" style="padding:14px;margin-bottom:10px;display:flex;gap:12px;align-items:center;"><img src="'+g.img+'" style="width:56px;height:56px;border-radius:14px;object-fit:cover;flex-shrink:0;"/><div style="flex:1;min-width:0;"><div style="font-size:15px;font-weight:700;color:var(--fg-primary);margin-bottom:3px;">'+g.name+'</div><div style="display:flex;gap:8px;font-size:12px;color:var(--fg-muted);"><span>排序 '+(i+1)+'</span><span>使用 '+(Math.floor(Math.random()*500)+100)+' 次</span></div></div><div style="display:flex;gap:6px;flex-shrink:0;"><button class="btn btn-soft btn-sm" style="padding:6px 10px;" onclick="showToast(\'编辑'+g.name+'\')"><i class="ri-edit-line" style="font-size:14px;"></i></button><div class="switch active" style="width:36px;height:20px;" onclick="this.classList.toggle(\'active\');showToast(this.classList.contains(\'active\')?\'已启用\':\'已禁用\')"></div></div></div>';
+    html+='<div class="card" style="padding:14px;margin-bottom:10px;display:flex;gap:12px;align-items:center;"><img src="'+g.img+'" style="width:56px;height:56px;border-radius:14px;object-fit:cover;flex-shrink:0;"/><div style="flex:1;min-width:0;"><div style="font-size:15px;font-weight:700;color:var(--fg-primary);margin-bottom:3px;">'+g.name+'</div><div style="display:flex;gap:8px;font-size:12px;color:var(--fg-muted);"><span>排序 '+(i+1)+'</span><span>使用 '+gpUsage[i]+' 次</span></div></div><div style="display:flex;gap:6px;flex-shrink:0;"><button class="btn btn-soft btn-sm" style="padding:6px 10px;" onclick="navigateTo(\'adminGameplayEdit\','+i+')"><i class="ri-edit-line" style="font-size:14px;"></i></button><div class="switch active" style="width:36px;height:20px;" onclick="this.classList.toggle(\'active\');showToast(this.classList.contains(\'active\')?\'已启用\':\'已禁用\')"></div></div></div>';
   });
   c.innerHTML=html;
 }
@@ -2301,19 +2420,437 @@ var ADMIN_REPORTS=[
   {id:7,workTitle:'违规内容',reporter:'风之绘师',reason:'违法违规',time:'1天前',status:'已驳回',img:'https://picsum.photos/seed/rp7/100/100'},
   {id:8,workTitle:'盗用作品',reporter:'光影魔术',reason:'侵权盗版',time:'2天前',status:'已处理',img:'https://picsum.photos/seed/rp8/100/100'}
 ];
+var _adminReportsFilter='all';
 function renderAdminReports(){
   var c=$('adminReportsContent');if(!c)return;
   var pending=ADMIN_REPORTS.filter(function(r){return r.status==='待处理'}).length;
-  var html='<div style="display:flex;gap:8px;margin-bottom:16px;"><div class="card" style="flex:1;padding:12px;text-align:center;"><div style="font-size:20px;font-weight:700;color:var(--rose);">'+pending+'</div><div style="font-size:11px;color:var(--fg-muted);">待处理</div></div><div class="card" style="flex:1;padding:12px;text-align:center;"><div style="font-size:20px;font-weight:700;color:var(--mint);">'+ADMIN_REPORTS.filter(function(r){return r.status==='已处理'}).length+'</div><div style="font-size:11px;color:var(--fg-muted);">已处理</div></div><div class="card" style="flex:1;padding:12px;text-align:center;"><div style="font-size:20px;font-weight:700;color:var(--fg-muted);">'+ADMIN_REPORTS.filter(function(r){return r.status==='已驳回'}).length+'</div><div style="font-size:11px;color:var(--fg-muted);">已驳回</div></div></div>';
-  ADMIN_REPORTS.forEach(function(r){
+  var processed=ADMIN_REPORTS.filter(function(r){return r.status==='已处理'}).length;
+  var rejected=ADMIN_REPORTS.filter(function(r){return r.status==='已驳回'}).length;
+  var html='<div style="display:flex;gap:8px;margin-bottom:16px;"><div class="card" style="flex:1;padding:12px;text-align:center;"><div style="font-size:20px;font-weight:700;color:var(--rose);">'+pending+'</div><div style="font-size:11px;color:var(--fg-muted);">待处理</div></div><div class="card" style="flex:1;padding:12px;text-align:center;"><div style="font-size:20px;font-weight:700;color:var(--mint);">'+processed+'</div><div style="font-size:11px;color:var(--fg-muted);">已处理</div></div><div class="card" style="flex:1;padding:12px;text-align:center;"><div style="font-size:20px;font-weight:700;color:var(--fg-muted);">'+rejected+'</div><div style="font-size:11px;color:var(--fg-muted);">已驳回</div></div></div>';
+  html+='<div style="display:flex;gap:8px;margin-bottom:16px;">';
+  ['all','待处理','已处理','已驳回'].forEach(function(f){
+    var labels={all:'全部','待处理':'待处理','已处理':'已处理','已驳回':'已驳回'};var active=_adminReportsFilter===f;
+    html+='<button class="btn btn-sm" style="flex:1;background:'+(active?'var(--accent)':'var(--bg-soft)')+';color:'+(active?'white':'var(--fg-secondary)')+';border:none;" onclick="_adminReportsFilter=\''+f+'\';renderAdminReports()">'+labels[f]+'</button>';
+  });
+  html+='</div>';
+  var list=_adminReportsFilter==='all'?ADMIN_REPORTS:ADMIN_REPORTS.filter(function(r){return r.status===_adminReportsFilter});
+  list.forEach(function(r){
     var statusColor=r.status==='待处理'?'var(--rose)':r.status==='已处理'?'var(--mint)':'var(--fg-muted)';
     var statusBg=r.status==='待处理'?'var(--rose-soft)':r.status==='已处理'?'var(--mint-soft)':'var(--bg-soft)';
-    html+='<div class="card" style="padding:14px;margin-bottom:10px;"><div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:10px;"><img src="'+r.img+'" style="width:48px;height:48px;border-radius:10px;object-fit:cover;flex-shrink:0;" onclick="previewImage(\''+r.img+'\')"/><div style="flex:1;min-width:0;"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;"><span style="font-size:14px;font-weight:700;color:var(--fg-primary);">'+r.workTitle+'</span><span class="tag" style="background:'+statusBg+';color:'+statusColor+';font-size:11px;">'+r.status+'</span></div><div style="font-size:12px;color:var(--fg-muted);line-height:1.6;"><div><i class="ri-user-line" style="margin-right:3px;"></i>举报人: '+r.reporter+'</div><div><i class="ri-error-warning-line" style="margin-right:3px;"></i>原因: '+r.reason+'</div><div><i class="ri-time-line" style="margin-right:3px;"></i>'+r.time+'</div></div></div></div>';
-    if(r.status==='待处理'){
-      html+='<div style="display:flex;gap:8px;"><button class="btn btn-sm" style="flex:1;background:var(--rose-soft);color:var(--rose);border:none;" onclick="showToast(\'已删除作品并封禁\')"><i class="ri-delete-bin-line" style="font-size:14px;margin-right:2px;"></i>删除+封禁</button><button class="btn btn-sm" style="flex:1;background:var(--accent-soft);color:var(--accent);border:none;" onclick="showToast(\'已删除作品\')"><i class="ri-close-line" style="font-size:14px;margin-right:2px;"></i>仅删除</button><button class="btn btn-sm" style="flex:1;background:var(--bg-soft);color:var(--fg-muted);border:none;" onclick="showToast(\'已驳回举报\')"><i class="ri-check-line" style="font-size:14px;margin-right:2px;"></i>驳回</button></div>';
-    }
-    html+='</div>';
+    html+='<div class="card" style="padding:14px;margin-bottom:10px;cursor:pointer;" onclick="navigateTo(\'adminReportDetail\','+r.id+')"><div style="display:flex;gap:12px;align-items:flex-start;"><img src="'+r.img+'" style="width:48px;height:48px;border-radius:10px;object-fit:cover;flex-shrink:0;"/><div style="flex:1;min-width:0;"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;"><span style="font-size:14px;font-weight:700;color:var(--fg-primary);">'+r.workTitle+'</span><span class="tag" style="background:'+statusBg+';color:'+statusColor+';font-size:11px;">'+r.status+'</span></div><div style="font-size:12px;color:var(--fg-muted);line-height:1.6;"><span><i class="ri-error-warning-line" style="margin-right:2px;"></i>'+r.reason+'</span><span style="margin-left:10px;"><i class="ri-time-line" style="margin-right:2px;"></i>'+r.time+'</span></div></div><i class="ri-arrow-right-s-line" style="font-size:18px;color:var(--fg-muted);flex-shrink:0;margin-top:4px;"></i></div></div>';
   });
+  c.innerHTML=html;
+}
+// ============ 管理后台-数据监控图表辅助 ============
+function adminBarChart(data,maxVal,color){
+  var html='<div style="display:flex;align-items:flex-end;gap:4px;height:120px;padding:8px 0;">';
+  data.forEach(function(d){
+    var h=Math.max(4,Math.round(d.value/maxVal*100));
+    html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="width:100%;border-radius:4px 4px 0 0;background:'+color+';height:'+h+'px;transition:height 0.5s;"></div><div style="font-size:9px;color:var(--fg-muted);white-space:nowrap;">'+d.label+'</div></div>';
+  });
+  html+='</div>';return html;
+}
+function adminStatCard(label,value,change,unit){
+  var isUp=change>0;var isDown=change<0;var isFlat=change===0;
+  var color=isFlat?'var(--fg-muted)':isUp?'var(--mint)':'var(--rose)';
+  var icon=isFlat?'ri-subtract-line':isUp?'ri-arrow-up-line':'ri-arrow-down-line';
+  var prefix=isUp?'+':isFlat?'':'';
+  return '<div class="card" style="flex:1;padding:12px;text-align:center;"><div style="font-size:11px;color:var(--fg-muted);margin-bottom:4px;">'+label+'</div><div style="font-size:20px;font-weight:700;color:var(--fg-primary);">'+value+'</div><div style="font-size:11px;color:'+color+';margin-top:2px;"><i class="'+icon+'" style="font-size:11px;"></i>'+prefix+change+(unit||'')+'</div></div>';
+}
+// ============ 管理后台-用户统计 ============
+function renderAdminStatUsers(){
+  var c=$('adminStatUsersContent');if(!c)return;
+  var days=['6/15','6/16','6/17','6/18','6/19','6/20','6/21'];
+  var newUsers=[98,112,86,145,128,156,128];
+  var maxU=Math.max.apply(null,newUsers);
+  var chartData=days.map(function(d,i){return{label:d,value:newUsers[i]}});
+  var html='<div style="display:flex;gap:8px;margin-bottom:16px;">';
+  html+=adminStatCard('总用户数','12,486',128,'');
+  html+=adminStatCard('今日新增','128',12,'%');
+  html+=adminStatCard('日活跃','3,256',-5,'%');
+  html+='</div>';
+  html+='<div class="section-title"><span>近7日新增用户</span></div>';
+  html+='<div class="card" style="padding:14px;margin-bottom:16px;">'+adminBarChart(chartData,maxU,'var(--accent)')+'</div>';
+  html+='<div class="section-title"><span>用户构成</span></div><div class="card" style="padding:14px;margin-bottom:16px;">';
+  var segments=[{label:'普通用户',value:9842,pct:78.8,color:'var(--accent)'},{label:'VIP会员',value:2156,pct:17.3,color:'var(--mint)'},{label:'已封禁',value:488,pct:3.9,color:'var(--rose)'}];
+  html+='<div style="display:flex;height:12px;border-radius:6px;overflow:hidden;margin-bottom:12px;">';
+  segments.forEach(function(s){html+='<div style="width:'+s.pct+'%;background:'+s.color+';"></div>'});
+  html+='</div>';
+  segments.forEach(function(s){
+    html+='<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;"><div style="display:flex;align-items:center;gap:8px;"><div style="width:10px;height:10px;border-radius:3px;background:'+s.color+';"></div><span style="font-size:13px;color:var(--fg-secondary);">'+s.label+'</span></div><div style="font-size:13px;"><span style="font-weight:700;color:var(--fg-primary);">'+s.value.toLocaleString()+'</span><span style="color:var(--fg-muted);margin-left:6px;">'+s.pct+'%</span></div></div>';
+  });
+  html+='</div>';
+  html+='<div class="section-title"><span>关键指标</span></div><div class="card" style="overflow:hidden;">';
+  html+='<div class="list-row"><div class="lr-text">7日留存率</div><span style="font-size:14px;font-weight:700;color:var(--mint);">42.3%</span></div>';
+  html+='<div class="list-row"><div class="lr-text">30日留存率</div><span style="font-size:14px;font-weight:700;color:var(--fg-primary);">28.6%</span></div>';
+  html+='<div class="list-row"><div class="lr-text">平均使用时长</div><span style="font-size:14px;font-weight:700;color:var(--fg-primary);">18分钟</span></div>';
+  html+='<div class="list-row"><div class="lr-text">人均生成次数</div><span style="font-size:14px;font-weight:700;color:var(--fg-primary);">3.2次/日</span></div></div>';
+  c.innerHTML=html;
+}
+// ============ 管理后台-作品统计 ============
+function renderAdminStatWorks(){
+  var c=$('adminStatWorksContent');if(!c)return;
+  var days=['6/15','6/16','6/17','6/18','6/19','6/20','6/21'];
+  var newWorks=[680,720,590,810,856,920,856];
+  var maxW=Math.max.apply(null,newWorks);
+  var chartData=days.map(function(d,i){return{label:d,value:newWorks[i]}});
+  var html='<div style="display:flex;gap:8px;margin-bottom:16px;">';
+  html+=adminStatCard('总作品数','48,320',856,'');
+  html+=adminStatCard('已发布','36,240',680,'');
+  html+=adminStatCard('未发布','12,080',176,'');
+  html+='</div>';
+  html+='<div class="section-title"><span>近7日新增作品</span></div>';
+  html+='<div class="card" style="padding:14px;margin-bottom:16px;">'+adminBarChart(chartData,maxW,'var(--mint)')+'</div>';
+  html+='<div class="section-title"><span>风格分布</span></div><div class="card" style="padding:14px;margin-bottom:16px;">';
+  var styles=[{name:'二次元',count:12860,pct:26.6},{name:'国风',count:8240,pct:17.1},{name:'写实',count:7680,pct:15.9},{name:'赛博朋克',count:5420,pct:11.2},{name:'水彩',count:4310,pct:8.9},{name:'其他',count:9810,pct:20.3}];
+  styles.forEach(function(s){
+    html+='<div style="margin-bottom:10px;"><div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:13px;color:var(--fg-secondary);">'+s.name+'</span><span style="font-size:12px;color:var(--fg-muted);">'+s.count.toLocaleString()+' ('+s.pct+'%)</span></div><div style="height:8px;background:var(--bg-soft);border-radius:4px;overflow:hidden;"><div style="height:100%;width:'+s.pct+'%;background:var(--accent);border-radius:4px;"></div></div></div>';
+  });
+  html+='</div>';
+  html+='<div class="section-title"><span>互动数据</span></div><div class="card" style="overflow:hidden;">';
+  html+='<div class="list-row"><div class="lr-text">总点赞数</div><span style="font-size:14px;font-weight:700;color:var(--fg-primary);">286,450</span></div>';
+  html+='<div class="list-row"><div class="lr-text">总收藏数</div><span style="font-size:14px;font-weight:700;color:var(--fg-primary);">98,320</span></div>';
+  html+='<div class="list-row"><div class="lr-text">总同款生成</div><span style="font-size:14px;font-weight:700;color:var(--fg-primary);">45,680</span></div>';
+  html+='<div class="list-row"><div class="lr-text">平均点赞/作品</div><span style="font-size:14px;font-weight:700;color:var(--fg-primary);">5.9</span></div></div>';
+  c.innerHTML=html;
+}
+// ============ 管理后台-生成统计 ============
+function renderAdminStatGen(){
+  var c=$('adminStatGenContent');if(!c)return;
+  var days=['6/15','6/16','6/17','6/18','6/19','6/20','6/21'];
+  var gens=[1320,1480,1150,1680,1560,1720,1856];
+  var maxG=Math.max.apply(null,gens);
+  var chartData=days.map(function(d,i){return{label:d,value:gens[i]}});
+  var html='<div style="display:flex;gap:8px;margin-bottom:16px;">';
+  html+=adminStatCard('今日生成','1,856',8,'%');
+  html+=adminStatCard('日均生成','1,420',0,'');
+  html+=adminStatCard('成功率','96.8',0.3,'%');
+  html+='</div>';
+  html+='<div class="section-title"><span>近7日生成量</span></div>';
+  html+='<div class="card" style="padding:14px;margin-bottom:16px;">'+adminBarChart(chartData,maxG,'var(--lavender)')+'</div>';
+  html+='<div class="section-title"><span>模型使用分布</span></div><div class="card" style="padding:14px;margin-bottom:16px;">';
+  var models=[{name:'GPT Image 2',count:620,pct:33.4,color:'var(--accent)'},{name:'Midjourney',count:412,pct:22.2,color:'var(--lavender)'},{name:'Flux Pro',count:318,pct:17.1,color:'var(--rose)'},{name:'Nano Banana 2',count:256,pct:13.8,color:'var(--mint)'},{name:'SDXL',count:148,pct:8.0,color:'var(--peach)'},{name:'DALL-E 3',count:102,pct:5.5,color:'var(--lemon)'}];
+  models.forEach(function(m){
+    html+='<div style="display:flex;align-items:center;gap:10px;padding:8px 0;"><div style="width:10px;height:10px;border-radius:3px;background:'+m.color+';flex-shrink:0;"></div><div style="flex:1;min-width:0;"><div style="display:flex;justify-content:space-between;margin-bottom:3px;"><span style="font-size:13px;color:var(--fg-secondary);">'+m.name+'</span><span style="font-size:12px;color:var(--fg-muted);">'+m.count+'次</span></div><div style="height:6px;background:var(--bg-soft);border-radius:3px;overflow:hidden;"><div style="height:100%;width:'+m.pct+'%;background:'+m.color+';border-radius:3px;max-width:100%;"></div></div></div></div>';
+  });
+  html+='</div>';
+  html+='<div class="section-title"><span>图片精度统计</span></div><div class="card" style="overflow:hidden;margin-bottom:16px;">';
+  var qualities=[{name:'标清（512px）',pct:22},{name:'高清（1024px）',pct:51},{name:'超高清（2048px）',pct:27}];
+  qualities.forEach(function(r){
+    html+='<div class="list-row"><div class="lr-text">'+r.name+'</div><div style="flex:1;max-width:120px;height:6px;background:var(--bg-soft);border-radius:3px;overflow:hidden;margin:0 10px;"><div style="height:100%;width:'+r.pct+'%;background:var(--accent);border-radius:3px;"></div></div><span style="font-size:13px;color:var(--fg-muted);flex-shrink:0;">'+r.pct+'%</span></div>';
+  });
+  html+='</div>';
+  html+='<div class="section-title"><span>性能指标</span></div><div class="card" style="overflow:hidden;">';
+  html+='<div class="list-row"><div class="lr-text">平均生成耗时</div><span style="font-size:14px;font-weight:700;color:var(--fg-primary);">8.2秒</span></div>';
+  html+='<div class="list-row"><div class="lr-text">队列等待时间</div><span style="font-size:14px;font-weight:700;color:var(--fg-primary);">2.1秒</span></div>';
+  html+='<div class="list-row"><div class="lr-text">失败率</div><span style="font-size:14px;font-weight:700;color:var(--mint);">3.2%</span></div>';
+  html+='<div class="list-row"><div class="lr-text">GPU利用率</div><span style="font-size:14px;font-weight:700;color:var(--peach);">78.5%</span></div></div>';
+  c.innerHTML=html;
+}
+// ============ 管理后台-收入统计 ============
+function renderAdminStatRevenue(){
+  var c=$('adminStatRevenueContent');if(!c)return;
+  var days=['6/15','6/16','6/17','6/18','6/19','6/20','6/21'];
+  var revenue=[680,720,560,890,780,920,856];
+  var maxR=Math.max.apply(null,revenue);
+  var chartData=days.map(function(d,i){return{label:d,value:revenue[i]}});
+  var html='<div style="display:flex;gap:8px;margin-bottom:16px;">';
+  html+=adminStatCard('今日收入','¥856',12,'%');
+  html+=adminStatCard('本月累计','¥18,650',28,'%');
+  html+=adminStatCard('ARPU','¥1.49',5,'%');
+  html+='</div>';
+  html+='<div class="section-title"><span>近7日收入</span></div>';
+  html+='<div class="card" style="padding:14px;margin-bottom:16px;">'+adminBarChart(chartData,maxR,'var(--peach)')+'</div>';
+  html+='<div class="section-title"><span>收入构成</span></div><div class="card" style="padding:14px;margin-bottom:16px;">';
+  var sources=[{label:'积分充值',value:12800,pct:76.4,color:'var(--accent)'},{label:'会员订阅',value:3960,pct:23.6,color:'var(--mint)'}];
+  html+='<div style="display:flex;height:12px;border-radius:6px;overflow:hidden;margin-bottom:12px;">';
+  sources.forEach(function(s){html+='<div style="width:'+s.pct+'%;background:'+s.color+';"></div>'});
+  html+='</div>';
+  sources.forEach(function(s){
+    html+='<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;"><div style="display:flex;align-items:center;gap:8px;"><div style="width:10px;height:10px;border-radius:3px;background:'+s.color+';"></div><span style="font-size:13px;color:var(--fg-secondary);">'+s.label+'</span></div><div style="font-size:13px;"><span style="font-weight:700;color:var(--fg-primary);">¥'+s.value.toLocaleString()+'</span><span style="color:var(--fg-muted);margin-left:6px;">'+s.pct+'%</span></div></div>';
+  });
+  html+='</div>';
+  html+='<div class="section-title"><span>充值档位分析</span></div><div class="card" style="overflow:hidden;margin-bottom:16px;">';
+  var tiers=[{name:'¥6 (60积分)',orders:1280,pct:32},{name:'¥18 (180积分)',orders:860,pct:22},{name:'¥30 (300积分)',orders:620,pct:16},{name:'¥68 (680积分)',orders:780,pct:20},{name:'¥128 (1280积分)',orders:380,pct:10}];
+  tiers.forEach(function(t){
+    html+='<div class="list-row"><div style="flex:1;min-width:0;"><div class="lr-text">'+t.name+'</div></div><span style="font-size:12px;color:var(--fg-muted);margin-right:8px;">'+t.orders+'笔</span><div style="width:60px;height:6px;background:var(--bg-soft);border-radius:3px;overflow:hidden;flex-shrink:0;"><div style="height:100%;width:'+t.pct*100/32+'%;background:var(--accent);border-radius:3px;"></div></div></div>';
+  });
+  html+='</div>';
+  html+='<div class="section-title"><span>关键指标</span></div><div class="card" style="overflow:hidden;">';
+  html+='<div class="list-row"><div class="lr-text">付费率</div><span style="font-size:14px;font-weight:700;color:var(--fg-primary);">6.8%</span></div>';
+  html+='<div class="list-row"><div class="lr-text">复购率</div><span style="font-size:14px;font-weight:700;color:var(--mint);">42.3%</span></div>';
+  html+='<div class="list-row"><div class="lr-text">平均客单价</div><span style="font-size:14px;font-weight:700;color:var(--fg-primary);">¥38.6</span></div>';
+  html+='<div class="list-row"><div class="lr-text">退款率</div><span style="font-size:14px;font-weight:700;color:var(--mint);">0.8%</span></div></div>';
+  c.innerHTML=html;
+}
+// ============ 管理后台-用户列表 ============
+var ADMIN_USERS=[
+  {id:101,name:'小画家001',avatar:'画',color:'var(--accent)',regTime:'2026-03-15',works:23,status:'正常',vip:true},
+  {id:102,name:'AI绘图迷',avatar:'绘',color:'var(--mint)',regTime:'2026-04-02',works:56,status:'正常',vip:false},
+  {id:103,name:'创意无限',avatar:'创',color:'var(--peach)',regTime:'2026-01-20',works:12,status:'正常',vip:true},
+  {id:104,name:'像素大师',avatar:'像',color:'var(--lavender)',regTime:'2026-05-10',works:38,status:'已封禁',vip:false},
+  {id:105,name:'梦境画师',avatar:'境',color:'var(--lemon)',regTime:'2026-02-28',works:67,status:'正常',vip:true},
+  {id:106,name:'色彩魔法',avatar:'彩',color:'var(--rose)',regTime:'2026-06-01',works:5,status:'正常',vip:false},
+  {id:107,name:'光影行者',avatar:'影',color:'var(--accent)',regTime:'2026-03-22',works:41,status:'正常',vip:false},
+  {id:108,name:'灵感源泉',avatar:'灵',color:'var(--mint)',regTime:'2026-04-18',works:29,status:'已封禁',vip:false}
+];
+function renderAdminUsers(){
+  var c=$('adminUsersContent');if(!c)return;
+  var total=ADMIN_USERS.length;var banned=ADMIN_USERS.filter(function(u){return u.status==='已封禁'}).length;var vipCount=ADMIN_USERS.filter(function(u){return u.vip}).length;
+  var html='<div style="display:flex;gap:8px;margin-bottom:16px;"><div class="card" style="flex:1;padding:12px;text-align:center;"><div style="font-size:20px;font-weight:700;color:var(--fg-primary);">'+total+'</div><div style="font-size:11px;color:var(--fg-muted);">总用户</div></div><div class="card" style="flex:1;padding:12px;text-align:center;"><div style="font-size:20px;font-weight:700;color:var(--fg-primary);">'+vipCount+'</div><div style="font-size:11px;color:var(--fg-muted);">会员</div></div><div class="card" style="flex:1;padding:12px;text-align:center;"><div style="font-size:20px;font-weight:700;color:var(--fg-primary);">'+banned+'</div><div style="font-size:11px;color:var(--fg-muted);">已封禁</div></div></div>';
+  html+='<div class="card" style="display:flex;align-items:center;padding:0 14px;margin-bottom:16px;gap:8px;"><i class="ri-search-line" style="font-size:18px;color:var(--fg-muted);flex-shrink:0;"></i><input class="input" placeholder="搜索用户名或ID" style="border:none;padding:12px 0;"/></div>';
+  ADMIN_USERS.forEach(function(u){
+    var statusColor=u.status==='正常'?'var(--mint)':'var(--rose)';var statusBg=u.status==='正常'?'var(--mint-soft)':'var(--rose-soft)';
+    html+='<div class="card" style="padding:14px;margin-bottom:10px;display:flex;gap:12px;align-items:center;cursor:pointer;" onclick="navigateTo(\'adminUserDetail\','+u.id+')"><div class="avatar" style="width:44px;height:44px;font-size:18px;background:'+u.color+';flex-shrink:0;">'+u.avatar+'</div><div style="flex:1;min-width:0;"><div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;"><span style="font-size:15px;font-weight:700;color:var(--fg-primary);">'+u.name+'</span>'+(u.vip?'<span class="tag" style="font-size:10px;padding:2px 6px;background:var(--accent-soft);color:var(--accent);">VIP</span>':'')+'</div><div style="font-size:12px;color:var(--fg-muted);"><span>作品 '+u.works+'</span><span style="margin-left:10px;">注册 '+u.regTime+'</span></div></div><div style="display:flex;align-items:center;gap:6px;flex-shrink:0;"><span class="tag" style="background:'+statusBg+';color:'+statusColor+';font-size:11px;">'+u.status+'</span><i class="ri-arrow-right-s-line" style="font-size:18px;color:var(--fg-muted);"></i></div></div>';
+  });
+  c.innerHTML=html;
+}
+// ============ 管理后台-用户详情 ============
+function renderAdminUserDetail(userId){
+  var c=$('adminUserDetailContent');if(!c)return;
+  var u=ADMIN_USERS.find(function(x){return x.id===userId});
+  if(!u){c.innerHTML='<div class="empty-state"><div class="empty-state-text">用户不存在</div></div>';return}
+  var isBanned=u.status==='已封禁';
+  var html='<div class="card" style="padding:20px;margin-bottom:16px;text-align:center;"><div class="avatar" style="width:64px;height:64px;font-size:28px;background:'+u.color+';margin:0 auto 12px;">'+u.avatar+'</div><div style="font-size:18px;font-weight:700;color:var(--fg-primary);margin-bottom:4px;">'+u.name+'</div><div style="display:flex;justify-content:center;gap:6px;margin-bottom:8px;">'+(u.vip?'<span class="tag" style="background:var(--accent-soft);color:var(--accent);">VIP会员</span>':'')+'<span class="tag" style="background:'+(isBanned?'var(--rose-soft)':'var(--mint-soft)')+';color:'+(isBanned?'var(--rose)':'var(--mint)')+';font-size:11px;">'+u.status+'</span></div><div style="font-size:13px;color:var(--fg-muted);">ID: '+u.id+'</div></div>';
+  html+='<div class="section-title"><span>用户信息</span></div><div class="card" style="overflow:hidden;margin-bottom:16px;">';
+  html+='<div class="list-row"><div class="lr-text">注册时间</div><span style="font-size:13px;color:var(--fg-muted);">'+u.regTime+'</span></div>';
+  html+='<div class="list-row"><div class="lr-text">作品数量</div><span style="font-size:13px;color:var(--fg-muted);">'+u.works+'</span></div>';
+  html+='<div class="list-row"><div class="lr-text">会员状态</div><span style="font-size:13px;color:var(--fg-muted);">'+(u.vip?'已开通':'未开通')+'</span></div>';
+  html+='<div class="list-row"><div class="lr-text">账号状态</div><span style="font-size:13px;color:'+(isBanned?'var(--rose)':'var(--mint)')+';">'+u.status+'</span></div></div>';
+  html+='<div class="section-title"><span>操作</span></div><div class="card" style="overflow:hidden;margin-bottom:16px;">';
+  html+='<div class="list-row" onclick="showToast(\'已重置密码\')"><div class="lr-icon" style="color:var(--accent);"><i class="ri-lock-unlock-line" style="font-size:22px;"></i></div><div class="lr-text">重置密码</div></div>';
+  html+='<div class="list-row" onclick="showConfirmDelete(\'确定清空该用户的所有作品？此操作不可恢复。\',function(){showToast(\'已清空作品\')})"><div class="lr-icon" style="color:var(--peach);"><i class="ri-delete-bin-line" style="font-size:22px;"></i></div><div class="lr-text">清空作品</div></div>';
+  html+='<div class="list-row" onclick="navigateTo(\'adminUserWorks\','+u.id+')"><div class="lr-icon" style="color:var(--mint);"><i class="ri-gallery-line" style="font-size:22px;"></i></div><div class="lr-text">查看作品</div><i class="ri-arrow-right-s-line lr-arrow" style="font-size:18px;color:var(--fg-muted);"></i></div></div>';
+  if(isBanned){html+='<button class="btn btn-primary" style="width:100%;margin-top:8px;" onclick="showToast(\'已解封\')">解除封禁</button>'}else{html+='<button class="btn" style="width:100%;margin-top:8px;background:var(--rose-soft);color:var(--rose);border:none;" onclick="showConfirmDelete(\'确定封禁此用户？封禁后用户将无法登录。\',function(){showToast(\'已封禁\')})">封禁用户</button>'}
+  c.innerHTML=html;
+}
+// ============ 管理后台-用户作品 ============
+function renderAdminUserWorks(userId){
+  var c=$('adminUserWorksContent');if(!c)return;
+  var u=ADMIN_USERS.find(function(x){return x.id===userId});
+  if(!u){c.innerHTML='<div class="empty-state"><div class="empty-state-text">用户不存在</div></div>';return}
+  $('page-adminUserWorks').dataset.title=u.name+'的作品';$('navTitle').textContent=u.name+'的作品';
+  var styles=['二次元','国风','写实','梦幻','赛博朋克','油画','水彩','像素'];
+  var ratios=['3:4','1:1','4:3','9:16'];
+  var prompts=['梦幻森林中的精灵','赛博朋克夜晚城市','水墨山水画卷','可爱猫咪肖像','星空下的少女','未来都市日落','古风仙侠人物','抽象艺术构图'];
+  var count=Math.min(u.works,8);
+  var works=[];
+  for(var i=0;i<count;i++){
+    works.push({id:i+1,img:'https://picsum.photos/seed/uw'+userId+'_'+i+'/300/400',title:prompts[i%prompts.length].substring(0,6),prompt:prompts[i%prompts.length],style:styles[i%styles.length],ratio:ratios[i%ratios.length],likes:Math.floor(Math.random()*500)+10,favorites:Math.floor(Math.random()*200)+5,remakes:Math.floor(Math.random()*80)+1,time:(i+1)+'天前',published:Math.random()>0.3});
+  }
+  var published=works.filter(function(w){return w.published});
+  var html='<div style="display:flex;gap:8px;margin-bottom:16px;"><div class="card" style="flex:1;padding:12px;text-align:center;"><div style="font-size:20px;font-weight:700;color:var(--fg-primary);">'+u.works+'</div><div style="font-size:11px;color:var(--fg-muted);">全部作品</div></div><div class="card" style="flex:1;padding:12px;text-align:center;"><div style="font-size:20px;font-weight:700;color:var(--mint);">'+published.length+'</div><div style="font-size:11px;color:var(--fg-muted);">已发布</div></div><div class="card" style="flex:1;padding:12px;text-align:center;"><div style="font-size:20px;font-weight:700;color:var(--fg-muted);">'+(works.length-published.length)+'</div><div style="font-size:11px;color:var(--fg-muted);">未发布</div></div></div>';
+  works.forEach(function(w){
+    var statusColor=w.published?'var(--mint)':'var(--fg-muted)';var statusBg=w.published?'var(--mint-soft)':'var(--bg-soft)';
+    html+='<div class="card" style="padding:12px;margin-bottom:10px;display:flex;gap:12px;align-items:center;cursor:pointer;" onclick="showToast(\'查看作品详情\')"><img src="'+w.img+'" style="width:56px;height:56px;border-radius:10px;object-fit:cover;flex-shrink:0;"/><div style="flex:1;min-width:0;"><div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;"><span style="font-size:14px;font-weight:700;color:var(--fg-primary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;">'+w.title+'</span><span class="tag" style="background:'+statusBg+';color:'+statusColor+';font-size:10px;flex-shrink:0;">'+(w.published?'已发布':'未发布')+'</span></div><div style="font-size:12px;color:var(--fg-muted);margin-bottom:3px;">'+w.style+' · '+w.ratio+'</div><div style="display:flex;gap:10px;font-size:11px;color:var(--fg-muted);"><span><i class="ri-heart-line" style="font-size:12px;margin-right:1px;"></i>'+w.likes+'</span><span><i class="ri-star-line" style="font-size:12px;margin-right:1px;"></i>'+w.favorites+'</span><span><i class="ri-file-copy-line" style="font-size:12px;margin-right:1px;"></i>'+w.remakes+'</span></div></div></div>';
+  });
+  if(u.works>8){html+='<div style="text-align:center;padding:12px;font-size:13px;color:var(--fg-muted);">仅展示最近 8 件作品，共 '+u.works+' 件</div>';}
+  c.innerHTML=html;
+}
+// ============ 管理后台-积分规则 ============
+var POINTS_RULES=[
+  {icon:'ri-user-add-line',color:'var(--accent)',name:'新用户注册',points:'+100',desc:'注册即送'},
+  {icon:'ri-check-double-line',color:'var(--mint)',name:'每日签到',points:'+10',desc:'连续签到额外奖励'},
+  {icon:'ri-share-line',color:'var(--peach)',name:'分享作品',points:'+3',desc:'每日最多30积分'},
+  {icon:'ri-user-follow-line',color:'var(--lemon)',name:'邀请好友',points:'+50',desc:'好友注册后双方获得'},
+  {icon:'ri-vip-crown-line',color:'var(--accent)',name:'购买会员',points:'+200',desc:'首次开通赠送'}
+];
+var POINTS_CONSUME=[
+  {icon:'ri-magic-line',color:'var(--lavender)',name:'AI生图',points:'-6~20',desc:'按模型计费'}
+];
+var POINTS_MILESTONES=[{days:3,reward:20},{days:7,reward:50},{days:14,reward:100},{days:30,reward:300}];
+function editPointsValue(type,idx){
+  var item=type==='rule'?POINTS_RULES[idx]:type==='consume'?POINTS_CONSUME[idx]:null;
+  if(type==='milestone'){
+    var m=POINTS_MILESTONES[idx];var val=prompt('修改连续签到'+m.days+'天的奖励积分：',m.reward);
+    if(val!==null&&val!==''){m.reward=parseInt(val)||m.reward;renderAdminPoints();showToast('已更新')}
+  }else if(item){
+    var val=prompt('修改「'+item.name+'」的积分值：',item.points);
+    if(val!==null&&val!==''){item.points=val;renderAdminPoints();showToast('已更新')}
+  }
+}
+function renderAdminPoints(){
+  var c=$('adminPointsContent');if(!c)return;
+  var html='<div class="section-title"><span>获取规则</span></div><div class="card" style="overflow:hidden;margin-bottom:16px;">';
+  POINTS_RULES.forEach(function(r,i){
+    html+='<div class="list-row" onclick="editPointsValue(\'rule\','+i+')"><div class="lr-icon" style="color:'+r.color+';"><i class="'+r.icon+'" style="font-size:22px;"></i></div><div style="flex:1;min-width:0;"><div class="lr-text" style="margin-bottom:1px;">'+r.name+'</div><div style="font-size:11px;color:var(--fg-muted);">'+r.desc+'</div></div><span style="font-size:14px;font-weight:700;color:var(--mint);flex-shrink:0;">'+r.points+'</span><i class="ri-edit-line" style="font-size:14px;color:var(--fg-muted);margin-left:8px;flex-shrink:0;"></i></div>';
+  });
+  html+='</div><div class="section-title"><span>消耗规则</span></div><div class="card" style="overflow:hidden;margin-bottom:16px;">';
+  POINTS_CONSUME.forEach(function(r,i){
+    html+='<div class="list-row" onclick="editPointsValue(\'consume\','+i+')"><div class="lr-icon" style="color:'+r.color+';"><i class="'+r.icon+'" style="font-size:22px;"></i></div><div style="flex:1;min-width:0;"><div class="lr-text" style="margin-bottom:1px;">'+r.name+'</div><div style="font-size:11px;color:var(--fg-muted);">'+r.desc+'</div></div><span style="font-size:14px;font-weight:700;color:var(--rose);flex-shrink:0;">'+r.points+'</span><i class="ri-edit-line" style="font-size:14px;color:var(--fg-muted);margin-left:8px;flex-shrink:0;"></i></div>';
+  });
+  html+='</div>';
+  html+='<div class="section-title"><span>里程碑奖励</span></div><div class="card" style="overflow:hidden;margin-bottom:16px;">';
+  POINTS_MILESTONES.forEach(function(m,i){
+    html+='<div class="list-row" onclick="editPointsValue(\'milestone\','+i+')"><div class="lr-icon" style="color:var(--accent);"><i class="ri-trophy-line" style="font-size:22px;"></i></div><div class="lr-text">连续签到'+m.days+'天</div><span style="font-size:14px;font-weight:700;color:var(--mint);flex-shrink:0;">+'+m.reward+'</span><i class="ri-edit-line" style="font-size:14px;color:var(--fg-muted);margin-left:8px;flex-shrink:0;"></i></div>';
+  });
+  html+='</div>';
+  c.innerHTML=html;
+}
+// ============ 管理后台-审核设置 ============
+function renderAdminAudit(){
+  var c=$('adminAuditContent');if(!c)return;
+  var html='<div class="section-title"><span>自动审核</span></div><div class="card" style="overflow:hidden;margin-bottom:16px;">';
+  html+='<div class="list-row"><div class="lr-icon" style="color:var(--accent);"><i class="ri-shield-check-line" style="font-size:22px;"></i></div><div style="flex:1;"><div class="lr-text">AI内容安全检测</div><div style="font-size:11px;color:var(--fg-muted);">自动过滤违规内容</div></div><div class="switch active" style="width:44px;height:26px;" onclick="this.classList.toggle(\'active\');showToast(this.classList.contains(\'active\')?\'已开启\':\'已关闭\')"></div></div>';
+  html+='<div class="list-row"><div class="lr-icon" style="color:var(--mint);"><i class="ri-spam-line" style="font-size:22px;"></i></div><div style="flex:1;"><div class="lr-text">敏感词过滤</div><div style="font-size:11px;color:var(--fg-muted);">过滤提示词中的敏感词汇</div></div><div class="switch active" style="width:44px;height:26px;" onclick="this.classList.toggle(\'active\');showToast(this.classList.contains(\'active\')?\'已开启\':\'已关闭\')"></div></div>';
+  html+='<div class="list-row"><div class="lr-icon" style="color:var(--lavender);"><i class="ri-eye-line" style="font-size:22px;"></i></div><div style="flex:1;"><div class="lr-text">NSFW检测</div><div style="font-size:11px;color:var(--fg-muted);">检测并拦截不良图片</div></div><div class="switch active" style="width:44px;height:26px;" onclick="this.classList.toggle(\'active\');showToast(this.classList.contains(\'active\')?\'已开启\':\'已关闭\')"></div></div></div>';
+  html+='<div class="section-title"><span>人工审核</span></div><div class="card" style="overflow:hidden;margin-bottom:16px;">';
+  html+='<div class="list-row"><div class="lr-icon" style="color:var(--peach);"><i class="ri-user-search-line" style="font-size:22px;"></i></div><div style="flex:1;"><div class="lr-text">新作品审核</div><div style="font-size:11px;color:var(--fg-muted);">发布前需人工审核</div></div><div class="switch" style="width:44px;height:26px;" onclick="this.classList.toggle(\'active\');showToast(this.classList.contains(\'active\')?\'已开启\':\'已关闭\')"></div></div>';
+  html+='<div class="list-row"><div class="lr-icon" style="color:var(--rose);"><i class="ri-user-star-line" style="font-size:22px;"></i></div><div style="flex:1;"><div class="lr-text">新用户审核</div><div style="font-size:11px;color:var(--fg-muted);">首次发布需人工审核</div></div><div class="switch active" style="width:44px;height:26px;" onclick="this.classList.toggle(\'active\');showToast(this.classList.contains(\'active\')?\'已开启\':\'已关闭\')"></div></div></div>';
+  html+='<div class="section-title"><span>审核阈值</span></div><div class="card" style="overflow:hidden;margin-bottom:16px;">';
+  html+='<div class="list-row"><div class="lr-text">安全评分阈值</div><span style="font-size:13px;color:var(--fg-muted);">0.85</span></div>';
+  html+='<div class="list-row"><div class="lr-text">自动通过分数</div><span style="font-size:13px;color:var(--fg-muted);">≥0.95</span></div>';
+  html+='<div class="list-row"><div class="lr-text">自动拒绝分数</div><span style="font-size:13px;color:var(--fg-muted);">≤0.30</span></div></div>';
+  html+='<div class="section-title"><span>通知设置</span></div><div class="card" style="overflow:hidden;">';
+  html+='<div class="list-row"><div class="lr-icon" style="color:var(--accent);"><i class="ri-notification-line" style="font-size:22px;"></i></div><div style="flex:1;"><div class="lr-text">举报通知</div><div style="font-size:11px;color:var(--fg-muted);">收到举报时推送通知</div></div><div class="switch active" style="width:44px;height:26px;" onclick="this.classList.toggle(\'active\');showToast(this.classList.contains(\'active\')?\'已开启\':\'已关闭\')"></div></div>';
+  html+='<div class="list-row"><div class="lr-icon" style="color:var(--mint);"><i class="ri-mail-line" style="font-size:22px;"></i></div><div style="flex:1;"><div class="lr-text">邮件通知</div><div style="font-size:11px;color:var(--fg-muted);">每日汇总发送至管理员邮箱</div></div><div class="switch" style="width:44px;height:26px;" onclick="this.classList.toggle(\'active\');showToast(this.classList.contains(\'active\')?\'已开启\':\'已关闭\')"></div></div></div>';
+  c.innerHTML=html;
+}
+// ============ 管理后台-Banner编辑 ============
+function saveBannerEdit(bannerId){
+  var title=$('bannerEditTitle').value;var link=$('bannerEditLink').value;
+  var sort=parseInt($('bannerEditSort').value)||1;var startDate=$('bannerEditStart').value;var endDate=$('bannerEditEnd').value;
+  if(!title){showToast('请输入标题');return}
+  var b=ADMIN_BANNERS.find(function(x){return x.id===bannerId});
+  if(b){b.title=title;b.link=link;b.sort=sort;b.startDate=startDate;b.endDate=endDate}
+  else{ADMIN_BANNERS.push({id:Date.now(),title:title,status:'已下架',img:'https://picsum.photos/seed/bnew'+Date.now()+'/700/300',link:link,sort:sort,startDate:startDate,endDate:endDate})}
+  navigateBack();showToast('已保存');
+}
+function renderAdminBannerEdit(bannerId){
+  var c=$('adminBannerEditContent');if(!c)return;
+  var b=ADMIN_BANNERS.find(function(x){return x.id===bannerId});
+  var isNew=!b;
+  $('page-adminBannerEdit').dataset.title=isNew?'新增Banner':'编辑Banner';
+  $('navTitle').textContent=isNew?'新增Banner':'编辑Banner';
+  var html='<div class="card" style="overflow:hidden;margin-bottom:16px;">';
+  if(!isNew){html+='<img src="'+b.img+'" style="width:100%;height:120px;object-fit:cover;display:block;"/>';}
+  html+='<div style="padding:14px;"><div style="display:flex;align-items:center;justify-content:center;gap:8px;padding:20px 0;cursor:pointer;border:1.5px dashed var(--border);border-radius:12px;color:var(--fg-muted);font-size:13px;" onclick="showToast(\'选择图片\')"><i class="ri-image-add-line" style="font-size:20px;"></i>'+(isNew?'上传Banner图片':'更换图片')+'</div></div></div>';
+  html+='<div class="section-title"><span>基本信息</span></div><div class="card" style="overflow:hidden;margin-bottom:16px;">';
+  html+='<div style="padding:14px;display:flex;flex-direction:column;gap:14px;">';
+  html+='<div><div style="font-size:13px;font-weight:600;color:var(--fg-secondary);margin-bottom:6px;">标题</div><input class="input" id="bannerEditTitle" value="'+(b?b.title:'')+'" placeholder="请输入Banner标题"/></div>';
+  html+='<div><div style="font-size:13px;font-weight:600;color:var(--fg-secondary);margin-bottom:6px;">跳转链接</div><input class="input" id="bannerEditLink" value="'+(b?b.link:'')+'" placeholder="请输入跳转页面"/></div>';
+  html+='<div><div style="font-size:13px;font-weight:600;color:var(--fg-secondary);margin-bottom:6px;">排序</div><input class="input" id="bannerEditSort" type="number" value="'+(b?b.sort:'')+'" placeholder="数字越小越靠前"/></div>';
+  html+='<div style="display:flex;gap:10px;"><div style="flex:1;"><div style="font-size:13px;font-weight:600;color:var(--fg-secondary);margin-bottom:6px;">开始日期</div><input class="input" id="bannerEditStart" type="date" value="'+(b?b.startDate:'')+'"/></div><div style="flex:1;"><div style="font-size:13px;font-weight:600;color:var(--fg-secondary);margin-bottom:6px;">结束日期</div><input class="input" id="bannerEditEnd" type="date" value="'+(b?b.endDate:'')+'"/></div></div>';
+  html+='</div></div>';
+  html+='<button class="btn btn-primary" style="width:100%;margin-top:8px;" onclick="saveBannerEdit('+bannerId+')"><i class="ri-check-line" style="font-size:16px;margin-right:4px;"></i>保存</button>';
+  c.innerHTML=html;
+}
+// ============ 管理后台-模型编辑 ============
+function renderAdminModelEdit(modelId){
+  var c=$('adminModelEditContent');if(!c)return;
+  var m=MODELS.find(function(x){return x.id===modelId});
+  var isNew=!m;
+  $('page-adminModelEdit').dataset.title=isNew?'新增模型':'编辑模型';
+  $('navTitle').textContent=isNew?'新增模型':'编辑模型';
+  var html='<div class="card" style="overflow:hidden;margin-bottom:16px;"><div style="padding:14px;display:flex;gap:14px;align-items:center;">';
+  if(!isNew){html+='<img src="'+m.img+'" style="width:72px;height:72px;border-radius:14px;object-fit:cover;flex-shrink:0;"/>';}
+  html+='<div style="flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:20px 0;cursor:pointer;border:1.5px dashed var(--border);border-radius:12px;color:var(--fg-muted);font-size:13px;" onclick="showToast(\'选择封面\')"><i class="ri-image-add-line" style="font-size:20px;"></i>'+(isNew?'上传封面':'更换封面')+'</div></div></div>';
+  html+='<div class="section-title"><span>基本信息</span></div><div class="card" style="overflow:hidden;margin-bottom:16px;"><div style="padding:14px;display:flex;flex-direction:column;gap:14px;">';
+  html+='<div><div style="font-size:13px;font-weight:600;color:var(--fg-secondary);margin-bottom:6px;">模型名称</div><input class="input" value="'+(m?m.name:'')+'" placeholder="请输入模型名称"/></div>';
+  html+='<div><div style="font-size:13px;font-weight:600;color:var(--fg-secondary);margin-bottom:6px;">模型描述</div><input class="input" value="'+(m?m.desc:'')+'" placeholder="请输入简要描述"/></div>';
+  html+='<div><div style="font-size:13px;font-weight:600;color:var(--fg-secondary);margin-bottom:6px;">积分消耗</div><input class="input" type="number" value="'+(m?m.cost:'')+'" placeholder="每次生图消耗积分"/></div>';
+  html+='<div><div style="font-size:13px;font-weight:600;color:var(--fg-secondary);margin-bottom:6px;">标签</div><input class="input" value="'+(m?m.tags.join(','):'')+'" placeholder="逗号分隔，如:写实,高清"/></div>';
+  html+='<div><div style="font-size:13px;font-weight:600;color:var(--fg-secondary);margin-bottom:6px;">角标</div><input class="input" value="'+(m&&m.badge?m.badge:'')+'" placeholder="如:推荐、NEW、性价比（选填）"/></div>';
+  html+='</div></div>';
+  html+='<div class="section-title"><span>高级设置</span></div><div class="card" style="overflow:hidden;margin-bottom:16px;">';
+  html+='<div class="list-row"><div style="flex:1;"><div class="lr-text">启用状态</div></div><div class="switch active" style="width:44px;height:26px;" onclick="this.classList.toggle(\'active\');showToast(this.classList.contains(\'active\')?\'已启用\':\'已禁用\')"></div></div>';
+  html+='<div class="list-row"><div style="flex:1;"><div class="lr-text">支持图生图</div></div><div class="switch active" style="width:44px;height:26px;" onclick="this.classList.toggle(\'active\');showToast(this.classList.contains(\'active\')?\'已开启\':\'已关闭\')"></div></div>';
+  html+='</div>';
+  html+='<button class="btn btn-primary" style="width:100%;margin-top:8px;" onclick="navigateBack();showToast(\'已保存\')"><i class="ri-check-line" style="font-size:16px;margin-right:4px;"></i>保存</button>';
+  if(!isNew){html+='<button class="btn" style="width:100%;margin-top:8px;background:var(--rose-soft);color:var(--rose);border:none;" onclick="showConfirmDelete(\'确定删除此模型？\',function(){navigateBack();showToast(\'已删除\')})">删除模型</button>';}
+  c.innerHTML=html;
+}
+// ============ 管理后台-玩法编辑 ============
+function renderAdminGameplayEdit(gpIdx){
+  var c=$('adminGameplayEditContent');if(!c)return;
+  var g=GAMEPLAYS[gpIdx];var isNew=!g;
+  $('page-adminGameplayEdit').dataset.title=isNew?'新增玩法':'编辑玩法';
+  $('navTitle').textContent=isNew?'新增玩法':'编辑玩法';
+  var html='<div class="card" style="overflow:hidden;margin-bottom:16px;"><div style="padding:14px;display:flex;gap:14px;align-items:center;">';
+  if(!isNew){html+='<img src="'+g.img+'" style="width:72px;height:72px;border-radius:14px;object-fit:cover;flex-shrink:0;"/>';}
+  html+='<div style="flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:20px 0;cursor:pointer;border:1.5px dashed var(--border);border-radius:12px;color:var(--fg-muted);font-size:13px;" onclick="showToast(\'选择封面\')"><i class="ri-image-add-line" style="font-size:20px;"></i>'+(isNew?'上传封面':'更换封面')+'</div></div></div>';
+  html+='<div class="section-title"><span>基本信息</span></div><div class="card" style="overflow:hidden;margin-bottom:16px;"><div style="padding:14px;display:flex;flex-direction:column;gap:14px;">';
+  html+='<div><div style="font-size:13px;font-weight:600;color:var(--fg-secondary);margin-bottom:6px;">玩法名称</div><input class="input" value="'+(g?g.name:'')+'" placeholder="请输入玩法名称"/></div>';
+  html+='<div><div style="font-size:13px;font-weight:600;color:var(--fg-secondary);margin-bottom:6px;">排序权重</div><input class="input" type="number" value="'+(g?gpIdx+1:'')+'" placeholder="数字越小越靠前"/></div>';
+  html+='<div><div style="font-size:13px;font-weight:600;color:var(--fg-secondary);margin-bottom:6px;">默认提示词</div><textarea class="input" rows="3" placeholder="用户选择此玩法后自动填入的提示词">'+(g?'masterpiece, best quality, '+g.name+' style':'')+'</textarea></div>';
+  html+='<div><div style="font-size:13px;font-weight:600;color:var(--fg-secondary);margin-bottom:6px;">推荐模型</div><select class="input">';
+  MODELS.forEach(function(mod){html+='<option value="'+mod.id+'">'+mod.name+'</option>'});
+  html+='</select></div></div></div>';
+  html+='<div class="section-title"><span>设置</span></div><div class="card" style="overflow:hidden;margin-bottom:16px;">';
+  html+='<div class="list-row"><div style="flex:1;"><div class="lr-text">启用状态</div></div><div class="switch active" style="width:44px;height:26px;" onclick="this.classList.toggle(\'active\')"></div></div>';
+  html+='<div class="list-row"><div style="flex:1;"><div class="lr-text">首页推荐</div></div><div class="switch active" style="width:44px;height:26px;" onclick="this.classList.toggle(\'active\')"></div></div></div>';
+  html+='<button class="btn btn-primary" style="width:100%;margin-top:8px;" onclick="navigateBack();showToast(\'已保存\')"><i class="ri-check-line" style="font-size:16px;margin-right:4px;"></i>保存</button>';
+  if(!isNew){html+='<button class="btn" style="width:100%;margin-top:8px;background:var(--rose-soft);color:var(--rose);border:none;" onclick="showConfirmDelete(\'确定删除此玩法？\',function(){navigateBack();showToast(\'已删除\')})">删除玩法</button>';}
+  c.innerHTML=html;
+}
+// ============ 管理后台-作品管理 ============
+var _adminWorksFilter='all';
+function renderAdminWorks(){
+  var c=$('adminWorksContent');if(!c)return;
+  var published=WORKS.filter(function(w){return w.published});
+  var unpublished=WORKS.filter(function(w){return !w.published});
+  var list=_adminWorksFilter==='all'?WORKS:_adminWorksFilter==='published'?published:unpublished;
+  var html='<div style="display:flex;gap:8px;margin-bottom:16px;"><div class="card" style="flex:1;padding:12px;text-align:center;"><div style="font-size:20px;font-weight:700;color:var(--fg-primary);">'+WORKS.length+'</div><div style="font-size:11px;color:var(--fg-muted);">全部作品</div></div><div class="card" style="flex:1;padding:12px;text-align:center;"><div style="font-size:20px;font-weight:700;color:var(--fg-primary);">'+published.length+'</div><div style="font-size:11px;color:var(--fg-muted);">已发布</div></div><div class="card" style="flex:1;padding:12px;text-align:center;"><div style="font-size:20px;font-weight:700;color:var(--fg-primary);">'+unpublished.length+'</div><div style="font-size:11px;color:var(--fg-muted);">未发布</div></div></div>';
+  html+='<div style="display:flex;gap:8px;margin-bottom:16px;">';
+  ['all','published','unpublished'].forEach(function(f,i){
+    var labels=['全部','已发布','未发布'];var active=_adminWorksFilter===f;
+    html+='<button class="btn btn-sm" style="flex:1;background:'+(active?'var(--accent)':'var(--bg-soft)')+';color:'+(active?'white':'var(--fg-secondary)')+';border:none;" onclick="_adminWorksFilter=\''+f+'\';renderAdminWorks()">'+labels[i]+'</button>';
+  });
+  html+='</div>';
+  html+='<div class="card" style="display:flex;align-items:center;padding:0 14px;margin-bottom:16px;gap:8px;"><i class="ri-search-line" style="font-size:18px;color:var(--fg-muted);flex-shrink:0;"></i><input class="input" placeholder="搜索作品标题或提示词" style="border:none;padding:12px 0;"/></div>';
+  list.forEach(function(w){
+    var u=USERS.find(function(x){return x.id===w.userId});
+    var displayTitle=w.title||(w.prompt?w.prompt.substring(0,15)+'...':'未命名作品');
+    var statusColor=w.published?'var(--mint)':'var(--fg-muted)';var statusBg=w.published?'var(--mint-soft)':'var(--bg-soft)';
+    html+='<div class="card" style="padding:12px;margin-bottom:10px;display:flex;gap:12px;align-items:center;cursor:pointer;" onclick="navigateTo(\'adminWorkDetail\','+w.id+')"><img src="'+w.img+'" style="width:56px;height:56px;border-radius:10px;object-fit:cover;flex-shrink:0;"/><div style="flex:1;min-width:0;"><div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;"><span style="font-size:14px;font-weight:700;color:var(--fg-primary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;">'+displayTitle+'</span><span class="tag" style="background:'+statusBg+';color:'+statusColor+';font-size:10px;flex-shrink:0;">'+(w.published?'已发布':'未发布')+'</span></div><div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--fg-muted);"><div class="avatar" style="width:16px;height:16px;font-size:8px;background:'+(u?u.color:'var(--accent)')+';">'+(u?u.avatar:'?')+'</div><span>'+(u?u.name:'未知')+'</span><span style="margin-left:auto;">'+w.time+'</span></div><div style="display:flex;gap:10px;font-size:11px;color:var(--fg-muted);margin-top:3px;"><span><i class="ri-heart-line" style="font-size:12px;margin-right:1px;"></i>'+w.likes+'</span><span><i class="ri-star-line" style="font-size:12px;margin-right:1px;"></i>'+w.favorites+'</span><span><i class="ri-file-copy-line" style="font-size:12px;margin-right:1px;"></i>'+w.remakes+'</span></div></div><i class="ri-arrow-right-s-line" style="font-size:18px;color:var(--fg-muted);flex-shrink:0;"></i></div>';
+  });
+  c.innerHTML=html;
+}
+// ============ 管理后台-作品详情 ============
+function renderAdminWorkDetail(workId){
+  var c=$('adminWorkDetailContent');if(!c)return;
+  var w=WORKS.find(function(x){return x.id===workId});
+  if(!w){c.innerHTML='<div class="empty-state"><div class="empty-state-text">作品不存在</div></div>';return}
+  var u=USERS.find(function(x){return x.id===w.userId});
+  var displayTitle=w.title||(w.prompt?w.prompt.substring(0,20):'未命名作品');
+  var statusColor=w.published?'var(--mint)':'var(--fg-muted)';var statusBg=w.published?'var(--mint-soft)':'var(--bg-soft)';
+  var html='<div class="card" style="overflow:hidden;margin-bottom:16px;"><img src="'+w.img+'" style="width:100%;aspect-ratio:'+(w.ratio==='3:4'?'3/4':w.ratio==='4:3'?'4/3':w.ratio==='9:16'?'9/16':w.ratio==='16:9'?'16/9':'1/1')+';object-fit:cover;display:block;cursor:pointer;" onclick="previewImage(\''+w.img+'\')"/><div style="padding:14px;"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;"><div style="font-size:17px;font-weight:700;color:var(--fg-primary);">'+displayTitle+'</div><span class="tag" style="background:'+statusBg+';color:'+statusColor+';">'+(w.published?'已发布':'未发布')+'</span></div><div style="font-size:13px;color:var(--fg-secondary);line-height:1.5;margin-bottom:8px;">'+(w.desc||w.prompt)+'</div></div></div>';
+  html+='<div class="section-title"><span>作品信息</span></div><div class="card" style="overflow:hidden;margin-bottom:16px;">';
+  html+='<div class="list-row"><div class="lr-text">作者</div><div style="display:flex;align-items:center;gap:6px;"><div class="avatar" style="width:20px;height:20px;font-size:10px;background:'+(u?u.color:'var(--accent)')+';">'+(u?u.avatar:'?')+'</div><span style="font-size:13px;color:var(--fg-muted);">'+(u?u.name:'未知')+'</span></div></div>';
+  html+='<div class="list-row"><div class="lr-text">使用模型</div><span style="font-size:13px;color:var(--fg-muted);">'+(MODELS.find(function(m){return m.id===w.model})||{name:w.model}).name+'</span></div>';
+  html+='<div class="list-row"><div class="lr-text">风格</div><span style="font-size:13px;color:var(--fg-muted);">'+(w.style||'无')+'</span></div>';
+  html+='<div class="list-row"><div class="lr-text">比例</div><span style="font-size:13px;color:var(--fg-muted);">'+w.ratio+'</span></div>';
+  html+='<div class="list-row"><div class="lr-text">发布时间</div><span style="font-size:13px;color:var(--fg-muted);">'+w.time+'</span></div></div>';
+  html+='<div class="section-title"><span>数据统计</span></div><div style="display:flex;gap:8px;margin-bottom:16px;"><div class="card" style="flex:1;padding:12px;text-align:center;"><div style="font-size:18px;font-weight:700;color:var(--fg-primary);">'+w.likes+'</div><div style="font-size:11px;color:var(--fg-muted);">点赞</div></div><div class="card" style="flex:1;padding:12px;text-align:center;"><div style="font-size:18px;font-weight:700;color:var(--fg-primary);">'+w.favorites+'</div><div style="font-size:11px;color:var(--fg-muted);">收藏</div></div><div class="card" style="flex:1;padding:12px;text-align:center;"><div style="font-size:18px;font-weight:700;color:var(--fg-primary);">'+w.remakes+'</div><div style="font-size:11px;color:var(--fg-muted);">同款</div></div></div>';
+  if(w.prompt){html+='<div class="section-title"><span>提示词</span></div><div class="card" style="padding:14px;margin-bottom:16px;"><div style="font-size:13px;color:var(--fg-secondary);line-height:1.6;word-break:break-all;">'+w.prompt+'</div></div>';}
+  if(w.tags&&w.tags.length){html+='<div class="section-title"><span>标签</span></div><div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;">';w.tags.forEach(function(t){html+='<span class="tag tag-accent">'+t+'</span>'});html+='</div>';}
+  html+='<div class="section-title"><span>管理操作</span></div>';
+  if(w.published){html+='<button class="btn" style="width:100%;margin-bottom:8px;background:var(--bg-soft);color:var(--fg-secondary);border:none;" onclick="showToast(\'已下架\')"><i class="ri-eye-off-line" style="font-size:16px;margin-right:4px;"></i>下架作品</button>';}else{html+='<button class="btn" style="width:100%;margin-bottom:8px;background:var(--accent-soft);color:var(--accent);border:none;" onclick="showToast(\'已上架\')"><i class="ri-eye-line" style="font-size:16px;margin-right:4px;"></i>上架作品</button>';}
+  html+='<button class="btn" style="width:100%;margin-bottom:8px;background:var(--peach-soft);color:var(--peach);border:none;" onclick="showToast(\'已设为推荐\')"><i class="ri-pushpin-line" style="font-size:16px;margin-right:4px;"></i>设为推荐</button>';
+  html+='<button class="btn" style="width:100%;margin-bottom:8px;background:var(--rose-soft);color:var(--rose);border:none;" onclick="showConfirmDelete(\'确定删除此作品？删除后不可恢复。\',function(){navigateBack();showToast(\'已删除\')})"><i class="ri-delete-bin-line" style="font-size:16px;margin-right:4px;"></i>删除作品</button>';
+  html+='<button class="btn" style="width:100%;background:var(--rose-soft);color:var(--rose);border:none;" onclick="showConfirmDelete(\'确定删除作品并封禁作者？\',function(){navigateBack();showToast(\'已删除并封禁\')})"><i class="ri-forbid-line" style="font-size:16px;margin-right:4px;"></i>删除并封禁作者</button>';
+  c.innerHTML=html;
+}
+// ============ 管理后台-举报详情 ============
+function renderAdminReportDetail(reportId){
+  var c=$('adminReportDetailContent');if(!c)return;
+  var r=ADMIN_REPORTS.find(function(x){return x.id===reportId});
+  if(!r){c.innerHTML='<div class="empty-state"><div class="empty-state-text">举报不存在</div></div>';return}
+  var statusColor=r.status==='待处理'?'var(--rose)':r.status==='已处理'?'var(--mint)':'var(--fg-muted)';
+  var statusBg=r.status==='待处理'?'var(--rose-soft)':r.status==='已处理'?'var(--mint-soft)':'var(--bg-soft)';
+  var html='<div class="card" style="overflow:hidden;margin-bottom:16px;"><img src="'+r.img+'" style="width:100%;height:200px;object-fit:cover;display:block;cursor:pointer;" onclick="previewImage(\''+r.img+'\')"/><div style="padding:14px;"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;"><div style="font-size:17px;font-weight:700;color:var(--fg-primary);">'+r.workTitle+'</div><span class="tag" style="background:'+statusBg+';color:'+statusColor+';">'+r.status+'</span></div></div></div>';
+  html+='<div class="section-title"><span>举报信息</span></div><div class="card" style="overflow:hidden;margin-bottom:16px;">';
+  html+='<div class="list-row"><div class="lr-icon" style="color:var(--accent);"><i class="ri-user-line" style="font-size:22px;"></i></div><div class="lr-text">举报人</div><span style="font-size:13px;color:var(--fg-muted);">'+r.reporter+'</span></div>';
+  html+='<div class="list-row"><div class="lr-icon" style="color:var(--rose);"><i class="ri-error-warning-line" style="font-size:22px;"></i></div><div class="lr-text">举报原因</div><span style="font-size:13px;color:var(--fg-muted);">'+r.reason+'</span></div>';
+  html+='<div class="list-row"><div class="lr-icon" style="color:var(--fg-muted);"><i class="ri-time-line" style="font-size:22px;"></i></div><div class="lr-text">举报时间</div><span style="font-size:13px;color:var(--fg-muted);">'+r.time+'</span></div></div>';
+  if(r.status==='待处理'){
+    html+='<div class="section-title"><span>处理操作</span></div>';
+    html+='<button class="btn" style="width:100%;margin-bottom:8px;background:var(--rose-soft);color:var(--rose);border:none;" onclick="showConfirmDelete(\'确定删除作品并封禁该用户？\',function(){var rr=ADMIN_REPORTS.find(function(x){return x.id==='+r.id+'});if(rr)rr.status=\'已处理\';navigateBack();showToast(\'已删除作品并封禁用户\')})"><i class="ri-delete-bin-line" style="font-size:16px;margin-right:4px;"></i>删除作品并封禁用户</button>';
+    html+='<button class="btn" style="width:100%;margin-bottom:8px;background:var(--accent-soft);color:var(--accent);border:none;" onclick="var rr=ADMIN_REPORTS.find(function(x){return x.id==='+r.id+'});if(rr)rr.status=\'已处理\';navigateBack();showToast(\'已删除作品\')"><i class="ri-close-line" style="font-size:16px;margin-right:4px;"></i>仅删除作品</button>';
+    html+='<button class="btn btn-secondary" style="width:100%;" onclick="var rr=ADMIN_REPORTS.find(function(x){return x.id==='+r.id+'});if(rr)rr.status=\'已驳回\';navigateBack();showToast(\'已驳回举报\')"><i class="ri-check-line" style="font-size:16px;margin-right:4px;"></i>驳回举报</button>';
+  }else{
+    html+='<div class="section-title"><span>处理结果</span></div><div class="card" style="padding:14px;"><div style="font-size:13px;color:var(--fg-secondary);line-height:1.6;">此举报已于'+r.time+'由管理员处理，状态为「'+r.status+'」。</div></div>';
+  }
   c.innerHTML=html;
 }
 // ============ 加载更多 ============
@@ -2346,7 +2883,7 @@ function init(){
       _homeFirstLoad=false;
       hideHomeSkeleton();
       var pageDiv=$('page-home').querySelector('div');
-      pageDiv.innerHTML='<div style="padding:0 16px;margin-bottom:16px;"><div class="card" style="height:150px;position:relative;overflow:hidden;cursor:pointer;" id="bannerBox"><div id="bannerTrack" style="display:flex;transition:transform 0.5s cubic-bezier(0.16,1,0.3,1);height:100%;"></div><div id="bannerDots" style="position:absolute;bottom:8px;left:0;right:0;display:flex;justify-content:center;gap:6px;"></div></div></div><div class="section-title" style="padding:0 16px;"><span>热门玩法</span><span class="more" onclick="navigateTo(\'allGameplays\')" style="color:var(--accent);font-size:14px;font-weight:600;display:flex;align-items:center;gap:2px;">全部 <i class="ri-arrow-right-s-line" style="font-size:18px;"></i></span></div><div class="h-scroll" style="margin-bottom:18px;" id="gameplayScroll"></div><div class="section-title" style="padding:0 16px;"><span>精选作品</span><div style="display:flex;gap:16px;position:relative;padding-bottom:4px;"><span class="home-tab active" data-idx="0" onclick="switchHomeTab(this,\'recommend\')" style="font-size:14px;font-weight:700;color:var(--accent);cursor:pointer;transition:color 0.3s;">推荐</span><span class="home-tab" data-idx="1" onclick="switchHomeTab(this,\'new\')" style="font-size:14px;font-weight:500;color:var(--fg-muted);cursor:pointer;transition:color 0.3s;">最新</span><div id="homeTabIndicator" style="position:absolute;bottom:0;width:20px;height:3px;border-radius:999px;background:var(--accent);transition:all 0.3s cubic-bezier(0.16,1,0.3,1);"></div></div></div><div style="padding:0 12px;"><div class="waterfall" id="homeWaterfall"></div><div id="homeLoadMore"></div></div>';
+      pageDiv.innerHTML='<div style="padding:0 16px;margin-bottom:16px;"><div class="card" style="height:150px;position:relative;overflow:hidden;cursor:pointer;" id="bannerBox"><div id="bannerTrack" style="display:flex;transition:transform 0.5s cubic-bezier(0.16,1,0.3,1);height:100%;"></div><div id="bannerDots" style="position:absolute;bottom:8px;left:0;right:0;display:flex;justify-content:center;gap:6px;"></div></div></div><div class="section-title" style="padding:0 16px;"><span>热门玩法</span><span class="more" onclick="navigateTo(\'allGameplays\')" style="color:var(--accent);font-size:14px;font-weight:600;display:flex;align-items:center;gap:2px;">全部 <i class="ri-arrow-right-s-line" style="font-size:18px;"></i></span></div><div class="h-scroll" style="margin-bottom:18px;" id="gameplayScroll"></div><div class="section-title" style="padding:0 16px;"><span>精选作品</span><div style="display:flex;gap:16px;position:relative;padding-bottom:4px;"><span class="home-tab active" data-idx="0" onclick="switchHomeTab(this,\'recommend\')" style="font-size:14px;font-weight:700;color:var(--accent);cursor:pointer;transition:color 0.3s;">推荐</span><span class="home-tab" data-idx="1" onclick="switchHomeTab(this,\'new\')" style="font-size:14px;font-weight:500;color:var(--fg-muted);cursor:pointer;transition:color 0.3s;">最新</span><div id="homeTabIndicator" style="position:absolute;bottom:0;width:20px;height:3px;border-radius:999px;background:var(--accent);transition:none;opacity:0;"></div></div></div><div style="padding:0 12px;"><div class="waterfall" id="homeWaterfall"></div><div id="homeLoadMore"></div></div>';
       initBanner();
       renderGameplay();
       renderWaterfall('homeWaterfall',WORKS.slice(0,8));
@@ -2363,8 +2900,6 @@ function init(){
   renderPlazaWaterfall();
   addLoadMoreBtn('plazaLoadMore');
   renderPlazaFilterCategories();
-  setTimeout(initPlazaTabIndicator,100);
-  setTimeout(initGalleryTabIndicator,100);
   setTimeout(initHomeTabIndicator,100);
   renderCreatePage();
   updateCost();
