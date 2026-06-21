@@ -243,6 +243,9 @@ textarea.input{resize:none;line-height:1.6;}
 .gen-spinner{width:24px;height:24px;border:2px solid var(--accent-soft);border-top-color:var(--accent);
   border-radius:50%;animation:spin 0.8s linear infinite;display:inline-block;}
 @keyframes spin{to{transform:rotate(360deg);}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+.gen-task-card{position:relative;border-radius:16px;overflow:hidden;background:var(--bg-card);border:1.5px solid var(--accent-soft);box-shadow:0 2px 12px rgba(91,159,232,0.10);}
+.gen-task-card .shimmer-bg{position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(90deg,transparent 25%,rgba(91,159,232,0.06) 50%,transparent 75%);background-size:200% 100%;animation:shimmer 2s ease infinite;}
 /* 进度条 */
 .progress{width:100%;height:6px;background:var(--bg-soft);border-radius:999px;overflow:hidden;}
 .progress-bar{height:100%;background:var(--gradient-dream);border-radius:999px;transition:width 0.5s;}
@@ -579,7 +582,7 @@ textarea.input{resize:none;line-height:1.6;}
       <button class="btn btn-sm" onclick="deleteSelectedGallery()" id="galleryDeleteBtn" style="background:var(--rose);color:white;border:none;opacity:0.5;cursor:not-allowed;transition:all 0.3s;">删除</button>
     </div>
   </div>
-  <div style="padding:0 12px;" id="galleryContent"><div class="waterfall" id="galleryWaterfall"></div><div id="galleryLoadMore"></div></div>
+  <div style="padding:0 12px;" id="galleryContent"><div id="galleryGenCards" style="display:none;margin-bottom:6px;"></div><div class="waterfall" id="galleryWaterfall"></div><div id="galleryLoadMore"></div></div>
 
 </div>
 
@@ -1948,10 +1951,15 @@ function removePromptImg(e){e.stopPropagation();$('promptImgPreview').style.disp
 function handleCreateBtn(){if(currentTab!=='create'){switchTab('create')}else{startGenerate()}}
 var genStages=['解析提示词...','构建画面构图...','AI绘制中...','细节优化...','渲染输出...'];
 var genTimer=null;
+var _generatingTasks=[];
 function startGenerate(){
   const prompt=$('promptInput').value.trim();if(!prompt){showToast('请输入提示词');return}
   const m=MODELS[selectedModel];const count=COUNTS[selectedCount];const total=m.cost*count;
   const ratio=RATIOS[selectedRatio].label;
+  var taskId='task_'+Date.now();
+  var task={id:taskId,prompt:prompt,model:m.name,modelImg:m.img,count:count,ratio:ratio,cost:total,progress:0,stage:genStages[0],startTime:Date.now()};
+  _generatingTasks.push(task);
+  refreshGalleryGenCards();
   showToast('创作任务已提交，正在为您生成 '+count+' 张图片');
   var stageIdx=0;var progress=0;
   $('resultContent').innerHTML='<div style="padding:24px 16px;display:flex;flex-direction:column;align-items:center;gap:16px;"><div style="position:relative;width:64px;height:64px;"><svg width="64" height="64" style="transform:rotate(-90deg);"><circle cx="32" cy="32" r="28" fill="none" stroke="var(--border)" stroke-width="4"/><circle id="genRing" cx="32" cy="32" r="28" fill="none" stroke="var(--accent)" stroke-width="4" stroke-linecap="round" stroke-dasharray="175.9" stroke-dashoffset="175.9" style="transition:stroke-dashoffset 0.5s ease;"/></svg><div style="position:absolute;top:0;left:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--accent);" id="genPercent">0%</div></div><div id="genStageText" style="font-size:14px;font-weight:600;color:var(--fg-primary);">解析提示词...</div><div style="width:100%;height:4px;border-radius:2px;background:var(--border);overflow:hidden;"><div id="genProgressBar" style="height:100%;width:0%;background:var(--gradient-dream);border-radius:2px;transition:width 0.5s ease;"></div></div><div style="font-size:12px;color:var(--fg-muted);">消耗 '+total+' 积分 · 使用 '+m.name+' · 预计 15 秒</div></div>';
@@ -1963,9 +1971,13 @@ function startGenerate(){
     var pct=$('genPercent');if(pct)pct.textContent=Math.floor(progress)+'%';
     var bar=$('genProgressBar');if(bar)bar.style.width=progress+'%';
     var txt=$('genStageText');if(txt)txt.textContent=genStages[stageIdx];
+    task.progress=progress;task.stage=genStages[stageIdx];
+    refreshGalleryGenCards();
   },400);
   setTimeout(()=>{
     clearInterval(genTimer);
+    _generatingTasks=_generatingTasks.filter(function(t){return t.id!==taskId});
+    refreshGalleryGenCards();
     var ring=$('genRing');if(ring)ring.style.strokeDashoffset='0';
     var pct=$('genPercent');if(pct)pct.textContent='100%';
     var bar=$('genProgressBar');if(bar)bar.style.width='100%';
@@ -1974,13 +1986,34 @@ function startGenerate(){
       var genTime=(Math.random()*8+7).toFixed(1);
       var resW=ratio==='1:1'?1024:ratio==='3:4'?768:ratio==='4:3'?1024:ratio==='9:16'?576:ratio==='16:9'?1024:768;
       var resH=ratio==='1:1'?1024:ratio==='3:4'?1024:ratio==='4:3'?768:ratio==='9:16'?1024:ratio==='16:9'?576:1024;
+      var errors=['模型服务暂时不可用','GPU资源不足，排队超时','内容安全检测未通过','生成超时，请重试','渲染异常，请重试'];
+      var results=[];
+      for(var i=0;i<count;i++){results.push({failed:Math.random()<0.15,seed:'gen'+Date.now()+i})}
+      var failCount=results.filter(function(r){return r.failed}).length;
+      var successCount=count-failCount;
+      var refund=failCount*m.cost;
+      var charged=successCount*m.cost;
       let html='<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:10px">';
-      var seeds=[];
-      for(let i=0;i<count;i++){const seed='gen'+Date.now()+i;seeds.push(seed);html+='<div class="result-img" onclick="previewGenImg(\'https://picsum.photos/seed/'+seed+'/400/400\','+i+')"><img src="https://picsum.photos/seed/'+seed+'/200/200" style="width:100%;border-radius:14px;display:block"/></div>'}
+      results.forEach(function(r,idx){
+        if(r.failed){
+          var errMsg=errors[Math.floor(Math.random()*errors.length)];
+          html+='<div style="position:relative;border-radius:14px;overflow:hidden;aspect-ratio:1;background:var(--bg-soft);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;border:1.5px dashed var(--rose);"><i class="ri-close-circle-line" style="font-size:28px;color:var(--rose);"></i><div style="font-size:11px;color:var(--rose);text-align:center;padding:0 8px;line-height:1.4;">'+errMsg+'</div><button class="btn btn-sm" style="background:var(--rose-soft);color:var(--rose);border:none;font-size:11px;padding:4px 12px;" onclick="retryOneImg(this,'+idx+',\''+ratio+'\')"><i class="ri-refresh-line" style="font-size:12px;margin-right:2px;"></i>重试</button></div>';
+        }else{
+          html+='<div class="result-img" onclick="previewGenImg(\'https://picsum.photos/seed/'+r.seed+'/400/400\','+idx+')"><img src="https://picsum.photos/seed/'+r.seed+'/200/200" style="width:100%;border-radius:14px;display:block"/></div>';
+        }
+      });
       html+='</div>';
+      if(failCount>0&&successCount>0){
+        html+='<div class="card" style="padding:10px 12px;margin-bottom:10px;background:var(--mint-soft);border:1px solid rgba(111,212,176,0.3);"><div style="display:flex;align-items:center;gap:8px;font-size:13px;"><i class="ri-refund-2-line" style="font-size:16px;color:var(--mint);"></i><span style="color:var(--mint);font-weight:600;">'+failCount+'张生成失败，已退还 '+refund+' 积分</span></div></div>';
+      }else if(failCount===count){
+        html+='<div class="card" style="padding:12px;margin-bottom:10px;background:var(--mint-soft);border:1px solid rgba(111,212,176,0.3);"><div style="display:flex;align-items:center;justify-content:center;gap:8px;"><i class="ri-refund-2-line" style="font-size:18px;color:var(--mint);"></i><span style="font-size:14px;font-weight:600;color:var(--mint);">全部失败，已退还 '+total+' 积分</span></div></div>';
+      }
       html+='<div style="display:flex;flex-wrap:wrap;gap:12px;padding:8px 0 12px;font-size:13px;color:var(--fg-muted);"><span><i class="ri-time-line" style="margin-right:3px;"></i>耗时 '+genTime+'s</span><span><i class="ri-ruler-line" style="margin-right:3px;"></i>'+resW+'×'+resH+'</span><span><i class="ri-file-line" style="margin-right:3px;"></i>'+(Math.random()*3+1.5).toFixed(1)+'MB</span><span><i class="ri-palette-line" style="margin-right:3px;"></i>'+m.name+'</span></div>';
       html+='<div style="display:flex;gap:8px"><button class="btn" style="flex:1;height:40px;background:var(--bg-elevated);color:var(--fg-primary);border:1px solid var(--border);" onclick="navigateTo(\'publish\')"><i class="ri-send-plane-fill" style="margin-right:4px;"></i>发布作品</button><button class="btn" style="flex:1;height:40px;background:var(--accent);color:white;box-shadow:0 2px 8px var(--accent-glow);" id="saveAllBtn" onclick="saveAllResults()"><i class="ri-download-2-line" style="margin-right:4px;"></i>全部保存</button></div>';
-      $('resultContent').innerHTML=html;showToast('生成成功！消耗'+total+'积分');
+      $('resultContent').innerHTML=html;
+      if(failCount===0)showToast('生成成功！消耗'+total+'积分');
+      else if(failCount===count)showToast('全部生成失败，'+total+'积分已退还');
+      else showToast(successCount+'张成功，'+failCount+'张失败，退还'+refund+'积分');
     },500);
   },3500);
 }
@@ -1993,6 +2026,26 @@ function previewGenImg(src,idx){
   $('genPreviewOverlay').classList.add('show');$('genPreviewSheet').classList.add('show');
 }
 function closeGenPreview(){$('genPreviewOverlay').classList.remove('show');$('genPreviewSheet').classList.remove('show')}
+function retryOneImg(btn,idx,ratio){
+  var card=btn.closest('div[style*="aspect-ratio"]');if(!card)card=btn.parentElement;
+  card.style.border='none';card.innerHTML='<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;height:100%;"><div style="width:24px;height:24px;border:2.5px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 0.7s linear infinite;"></div><span style="font-size:11px;color:var(--fg-muted);">重新生成中...</span></div>';
+  setTimeout(function(){
+    var failed=Math.random()<0.15;
+    if(failed){
+      var errors=['模型服务暂时不可用','GPU资源不足，排队超时','内容安全检测未通过','生成超时，请重试','渲染异常，请重试'];
+      var errMsg=errors[Math.floor(Math.random()*errors.length)];
+      card.style.border='1.5px dashed var(--rose)';
+      card.innerHTML='<i class="ri-close-circle-line" style="font-size:28px;color:var(--rose);"></i><div style="font-size:11px;color:var(--rose);text-align:center;padding:0 8px;line-height:1.4;">'+errMsg+'</div><button class="btn btn-sm" style="background:var(--rose-soft);color:var(--rose);border:none;font-size:11px;padding:4px 12px;" onclick="retryOneImg(this,'+idx+',\''+ratio+'\')"><i class="ri-refresh-line" style="font-size:12px;margin-right:2px;"></i>重试</button>';
+      showToast('重试失败，请稍后再试');
+    }else{
+      var seed='retry'+Date.now()+idx;
+      card.style.border='none';card.style.background='none';card.style.cursor='pointer';
+      card.className='result-img';card.setAttribute('onclick','previewGenImg(\'https://picsum.photos/seed/'+seed+'/400/400\','+idx+')');
+      card.innerHTML='<img src="https://picsum.photos/seed/'+seed+'/200/200" style="width:100%;border-radius:14px;display:block"/>';
+      showToast('重试成功！');
+    }
+  },2000);
+}
 function saveResults(){showToast('图片已保存到相册和草稿箱')}
 function saveAllResults(){
   var btn=$('saveAllBtn');if(!btn||btn.dataset.saving)return;
@@ -2038,7 +2091,7 @@ if(isPub){html+='<div style="display:flex;gap:16px;padding:12px 0;border-top:0.5
 html+='</div></div>';
 if(isOwn&&!isPub){html+='<div style="flex-shrink:0;display:flex;align-items:center;gap:10px;padding:14px 16px 30px 16px;background:var(--bg-glass);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border-top:0.5px solid var(--border);box-shadow:0 -4px 20px rgba(60,120,200,0.06)"><div onclick="confirmDeleteWork('+id+')" style="display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;min-width:44px"><i class="ri-delete-bin-line" style="font-size:24px;color:var(--rose);"></i><span style="font-size:11px;color:var(--rose)">删除</span></div><div onclick="showToast(\'已保存到相册\')" style="display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;min-width:44px"><i class="ri-download-line" style="font-size:24px;color:var(--fg-muted);"></i><span style="font-size:11px;color:var(--fg-muted)">下载</span></div><button class="btn btn-gradient" onclick="remakeWork('+id+')" style="flex:1;margin-left:auto;font-size:15px;font-weight:700;padding:12px 0;box-shadow:0 4px 16px var(--accent-glow)"><i class="ri-refresh-line" style="font-size:16px;margin-right:4px;"></i>重新生成</button></div>';}else if(isOwn&&isPub){html+='<div style="flex-shrink:0;display:flex;align-items:center;gap:10px;padding:14px 16px 30px 16px;background:var(--bg-glass);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border-top:0.5px solid var(--border);box-shadow:0 -4px 20px rgba(60,120,200,0.06)"><div onclick="confirmDeleteWork('+id+')" style="display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;min-width:44px"><i class="ri-delete-bin-line" style="font-size:24px;color:var(--rose);"></i><span style="font-size:11px;color:var(--rose)">删除</span></div><div onclick="showToast(\'已保存到相册\')" style="display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;min-width:44px"><i class="ri-download-line" style="font-size:24px;color:var(--fg-muted);"></i><span style="font-size:11px;color:var(--fg-muted)">下载</span></div><button class="btn btn-gradient" onclick="remakeWork('+id+')" style="flex:1;margin-left:auto;font-size:15px;font-weight:700;padding:12px 0;box-shadow:0 4px 16px var(--accent-glow)"><i class="ri-refresh-line" style="font-size:16px;margin-right:4px;"></i>重新生成</button></div>';}else{html+='<div style="flex-shrink:0;display:flex;align-items:center;gap:16px;padding:14px 16px 30px 16px;background:var(--bg-glass);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border-top:0.5px solid var(--border);box-shadow:0 -4px 20px rgba(60,120,200,0.06)"><div onclick="toggleLikeDetail(event,'+id+')" style="display:flex;align-items:center;gap:4px;cursor:pointer"><i id="detailLikeIcon" class="'+(liked?'ri-heart-fill':'ri-heart-line')+'" style="font-size:28px;color:'+(liked?'var(--rose)':'var(--fg-muted)')+';transition:all 0.3s;"></i><span id="detailLikeNum" style="font-size:14px;font-weight:600;color:'+(liked?'var(--rose)':'var(--fg-muted)')+'">'+w.likes+'</span></div><div onclick="toggleFavDetail(event,'+id+')" style="display:flex;align-items:center;gap:4px;cursor:pointer"><i id="detailFavIcon" class="'+(faved?'ri-star-fill':'ri-star-line')+'" style="font-size:28px;color:'+(faved?'var(--lemon)':'var(--fg-muted)')+';transition:all 0.3s;"></i><span id="detailFavNum" style="font-size:14px;font-weight:600;color:'+(faved?'var(--lemon)':'var(--fg-muted)')+'">'+w.favorites+'</span></div><button class="btn btn-gradient" onclick="remakeWork('+id+')" style="margin-left:auto;font-size:14px;font-weight:700;flex:1;padding:12px 0;box-shadow:0 4px 16px var(--accent-glow)"><i class="ri-magic-line" style="font-size:16px;margin-right:4px;"></i>一键同款</button></div>';}
 $('workDetailContent').innerHTML=html;if(imgs.length>1&&isOwn&&!isPub)initDetailCarousel();}
-function toggleFollow(btn,uid){if(isFollowing[uid]){showConfirmDialog({icon:'ri-user-unfollow-line',iconBg:'var(--peach-soft)',iconColor:'var(--peach)',title:'取消关注',msg:'确定要取消关注该用户吗？',btnText:'取消关注',btnColor:'var(--rose)',onConfirm:function(){isFollowing[uid]=false;updateFollowBtn(btn,uid);showToast('已取消关注')}})}else{isFollowing[uid]=true;updateFollowBtn(btn,uid);showToast('关注成功')}}
+function toggleFollow(btn,uid){if(isFollowing[uid]){showConfirmDialog({icon:'ri-user-unfollow-line',iconBg:'var(--peach-soft)',iconColor:'var(--peach)',title:'取消关注',msg:'确定要取消关注该用户吗？',btnText:'取消关注',btnColor:'var(--rose)',onConfirm:function(){isFollowing[uid]=false;updateFollowBtn(btn,uid);showToast('已取消关注');var flPage=$('page-followList');if(flPage&&(flPage.classList.contains('active')||flPage.classList.contains('drawer-open')))renderFollowList('following')}})}else{isFollowing[uid]=true;updateFollowBtn(btn,uid);showToast('关注成功')}}
 function updateFollowBtn(btn,uid){if(isFollowing[uid]){btn.textContent='已关注';btn.style.background='var(--bg-soft)';btn.style.color='var(--fg-muted)';btn.style.border='none'}else{btn.textContent='+ 关注';btn.style.background='var(--accent)';btn.style.color='white';btn.style.border='none'}}
 function toggleLikeDetail(e,id){e.stopPropagation();var w=WORKS.find(function(x){return x.id===id});if(!w)return;var icon=$('detailLikeIcon');var num=$('detailLikeNum');icon.style.transition='transform 0.4s cubic-bezier(0.34,1.56,0.64,1)';if(likedWorks[id]){delete likedWorks[id];w.likes--;icon.className='ri-heart-line';icon.style.color='var(--fg-muted)';num.style.color='var(--fg-muted)'}else{likedWorks[id]=true;w.likes++;icon.className='ri-heart-fill';icon.style.color='var(--rose)';num.style.color='var(--rose)';icon.style.transform='scale(1.4)';setTimeout(function(){icon.style.transform='scale(1)'},150)}num.textContent=w.likes}
 function toggleFavDetail(e,id){e.stopPropagation();var w=WORKS.find(function(x){return x.id===id});if(!w)return;var icon=$('detailFavIcon');var num=$('detailFavNum');icon.style.transition='transform 0.4s cubic-bezier(0.34,1.56,0.64,1)';if(favoritedWorks[id]){delete favoritedWorks[id];w.favorites--;icon.className='ri-star-line';icon.style.color='var(--fg-muted)';num.style.color='var(--fg-muted)'}else{favoritedWorks[id]=true;w.favorites++;icon.className='ri-star-fill';icon.style.color='var(--lemon)';num.style.color='var(--lemon)';icon.style.transform='scale(1.4)';setTimeout(function(){icon.style.transform='scale(1)'},150)}num.textContent=w.favorites}
@@ -2076,8 +2129,48 @@ function renderPlazaCategories(){const c=$('plazaCategories');CATEGORIES.forEach
 function renderFilterStyles(){const c=$('filterStyles');STYLES.forEach(s=>{const chip=createEl('div','chip chip-outline');chip.textContent=s;chip.onclick=()=>chip.classList.toggle('active');c.appendChild(chip)})}
 function renderPlazaWaterfall(){renderWaterfall('plazaWaterfall',WORKS)}
 // ============ 画廊 ============
+function refreshGalleryGenCards(){
+  var container=$('galleryGenCards');if(!container)return;
+  if(_generatingTasks.length===0){container.innerHTML='';container.style.display='none';return}
+  container.style.display='block';
+  var html='';
+  _generatingTasks.forEach(function(t){
+    var pct=Math.floor(t.progress);
+    var elapsed=Math.floor((Date.now()-t.startTime)/1000);
+    html+='<div class="gen-task-card" style="margin-bottom:10px;"><div class="shimmer-bg"></div>'
+      +'<div style="position:relative;padding:14px;">'
+      +'<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">'
+      +'<img src="'+t.modelImg+'" style="width:36px;height:36px;border-radius:10px;object-fit:cover;flex-shrink:0;"/>'
+      +'<div style="flex:1;min-width:0;">'
+      +'<div style="font-size:13px;font-weight:600;color:var(--fg-primary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+t.prompt.substring(0,24)+(t.prompt.length>24?'...':'')+'</div>'
+      +'<div style="font-size:11px;color:var(--fg-muted);margin-top:2px;">'+t.model+' · '+t.count+'张 · '+t.ratio+'</div>'
+      +'</div>'
+      +'<div style="text-align:right;flex-shrink:0;">'
+      +'<div style="font-size:18px;font-weight:700;color:var(--accent);line-height:1;">'+pct+'%</div>'
+      +'<div style="font-size:10px;color:var(--fg-muted);margin-top:1px;">'+elapsed+'s</div>'
+      +'</div>'
+      +'</div>'
+      +'<div style="display:flex;align-items:center;gap:8px;">'
+      +'<div style="flex:1;height:4px;border-radius:2px;background:var(--border);overflow:hidden;">'
+      +'<div style="height:100%;width:'+pct+'%;background:var(--gradient-dream);border-radius:2px;transition:width 0.4s ease;"></div>'
+      +'</div>'
+      +'<div style="display:flex;align-items:center;gap:4px;flex-shrink:0;">'
+      +'<div style="width:10px;height:10px;border:1.5px solid var(--accent-soft);border-top-color:var(--accent);border-radius:50%;animation:spin 0.7s linear infinite;"></div>'
+      +'<span style="font-size:11px;color:var(--accent);font-weight:500;">'+t.stage+'</span>'
+      +'</div>'
+      +'</div>'
+      +'</div></div>';
+  });
+  container.innerHTML=html;
+}
 var lastGalleryTabIdx=0;
-function switchGalleryTab(el,tab){var idx=parseInt(el.dataset.idx);el.parentElement.querySelectorAll('.gallery-tab').forEach(t=>{t.style.fontWeight='500';t.style.color='var(--fg-muted)'});el.style.fontWeight='700';el.style.color='var(--accent)';var indicator=$('galleryTabIndicator');if(indicator){indicator.style.left=el.offsetLeft+el.offsetWidth/2-10+'px'}var c=$('galleryContent');c.innerHTML='<div style="display:flex;justify-content:center;padding:20px 0"><div style="width:28px;height:28px;border:2.5px solid var(--accent-soft);border-top-color:var(--accent);border-radius:50%;animation:spin 0.7s linear infinite"></div></div>';var slideDir=idx>lastGalleryTabIdx?'wf-slide-left':'wf-slide-right';lastGalleryTabIdx=idx;setTimeout(function(){c.innerHTML='<div class="waterfall" id="galleryWaterfall"></div><div id="galleryLoadMore"></div>';var myWorks=WORKS.filter(function(w){return w.userId===CURRENT_USER_ID});if(tab==='all'){renderWaterfall('galleryWaterfall',myWorks)}else if(tab==='published'){renderWaterfall('galleryWaterfall',myWorks.filter(function(w){return w.published}),true)}else if(tab==='draft'){renderWaterfall('galleryWaterfall',myWorks.filter(function(w){return !w.published}))}else{renderWaterfall('galleryWaterfall',WORKS.filter(function(w){return favoritedWorks[w.id]}))}addLoadMoreBtn('galleryLoadMore');c.classList.remove('wf-slide-left','wf-slide-right');void c.offsetWidth;c.classList.add(slideDir);setTimeout(function(){c.classList.remove('wf-slide-left','wf-slide-right')},450)},300)}
+var _galleryEmptyMap={
+  all:{icon:'ri-image-line',text:'还没有作品',sub:'去创作页生成你的第一幅AI画作吧',btn:'去创作',action:'navigateBack();switchTab(\'create\')'},
+  published:{icon:'ri-send-plane-line',text:'暂无已发布作品',sub:'创作完成后点击发布，让更多人看到'},
+  draft:{icon:'ri-draft-line',text:'暂无草稿',sub:'生成的作品会自动保存到草稿箱'},
+  favorite:{icon:'ri-heart-line',text:'暂无收藏',sub:'浏览广场时收藏喜欢的作品吧',btn:'去广场',action:'navigateBack();switchTab(\'home\')'}
+};
+function switchGalleryTab(el,tab){var idx=parseInt(el.dataset.idx);el.parentElement.querySelectorAll('.gallery-tab').forEach(t=>{t.style.fontWeight='500';t.style.color='var(--fg-muted)'});el.style.fontWeight='700';el.style.color='var(--accent)';var indicator=$('galleryTabIndicator');if(indicator){indicator.style.left=el.offsetLeft+el.offsetWidth/2-10+'px'}var c=$('galleryContent');c.innerHTML='<div style="display:flex;justify-content:center;padding:20px 0"><div style="width:28px;height:28px;border:2.5px solid var(--accent-soft);border-top-color:var(--accent);border-radius:50%;animation:spin 0.7s linear infinite"></div></div>';var slideDir=idx>lastGalleryTabIdx?'wf-slide-left':'wf-slide-right';lastGalleryTabIdx=idx;setTimeout(function(){c.innerHTML='<div id="galleryGenCards" style="display:none;margin-bottom:6px;"></div><div class="waterfall" id="galleryWaterfall"></div><div id="galleryLoadMore"></div>';refreshGalleryGenCards();var myWorks=WORKS.filter(function(w){return w.userId===CURRENT_USER_ID});var filtered;if(tab==='all'){filtered=myWorks}else if(tab==='published'){filtered=myWorks.filter(function(w){return w.published})}else if(tab==='draft'){filtered=myWorks.filter(function(w){return !w.published})}else{filtered=WORKS.filter(function(w){return favoritedWorks[w.id]})}if(filtered.length===0){var em=_galleryEmptyMap[tab]||_galleryEmptyMap.all;var btnHtml=em.btn?'<button class="btn btn-soft btn-sm" style="margin-top:8px;" onclick="'+em.action+'"><i class="ri-arrow-right-line" style="margin-right:4px;"></i>'+em.btn+'</button>':'';$('galleryWaterfall').innerHTML='<div class="empty-state" style="grid-column:1/-1;"><div class="empty-state-icon"><i class="'+em.icon+'" style="font-size:28px;color:var(--accent);"></i></div><div class="empty-state-text">'+em.text+'</div><div style="font-size:12px;color:var(--fg-muted);">'+em.sub+'</div>'+btnHtml+'</div>'}else{renderWaterfall('galleryWaterfall',filtered,tab==='published')}addLoadMoreBtn('galleryLoadMore');c.classList.remove('wf-slide-left','wf-slide-right');void c.offsetWidth;c.classList.add(slideDir);setTimeout(function(){c.classList.remove('wf-slide-left','wf-slide-right')},450)},300)}
 function initGalleryTabIndicator(){var active=document.querySelector('.gallery-tab.active');var ind=$('galleryTabIndicator');if(active&&ind){ind.style.transition='none';ind.style.left=active.offsetLeft+active.offsetWidth/2-10+'px';ind.style.opacity='1';ind.offsetHeight;ind.style.transition='all 0.3s cubic-bezier(0.16,1,0.3,1)'}}
 let galleryManageMode=false;let gallerySelectedItems={};
 function toggleGalleryManage(){galleryManageMode=!galleryManageMode;gallerySelectedItems={};const btn=$('galleryManageBtn');const bar=$('galleryManageBar');if(galleryManageMode){btn.innerHTML='<i class="ri-check-line" style="font-size:14px;"></i>完成';btn.classList.remove('btn-ghost');btn.classList.add('btn-soft');addManageOverlays();updateGallerySelectedCount();requestAnimationFrame(function(){bar.style.maxHeight='60px';bar.style.padding='8px 16px';bar.style.opacity='1';bar.style.pointerEvents='auto';})}else{btn.innerHTML='<i class="ri-list-unordered" style="font-size:16px;"></i>管理';btn.classList.remove('btn-soft');btn.classList.add('btn-ghost');bar.style.maxHeight='0';bar.style.padding='0';bar.style.opacity='0';bar.style.pointerEvents='none';removeManageOverlays()}}
@@ -2301,7 +2394,7 @@ function submitEditWork(){
   setTimeout(function(){navigateBack()},600);
 }
 // ============ 搜索 ============
-function renderSearchDefault(){var hotColors=['#E03050','#E87040','#F0A060'];$('searchHistory').innerHTML=SEARCH_HISTORY.map(s=>'<div class="chip chip-outline" onclick="doSearch(\''+s+'\')">'+s+'</div>').join('');$('hotSearch').innerHTML=HOT_SEARCHES.map((s,i)=>'<div class="list-row" onclick="doSearch(\''+s+'\')"><span style="font-size:16px;font-weight:700;color:'+(i<3?hotColors[i]:'var(--fg-muted)')+';font-family:Georgia,serif;width:24px">'+(i+1)+'</span><div class="lr-text">'+s+'</div></div>').join('')}
+function renderSearchDefault(){var hotColors=['#E03050','#E87040','#F0A060'];if(SEARCH_HISTORY.length===0){$('searchHistory').innerHTML='<div style="font-size:13px;color:var(--fg-muted);padding:4px 0;">暂无搜索历史</div>'}else{$('searchHistory').innerHTML=SEARCH_HISTORY.map(s=>'<div class="chip chip-outline" onclick="doSearch(\''+s+'\')">'+s+'</div>').join('')}$('hotSearch').innerHTML=HOT_SEARCHES.map((s,i)=>'<div class="list-row" onclick="doSearch(\''+s+'\')"><span style="font-size:16px;font-weight:700;color:'+(i<3?hotColors[i]:'var(--fg-muted)')+';font-family:Georgia,serif;width:24px">'+(i+1)+'</span><div class="lr-text">'+s+'</div></div>').join('')}
 function doSearch(kw){$('searchInput').value=kw;onSearchInput()}
 function onSearchInput(){const v=$('searchInput').value.trim();if(v){$('searchDefault').style.display='none';$('searchResults').style.display='block';const filtered=WORKS.filter(w=>w.title.includes(v)||w.prompt.includes(v)||w.tags.some(t=>t.includes(v)));if(filtered.length>0){renderWaterfall('searchWaterfall',filtered)}else{$('searchWaterfall').innerHTML='<div class="empty-state" style="column-span:all;"><div class="empty-state-icon"><i class="ri-search-line" style="font-size:28px;color:var(--accent);"></i></div><div class="empty-state-text">没有找到相关作品</div><div style="font-size:12px;color:var(--fg-muted);">试试其他关键词吧</div></div>'}}else{$('searchDefault').style.display='block';$('searchResults').style.display='none'}}
 function clearSearchHistory(){SEARCH_HISTORY.length=0;renderSearchDefault();showToast('已清空搜索历史')}
@@ -2331,13 +2424,14 @@ html+='<div style="padding:0 12px"><div class="waterfall" id="userWorks"></div><
 $('userProfileContent').innerHTML=html;
 renderWaterfall('userWorks',works);addLoadMoreBtn('userWorksLoadMore')}
 // ============ 关注/粉丝列表 ============
-function renderFollowList(type){const c=$('followListContent');c.innerHTML='';const title=type==='following'?'我的关注':'我的粉丝';$('page-followList').dataset.title=title;$('navTitle').textContent=title;USERS.forEach(u=>{if(u.id===1)return;const row=createEl('div','list-row');row.innerHTML='<div class="avatar" style="width:40px;height:40px;font-size:16px;background:'+u.color+';cursor:pointer;" onclick="navigateTo(\'userProfile\','+u.id+')">'+u.avatar+'</div><div class="lr-text" style="cursor:pointer;" onclick="navigateTo(\'userProfile\','+u.id+')"><div style="font-size:15px;font-weight:600">'+u.name+'</div><div style="font-size:12px;color:var(--fg-muted)">'+u.bio+'</div></div><button class="btn '+(isFollowing[u.id]?'btn-secondary':'btn-soft')+' btn-sm" onclick="toggleFollow(this,'+u.id+')">'+(isFollowing[u.id]?'已关注':'+ 关注')+'</button>';c.appendChild(row)})}
+function renderFollowList(type){var c=$('followListContent');c.innerHTML='';var title=type==='following'?'我的关注':'我的粉丝';$('page-followList').dataset.title=title;$('navTitle').textContent=title;var list;if(type==='following'){list=USERS.filter(function(u){return u.id!==1&&isFollowing[u.id]})}else{list=USERS.filter(function(u){return u.id!==1})}if(list.length===0){var icon=type==='following'?'ri-user-heart-line':'ri-group-line';var text=type==='following'?'暂无关注':'暂无粉丝';var sub=type==='following'?'去广场发现有趣的创作者吧':'创作更多优秀作品来吸引粉丝';var btnHtml=type==='following'?'<button class="btn btn-soft btn-sm" style="margin-top:8px;" onclick="navigateBack();switchTab(\'home\')"><i class="ri-compass-3-line" style="margin-right:4px;"></i>去广场</button>':'';c.innerHTML='<div class="empty-state"><div class="empty-state-icon"><i class="'+icon+'" style="font-size:28px;color:var(--accent);"></i></div><div class="empty-state-text">'+text+'</div><div style="font-size:12px;color:var(--fg-muted);">'+sub+'</div>'+btnHtml+'</div>';return}list.forEach(function(u){var row=createEl('div','list-row');row.innerHTML='<div class="avatar" style="width:40px;height:40px;font-size:16px;background:'+u.color+';cursor:pointer;" onclick="navigateTo(\'userProfile\','+u.id+')">'+u.avatar+'</div><div class="lr-text" style="cursor:pointer;" onclick="navigateTo(\'userProfile\','+u.id+')"><div style="font-size:15px;font-weight:600">'+u.name+'</div><div style="font-size:12px;color:var(--fg-muted)">'+u.bio+'</div></div><button class="btn '+(isFollowing[u.id]?'btn-secondary':'btn-soft')+' btn-sm" onclick="toggleFollow(this,'+u.id+')">'+(isFollowing[u.id]?'已关注':'+ 关注')+'</button>';c.appendChild(row)})}
 // ============ 全部模型 ============
 function renderAllModels(){const c=$('allModelsContent');c.innerHTML='';MODELS.forEach((m,i)=>{const card=createEl('div','card');card.style.cssText='padding:14px;margin-bottom:10px;display:flex;gap:12px;align-items:center;cursor:pointer;'+(i===selectedModel?'border:2px solid var(--accent)':'');card.innerHTML='<img src="'+m.img+'" style="width:60px;height:60px;border-radius:12px;object-fit:cover"/><div style="flex:1"><div style="font-size:15px;font-weight:700">'+m.name+'</div><div style="font-size:12px;color:var(--fg-muted);margin-top:2px">'+m.desc+'</div><div style="display:flex;gap:4px;margin-top:4px">'+m.tags.map(t=>'<span class="tag tag-accent" style="font-size:10px;padding:2px 6px">'+t+'</span>').join('')+'</div></div><div style="text-align:right"><div style="font-size:16px;font-weight:700;color:var(--accent);font-family:Georgia,serif">'+m.cost+'</div><div style="font-size:10px;color:var(--fg-muted)">积分起</div></div>';card.onclick=()=>{selectedModel=i;renderCreatePage();updateCost();navigateBack();showToast('已选择'+m.name)};c.appendChild(card)})}
 // ============ 草稿箱 ============
 // ============ 浏览记录 ============
-function renderHistory(){const c=$('historyContent');c.innerHTML='<div class="section-title"><span>今天</span></div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px">'+WORKS.slice(0,6).map(w=>'<div class="card" style="cursor:pointer"><img src="'+w.img+'" style="width:100%;aspect-ratio:1;object-fit:cover" onclick="navigateTo(\'workDetail\','+w.id+')"/></div>').join('')+'</div><div class="section-title"><span>昨天</span></div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">'+WORKS.slice(6,9).map(w=>'<div class="card" style="cursor:pointer"><img src="'+w.img+'" style="width:100%;aspect-ratio:1;object-fit:cover" onclick="navigateTo(\'workDetail\','+w.id+')"/></div>').join('')+'</div>'}
-function clearHistory(){showToast('已清空浏览记录')}
+var _historyCleared=false;
+function renderHistory(){var c=$('historyContent');if(_historyCleared){c.innerHTML='<div class="empty-state"><div class="empty-state-icon"><i class="ri-time-line" style="font-size:28px;color:var(--accent);"></i></div><div class="empty-state-text">暂无浏览记录</div><div style="font-size:12px;color:var(--fg-muted);">去广场逛逛，发现更多精彩作品</div><button class="btn btn-soft btn-sm" style="margin-top:8px;" onclick="navigateBack();switchTab(\'home\')"><i class="ri-compass-3-line" style="margin-right:4px;"></i>去逛逛</button></div>';return}c.innerHTML='<div class="section-title"><span>今天</span></div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px">'+WORKS.slice(0,6).map(w=>'<div class="card" style="cursor:pointer"><img src="'+w.img+'" style="width:100%;aspect-ratio:1;object-fit:cover" onclick="navigateTo(\'workDetail\','+w.id+')"/></div>').join('')+'</div><div class="section-title"><span>昨天</span></div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">'+WORKS.slice(6,9).map(w=>'<div class="card" style="cursor:pointer"><img src="'+w.img+'" style="width:100%;aspect-ratio:1;object-fit:cover" onclick="navigateTo(\'workDetail\','+w.id+')"/></div>').join('')+'</div>'}
+function clearHistory(){_historyCleared=true;renderHistory();showToast('已清空浏览记录')}
 // ============ 反推提示词 ============
 function uploadReverseImg(){const url='https://picsum.photos/seed/rev'+Date.now()+'/300/300';$('reverseImg').src=url;$('reverseImgPreview').style.display='block';$('reverseUploadArea').style.display='none'}
 function startReverse(){$('reverseBtn').disabled=true;$('reverseBtn').innerHTML='<div class="gen-spinner" style="width:16px;height:16px"></div> 分析中...';setTimeout(()=>{$('reverseBtn').disabled=false;$('reverseBtn').innerHTML='重新分析';$('reverseResult').style.display='block';$('reverseText').value='A beautiful scene with soft lighting, dreamy atmosphere, pastel color palette, detailed composition, artistic style, high quality, ethereal mood, serene landscape with gentle bokeh';showToast('分析完成！消耗5积分')},2000)}
@@ -2903,6 +2997,8 @@ function init(){
   setTimeout(initHomeTabIndicator,100);
   renderCreatePage();
   updateCost();
+  _generatingTasks.push({id:'demo_task',prompt:'夕阳下的海边城堡，梦幻光影',model:MODELS[0].name,modelImg:MODELS[0].img,count:4,ratio:'3:4',cost:MODELS[0].cost*4,progress:62,stage:'AI绘制中...',startTime:Date.now()-9000});
+  refreshGalleryGenCards();
   renderWaterfall('galleryWaterfall',WORKS.filter(function(w){return w.userId===CURRENT_USER_ID}));
   addLoadMoreBtn('galleryLoadMore');
   renderRechargeTiers();
