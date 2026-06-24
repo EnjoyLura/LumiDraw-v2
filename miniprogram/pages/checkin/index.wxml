@@ -1,0 +1,43 @@
+<!-- 每日签到页 -->
+<view class="checkin-page">
+  <!-- 连续签到卡片 -->
+  <view class="streak-card">
+    <text class="streak-label">已连续签到</text>
+    <view class="streak-num-row">
+      <text class="streak-num">{{streak}}</text>
+      <text class="streak-unit">天</text>
+    </view>
+    <view class="checkin-btn {{checkedToday ? 'done' : ''}}" bindtap="onCheckin">
+      <text>{{checkedToday ? '✓ 今日已签到' : '今日签到 +10积分'}}</text>
+    </view>
+  </view>
+
+  <!-- 里程碑奖励 -->
+  <view class="section-title">🎁 里程碑奖励</view>
+  <view class="milestone-grid">
+    <view wx:for="{{milestones}}" wx:key="days" class="milestone-card {{claimedMilestones.indexOf(item.days) >= 0 ? 'claimed' : (streak >= item.days ? 'claimable' : '')}}">
+      <text class="ms-days">{{item.days}}天</text>
+      <text class="ms-reward">+{{item.reward}}</text>
+      <text class="ms-status" wx:if="{{claimedMilestones.indexOf(item.days) >= 0}}">已领</text>
+      <text class="ms-status claimable" wx:elif="{{streak >= item.days}}" data-days="{{item.days}}" bindtap="onClaimMilestone">可领</text>
+      <text class="ms-status locked" wx:else>未达</text>
+    </view>
+  </view>
+
+  <!-- 本月签到 -->
+  <view class="section-title">本月签到</view>
+  <view class="calendar-card">
+    <text class="cal-month">2026年6月</text>
+    <view class="cal-header">
+      <text wx:for="{{['日','一','二','三','四','五','六']}}" wx:key="*this" class="cal-weekday">{{item}}</text>
+    </view>
+    <view class="cal-grid">
+      <!-- 前置空位（6月1日是周一，所以1个空位） -->
+      <view class="cal-empty"></view>
+      <view wx:for="{{calendarDays}}" wx:key="day"
+        class="cal-day {{item.signed ? 'signed' : ''}} {{item.isToday ? 'today' : ''}} {{item.isMilestone ? 'milestone' : ''}}">
+        <text>{{item.day}}</text>
+      </view>
+    </view>
+  </view>
+</view>

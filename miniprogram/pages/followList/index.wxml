@@ -1,0 +1,16 @@
+<!-- 关注/粉丝列表 -->
+<view class="follow-page">
+  <block wx:if="{{users.length > 0}}">
+    <view wx:for="{{users}}" wx:key="id" class="user-item">
+      <view class="user-avatar" style="background: {{item.color}};" data-id="{{item.id}}" bindtap="onUserTap"><text>{{item.avatar}}</text></view>
+      <view class="user-info" data-id="{{item.id}}" bindtap="onUserTap">
+        <text class="user-name">{{item.name}}</text>
+        <text class="user-bio">{{item.bio}}</text>
+      </view>
+      <view class="follow-btn {{item.isFollowing ? 'following' : ''}}" data-index="{{index}}" bindtap="onToggleFollow">
+        <text>{{item.isFollowing ? '已关注' : '+ 关注'}}</text>
+      </view>
+    </view>
+  </block>
+  <empty-state wx:else icon="{{type === 'following' ? '♡' : '👤'}}" text="{{type === 'following' ? '暂无关注' : '暂无粉丝'}}" subText="{{type === 'following' ? '去广场发现有趣的创作者吧' : '创作更多优秀作品来吸引粉丝'}}" />
+</view>

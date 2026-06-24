@@ -1,0 +1,17 @@
+<!-- 作品详情管理 -->
+<view class="admin-page">
+  <view class="list-card" style="padding:24rpx;">
+    <text class="li-title" style="font-size:32rpx;">{{work.title}}</text>
+    <text class="li-sub">{{work.user}} · {{work.model}} · {{work.style}} · {{work.ratio}}</text>
+    <text class="li-sub" style="margin-top:12rpx;">{{work.prompt}}</text>
+    <text class="li-badge {{work.status === '已发布' ? 'badge-green' : 'badge-gray'}}" style="margin-top:12rpx;">{{work.status}}</text>
+  </view>
+  <view class="stat-row">
+    <view class="mini-stat"><text class="ms-num">{{work.likes}}</text><text class="ms-label">点赞</text></view>
+    <view class="mini-stat"><text class="ms-num">{{work.favorites}}</text><text class="ms-label">收藏</text></view>
+    <view class="mini-stat"><text class="ms-num">{{work.remakes}}</text><text class="ms-label">同款</text></view>
+  </view>
+  <view class="action-btn btn-secondary" bindtap="onUnpublish">下架作品</view>
+  <view class="action-btn btn-secondary" bindtap="onRecommend">设为推荐</view>
+  <view class="action-btn btn-danger" bindtap="onDelete">删除作品</view>
+</view>

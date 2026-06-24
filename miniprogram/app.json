@@ -1,14 +1,104 @@
 {
   "pages": [
-    "pages/index/index",
-    "pages/example/index"
+    "pages/home/index",
+    "pages/plaza/index",
+    "pages/create/index",
+    "pages/gallery/index",
+    "pages/mine/index",
+    "pages/editProfile/index",
+    "pages/search/index",
+    "pages/workDetail/index",
+    "pages/settings/index",
+    "pages/feedback/index",
+    "pages/recharge/index",
+    "pages/checkin/index",
+    "pages/membership/index",
+    "pages/invite/index",
+    "pages/messages/index",
+    "pages/msgDetail/index",
+    "pages/publish/index",
+    "pages/editWork/index",
+    "pages/reversePrompt/index",
+    "pages/userProfile/index",
+    "pages/followList/index",
+    "pages/history/index",
+    "pages/report/index",
+    "pages/allModels/index",
+    "pages/allGameplays/index"
+  ],
+  "subpackages": [
+    {
+      "root": "pages/admin",
+      "pages": [
+        "index/index",
+        "statUsers/index",
+        "statWorks/index",
+        "statGen/index",
+        "statRevenue/index",
+        "banner/index",
+        "bannerEdit/index",
+        "model/index",
+        "modelEdit/index",
+        "style/index",
+        "styleEdit/index",
+        "gameplay/index",
+        "gameplayEdit/index",
+        "works/index",
+        "workDetail/index",
+        "reports/index",
+        "reportDetail/index",
+        "users/index",
+        "userDetail/index",
+        "userWorks/index",
+        "points/index",
+        "audit/index"
+      ]
+    }
   ],
   "window": {
     "backgroundColor": "#F6F6F6",
-    "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#F6F6F6",
-    "navigationBarTitleText": "云开发 QuickStart",
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#FFFFFF",
+    "navigationBarTitleText": "露米画板",
     "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "color": "#8497B5",
+    "selectedColor": "#5B9FE8",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/home/index",
+        "text": "首页",
+        "iconPath": "images/icons/home.png",
+        "selectedIconPath": "images/icons/home-active.png"
+      },
+      {
+        "pagePath": "pages/plaza/index",
+        "text": "广场",
+        "iconPath": "images/icons/plaza.png",
+        "selectedIconPath": "images/icons/plaza-active.png"
+      },
+      {
+        "pagePath": "pages/create/index",
+        "text": "创作",
+        "iconPath": "images/icons/create.png",
+        "selectedIconPath": "images/icons/create-active.png"
+      },
+      {
+        "pagePath": "pages/gallery/index",
+        "text": "画廊",
+        "iconPath": "images/icons/gallery.png",
+        "selectedIconPath": "images/icons/gallery-active.png"
+      },
+      {
+        "pagePath": "pages/mine/index",
+        "text": "我的",
+        "iconPath": "images/icons/usercenter.png",
+        "selectedIconPath": "images/icons/usercenter-active.png"
+      }
+    ]
   },
   "sitemapLocation": "sitemap.json",
   "style": "v2",

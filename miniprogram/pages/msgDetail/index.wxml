@@ -1,0 +1,22 @@
+<!-- 消息详情页 -->
+<view class="msg-detail-page">
+  <block wx:if="{{messages.length > 0}}">
+    <view wx:for="{{messages}}" wx:key="id"
+      class="msg-item" data-id="{{item.id}}" bindtap="onTapMsg">
+      <view wx:if="{{item.user}}" class="msg-avatar" style="background: {{item.color}};">
+        <text>{{item.avatar}}</text>
+      </view>
+      <view wx:else class="msg-sys-icon">🔔</view>
+      <view class="msg-content">
+        <view class="msg-row">
+          <text wx:if="{{item.user}}" class="msg-user">{{item.user}}</text>
+          <text wx:else class="msg-user">{{title}}</text>
+          <text class="msg-time">{{item.time}}</text>
+        </view>
+        <text class="msg-text">{{item.content}}</text>
+      </view>
+      <view wx:if="{{item.unread}}" class="msg-dot"></view>
+    </view>
+  </block>
+  <empty-state wx:else icon="📭" text="暂无{{title}}消息" subText="有新消息时会通知你" />
+</view>

@@ -1,0 +1,11 @@
+{
+  "navigationBarTitleText": "露米画板",
+  "usingComponents": {
+    "waterfall": "/components/waterfall/index",
+    "skeleton": "/components/skeleton/index",
+    "load-more": "/components/load-more/index",
+    "bottom-sheet": "/components/bottom-sheet/index",
+    "image-preview": "/components/image-preview/index"
+  }
+}
+

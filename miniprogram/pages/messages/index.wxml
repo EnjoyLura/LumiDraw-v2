@@ -1,0 +1,19 @@
+<!-- 消息中心页 -->
+<view class="messages-page">
+  <view wx:for="{{categories}}" wx:key="key"
+    class="msg-card" data-key="{{item.key}}" bindtap="onTapCategory">
+    <view class="msg-icon" style="background: {{item.gradient}};">
+      <text class="msg-icon-text">{{item.icon}}</text>
+    </view>
+    <view class="msg-info">
+      <view class="msg-top">
+        <text class="msg-title">{{item.title}}</text>
+        <text class="msg-time">{{item.time}}</text>
+      </view>
+      <view class="msg-bottom">
+        <text class="msg-latest">{{item.latest}}</text>
+        <view wx:if="{{item.unread > 0}}" class="msg-badge">{{item.unread}}</view>
+      </view>
+    </view>
+  </view>
+</view>

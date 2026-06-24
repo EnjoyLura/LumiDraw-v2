@@ -1,0 +1,51 @@
+/* 底部弹窗组件 */
+.sheet-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 200;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.35s, visibility 0.35s;
+}
+
+.sheet-overlay.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.sheet-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #FFFFFF;
+  border-radius: 48rpx 48rpx 0 0;
+  box-shadow: 0 -16rpx 48rpx rgba(60, 120, 200, 0.16);
+  z-index: 201;
+  transform: translateY(100%);
+  visibility: hidden;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.4s;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.sheet-container.show {
+  transform: translateY(0);
+  visibility: visible;
+}
+
+.sheet-handle {
+  width: 72rpx;
+  height: 8rpx;
+  background: rgba(91, 159, 232, 0.32);
+  border-radius: 4rpx;
+  margin: 20rpx auto 8rpx;
+}
+
+.sheet-content {
+  padding: 0 0 env(safe-area-inset-bottom);
+}

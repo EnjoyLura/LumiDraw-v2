@@ -1,0 +1,331 @@
+<!-- 创作页 -->
+<view class="create-page">
+
+  <!-- 滚动内容区 -->
+  <scroll-view scroll-y class="create-scroll">
+
+    <!-- 选择模型 -->
+    <view class="section">
+      <view class="section-title">选择模型</view>
+      <view class="model-card" bindtap="onOpenModelSheet">
+        <view class="model-cover" style="background: linear-gradient(135deg, {{models[selectedModelIndex].badgeColor || '#5B9FE8'}}, {{models[selectedModelIndex].badgeColor || '#6FD4B0'}}88);">
+          <text class="model-cover-text">{{models[selectedModelIndex].name[0]}}</text>
+        </view>
+        <view class="model-info">
+          <view class="model-name-row">
+            <text class="model-name">{{models[selectedModelIndex].name}}</text>
+            <text wx:if="{{models[selectedModelIndex].badge}}" class="model-badge" style="color: {{models[selectedModelIndex].badgeColor}}; background: {{models[selectedModelIndex].badgeColor}}20;">{{models[selectedModelIndex].badge}}</text>
+          </view>
+          <text class="model-desc">{{models[selectedModelIndex].desc}}</text>
+          <view class="model-tags">
+            <text wx:for="{{models[selectedModelIndex].tags}}" wx:key="*this" class="model-tag">{{item}}</text>
+          </view>
+        </view>
+        <view class="model-right">
+          <view class="model-cost-area">
+            <text class="model-cost">{{models[selectedModelIndex].cost}}</text>
+            <text class="model-cost-unit">积分起</text>
+          </view>
+          <view class="model-arrow">›</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 描述你想要的画面 -->
+    <view class="section">
+      <view class="prompt-card">
+        <view class="prompt-header">
+          <text class="prompt-title">描述你想要的画面</text>
+          <view class="prompt-reverse" bindtap="onReversePrompt">
+            <text class="reverse-icon">🖼</text>
+            <text class="reverse-text">反推提示词</text>
+          </view>
+        </view>
+        <textarea
+          class="prompt-input"
+          value="{{prompt}}"
+          placeholder="描述你想要生成的图片，越详细效果越好..."
+          maxlength="500"
+          bindinput="onPromptInput"
+          auto-height="{{false}}"
+        />
+        <view class="prompt-footer">
+          <text class="prompt-counter">{{promptCount}}/500</text>
+          <view class="prompt-actions">
+            <view wx:if="{{showClearBtn}}" class="prompt-clear" bindtap="onClearPrompt">
+              <text class="clear-icon">✕</text>
+              <text>清除</text>
+            </view>
+            <view class="prompt-upload" bindtap="onUploadPromptImage">
+              <text class="upload-icon">📷</text>
+              <text>上传图片</text>
+            </view>
+          </view>
+        </view>
+        <!-- 上传的图片预览 -->
+        <view wx:if="{{showPromptImage}}" class="prompt-img-preview">
+          <image class="prompt-img" src="{{promptImage}}" mode="aspectFill" bindtap="onPreviewPromptImage" />
+          <view class="prompt-img-remove" bindtap="onRemovePromptImage">
+            <text>✕</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 风格类型 -->
+    <view class="section">
+      <view class="section-title">风格类型</view>
+      <view class="style-grid">
+        <view
+          wx:for="{{styles}}"
+          wx:key="*this"
+          wx:if="{{index < 7}}"
+          class="style-card {{selectedStyle === item ? 'selected' : ''}}"
+          data-style="{{item}}"
+          bindtap="onSelectStyle"
+        >
+          <view class="style-bg" style="background: {{STYLE_COLORS[index]}};"></view>
+          <view class="style-overlay"></view>
+          <view class="style-label">{{item}}</view>
+        </view>
+        <!-- 更多按钮 -->
+        <view class="style-card more-card {{selectedStyle && styles.indexOf(selectedStyle) > 6 ? 'selected' : ''}}" bindtap="onOpenStyleSheet">
+          <view class="style-bg" style="background: {{STYLE_COLORS[7]}};"></view>
+          <view class="style-overlay dark"></view>
+          <text class="style-more-text">+{{styles.length - 7}}</text>
+          <view class="style-label">更多</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 图片精度 -->
+    <view class="section">
+      <view class="section-title">图片精度</view>
+      <view class="quality-row">
+        <view
+          wx:for="{{qualities}}"
+          wx:key="label"
+          class="quality-item {{selectedQualityIndex === index ? 'selected' : ''}}"
+          data-index="{{index}}"
+          bindtap="onSelectQuality"
+        >{{item.label}}</view>
+      </view>
+    </view>
+
+    <!-- 画面比例 -->
+    <view class="section">
+      <view class="section-title-row">
+        <text class="section-title">画面比例</text>
+        <view class="section-more" bindtap="onOpenRatioSheet">
+          <text>全部尺寸</text>
+          <text class="more-arrow">›</text>
+        </view>
+      </view>
+      <view class="ratio-row">
+        <view
+          wx:for="{{ratios}}"
+          wx:key="label"
+          wx:if="{{index < 4}}"
+          class="ratio-card {{selectedRatioIndex === index ? 'active' : ''}}"
+          data-index="{{index}}"
+          bindtap="onSelectRatio"
+        >
+          <view class="ratio-shape" style="width: {{item.w > item.h ? 56 : item.w === item.h ? 44 : 36}}rpx; height: {{item.h > item.w ? 56 : item.w === item.h ? 44 : 36}}rpx;"></view>
+          <text class="ratio-name">{{item.label}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 生成数量 -->
+    <view class="section">
+      <view class="section-title">生成数量</view>
+      <view class="count-row">
+        <view
+          wx:for="{{counts}}"
+          wx:key="*this"
+          class="count-card {{selectedCountIndex === index ? 'selected' : ''}}"
+          data-index="{{index}}"
+          bindtap="onSelectCount"
+        >{{item}}张</view>
+      </view>
+    </view>
+
+    <!-- 生成结果区域 -->
+    <view class="section result-section">
+      <view class="section-title">生成结果</view>
+
+      <!-- 空闲状态 -->
+      <view wx:if="{{genStatus === 'idle'}}" class="result-placeholder">
+        <text class="result-ph-icon">🖼</text>
+        <text class="result-ph-text">点击「开始创作」生成作品</text>
+      </view>
+
+      <!-- 生成中进度 -->
+      <view wx:elif="{{genStatus === 'generating'}}" class="gen-progress">
+        <!-- 环形进度 -->
+        <view class="gen-ring-wrap">
+          <view class="gen-ring">
+            <view class="gen-ring-bg"></view>
+            <view class="gen-ring-fill" style="transform: rotate({{genProgress * 3.6 - 90}}deg);"></view>
+            <text class="gen-percent">{{genProgress}}%</text>
+          </view>
+        </view>
+        <text class="gen-stage">{{genStageText}}</text>
+        <!-- 进度条 -->
+        <view class="gen-bar-wrap">
+          <view class="gen-bar-fill" style="width: {{genProgress}}%;"></view>
+        </view>
+        <text class="gen-info">{{genInfo}}</text>
+      </view>
+
+      <!-- 生成完成 -->
+      <view wx:elif="{{genStatus === 'done'}}" class="gen-results">
+        <!-- 结果网格 -->
+        <view class="gen-grid">
+          <view wx:for="{{genResults}}" wx:key="index" class="gen-item {{item.failed ? 'failed' : ''}}">
+            <!-- 重试中 -->
+            <view wx:if="{{item.retrying}}" class="gen-retrying">
+              <view class="gen-retry-spinner"></view>
+              <text class="gen-retry-text">重新生成中...</text>
+            </view>
+            <!-- 失败 -->
+            <view wx:elif="{{item.failed}}" class="gen-failed">
+              <text class="gen-fail-icon">✕</text>
+              <text class="gen-fail-msg">{{item.error}}</text>
+              <view class="gen-retry-btn" data-index="{{item.index}}" bindtap="onRetryOne">
+                <text>↻ 重试</text>
+              </view>
+            </view>
+            <!-- 成功 -->
+            <view wx:else class="gen-success" style="background: {{item.color}};">
+            </view>
+          </view>
+        </view>
+
+        <!-- 退还提示 -->
+        <view wx:if="{{genMeta.refundMsg}}" class="gen-refund">
+          <text class="gen-refund-icon">↩</text>
+          <text class="gen-refund-text">{{genMeta.refundMsg}}</text>
+        </view>
+
+        <!-- 元信息 -->
+        <view class="gen-meta">
+          <text class="gen-meta-item">⏱ 耗时 {{genMeta.genTime}}s</text>
+          <text class="gen-meta-item">📐 {{genMeta.resW}}×{{genMeta.resH}}</text>
+          <text class="gen-meta-item">📄 {{genMeta.fileSize}}MB</text>
+          <text class="gen-meta-item">🎨 {{genMeta.modelName}}</text>
+        </view>
+
+        <!-- 操作按钮 -->
+        <view class="gen-actions">
+          <view class="gen-action-btn" bindtap="onPublishResult">
+            <text>📤 发布作品</text>
+          </view>
+          <view class="gen-action-btn primary" bindtap="onSaveAll">
+            <text>💾 全部保存</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 底部间距（给固定栏让位） -->
+    <view style="height: 200rpx;"></view>
+
+  </scroll-view>
+
+  <!-- 底部创作栏（固定） -->
+  <view class="create-bottom">
+    <view class="cost-info">
+      <text class="cost-label">本次消耗</text>
+      <view class="cost-value">
+        <text class="cost-num">{{costCredits}}</text>
+        <text class="cost-unit">积分</text>
+      </view>
+    </view>
+    <view class="create-btn" bindtap="onStartCreate">
+      <text class="create-btn-icon">✦</text>
+      <text class="create-btn-text">开始创作</text>
+    </view>
+  </view>
+
+</view>
+
+<!-- 模型选择抽屉 -->
+<bottom-sheet visible="{{showModelSheet}}" bind:close="onCloseModelSheet">
+  <view class="model-sheet">
+    <view class="sheet-title">切换模型</view>
+    <view class="sheet-subtitle">共 {{models.length}} 款模型可选</view>
+    <view class="model-sheet-list">
+      <view
+        wx:for="{{models}}"
+        wx:key="id"
+        class="model-sheet-item {{selectedModelIndex === index ? 'selected' : ''}}"
+        data-index="{{index}}"
+        bindtap="onSelectModel"
+      >
+        <view class="msi-cover" style="background: linear-gradient(135deg, {{item.badgeColor || '#5B9FE8'}}, {{item.badgeColor || '#6FD4B0'}}88);">
+          <text class="msi-cover-text">{{item.name[0]}}</text>
+        </view>
+        <view class="msi-info">
+          <view class="msi-name-row">
+            <text class="msi-name">{{item.name}}</text>
+            <text wx:if="{{item.badge}}" class="msi-badge" style="color: {{item.badgeColor}}; background: {{item.badgeColor}}20;">{{item.badge}}</text>
+          </view>
+          <text class="msi-desc">{{item.desc}}</text>
+          <view class="msi-tags">
+            <text wx:for="{{item.tags}}" wx:for-item="tag" wx:key="*this" class="msi-tag">{{tag}}</text>
+          </view>
+        </view>
+        <view class="msi-cost">
+          <text class="msi-cost-num">{{item.cost}}</text>
+          <text class="msi-cost-unit">积分起</text>
+        </view>
+        <text wx:if="{{selectedModelIndex === index}}" class="msi-check">✓</text>
+      </view>
+    </view>
+  </view>
+</bottom-sheet>
+
+<!-- 风格选择弹窗 -->
+<bottom-sheet visible="{{showStyleSheet}}" bind:close="onCloseStyleSheet">
+  <view class="style-sheet">
+    <view class="sheet-title-row">
+      <text class="sheet-title">选择风格</text>
+      <text class="sheet-subtitle">共 {{styles.length}} 种风格可选</text>
+    </view>
+    <view class="style-sheet-grid">
+      <view
+        wx:for="{{styles}}"
+        wx:key="*this"
+        class="style-sheet-card {{selectedStyle === item ? 'selected' : ''}}"
+        data-style="{{item}}"
+        bindtap="onSelectStyle"
+      >
+        <view class="ssc-bg" style="background: {{STYLE_COLORS[index]}};"></view>
+        <view class="ssc-overlay"></view>
+        <text class="ssc-label">{{item}}</text>
+      </view>
+    </view>
+    <view class="style-sheet-confirm" bindtap="onConfirmStyleSheet">确认选择</view>
+  </view>
+</bottom-sheet>
+
+<!-- 全部尺寸弹窗 -->
+<bottom-sheet visible="{{showRatioSheet}}" bind:close="onCloseRatioSheet">
+  <view class="ratio-sheet">
+    <view class="sheet-title">选择尺寸</view>
+    <view class="ratio-sheet-grid">
+      <view
+        wx:for="{{ratios}}"
+        wx:key="label"
+        class="ratio-sheet-card {{selectedRatioIndex === index ? 'selected' : ''}}"
+        data-index="{{index}}"
+        bindtap="onSelectRatio"
+      >
+        <view class="rsc-shape" style="width: {{item.w > item.h ? 64 : item.w === item.h ? 48 : 36}}rpx; height: {{item.h > item.w ? 64 : item.w === item.h ? 48 : 36}}rpx;"></view>
+        <text class="rsc-name">{{item.label}}</text>
+      </view>
+    </view>
+  </view>
+</bottom-sheet>
+

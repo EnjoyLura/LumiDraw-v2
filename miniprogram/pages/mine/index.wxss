@@ -1,0 +1,170 @@
+/* 我的页样式 */
+.mine-page {
+  padding: 32rpx;
+  min-height: 100vh;
+  background: #EEF4FC;
+}
+
+/* ============ 用户信息卡片 ============ */
+.user-card {
+  padding: 36rpx 32rpx;
+  margin-bottom: 32rpx;
+}
+
+.user-row {
+  display: flex;
+  align-items: center;
+  gap: 28rpx;
+  margin-bottom: 32rpx;
+}
+
+.user-avatar {
+  width: 112rpx;
+  height: 112rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 44rpx;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.user-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.user-name {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #0E1F3A;
+  display: block;
+}
+
+.user-id {
+  font-size: 26rpx;
+  color: #8497B5;
+  margin-top: 6rpx;
+  display: block;
+}
+
+.user-credits {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.credits-label {
+  font-size: 28rpx;
+  color: #8497B5;
+  display: block;
+}
+
+.credits-num {
+  font-size: 44rpx;
+  font-weight: 700;
+  color: #5B9FE8;
+  display: block;
+}
+
+/* ============ 4宫格快捷入口 ============ */
+.quick-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16rpx;
+  padding-top: 28rpx;
+  border-top: 1rpx solid rgba(91, 159, 232, 0.14);
+}
+
+.quick-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.quick-item:active {
+  opacity: 0.7;
+}
+
+.quick-icon {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.quick-icon-text {
+  font-size: 36rpx;
+  line-height: 1;
+}
+
+.quick-label {
+  font-size: 22rpx;
+  color: #445876;
+}
+
+/* ============ 功能/服务列表 ============ */
+.menu-card {
+  background: #FFFFFF;
+  border: 1rpx solid rgba(91, 159, 232, 0.14);
+  border-radius: 28rpx;
+  overflow: hidden;
+  margin-bottom: 32rpx;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+  padding: 28rpx 32rpx;
+  position: relative;
+}
+
+.menu-item:active {
+  background: rgba(91, 159, 232, 0.04);
+}
+
+/* 分隔线 */
+.menu-item + .menu-item {
+  border-top: 1rpx solid rgba(91, 159, 232, 0.08);
+}
+
+.menu-icon {
+  font-size: 44rpx;
+  width: 44rpx;
+  text-align: center;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.menu-label {
+  font-size: 30rpx;
+  color: #0E1F3A;
+  flex: 1;
+}
+
+.menu-badge {
+  min-width: 36rpx;
+  height: 36rpx;
+  border-radius: 999rpx;
+  background: #FFA8B8;
+  color: white;
+  font-size: 20rpx;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 10rpx;
+  flex-shrink: 0;
+}
+
+.menu-arrow {
+  font-size: 36rpx;
+  color: #8497B5;
+  flex-shrink: 0;
+}
+

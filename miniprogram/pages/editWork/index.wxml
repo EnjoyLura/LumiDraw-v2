@@ -1,0 +1,30 @@
+<!-- 编辑作品页 -->
+<view class="edit-page">
+  <view class="section">
+    <text class="section-label">作品预览</text>
+    <view class="preview-card">
+      <view class="preview-thumb" style="background: {{work.color}};"></view>
+      <view class="preview-info">
+        <text class="preview-model">{{work.model}}</text>
+        <text class="preview-meta">{{work.ratio}} · 2小时前</text>
+      </view>
+    </view>
+  </view>
+  <view class="section">
+    <text class="section-label">作品标题</text>
+    <input class="field-input" value="{{title}}" maxlength="30" bindinput="onTitleInput" placeholder="给作品起个名字" />
+    <text class="field-count">{{titleCount}}/30</text>
+  </view>
+  <view class="section">
+    <text class="section-label">作品描述</text>
+    <textarea class="field-textarea" value="{{desc}}" maxlength="200" bindinput="onDescInput" placeholder="介绍一下你的创作灵感吧~" />
+    <text class="field-count">{{descCount}}/200</text>
+  </view>
+  <view class="section">
+    <view class="tag-header"><text class="section-label">作品标签</text><text class="tag-hint">最多选5个</text></view>
+    <view class="tag-grid">
+      <view wx:for="{{allTags}}" wx:key="*this" class="tag-chip {{selectedTags.indexOf(item) >= 0 ? 'active' : ''}}" data-tag="{{item}}" bindtap="onToggleTag">{{item}}</view>
+    </view>
+  </view>
+  <view class="save-btn" bindtap="onSave">✓ 保存修改</view>
+</view>

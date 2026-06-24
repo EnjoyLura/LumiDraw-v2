@@ -1,0 +1,16 @@
+<!-- 图片全屏预览组件 -->
+<view class="preview-overlay {{visible ? 'show' : ''}}" bindtap="onClose">
+  <view class="preview-body" catchtap="noop">
+    <image
+      wx:if="{{src}}"
+      class="preview-img {{visible ? 'show' : ''}}"
+      src="{{src}}"
+      mode="widthFix"
+      bindtap="onClose"
+    />
+    <view wx:if="{{showSave}}" class="preview-save-btn" catchtap="onSave">
+      <text class="save-icon">↓</text>
+      <text>保存图片</text>
+    </view>
+  </view>
+</view>

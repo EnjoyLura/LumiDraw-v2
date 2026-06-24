@@ -1,0 +1,13 @@
+<!-- 举报详情 -->
+<view class="admin-page">
+  <view class="list-card" style="padding:24rpx;">
+    <text class="li-title" style="font-size:32rpx;">{{report.title}}</text>
+    <text class="li-sub">举报人: {{report.reporter}}</text>
+    <text class="li-sub">原因: {{report.reason}}</text>
+    <text class="li-sub">时间: {{report.time}}</text>
+    <text class="li-badge badge-red" style="margin-top:12rpx;">{{report.status}}</text>
+  </view>
+  <view class="action-btn btn-danger" bindtap="onDeleteBan">删除作品并封禁用户</view>
+  <view class="action-btn btn-danger" bindtap="onDeleteOnly">仅删除作品</view>
+  <view class="action-btn btn-secondary" bindtap="onDismiss">驳回举报</view>
+</view>

@@ -1,0 +1,11 @@
+<!-- 模型管理 -->
+<view class="admin-page">
+  <view class="header-row"><text class="page-title">模型管理</text><view class="add-btn" bindtap="onAdd">+ 新增</view></view>
+  <view class="list-card">
+    <view wx:for="{{models}}" wx:key="name" class="list-item" data-idx="{{index}}" bindtap="onEdit">
+      <view class="li-info"><text class="li-title">{{item.name}}</text><text class="li-sub">{{item.desc}} · {{item.cost}}积分</text></view>
+      <text wx:if="{{item.badge}}" class="li-badge badge-green">{{item.badge}}</text>
+      <text class="li-arrow">›</text>
+    </view>
+  </view>
+</view>

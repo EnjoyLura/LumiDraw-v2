@@ -1,0 +1,271 @@
+<!-- 画廊页 -->
+<view class="gallery-page">
+
+  <!-- 整个页面可滚动 -->
+  <scroll-view scroll-y class="gallery-scroll" enhanced show-scrollbar="{{false}}">
+
+    <!-- 头部背景区域（随页面滚动） -->
+    <view class="gallery-header" style="{{headerBg ? 'background:' + headerBg : ''}}">
+      <!-- 顶部操作栏 -->
+      <view class="gallery-topbar">
+        <view class="topbar-btn" bindtap="onOpenLeftDrawer">
+          <text class="topbar-icon">☰</text>
+        </view>
+        <view class="topbar-spacer"></view>
+        <view class="bg-picker-btn" bindtap="onOpenBgPicker">
+          <text class="bg-picker-icon">📷</text>
+          <text class="bg-picker-text">设置背景</text>
+        </view>
+        <view class="topbar-btn" bindtap="onSearchTap">
+          <text class="topbar-icon">⌕</text>
+        </view>
+      </view>
+
+      <!-- 头像 + 信息 -->
+      <view class="user-row">
+        <view class="avatar-wrap" bindtap="onChangeAvatar">
+          <view class="avatar" style="background: {{user.avatarColor}};">
+            <text>{{user.avatarText}}</text>
+          </view>
+          <view class="avatar-badge">+</view>
+        </view>
+        <view class="user-info">
+          <text class="user-name">{{user.nickName}}</text>
+          <text class="user-id">ID: {{user.userId}}</text>
+          <view class="gender-tag {{user.gender === 'female' ? 'female' : 'male'}}">
+            <text>{{user.gender === 'female' ? '♀' : '♂'}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 签名 -->
+      <text class="user-signature">{{user.signature}}</text>
+
+      <!-- 标签 -->
+      <view class="user-tags">
+        <text class="user-tag">{{user.tag}}</text>
+      </view>
+
+      <!-- 数据统计 + 编辑按钮 -->
+      <view class="stats-row">
+        <view class="stats-list">
+          <view class="stat-item">
+            <text class="stat-num" style="color: #FFA8B8;">{{user.worksCount}}</text>
+            <text class="stat-label">作品</text>
+          </view>
+          <view class="stat-item" bindtap="onSearchTap">
+            <text class="stat-num" style="color: #5B9FE8;">{{user.followersCount}}</text>
+            <text class="stat-label">粉丝</text>
+          </view>
+          <view class="stat-item">
+            <text class="stat-num" style="color: #B8A5E3;">{{likesDisplay}}</text>
+            <text class="stat-label">获赞</text>
+          </view>
+        </view>
+        <view class="edit-btn" bindtap="onEditProfile">编辑资料</view>
+      </view>
+    </view>
+
+    <!-- 子标签页 + 管理按钮 -->
+    <view class="tab-manage-row">
+      <view class="gallery-tabs">
+        <view
+          wx:for="{{tabList}}"
+          wx:key="key"
+          class="gallery-tab {{currentTab === item.key ? 'active' : ''}}"
+          data-tab="{{item.key}}"
+          bindtap="onSwitchTab"
+        >{{item.label}}</view>
+      </view>
+      <view class="manage-btn {{manageMode ? 'active' : ''}}" bindtap="onToggleManage">
+        <text class="manage-icon">☰</text>
+        <text>{{manageMode ? '完成' : '管理'}}</text>
+      </view>
+    </view>
+
+    <!-- 生成中任务卡片 -->
+    <view wx:if="{{genTasks.length > 0}}" class="gen-tasks">
+      <view wx:for="{{genTasks}}" wx:key="id" class="gen-task-card">
+        <view class="gen-task-shimmer"></view>
+        <view class="gen-task-content">
+          <view class="gen-task-info">
+            <text class="gen-task-prompt">{{item.prompt}}</text>
+            <text class="gen-task-meta">{{item.model}} · {{item.count}}张 · {{item.ratio}}</text>
+          </view>
+          <view class="gen-task-progress">
+            <text class="gen-task-pct">{{item.progress || 0}}%</text>
+          </view>
+        </view>
+        <view class="gen-task-bar">
+          <view class="gen-task-bar-fill" style="width: {{item.progress || 0}}%;"></view>
+        </view>
+      </view>
+    </view>
+
+    <!-- Tab切换加载 spinner -->
+    <view wx:if="{{showTabLoading}}" class="tab-loading">
+      <view class="tab-spinner"></view>
+    </view>
+
+    <!-- 作品区域 -->
+    <block wx:else>
+      <!-- 空状态 -->
+      <view wx:if="{{works.length === 0}}" class="gallery-empty">
+        <empty-state
+          wx:if="{{currentTab === 'all'}}"
+          icon="🖼" text="还没有作品" subText="去创作页生成你的第一幅AI画作吧" buttonText="去创作"
+          bind:action="onPublish"
+        />
+        <empty-state
+          wx:elif="{{currentTab === 'published'}}"
+          icon="📤" text="暂无已发布作品" subText="创作完成后点击发布，让更多人看到"
+        />
+        <empty-state
+          wx:elif="{{currentTab === 'draft'}}"
+          icon="📝" text="暂无草稿" subText="生成的作品会自动保存到草稿箱"
+        />
+        <empty-state
+          wx:elif="{{currentTab === 'favorite'}}"
+          icon="♥" text="暂无收藏" subText="浏览广场时收藏喜欢的作品吧" buttonText="去广场"
+          bind:action="onSearchTap"
+        />
+      </view>
+
+      <!-- 瀑布流（带滑入动画） -->
+      <view wx:else class="gallery-waterfall {{wfAnimClass}}">
+        <waterfall
+          works="{{works}}"
+          likedMap="{{likedMap}}"
+          showPublished="{{currentTab === 'published'}}"
+          manageMode="{{manageMode}}"
+          selectedMap="{{selectedItems}}"
+          bind:itemclick="onWorkItemTap"
+          bind:selecttap="onSelectItem"
+          bind:longpress="onWorkLongPress"
+          bind:liketap="onWorkLikeTap"
+        />
+      </view>
+
+      <load-more status="{{loadMoreStatus}}" />
+    </block>
+
+    <!-- 底部间距 -->
+    <view style="height: 200rpx;"></view>
+
+  </scroll-view>
+
+  <!-- 管理模式底部操作栏（动画滑入） -->
+  <view class="manage-bar {{manageMode ? 'show' : ''}}">
+    <text class="manage-count">已选择 {{selectedCount}} 项</text>
+    <view class="manage-select-all" bindtap="onSelectAll">全选</view>
+    <view class="manage-delete {{selectedCount > 0 ? 'active' : ''}}" bindtap="onDeleteSelected">删除</view>
+  </view>
+
+  <!-- 悬浮发布按钮 -->
+  <view class="publish-fab" bindtap="onPublish" wx:if="{{!manageMode}}">
+    <text class="fab-icon">+</text>
+  </view>
+
+</view>
+
+<!-- 左抽屉（与广场页一致） -->
+<left-drawer visible="{{showLeftDrawer}}" bind:close="onCloseLeftDrawer">
+  <view class="drawer-header">
+    <view class="drawer-user-row">
+      <view class="drawer-avatar" style="background: {{user.avatarColor}};">
+        <text>{{user.avatarText}}</text>
+      </view>
+      <view class="drawer-user-info">
+        <text class="drawer-user-name">{{user.nickName}}</text>
+        <text class="drawer-credits"><text class="credits-num">2860</text> <text class="credits-label">积分</text></text>
+      </view>
+    </view>
+    <view class="drawer-quick">
+      <view class="drawer-quick-item" data-page="recharge" bindtap="onDrawerNav">
+        <view class="dq-icon" style="background: linear-gradient(135deg, #a8d8f8, #b0e6d0);">
+          <text class="dq-icon-text">💰</text>
+        </view>
+        <text class="dq-text">充值</text>
+      </view>
+      <view class="drawer-quick-item" data-page="checkin" bindtap="onDrawerNav">
+        <view class="dq-icon" style="background: linear-gradient(135deg, #FFD4C8, #FFC8D6);">
+          <text class="dq-icon-text">📅</text>
+        </view>
+        <text class="dq-text">签到</text>
+      </view>
+      <view class="drawer-quick-item" data-page="membership" bindtap="onDrawerNav">
+        <view class="dq-icon" style="background: linear-gradient(135deg, #D4C8F0, #B8A8E0);">
+          <text class="dq-icon-text">♛</text>
+        </view>
+        <text class="dq-text">会员</text>
+      </view>
+      <view class="drawer-quick-item" data-page="invite" bindtap="onDrawerNav">
+        <view class="dq-icon" style="background: linear-gradient(135deg, #A3E4CC, #8BD8B8);">
+          <text class="dq-icon-text">👥</text>
+        </view>
+        <text class="dq-text">邀请</text>
+      </view>
+    </view>
+  </view>
+  <view class="drawer-menu">
+    <view class="drawer-menu-item" data-page="publish" bindtap="onDrawerNav">
+      <text class="dm-icon" style="color:#5B9FE8;">✦</text>
+      <text class="dm-text">发布作品</text>
+      <text class="dm-arrow">›</text>
+    </view>
+    <view class="drawer-menu-item" data-page="history" bindtap="onDrawerNav">
+      <text class="dm-icon" style="color:#6FD4B0;">◷</text>
+      <text class="dm-text">浏览记录</text>
+      <text class="dm-arrow">›</text>
+    </view>
+    <view class="drawer-menu-item" data-page="messages" bindtap="onDrawerNav">
+      <text class="dm-icon" style="color:#FFA8B8;">✉</text>
+      <text class="dm-text">消息中心</text>
+      <view class="dm-badge">5</view>
+      <text class="dm-arrow">›</text>
+    </view>
+    <view class="drawer-menu-item" data-page="followList" data-type="following" bindtap="onDrawerNav">
+      <text class="dm-icon" style="color:#FFB59A;">♡</text>
+      <text class="dm-text">我的关注</text>
+      <text class="dm-arrow">›</text>
+    </view>
+    <view class="drawer-menu-item" data-page="followList" data-type="followers" bindtap="onDrawerNav">
+      <text class="dm-icon" style="color:#FFE08A;">👤</text>
+      <text class="dm-text">我的粉丝</text>
+      <text class="dm-arrow">›</text>
+    </view>
+  </view>
+</left-drawer>
+
+<!-- 背景选择弹窗 -->
+<bottom-sheet visible="{{showBgPicker}}" bind:close="onCloseBgPicker">
+  <view class="bg-picker">
+    <view class="bg-picker-title">选择背景</view>
+    <view class="bg-color-grid">
+      <view
+        wx:for="{{bgColors}}"
+        wx:key="name"
+        class="bg-color-item {{currentBgValue === item.value ? 'selected' : ''}}"
+        style="background: {{item.value}};"
+        data-value="{{item.value}}"
+        bindtap="onSelectBgColor"
+      >
+        <text wx:if="{{currentBgValue === item.value}}" class="bg-check">✓</text>
+      </view>
+    </view>
+    <view class="bg-picker-title" style="margin-top: 24rpx;">渐变背景</view>
+    <view class="bg-gradient-grid">
+      <view
+        wx:for="{{bgGradients}}"
+        wx:key="name"
+        class="bg-gradient-item {{currentBgValue === item.value ? 'selected' : ''}}"
+        style="background: {{item.value}};"
+        data-value="{{item.value}}"
+        bindtap="onSelectBgGradient"
+      >
+        <text wx:if="{{currentBgValue === item.value}}" class="bg-check">✓</text>
+        <text class="bg-gradient-name">{{item.name}}</text>
+      </view>
+    </view>
+  </view>
+</bottom-sheet>

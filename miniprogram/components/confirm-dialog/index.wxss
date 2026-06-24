@@ -1,0 +1,105 @@
+/* 确认对话框组件 */
+.dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 250;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s, visibility 0.25s;
+}
+
+.dialog-overlay.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.dialog-box {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 560rpx;
+  background: #FFFFFF;
+  border-radius: 32rpx;
+  box-shadow: 0 40rpx 120rpx rgba(0, 0, 0, 0.15);
+  z-index: 260;
+  transform: translate(-50%, -50%) scale(0.9);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s;
+  overflow: hidden;
+}
+
+.dialog-box.show {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.dialog-body {
+  padding: 48rpx 40rpx 32rpx;
+  text-align: center;
+}
+
+.dialog-icon {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24rpx;
+}
+
+.dialog-icon-text {
+  font-size: 48rpx;
+  line-height: 1;
+}
+
+.dialog-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #0E1F3A;
+  margin-bottom: 12rpx;
+}
+
+.dialog-msg {
+  font-size: 28rpx;
+  color: #8497B5;
+  line-height: 1.5;
+}
+
+.dialog-footer {
+  display: flex;
+  border-top: 1rpx solid rgba(91, 159, 232, 0.14);
+}
+
+.dialog-btn {
+  flex: 1;
+  padding: 28rpx 0;
+  font-size: 30rpx;
+  font-weight: 600;
+  text-align: center;
+  background: none;
+  border: none;
+}
+
+.dialog-btn-cancel {
+  color: #445876;
+  border-right: 1rpx solid rgba(91, 159, 232, 0.14);
+}
+
+.dialog-btn-cancel:active {
+  background: rgba(91, 159, 232, 0.06);
+}
+
+.dialog-btn-confirm {
+  color: #FF6B8A;
+}
+
+.dialog-btn-confirm:active {
+  background: rgba(91, 159, 232, 0.06);
+}

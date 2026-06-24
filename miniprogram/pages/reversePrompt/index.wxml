@@ -1,0 +1,26 @@
+<!-- 反推提示词页 -->
+<view class="reverse-page">
+  <view class="upload-card">
+    <view wx:if="{{!imageUploaded}}" class="upload-area" bindtap="onUploadImage">
+      <text class="upload-icon">📷</text>
+      <text class="upload-title">上传图片</text>
+      <text class="upload-hint">AI将分析图片并生成提示词</text>
+    </view>
+    <view wx:else class="preview-area">
+      <image class="preview-img" src="{{imageUrl}}" mode="aspectFill" />
+    </view>
+    <view class="analyze-btn {{analyzing ? 'loading' : ''}}" bindtap="onAnalyze">
+      <text>{{analyzing ? '分析中...' : (analyzed ? '重新分析' : '🔍 开始分析 (消耗5积分)')}}</text>
+    </view>
+  </view>
+  <view wx:if="{{analyzed}}" class="result-section">
+    <text class="section-title">分析结果</text>
+    <view class="result-card">
+      <textarea class="result-text" value="{{resultText}}" disabled />
+    </view>
+    <view class="result-actions">
+      <view class="result-btn secondary" bindtap="onCopyResult">复制</view>
+      <view class="result-btn primary" bindtap="onUseResult">带入创作</view>
+    </view>
+  </view>
+</view>

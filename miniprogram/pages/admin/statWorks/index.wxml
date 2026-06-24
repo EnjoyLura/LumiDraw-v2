@@ -1,0 +1,11 @@
+<!-- 作品统计 -->
+<view class="admin-page">
+  <text class="page-title">作品统计</text>
+  <view class="stat-row"><view wx:for="{{stats}}" wx:key="label" class="mini-stat"><text class="ms-num">{{item.value}}</text><text class="ms-label">{{item.label}}</text></view></view>
+  <text class="section-title">近7日新增作品</text>
+  <view class="bar-chart"><view class="bar-row"><view wx:for="{{bars}}" wx:key="label" class="bar-col"><view class="bar-fill" style="height: {{item.h}}%;background: #6FD4B0;"></view><text class="bar-label">{{item.label}}</text></view></view></view>
+  <text class="section-title">风格分布</text>
+  <view class="list-card" style="padding:24rpx;"><view wx:for="{{styles}}" wx:key="name" class="progress-row"><view class="pr-label"><text>{{item.name}}</text><text>{{item.count}} ({{item.pct}}%)</text></view><view class="pr-bar"><view class="pr-fill" style="width: {{item.pct * 3}}%;background: #6FD4B0;"></view></view></view></view>
+  <text class="section-title">互动数据</text>
+  <view class="list-card"><view wx:for="{{metrics}}" wx:key="label" class="list-item"><text class="li-label">{{item.label}}</text><text class="li-value">{{item.value}}</text></view></view>
+</view>

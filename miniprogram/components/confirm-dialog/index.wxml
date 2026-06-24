@@ -1,0 +1,15 @@
+<!-- 确认对话框组件 -->
+<view class="dialog-overlay {{visible ? 'show' : ''}}" bindtap="onCancel"></view>
+<view class="dialog-box {{visible ? 'show' : ''}}">
+  <view class="dialog-body">
+    <view class="dialog-icon" style="background: {{iconBg}};">
+      <text class="dialog-icon-text" style="color: {{iconColor}};">{{iconChar}}</text>
+    </view>
+    <view class="dialog-title">{{title}}</view>
+    <view class="dialog-msg">{{message}}</view>
+  </view>
+  <view class="dialog-footer">
+    <view class="dialog-btn dialog-btn-cancel" bindtap="onCancel">取消</view>
+    <view class="dialog-btn dialog-btn-confirm" style="color: {{confirmColor}};" bindtap="onConfirm">{{confirmText}}</view>
+  </view>
+</view>

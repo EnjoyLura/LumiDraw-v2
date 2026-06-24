@@ -1,0 +1,81 @@
+<!-- 积分充值页 -->
+<view class="recharge-page">
+  <!-- 余额卡片 -->
+  <view class="balance-card">
+    <text class="balance-label">当前积分余额</text>
+    <text class="balance-num">{{credits}}</text>
+  </view>
+
+  <!-- 充值档位 -->
+  <view class="section-title">充值档位</view>
+  <view class="tier-grid">
+    <view wx:for="{{tiers}}" wx:key="price"
+      class="tier-card {{selectedTier === index ? 'selected' : ''}}"
+      data-index="{{index}}" bindtap="onSelectTier">
+      <view wx:if="{{item.popular}}" class="tier-badge">推荐</view>
+      <text class="tier-credits">{{item.credits}}</text>
+      <text class="tier-unit">积分</text>
+      <text wx:if="{{item.bonus > 0}}" class="tier-bonus">送{{item.bonus}}积分</text>
+      <view wx:else class="tier-bonus-spacer"></view>
+      <text class="tier-price">¥{{item.price}}</text>
+    </view>
+    <view class="tier-card custom" bindtap="onOpenCustom">
+      <text class="custom-icon">+</text>
+      <text class="custom-text">自定义</text>
+      <text class="custom-sub">任意金额</text>
+    </view>
+  </view>
+
+  <!-- 充值按钮 -->
+  <view class="recharge-btn" bindtap="onRecharge">立即充值 · ¥{{tiers[selectedTier].price}}</view>
+
+  <!-- 记录Tab -->
+  <view class="record-tabs">
+    <view class="record-tab {{currentTab === 'earn' ? 'active' : ''}}" data-tab="earn" bindtap="onSwitchTab">积分获得</view>
+    <view class="record-tab {{currentTab === 'spend' ? 'active' : ''}}" data-tab="spend" bindtap="onSwitchTab">积分消耗</view>
+  </view>
+
+  <!-- 记录列表 -->
+  <view class="record-list">
+    <block wx:if="{{currentTab === 'earn'}}">
+      <view wx:for="{{earnRecords}}" wx:key="title" class="record-item">
+        <view class="record-icon earn">+</view>
+        <view class="record-info">
+          <text class="record-title">{{item.title}}</text>
+          <text class="record-meta">{{item.source}} · {{item.time}}</text>
+        </view>
+        <text class="record-amount earn">{{item.amount}}</text>
+      </view>
+    </block>
+    <block wx:else>
+      <view wx:for="{{spendRecords}}" wx:key="title" class="record-item">
+        <view class="record-icon spend">✦</view>
+        <view class="record-info">
+          <text class="record-title">{{item.title}}</text>
+          <text class="record-meta">{{item.model}} · {{item.time}}</text>
+        </view>
+        <text class="record-amount spend">{{item.amount}}</text>
+      </view>
+    </block>
+  </view>
+</view>
+
+<!-- 自定义充值弹窗 -->
+<bottom-sheet visible="{{showCustomSheet}}" bind:close="onCloseCustom">
+  <view class="custom-sheet">
+    <view class="sheet-handle"></view>
+    <view class="sheet-title">自定义充值</view>
+    <view class="custom-input-row">
+      <text class="custom-yen">¥</text>
+      <input class="custom-input" type="digit" value="{{customAmount}}" bindinput="onCustomInput" placeholder="最低1元" />
+    </view>
+    <view class="custom-preview">
+      <view class="cp-row"><text>可获得积分</text><text class="cp-num">{{customCredits}}</text></view>
+      <view class="cp-row"><text>额外赠送</text><text class="cp-bonus">+{{customBonus}}</text></view>
+    </view>
+    <view class="custom-actions">
+      <view class="custom-cancel" bindtap="onCloseCustom">取消</view>
+      <view class="custom-confirm" bindtap="onConfirmCustom">确认充值</view>
+    </view>
+  </view>
+</bottom-sheet>

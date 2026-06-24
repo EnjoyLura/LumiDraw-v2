@@ -1,0 +1,13 @@
+<!-- 用户列表 -->
+<view class="admin-page">
+  <text class="page-title">用户列表</text>
+  <view class="list-card">
+    <view wx:for="{{users}}" wx:key="id" class="list-item" data-id="{{item.id}}" bindtap="onDetail">
+      <view class="avatar-sm" style="background: {{item.color}};"><text>{{item.avatar}}</text></view>
+      <view class="li-info"><text class="li-title">{{item.name}}</text><text class="li-sub">作品{{item.works}} · 注册{{item.date}}</text></view>
+      <text wx:if="{{item.vip}}" class="li-badge badge-green">VIP</text>
+      <text class="li-badge {{item.status === '正常' ? 'badge-green' : 'badge-red'}}">{{item.status}}</text>
+      <text class="li-arrow">›</text>
+    </view>
+  </view>
+</view>

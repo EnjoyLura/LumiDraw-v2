@@ -1,0 +1,13 @@
+<!-- 举报页 -->
+<view class="report-page">
+  <text class="page-title">请选择举报原因</text>
+  <view class="reason-list">
+    <view wx:for="{{reasons}}" wx:key="*this" class="reason-item {{selectedReason === index ? 'active' : ''}}" data-index="{{index}}" bindtap="onSelectReason">
+      <text class="reason-text">{{item}}</text>
+      <text wx:if="{{selectedReason === index}}" class="reason-check">✓</text>
+    </view>
+  </view>
+  <text class="desc-label">补充描述（选填）</text>
+  <textarea class="desc-input" value="{{desc}}" maxlength="200" bindinput="onDescInput" placeholder="请描述具体问题..." />
+  <view class="submit-btn" bindtap="onSubmit">提交举报</view>
+</view>

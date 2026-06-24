@@ -1,0 +1,21 @@
+<!-- 用户主页 -->
+<view class="profile-page">
+  <view class="profile-header">
+    <view class="profile-avatar" style="background: {{user.color}};"><text>{{user.avatar}}</text></view>
+    <view class="profile-info">
+      <text class="profile-name">{{user.name}}</text>
+      <text class="profile-id">ID: {{user.id}}</text>
+    </view>
+    <view class="follow-btn {{isFollowing ? 'following' : ''}}" bindtap="onToggleFollow">
+      <text>{{isFollowing ? '已关注' : '+ 关注'}}</text>
+    </view>
+  </view>
+  <text class="profile-bio">{{user.bio}}</text>
+  <view class="profile-stats">
+    <view class="stat"><text class="stat-num" style="color:#FFA8B8;">{{user.works}}</text><text class="stat-label">作品</text></view>
+    <view class="stat"><text class="stat-num" style="color:#5B9FE8;">{{user.followers}}</text><text class="stat-label">粉丝</text></view>
+    <view class="stat"><text class="stat-num" style="color:#B8A5E3;">{{user.likes}}</text><text class="stat-label">获赞</text></view>
+  </view>
+  <view class="works-title">TA的作品 ({{works.length}})</view>
+  <view class="works-area"><waterfall works="{{works}}" bind:itemclick="onWorkTap" /></view>
+</view>

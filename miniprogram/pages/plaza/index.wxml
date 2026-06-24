@@ -1,0 +1,192 @@
+<!-- 广场页 -->
+<view class="plaza-page">
+
+  <!-- 顶部栏：菜单 + Tab + 搜索 -->
+  <view class="plaza-topbar">
+    <view class="topbar-btn" bindtap="onOpenLeftDrawer">
+      <text class="topbar-icon">☰</text>
+    </view>
+    <view class="topbar-tabs">
+      <view
+        wx:for="{{tabList}}"
+        wx:key="key"
+        class="topbar-tab {{currentTab === item.key ? 'active' : ''}}"
+        data-tab="{{item.key}}"
+        bindtap="onSwitchTab"
+      >{{item.label}}</view>
+    </view>
+    <view class="topbar-btn" bindtap="onSearchTap">
+      <text class="topbar-icon search-icon">⌕</text>
+    </view>
+  </view>
+
+  <!-- 分类chips + 筛选按钮 -->
+  <view class="category-bar">
+    <view class="category-scroll-wrap">
+      <scroll-view scroll-x class="category-scroll" enhanced show-scrollbar="{{false}}">
+        <view class="category-list">
+          <view
+            wx:for="{{categories}}"
+            wx:key="index"
+            class="category-chip {{currentCategory === index ? 'active' : ''}}"
+            data-index="{{index}}"
+            bindtap="onCategoryTap"
+          >{{item}}</view>
+        </view>
+      </scroll-view>
+      <view class="category-fade"></view>
+    </view>
+    <view class="filter-btn" bindtap="onOpenFilter">
+      <view class="filter-icon-lines">
+        <view class="filter-line"></view>
+        <view class="filter-line short"></view>
+        <view class="filter-line"></view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 瀑布流区域 -->
+  <scroll-view scroll-y class="plaza-scroll" enhanced show-scrollbar="{{false}}">
+    <view class="waterfall-area {{wfAnimClass}}">
+      <!-- 加载 spinner -->
+      <view wx:if="{{showTabLoading}}" class="tab-loading">
+        <view class="tab-spinner"></view>
+      </view>
+      <block wx:else>
+        <waterfall
+          works="{{works}}"
+          likedMap="{{likedMap}}"
+          bind:itemclick="onWorkItemTap"
+          bind:longpress="onWorkLongPress"
+          bind:liketap="onWorkLikeTap"
+          bind:usertap="onWorkUserTap"
+        />
+      </block>
+    </view>
+    <load-more status="{{loadMoreStatus}}" />
+  </scroll-view>
+
+</view>
+
+<!-- 左抽屉导航 -->
+<left-drawer visible="{{showLeftDrawer}}" bind:close="onCloseLeftDrawer">
+  <view class="drawer-header">
+    <view class="drawer-user-row">
+      <view class="drawer-avatar">梦</view>
+      <view class="drawer-user-info">
+        <text class="drawer-user-name">云端造梦师</text>
+        <text class="drawer-credits"><text class="credits-num">2860</text> <text class="credits-label">积分</text></text>
+      </view>
+    </view>
+    <view class="drawer-quick">
+      <view class="drawer-quick-item" data-page="recharge" bindtap="onDrawerNav">
+        <view class="dq-icon" style="background: linear-gradient(135deg, #a8d8f8, #b0e6d0);">
+          <text class="dq-icon-text">💰</text>
+        </view>
+        <text class="dq-text">充值</text>
+      </view>
+      <view class="drawer-quick-item" data-page="checkin" bindtap="onDrawerNav">
+        <view class="dq-icon" style="background: linear-gradient(135deg, #FFD4C8, #FFC8D6);">
+          <text class="dq-icon-text">📅</text>
+        </view>
+        <text class="dq-text">签到</text>
+      </view>
+      <view class="drawer-quick-item" data-page="membership" bindtap="onDrawerNav">
+        <view class="dq-icon" style="background: linear-gradient(135deg, #D4C8F0, #B8A8E0);">
+          <text class="dq-icon-text">♛</text>
+        </view>
+        <text class="dq-text">会员</text>
+      </view>
+      <view class="drawer-quick-item" data-page="invite" bindtap="onDrawerNav">
+        <view class="dq-icon" style="background: linear-gradient(135deg, #A3E4CC, #8BD8B8);">
+          <text class="dq-icon-text">👥</text>
+        </view>
+        <text class="dq-text">邀请</text>
+      </view>
+    </view>
+  </view>
+  <view class="drawer-menu">
+    <view class="drawer-menu-item" data-page="publish" bindtap="onDrawerNav">
+      <text class="dm-icon" style="color:#5B9FE8;">✦</text>
+      <text class="dm-text">发布作品</text>
+      <text class="dm-arrow">›</text>
+    </view>
+    <view class="drawer-menu-item" data-page="history" bindtap="onDrawerNav">
+      <text class="dm-icon" style="color:#6FD4B0;">◷</text>
+      <text class="dm-text">浏览记录</text>
+      <text class="dm-arrow">›</text>
+    </view>
+    <view class="drawer-menu-item" data-page="messages" bindtap="onDrawerNav">
+      <text class="dm-icon" style="color:#FFA8B8;">✉</text>
+      <text class="dm-text">消息中心</text>
+      <view class="dm-badge">5</view>
+      <text class="dm-arrow">›</text>
+    </view>
+    <view class="drawer-menu-item" data-page="followList" data-type="following" bindtap="onDrawerNav">
+      <text class="dm-icon" style="color:#FFB59A;">♡</text>
+      <text class="dm-text">我的关注</text>
+      <text class="dm-arrow">›</text>
+    </view>
+    <view class="drawer-menu-item" data-page="followList" data-type="followers" bindtap="onDrawerNav">
+      <text class="dm-icon" style="color:#FFE08A;">👤</text>
+      <text class="dm-text">我的粉丝</text>
+      <text class="dm-arrow">›</text>
+    </view>
+  </view>
+</left-drawer>
+
+<!-- 筛选抽屉 -->
+<bottom-sheet visible="{{showFilterSheet}}" bind:close="onCloseFilter">
+  <view class="filter-sheet">
+    <!-- 分类 -->
+    <view class="filter-section-title">分类</view>
+    <view class="filter-chips">
+      <view
+        wx:for="{{categories}}"
+        wx:key="index"
+        class="filter-chip {{selectedFilterModels.indexOf(item) >= 0 ? 'active' : ''}}"
+        data-value="{{item}}"
+        bindtap="onFilterModelTap"
+      >{{item}}</view>
+    </view>
+    <!-- 模型 -->
+    <view class="filter-section-title">模型</view>
+    <view class="filter-chips">
+      <view
+        wx:for="{{filterModels}}"
+        wx:key="index"
+        class="filter-chip {{selectedFilterModels.indexOf(item) >= 0 ? 'active' : ''}}"
+        data-value="{{item}}"
+        bindtap="onFilterModelTap"
+      >{{item}}</view>
+    </view>
+    <!-- 尺寸 -->
+    <view class="filter-section-title">尺寸</view>
+    <view class="filter-chips">
+      <view
+        wx:for="{{filterRatios}}"
+        wx:key="index"
+        class="filter-chip {{selectedFilterRatios.indexOf(item) >= 0 ? 'active' : ''}}"
+        data-value="{{item}}"
+        bindtap="onFilterRatioTap"
+      >{{item}}</view>
+    </view>
+    <!-- 精度 -->
+    <view class="filter-section-title">精度</view>
+    <view class="filter-chips">
+      <view
+        wx:for="{{filterQualities}}"
+        wx:key="index"
+        class="filter-chip {{selectedFilterQualities.indexOf(item) >= 0 ? 'active' : ''}}"
+        data-value="{{item}}"
+        bindtap="onFilterQualityTap"
+      >{{item}}</view>
+    </view>
+    <!-- 按钮 -->
+    <view class="filter-actions">
+      <view class="filter-btn-reset" bindtap="onResetFilter">重置</view>
+      <view class="filter-btn-apply" bindtap="onApplyFilter">确认</view>
+    </view>
+  </view>
+</bottom-sheet>
+

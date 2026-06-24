@@ -1,0 +1,197 @@
+/* 瀑布流组件样式 */
+.waterfall {
+  display: flex;
+  gap: 16rpx;
+}
+
+.waterfall-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.wf-item {
+  break-inside: avoid;
+}
+
+.card {
+  background: #FFFFFF;
+  border: 1rpx solid rgba(91, 159, 232, 0.14);
+  border-radius: 24rpx;
+  overflow: hidden;
+  position: relative;
+  transition: transform 0.2s;
+}
+
+.card:active {
+  transform: scale(0.98);
+}
+
+/* 管理模式勾选圆圈 */
+.manage-check {
+  position: absolute;
+  top: 16rpx;
+  left: 16rpx;
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  border: 4rpx solid rgba(91, 159, 232, 0.32);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  font-size: 28rpx;
+  color: white;
+  transition: all 0.2s;
+}
+
+.manage-check.checked {
+  background: #5B9FE8;
+  border-color: #5B9FE8;
+}
+
+/* 已发布角标 */
+.published-badge {
+  position: absolute;
+  top: 16rpx;
+  right: 16rpx;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(8px);
+  color: #5B9FE8;
+  font-size: 20rpx;
+  font-weight: 600;
+  padding: 6rpx 16rpx;
+  border-radius: 16rpx;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 6rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.08);
+}
+
+.badge-icon {
+  font-size: 24rpx;
+  line-height: 1;
+}
+
+.badge-text {
+  line-height: 1;
+}
+
+/* 图片 */
+.card-img-wrap {
+  width: 100%;
+  overflow: hidden;
+}
+
+.card-img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.card-img.loaded {
+  opacity: 1;
+}
+
+/* 颜色占位（无图片时） */
+.card-color-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24rpx;
+}
+
+.placeholder-label {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 28rpx;
+  font-weight: 600;
+  text-align: center;
+  text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.1);
+}
+
+/* 信息区 */
+.card-info {
+  padding: 20rpx 20rpx 12rpx;
+}
+
+.card-title {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #0E1F3A;
+  margin-bottom: 8rpx;
+  display: block;
+}
+
+.card-meta {
+  display: flex;
+  align-items: center;
+}
+
+.card-user {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  flex: 1;
+  overflow: hidden;
+}
+
+.user-avatar {
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #5B9FE8, #6FD4B0);
+  color: white;
+  font-weight: 700;
+  font-size: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.user-name {
+  font-size: 22rpx;
+  color: #445876;
+  flex: 1;
+  display: block;
+}
+
+.card-like {
+  display: flex;
+  align-items: center;
+  gap: 6rpx;
+  padding: 4rpx 8rpx;
+  border-radius: 16rpx;
+  transition: background 0.2s;
+}
+
+.card-like:active {
+  background: rgba(91, 159, 232, 0.12);
+}
+
+.like-icon {
+  font-size: 32rpx;
+  color: #8497B5;
+  transition: all 0.3s;
+}
+
+.like-icon.liked {
+  color: #FFA8B8;
+}
+
+.like-count {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #8497B5;
+}
+
+.like-count.liked {
+  color: #FFA8B8;
+}

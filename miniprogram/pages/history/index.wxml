@@ -1,0 +1,17 @@
+<!-- 浏览记录页 -->
+<view class="history-page">
+  <view class="clear-row" wx:if="{{!cleared}}"><view class="clear-btn" bindtap="onClear">清空记录</view></view>
+  <block wx:if="{{cleared}}">
+    <empty-state icon="◷" text="暂无浏览记录" subText="去广场逛逛，发现更多精彩作品" buttonText="去逛逛" bind:action="onGoPlaza" />
+  </block>
+  <block wx:else>
+    <text class="date-label">今天</text>
+    <view class="grid3">
+      <view wx:for="{{todayItems}}" wx:key="id" class="grid-item" style="background: {{item.color}};" data-id="{{item.id}}" bindtap="onItemTap"></view>
+    </view>
+    <text class="date-label">昨天</text>
+    <view class="grid3">
+      <view wx:for="{{yesterdayItems}}" wx:key="id" class="grid-item" style="background: {{item.color}};" data-id="{{item.id}}" bindtap="onItemTap"></view>
+    </view>
+  </block>
+</view>

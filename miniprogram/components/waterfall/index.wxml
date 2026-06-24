@@ -1,0 +1,112 @@
+<!-- 瀑布流组件 -->
+<view class="waterfall">
+  <!-- 左列 -->
+  <view class="waterfall-col" id="col-left">
+    <block wx:for="{{leftItems}}" wx:key="id">
+      <view
+        class="wf-item"
+        data-id="{{item.id}}"
+        data-index="{{index}}"
+        bindtap="onItemTap"
+        bindlongpress="onItemLongPress"
+      >
+        <view class="card" style="{{manageMode ? 'position:relative;' : ''}}">
+          <!-- 管理模式勾选圆圈 -->
+          <view wx:if="{{manageMode}}" class="manage-check {{selectedMap[item.id || item._id] ? 'checked' : ''}}">
+            <text wx:if="{{selectedMap[item.id || item._id]}}">✓</text>
+          </view>
+          <!-- 已发布角标 -->
+          <view wx:if="{{showPublished && item.status === 'published'}}" class="published-badge">
+            <text class="badge-icon">✓</text>
+            <text class="badge-text">已发布</text>
+          </view>
+          <!-- 图片 -->
+          <view class="card-img-wrap" style="aspect-ratio: {{item._aspectRatio}};">
+            <!-- 有图片时显示图片 -->
+            <image
+              wx:if="{{item.imageUrl || (item.imageUrls && item.imageUrls[0])}}"
+              class="card-img {{item._imgLoaded ? 'loaded' : ''}}"
+              src="{{item.imageUrl || item.imageUrls[0]}}"
+              mode="aspectFill"
+              lazy-load
+              bindload="onImageLoad"
+              data-id="{{item.id}}"
+            />
+            <!-- 无图片时显示颜色占位 -->
+            <view wx:else class="card-color-placeholder" style="background: {{item._cardColor || 'linear-gradient(135deg, #E1EBF8, #F5F9FE)'}};">
+              <text class="placeholder-label">{{item._displayTitle}}</text>
+            </view>
+          </view>
+          <!-- 信息区 -->
+          <view class="card-info">
+            <text class="card-title ellipsis">{{item._displayTitle}}</text>
+            <view class="card-meta">
+              <view class="card-user" catchtap="onUserTap" data-user-id="{{item.userId}}">
+                <view class="user-avatar" style="background: {{item._userColor}};">
+                  <text>{{item._userAvatarText}}</text>
+                </view>
+                <text class="user-name ellipsis">{{item._userName}}</text>
+              </view>
+              <view class="card-like" catchtap="onLikeTap" data-id="{{item.id}}">
+                <text class="like-icon {{item._liked ? 'liked' : ''}}">♥</text>
+                <text class="like-count {{item._liked ? 'liked' : ''}}">{{item.likes}}</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </block>
+  </view>
+  <!-- 右列 -->
+  <view class="waterfall-col" id="col-right">
+    <block wx:for="{{rightItems}}" wx:key="id">
+      <view
+        class="wf-item"
+        data-id="{{item.id}}"
+        data-index="{{index}}"
+        bindtap="onItemTap"
+        bindlongpress="onItemLongPress"
+      >
+        <view class="card" style="{{manageMode ? 'position:relative;' : ''}}">
+          <!-- 管理模式勾选圆圈 -->
+          <view wx:if="{{manageMode}}" class="manage-check {{selectedMap[item.id || item._id] ? 'checked' : ''}}">
+            <text wx:if="{{selectedMap[item.id || item._id]}}">✓</text>
+          </view>
+          <view wx:if="{{showPublished && item.status === 'published'}}" class="published-badge">
+            <text class="badge-icon">✓</text>
+            <text class="badge-text">已发布</text>
+          </view>
+          <view class="card-img-wrap" style="aspect-ratio: {{item._aspectRatio}};">
+            <image
+              wx:if="{{item.imageUrl || (item.imageUrls && item.imageUrls[0])}}"
+              class="card-img {{item._imgLoaded ? 'loaded' : ''}}"
+              src="{{item.imageUrl || item.imageUrls[0]}}"
+              mode="aspectFill"
+              lazy-load
+              bindload="onImageLoad"
+              data-id="{{item.id}}"
+            />
+            <view wx:else class="card-color-placeholder" style="background: {{item._cardColor || 'linear-gradient(135deg, #E1EBF8, #F5F9FE)'}};">
+              <text class="placeholder-label">{{item._displayTitle}}</text>
+            </view>
+          </view>
+          <view class="card-info">
+            <text class="card-title ellipsis">{{item._displayTitle}}</text>
+            <view class="card-meta">
+              <view class="card-user" catchtap="onUserTap" data-user-id="{{item.userId}}">
+                <view class="user-avatar" style="background: {{item._userColor}};">
+                  <text>{{item._userAvatarText}}</text>
+                </view>
+                <text class="user-name ellipsis">{{item._userName}}</text>
+              </view>
+              <view class="card-like" catchtap="onLikeTap" data-id="{{item.id}}">
+                <text class="like-icon {{item._liked ? 'liked' : ''}}">♥</text>
+                <text class="like-count {{item._liked ? 'liked' : ''}}">{{item.likes}}</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </block>
+  </view>
+</view>

@@ -1,0 +1,12 @@
+/* 消息详情页 */
+.msg-detail-page { padding: 24rpx 32rpx; min-height: 100vh; background: #EEF4FC; }
+.msg-item { display: flex; align-items: flex-start; gap: 20rpx; background: #FFFFFF; border: 1rpx solid rgba(91,159,232,0.14); border-radius: 28rpx; padding: 28rpx; margin-bottom: 16rpx; }
+.msg-item:active { background: rgba(91,159,232,0.04); }
+.msg-avatar { width: 80rpx; height: 80rpx; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 32rpx; font-weight: 700; flex-shrink: 0; }
+.msg-sys-icon { width: 80rpx; height: 80rpx; border-radius: 20rpx; background: linear-gradient(135deg, #B4C8F5, #96B0E8); display: flex; align-items: center; justify-content: center; font-size: 36rpx; flex-shrink: 0; }
+.msg-content { flex: 1; min-width: 0; }
+.msg-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8rpx; }
+.msg-user { font-size: 28rpx; font-weight: 700; color: #0E1F3A; }
+.msg-time { font-size: 22rpx; color: #8497B5; flex-shrink: 0; }
+.msg-text { font-size: 26rpx; color: #445876; line-height: 1.5; display: block; }
+.msg-dot { width: 16rpx; height: 16rpx; border-radius: 50%; background: #FF6B8A; flex-shrink: 0; margin-top: 12rpx; }

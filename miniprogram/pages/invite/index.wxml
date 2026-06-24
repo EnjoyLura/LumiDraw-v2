@@ -1,0 +1,31 @@
+<!-- 邀请好友页 -->
+<view class="invite-page">
+  <view class="invite-hero">
+    <text class="hero-icon">🎁</text>
+    <text class="hero-title">邀请好友，双方得积分</text>
+    <text class="hero-desc">好友填你的邀请码注册，你+50积分，好友+30积分</text>
+  </view>
+  <view class="code-card">
+    <text class="code-label">我的邀请码</text>
+    <text class="code-value">{{inviteCode}}</text>
+    <view class="code-actions">
+      <view class="code-btn secondary" bindtap="onCopyCode">复制邀请码</view>
+      <view class="code-btn primary" bindtap="onShareInvite">分享邀请</view>
+    </view>
+  </view>
+  <view class="section-title">已邀请 {{invitedList.length}} 人</view>
+  <view class="invited-list">
+    <view wx:for="{{invitedList}}" wx:key="name" class="invited-item">
+      <view class="invited-avatar" style="background: {{item.color}};">{{item.avatar}}</view>
+      <view class="invited-info">
+        <text class="invited-name">{{item.name}}</text>
+        <text class="invited-date">{{item.date}} 注册</text>
+      </view>
+      <text class="invited-credits">+{{item.credits}}</text>
+    </view>
+  </view>
+  <view class="rules-card">
+    <text class="rules-title">活动规则</text>
+    <text class="rules-text">1. 好友首次注册时填写你的邀请码，双方各获得积分奖励\n2. 每人最多可邀请50位好友\n3. 邀请奖励积分实时到账\n4. 禁止刷邀请，违规者将扣除积分并封号</text>
+  </view>
+</view>

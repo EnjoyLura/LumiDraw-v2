@@ -1,0 +1,8 @@
+<!-- 编辑玩法 -->
+<view class="admin-page">
+  <view class="field-row"><text class="field-label">玩法名称</text><input class="field-input" value="{{name}}" data-field="name" bindinput="onInput" placeholder="请输入玩法名称" /></view>
+  <view class="field-row"><text class="field-label">排序权重</text><input class="field-input" type="number" value="{{sort}}" data-field="sort" bindinput="onInput" placeholder="数字越小越靠前" /></view>
+  <view class="field-row"><text class="field-label">默认提示词</text><textarea class="field-textarea" value="{{defaultPrompt}}" data-field="defaultPrompt" bindinput="onInput" placeholder="用户选择此玩法后自动填入的提示词" /></view>
+  <view class="action-btn btn-primary" bindtap="onSave">保存</view>
+  <view class="action-btn btn-danger">删除玩法</view>
+</view>

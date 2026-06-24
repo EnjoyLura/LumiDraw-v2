@@ -1,0 +1,16 @@
+/* 用户主页 */
+.profile-page { min-height: 100vh; background: #EEF4FC; }
+.profile-header { display: flex; align-items: flex-start; gap: 28rpx; padding: 32rpx; }
+.profile-avatar { width: 144rpx; height: 144rpx; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 56rpx; font-weight: 700; flex-shrink: 0; }
+.profile-info { flex: 1; min-width: 0; }
+.profile-name { font-size: 36rpx; font-weight: 700; color: #0E1F3A; display: block; }
+.profile-id { font-size: 26rpx; color: #8497B5; display: block; margin-top: 6rpx; }
+.follow-btn { padding: 12rpx 32rpx; border-radius: 999rpx; background: #5B9FE8; color: white; font-size: 26rpx; font-weight: 600; flex-shrink: 0; }
+.follow-btn.following { background: rgba(91,159,232,0.12); color: #8497B5; }
+.profile-bio { font-size: 28rpx; color: #445876; line-height: 1.5; padding: 0 32rpx; display: block; }
+.profile-stats { display: flex; gap: 56rpx; padding: 32rpx; }
+.stat { text-align: center; }
+.stat-num { font-size: 36rpx; font-weight: 700; display: block; }
+.stat-label { font-size: 26rpx; color: #8497B5; }
+.works-title { font-size: 28rpx; font-weight: 600; color: #0E1F3A; padding: 0 32rpx 16rpx; }
+.works-area { padding: 0 24rpx; }

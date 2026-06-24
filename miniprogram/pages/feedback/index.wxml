@@ -1,0 +1,64 @@
+<!-- 意见反馈页 -->
+<view class="feedback-page">
+  <!-- 反馈类型 -->
+  <view class="section">
+    <text class="section-title">反馈类型</text>
+    <view class="type-row">
+      <view
+        wx:for="{{types}}"
+        wx:key="key"
+        class="type-card {{selectedType === item.key ? 'active' : ''}}"
+        data-key="{{item.key}}"
+        bindtap="onSelectType"
+      >
+        <text class="type-icon">{{item.icon}}</text>
+        <text class="type-label">{{item.label}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 反馈描述 -->
+  <view class="section">
+    <view class="field-header">
+      <text class="section-title">反馈描述</text>
+      <text class="field-hint">（选填）</text>
+    </view>
+    <view class="desc-card">
+      <textarea class="desc-input" value="{{description}}" maxlength="500" bindinput="onDescInput" placeholder="请详细描述您遇到的问题或建议…" />
+    </view>
+    <text class="field-count">{{descCount}}/500</text>
+  </view>
+
+  <!-- 截图 -->
+  <view class="section">
+    <view class="field-header">
+      <text class="section-title">截图</text>
+      <text class="field-hint">（选填，最多2张）</text>
+    </view>
+    <view class="image-row">
+      <view wx:for="{{images}}" wx:key="*this" class="image-item">
+        <image class="preview-img" src="{{item}}" mode="aspectFill" />
+        <view class="image-remove" data-index="{{index}}" bindtap="onRemoveImage">✕</view>
+      </view>
+      <view wx:if="{{images.length < 2}}" class="image-add" bindtap="onAddImage">
+        <text class="add-icon">📷</text>
+        <text class="add-text">添加图片</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 微信号 -->
+  <view class="section">
+    <view class="field-header">
+      <text class="section-title">微信号</text>
+      <text class="field-hint">（选填）</text>
+    </view>
+    <view class="wechat-card">
+      <input class="wechat-input" value="{{wechatId}}" maxlength="30" bindinput="onWechatInput" placeholder="方便我们联系您" />
+    </view>
+  </view>
+
+  <!-- 提交按钮 -->
+  <view class="submit-btn" bindtap="onSubmit">📤 提交反馈</view>
+</view>
+

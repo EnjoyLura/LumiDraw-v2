@@ -1,0 +1,41 @@
+<!-- 管理后台首页 -->
+<view class="admin-page">
+  <text class="page-title">数据概览</text>
+  <view class="stat-grid">
+    <view wx:for="{{stats}}" wx:key="label" class="stat-card" data-page="{{['statUsers','statWorks','statGen','statRevenue'][index]}}" bindtap="onStatNav">
+      <text class="sc-label">{{item.label}}</text>
+      <text class="sc-value">{{item.value}}</text>
+      <text class="sc-change" style="color: {{item.color}};">{{item.change}}</text>
+    </view>
+  </view>
+
+  <text class="page-title">内容管理</text>
+  <view class="menu-card">
+    <view wx:for="{{contentMenus}}" wx:key="page" class="menu-item" data-page="{{item.page}}" bindtap="onNav">
+      <text class="mi-icon">{{item.icon}}</text>
+      <text class="mi-label">{{item.label}}</text>
+      <text class="mi-count">{{item.count}}个</text>
+      <text class="mi-arrow">›</text>
+    </view>
+  </view>
+
+  <text class="page-title">用户管理</text>
+  <view class="menu-card">
+    <view wx:for="{{userMenus}}" wx:key="page" class="menu-item" data-page="{{item.page}}" bindtap="onNav">
+      <text class="mi-icon">{{item.icon}}</text>
+      <text class="mi-label">{{item.label}}</text>
+      <view wx:if="{{item.badge}}" class="mi-badge">{{item.badge}}</view>
+      <text wx:if="{{item.count}}" class="mi-count">{{item.count}}</text>
+      <text class="mi-arrow">›</text>
+    </view>
+  </view>
+
+  <text class="page-title">系统设置</text>
+  <view class="menu-card">
+    <view wx:for="{{settingsMenus}}" wx:key="page" class="menu-item" data-page="{{item.page}}" bindtap="onNav">
+      <text class="mi-icon">{{item.icon}}</text>
+      <text class="mi-label">{{item.label}}</text>
+      <text class="mi-arrow">›</text>
+    </view>
+  </view>
+</view>

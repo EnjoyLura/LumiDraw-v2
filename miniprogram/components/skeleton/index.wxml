@@ -1,0 +1,35 @@
+<!-- 骨架屏组件 -->
+<!-- type: home / list -->
+<view wx:if="{{type === 'home'}}" class="skeleton-home">
+  <!-- Banner骨架 -->
+  <view class="sk-banner skeleton"></view>
+  <!-- 标题骨架 -->
+  <view class="sk-section skeleton"></view>
+  <!-- 玩法骨架 -->
+  <view class="sk-gameplay">
+    <view class="sk-gp-item skeleton" wx:for="{{5}}" wx:key="index"></view>
+  </view>
+  <!-- 标题骨架 -->
+  <view class="sk-section skeleton"></view>
+  <!-- 瀑布流骨架 -->
+  <view class="sk-wf">
+    <view class="sk-wf-col">
+      <view class="sk-wf-item skeleton" style="height: 320rpx;"></view>
+      <view class="sk-wf-item skeleton" style="height: 240rpx;"></view>
+    </view>
+    <view class="sk-wf-col">
+      <view class="sk-wf-item skeleton" style="height: 260rpx;"></view>
+      <view class="sk-wf-item skeleton" style="height: 300rpx;"></view>
+    </view>
+  </view>
+</view>
+
+<view wx:elif="{{type === 'list'}}" class="skeleton-list">
+  <view class="sk-list-item" wx:for="{{4}}" wx:key="index">
+    <view class="sk-avatar skeleton"></view>
+    <view class="sk-list-content">
+      <view class="sk-line skeleton" style="width: 60%;"></view>
+      <view class="sk-line skeleton" style="width: 40%; height: 24rpx;"></view>
+    </view>
+  </view>
+</view>

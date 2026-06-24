@@ -1,0 +1,48 @@
+<!-- 编辑资料页 -->
+<view class="edit-page">
+  <!-- 头像 -->
+  <view class="avatar-section" bindtap="onChangeAvatar">
+    <view class="avatar" style="background: {{avatarColor}};">
+      <text>{{avatarText}}</text>
+    </view>
+    <view class="avatar-camera">📷</view>
+    <text class="avatar-hint">点击更换头像</text>
+  </view>
+
+  <!-- 昵称 -->
+  <view class="field">
+    <text class="field-label">昵称</text>
+    <input class="field-input" value="{{nickName}}" maxlength="20" bindinput="onNickInput" placeholder="请输入昵称" />
+    <text class="field-count">{{nickCount}}/20</text>
+  </view>
+
+  <!-- 性别 -->
+  <view class="field">
+    <text class="field-label">性别</text>
+    <view class="gender-row">
+      <view class="gender-opt {{gender === 'male' ? 'active' : ''}}" data-gender="male" bindtap="onSelectGender">男</view>
+      <view class="gender-opt {{gender === 'female' ? 'active' : ''}}" data-gender="female" bindtap="onSelectGender">女</view>
+    </view>
+  </view>
+
+  <!-- 个性签名 -->
+  <view class="field">
+    <text class="field-label">个性签名</text>
+    <textarea class="field-textarea" value="{{signature}}" maxlength="100" bindinput="onSignInput" placeholder="写一句个性签名吧" />
+    <text class="field-count">{{signCount}}/100</text>
+  </view>
+
+  <!-- 账号ID -->
+  <view class="field">
+    <text class="field-label">账号ID</text>
+    <view class="field-locked">
+      <input class="field-input disabled" value="{{userId}}" disabled />
+      <text class="lock-icon">🔒</text>
+    </view>
+    <text class="field-hint">账号ID不可修改</text>
+  </view>
+
+  <!-- 保存按钮 -->
+  <view class="save-btn" bindtap="onSave">保存</view>
+</view>
+

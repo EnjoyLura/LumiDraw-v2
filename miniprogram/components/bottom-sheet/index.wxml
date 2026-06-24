@@ -1,0 +1,8 @@
+<!-- 底部弹窗组件 -->
+<view class="sheet-overlay {{visible ? 'show' : ''}}" bindtap="onClose"></view>
+<view class="sheet-container {{visible ? 'show' : ''}}">
+  <view class="sheet-handle"></view>
+  <view class="sheet-content">
+    <slot></slot>
+  </view>
+</view>

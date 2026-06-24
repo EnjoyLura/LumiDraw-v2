@@ -1,0 +1,20 @@
+<!-- 全部模型页 -->
+<view class="models-page">
+  <view wx:for="{{models}}" wx:key="id" class="model-card {{selectedIndex === index ? 'selected' : ''}}" data-index="{{index}}" bindtap="onSelect">
+    <view class="model-cover" style="background: linear-gradient(135deg, {{item.badgeColor || '#5B9FE8'}}, {{item.badgeColor || '#6FD4B0'}}88);">
+      <text class="cover-text">{{item.name[0]}}</text>
+    </view>
+    <view class="model-info">
+      <view class="name-row">
+        <text class="model-name">{{item.name}}</text>
+        <text wx:if="{{item.badge}}" class="model-badge" style="color: {{item.badgeColor}}; background: {{item.badgeColor}}20;">{{item.badge}}</text>
+      </view>
+      <text class="model-desc">{{item.desc}}</text>
+      <view class="model-tags"><text wx:for="{{item.tags}}" wx:for-item="t" wx:key="*this" class="model-tag">{{t}}</text></view>
+    </view>
+    <view class="model-cost">
+      <text class="cost-num">{{item.cost}}</text>
+      <text class="cost-unit">积分起</text>
+    </view>
+  </view>
+</view>

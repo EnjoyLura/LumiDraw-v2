@@ -1,0 +1,17 @@
+<!-- Banner管理 -->
+<view class="admin-page">
+  <view class="header-row">
+    <text class="page-title">Banner管理</text>
+    <view class="add-btn" bindtap="onAdd">+ 新增</view>
+  </view>
+  <view class="list-card">
+    <view wx:for="{{banners}}" wx:key="id" class="list-item">
+      <view class="li-info">
+        <text class="li-title">{{item.title}}</text>
+        <text class="li-sub">排序{{item.sort}} · {{item.date}}</text>
+      </view>
+      <text class="li-badge {{item.status === '上架中' ? 'badge-green' : 'badge-gray'}}">{{item.status}}</text>
+      <view class="add-btn" style="font-size:22rpx;padding:6rpx 16rpx;" data-id="{{item.id}}" bindtap="onEdit">编辑</view>
+    </view>
+  </view>
+</view>

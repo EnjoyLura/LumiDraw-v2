@@ -1,0 +1,10 @@
+<!-- 编辑模型 -->
+<view class="admin-page">
+  <view class="field-row"><text class="field-label">模型名称</text><input class="field-input" value="{{name}}" data-field="name" bindinput="onInput" placeholder="请输入模型名称" /></view>
+  <view class="field-row"><text class="field-label">模型描述</text><input class="field-input" value="{{desc}}" data-field="desc" bindinput="onInput" placeholder="请输入简要描述" /></view>
+  <view class="field-row"><text class="field-label">积分消耗</text><input class="field-input" type="number" value="{{cost}}" data-field="cost" bindinput="onInput" placeholder="每次生图消耗积分" /></view>
+  <view class="field-row"><text class="field-label">标签</text><input class="field-input" value="{{tags}}" data-field="tags" bindinput="onInput" placeholder="逗号分隔" /></view>
+  <view class="field-row"><text class="field-label">角标</text><input class="field-input" value="{{badge}}" data-field="badge" bindinput="onInput" placeholder="如: 推荐、NEW（选填）" /></view>
+  <view class="action-btn btn-primary" bindtap="onSave">保存</view>
+  <view class="action-btn btn-danger">删除模型</view>
+</view>

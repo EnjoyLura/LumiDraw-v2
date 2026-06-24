@@ -1,0 +1,9 @@
+<!-- 全部玩法页 -->
+<view class="gameplays-page">
+  <view class="gameplay-grid">
+    <view wx:for="{{gameplays}}" wx:key="name" class="gameplay-card" data-name="{{item.name}}" bindtap="onTap">
+      <view class="gameplay-cover" style="background: {{item.color}};"></view>
+      <text class="gameplay-name">{{item.name}}</text>
+    </view>
+  </view>
+</view>

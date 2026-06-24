@@ -1,0 +1,103 @@
+<!-- 作品详情页 -->
+<view class="detail-page" wx:if="{{work}}">
+  <!-- 图片 -->
+  <view class="detail-image" bindtap="onPreviewImage">
+    <view class="image-placeholder" style="background: {{work._cardColor}};">
+      <text class="image-title">{{work.title}}</text>
+    </view>
+  </view>
+
+  <scroll-view scroll-y class="detail-scroll">
+    <view class="detail-body">
+      <!-- 用户信息 -->
+      <view class="user-row" bindtap="onUserTap">
+        <view class="user-avatar" style="background: {{work.userColor}};">
+          <text>{{work.userAvatar}}</text>
+        </view>
+        <view class="user-info">
+          <text class="user-name">{{work.userName}}</text>
+          <text class="user-meta">{{work.likes}}赞 · {{work.favorites}}收藏</text>
+        </view>
+        <view wx:if="{{!isOwn}}" class="follow-btn">+ 关注</view>
+        <view wx:else class="follow-btn secondary">管理</view>
+      </view>
+
+      <!-- 标题 + 描述 -->
+      <text class="detail-title">{{work.title}}</text>
+      <text wx:if="{{work.published}}" class="detail-desc">{{work.desc}}</text>
+
+      <!-- 标签 -->
+      <view wx:if="{{work.published}}" class="tag-row">
+        <text class="tag accent">{{work.model}}</text>
+        <text class="tag mint">{{work.ratio}}</text>
+        <text class="tag lavender">{{work.style}}</text>
+        <text wx:for="{{work.tags}}" wx:key="*this" class="tag peach">{{item}}</text>
+      </view>
+
+      <!-- 提示词 -->
+      <view class="prompt-card">
+        <view class="prompt-header">
+          <text class="prompt-label">提示词</text>
+          <view class="copy-btn" bindtap="onCopyPrompt">
+            <text>📋 复制</text>
+          </view>
+        </view>
+        <text class="prompt-text">{{work.prompt}}</text>
+      </view>
+
+      <text class="detail-time">生成于 {{work.time}}</text>
+
+      <!-- 互动数据 -->
+      <view wx:if="{{work.published}}" class="stats-row">
+        <view class="stat-item">
+          <text class="stat-num" style="color:#FFA8B8;">{{work.likes}}</text>
+          <text class="stat-label">点赞</text>
+        </view>
+        <view class="stat-item">
+          <text class="stat-num" style="color:#5B9FE8;">{{work.favorites}}</text>
+          <text class="stat-label">收藏</text>
+        </view>
+        <view class="stat-item">
+          <text class="stat-num" style="color:#B8A5E3;">{{work.remakes}}</text>
+          <text class="stat-label">同款</text>
+        </view>
+      </view>
+
+      <view style="height: 200rpx;"></view>
+    </view>
+  </scroll-view>
+
+  <!-- 底部操作栏 -->
+  <view class="detail-bottom">
+    <view wx:if="{{isOwn}}">
+      <view class="bottom-row">
+        <view class="bottom-icon-btn" bindtap="onDelete">
+          <text class="bi-icon" style="color:#FFA8B8;">✕</text>
+          <text class="bi-label" style="color:#FFA8B8;">删除</text>
+        </view>
+        <view class="bottom-icon-btn" bindtap="onSave">
+          <text class="bi-icon">↓</text>
+          <text class="bi-label">下载</text>
+        </view>
+        <view class="remake-btn" bindtap="onRemake">
+          <text>↻ 重新生成</text>
+        </view>
+      </view>
+    </view>
+    <view wx:else>
+      <view class="bottom-row">
+        <view class="like-area" bindtap="onLikeTap">
+          <text class="like-icon {{liked ? 'liked' : ''}}">{{liked ? '♥' : '♡'}}</text>
+          <text class="like-num {{liked ? 'liked' : ''}}">{{work.likes}}</text>
+        </view>
+        <view class="fav-area" bindtap="onFavTap">
+          <text class="fav-icon {{favorited ? 'liked' : ''}}">{{favorited ? '★' : '☆'}}</text>
+          <text class="fav-num {{favorited ? 'liked' : ''}}">{{work.favorites}}</text>
+        </view>
+        <view class="remake-btn" bindtap="onRemake">
+          <text>✦ 一键同款</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

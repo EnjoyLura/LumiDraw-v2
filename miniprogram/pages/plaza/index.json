@@ -1,0 +1,10 @@
+{
+  "navigationBarTitleText": "广场",
+  "usingComponents": {
+    "waterfall": "/components/waterfall/index",
+    "load-more": "/components/load-more/index",
+    "bottom-sheet": "/components/bottom-sheet/index",
+    "left-drawer": "/components/left-drawer/index"
+  }
+}
+

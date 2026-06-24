@@ -1,0 +1,38 @@
+/* 左侧抽屉组件 */
+.drawer-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 200;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.35s, visibility 0.35s;
+}
+
+.drawer-overlay.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.drawer-container {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 560rpx;
+  background: #FFFFFF;
+  z-index: 201;
+  transform: translateX(-100%);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 16rpx 0 48rpx rgba(60, 120, 200, 0.16);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.drawer-container.show {
+  transform: translateX(0);
+}

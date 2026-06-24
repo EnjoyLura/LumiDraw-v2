@@ -1,0 +1,5 @@
+<!-- 左侧抽屉组件 -->
+<view class="drawer-overlay {{visible ? 'show' : ''}}" bindtap="onClose"></view>
+<view class="drawer-container {{visible ? 'show' : ''}}">
+  <slot></slot>
+</view>

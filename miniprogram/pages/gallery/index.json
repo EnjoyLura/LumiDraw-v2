@@ -1,0 +1,11 @@
+{
+  "navigationBarTitleText": "画廊",
+  "usingComponents": {
+    "waterfall": "/components/waterfall/index",
+    "load-more": "/components/load-more/index",
+    "left-drawer": "/components/left-drawer/index",
+    "bottom-sheet": "/components/bottom-sheet/index",
+    "empty-state": "/components/empty-state/index"
+  }
+}
+

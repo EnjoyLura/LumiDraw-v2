@@ -1,0 +1,141 @@
+<!-- 首页 -->
+<!-- 骨架屏 -->
+<skeleton wx:if="{{showSkeleton}}" type="home" />
+
+<!-- 正式内容 -->
+<scroll-view wx:else scroll-y class="home-scroll" refresher-enabled bindrefresherrefresh="onPullDownRefresh">
+
+  <!-- Banner 轮播 -->
+  <view class="banner-wrap">
+    <swiper
+      class="banner-swiper"
+      indicator-dots="{{false}}"
+      autoplay
+      interval="{{4000}}"
+      duration="{{500}}"
+      circular
+      bindchange="onBannerChange"
+    >
+      <swiper-item wx:for="{{banners}}" wx:key="_id">
+        <view class="banner-item" bindtap="onBannerTap" data-index="{{index}}">
+          <view class="banner-bg" style="background: {{item._gradient}};"></view>
+          <text class="banner-big-text">{{item.title}}</text>
+          <view class="banner-btn" catchtap="onBannerTap" data-index="{{index}}">前往创作</view>
+          <view class="banner-overlay"></view>
+        </view>
+      </swiper-item>
+    </swiper>
+    <!-- 自定义指示点 -->
+    <view class="banner-dots">
+      <view
+        wx:for="{{banners}}"
+        wx:key="_id"
+        class="banner-dot {{bannerIndex === index ? 'active' : ''}}"
+      ></view>
+    </view>
+  </view>
+
+  <!-- 热门玩法 -->
+  <view class="section-header">
+    <text class="section-title">热门玩法</text>
+    <view class="section-more" bindtap="onViewAllGameplays">
+      <text class="more-text">全部</text>
+      <text class="more-arrow">›</text>
+    </view>
+  </view>
+  <scroll-view scroll-x class="gameplay-scroll" enhanced show-scrollbar="{{false}}">
+    <view class="gameplay-list">
+      <view
+        wx:for="{{gameplays}}"
+        wx:key="_id"
+        class="gameplay-item"
+        bindtap="onGameplayTap"
+        data-name="{{item.name}}"
+      >
+        <view class="gameplay-cover">
+          <image wx:if="{{item.coverUrl}}" class="gameplay-img" src="{{item.coverUrl}}" mode="aspectFill" />
+          <view wx:else class="gameplay-placeholder">
+            <text>{{item.name[0]}}</text>
+          </view>
+        </view>
+        <text class="gameplay-name">{{item.name}}</text>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 精选作品 -->
+  <view class="section-header">
+    <text class="section-title">精选作品</text>
+    <view class="tab-switcher">
+      <view
+        class="tab-item {{currentTab === 'recommend' ? 'active' : ''}}"
+        data-tab="recommend"
+        bindtap="onSwitchTab"
+      >推荐</view>
+      <view
+        class="tab-item {{currentTab === 'new' ? 'active' : ''}}"
+        data-tab="new"
+        bindtap="onSwitchTab"
+      >最新</view>
+    </view>
+  </view>
+
+  <!-- 瀑布流（带切换动画） -->
+  <view class="waterfall-wrap {{wfAnimClass}}">
+    <!-- 加载 spinner -->
+    <view wx:if="{{showTabLoading}}" class="tab-loading">
+      <view class="tab-spinner"></view>
+    </view>
+    <block wx:else>
+      <waterfall
+        works="{{works}}"
+        likedMap="{{likedMap}}"
+        bind:itemclick="onWorkItemTap"
+        bind:longpress="onWorkLongPress"
+        bind:liketap="onWorkLikeTap"
+        bind:usertap="onWorkUserTap"
+      />
+    </block>
+  </view>
+
+  <!-- 加载更多 -->
+  <load-more status="{{loadMoreStatus}}" />
+
+</scroll-view>
+
+<!-- 长按操作菜单 -->
+<bottom-sheet visible="{{showLongPressSheet}}" bind:close="onCloseLongPressSheet">
+  <view class="long-press-grid">
+    <view class="lp-item" data-action="like" bindtap="onLongPressAction">
+      <view class="lp-icon" style="background: rgba(255,168,184,0.22);">
+        <text style="color: #FFA8B8; font-size: 48rpx;">♥</text>
+      </view>
+      <text class="lp-label">点赞</text>
+    </view>
+    <view class="lp-item" data-action="favorite" bindtap="onLongPressAction">
+      <view class="lp-icon" style="background: rgba(255,224,138,0.24);">
+        <text style="color: #FFE08A; font-size: 48rpx;">★</text>
+      </view>
+      <text class="lp-label">收藏</text>
+    </view>
+    <view class="lp-item" data-action="share" bindtap="onLongPressAction">
+      <view class="lp-icon" style="background: rgba(91,159,232,0.12);">
+        <text style="color: #5B9FE8; font-size: 48rpx;">↗</text>
+      </view>
+      <text class="lp-label">分享</text>
+    </view>
+    <view class="lp-item" data-action="report" bindtap="onLongPressAction">
+      <view class="lp-icon" style="background: rgba(255,181,154,0.2);">
+        <text style="color: #FFB59A; font-size: 48rpx;">⚑</text>
+      </view>
+      <text class="lp-label">举报</text>
+    </view>
+  </view>
+</bottom-sheet>
+
+<!-- 图片预览 -->
+<image-preview
+  visible="{{showPreview}}"
+  src="{{previewSrc}}"
+  bind:close="onClosePreview"
+/>

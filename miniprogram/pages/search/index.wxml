@@ -1,0 +1,45 @@
+<!-- 搜索页 -->
+<view class="search-page">
+  <!-- 搜索栏 -->
+  <view class="search-bar">
+    <view class="search-input-wrap">
+      <text class="search-icon">⌕</text>
+      <input class="search-input" value="{{keyword}}" placeholder="搜索作品、提示词或用户" bindinput="onInput" confirm-type="search" bindconfirm="onSearch" />
+    </view>
+    <view class="search-btn" bindtap="onSearch">搜索</view>
+  </view>
+
+  <!-- 默认内容（无搜索时） -->
+  <view wx:if="{{!showResult}}">
+    <!-- 搜索历史 -->
+    <view wx:if="{{searchHistory.length > 0}}" class="section">
+      <view class="section-header">
+        <text class="section-title">搜索历史</text>
+        <text class="section-action" bindtap="onClearHistory">清空</text>
+      </view>
+      <view class="chip-list">
+        <view wx:for="{{searchHistory}}" wx:key="*this" class="chip" data-kw="{{item}}" bindtap="onHistoryTap">{{item}}</view>
+      </view>
+    </view>
+    <!-- 热门搜索 -->
+    <view class="section">
+      <view class="section-header">
+        <text class="section-title">🔥 热门搜索</text>
+      </view>
+      <view class="hot-list">
+        <view wx:for="{{hotSearches}}" wx:key="*this" class="hot-item" data-kw="{{item}}" bindtap="onHotTap">
+          <text class="hot-rank {{index < 3 ? 'top' : ''}}">{{index + 1}}</text>
+          <text class="hot-text">{{item}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 搜索结果 -->
+  <view wx:else class="result-area">
+    <view wx:if="{{results.length > 0}}" class="result-waterfall">
+      <waterfall works="{{results}}" likedMap="{{likedMap}}" bind:itemclick="onWorkItemTap" bind:liketap="onWorkLikeTap" />
+    </view>
+    <empty-state wx:else icon="⌕" text="没有找到相关作品" subText="试试其他关键词吧" />
+  </view>
+</view>

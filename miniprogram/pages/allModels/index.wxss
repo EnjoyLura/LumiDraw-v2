@@ -1,0 +1,17 @@
+/* 全部模型页 */
+.models-page { padding: 32rpx; min-height: 100vh; background: #EEF4FC; }
+.model-card { display: flex; align-items: center; gap: 24rpx; background: #FFFFFF; border: 4rpx solid rgba(91,159,232,0.14); border-radius: 28rpx; padding: 28rpx; margin-bottom: 20rpx; transition: all 0.2s; }
+.model-card.selected { border-color: #5B9FE8; background: rgba(91,159,232,0.06); }
+.model-card:active { transform: scale(0.98); }
+.model-cover { width: 112rpx; height: 112rpx; border-radius: 24rpx; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.cover-text { color: white; font-size: 40rpx; font-weight: 700; }
+.model-info { flex: 1; min-width: 0; }
+.name-row { display: flex; align-items: center; gap: 8rpx; margin-bottom: 4rpx; }
+.model-name { font-size: 30rpx; font-weight: 700; color: #0E1F3A; }
+.model-badge { font-size: 18rpx; font-weight: 600; padding: 2rpx 12rpx; border-radius: 999rpx; }
+.model-desc { font-size: 24rpx; color: #8497B5; display: block; margin-bottom: 8rpx; }
+.model-tags { display: flex; gap: 8rpx; }
+.model-tag { font-size: 20rpx; padding: 4rpx 12rpx; border-radius: 999rpx; background: rgba(91,159,232,0.12); color: #3B7FC8; }
+.model-cost { text-align: right; flex-shrink: 0; }
+.cost-num { font-size: 36rpx; font-weight: 700; color: #5B9FE8; display: block; }
+.cost-unit { font-size: 20rpx; color: #8497B5; }

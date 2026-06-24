@@ -1,0 +1,10 @@
+<!-- 积分规则 -->
+<view class="admin-page">
+  <text class="page-title">积分规则</text>
+  <text class="section-title">获取规则</text>
+  <view class="list-card"><view wx:for="{{earnRules}}" wx:key="label" class="list-item"><text class="li-label">{{item.icon}} {{item.label}}</text><text class="li-value" style="color:#6FD4B0;">{{item.points}}</text></view></view>
+  <text class="section-title">消耗规则</text>
+  <view class="list-card"><view wx:for="{{spendRules}}" wx:key="label" class="list-item"><text class="li-label">{{item.icon}} {{item.label}}</text><text class="li-value" style="color:#FFA8B8;">{{item.points}}</text></view></view>
+  <text class="section-title">里程碑奖励</text>
+  <view class="list-card"><view wx:for="{{milestones}}" wx:key="days" class="list-item"><text class="li-label">连续签到{{item.days}}天</text><text class="li-value" style="color:#6FD4B0;">+{{item.reward}}</text></view></view>
+</view>

@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "创作",
+  "usingComponents": {
+    "bottom-sheet": "/components/bottom-sheet/index"
+  }
+}
+

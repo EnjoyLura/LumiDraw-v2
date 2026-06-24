@@ -1,0 +1,15 @@
+<!-- 用户详情 -->
+<view class="admin-page">
+  <view class="list-card" style="padding:24rpx;text-align:center;">
+    <view class="avatar-sm" style="background: {{user.color}};width:128rpx;height:128rpx;font-size:56rpx;margin:0 auto 16rpx;"><text>{{user.avatar}}</text></view>
+    <text class="li-title" style="font-size:32rpx;">{{user.name}}</text>
+    <text class="li-sub">ID: {{user.id}} · 注册: {{user.date}} · 作品: {{user.works}}</text>
+    <view style="margin-top:12rpx;display:flex;justify-content:center;gap:12rpx;">
+      <text wx:if="{{user.vip}}" class="li-badge badge-green">VIP</text>
+      <text class="li-badge {{user.status === '正常' ? 'badge-green' : 'badge-red'}}">{{user.status}}</text>
+    </view>
+  </view>
+  <view class="action-btn btn-secondary" bindtap="onViewWorks">查看作品</view>
+  <view class="action-btn btn-danger" wx:if="{{user.status === '正常'}}" bindtap="onBan">封禁用户</view>
+  <view class="action-btn btn-primary" wx:else bindtap="onUnban">解除封禁</view>
+</view>

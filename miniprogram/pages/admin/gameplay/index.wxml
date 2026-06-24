@@ -1,0 +1,10 @@
+<!-- 玩法管理 -->
+<view class="admin-page">
+  <view class="header-row"><text class="page-title">玩法管理</text><view class="add-btn" bindtap="onAdd">+ 新增</view></view>
+  <view class="list-card">
+    <view wx:for="{{gameplays}}" wx:key="name" class="list-item" data-idx="{{index}}" bindtap="onEdit">
+      <view class="li-info"><text class="li-title">{{item.name}}</text><text class="li-sub">排序{{item.sort}} · 使用{{item.usage}}次</text></view>
+      <text class="li-arrow">›</text>
+    </view>
+  </view>
+</view>

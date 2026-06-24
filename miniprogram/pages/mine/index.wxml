@@ -1,0 +1,82 @@
+<!-- 我的页 -->
+<view class="mine-page">
+
+  <!-- 用户信息卡片 -->
+  <view class="user-card">
+    <!-- 头像 + 信息 + 积分 -->
+    <view class="user-row">
+      <view class="user-avatar" style="background: {{user.avatarColor}}; box-shadow: 0 8rpx 24rpx rgba(91,159,232,0.35);">
+        <text>{{user.avatarText}}</text>
+      </view>
+      <view class="user-info">
+        <text class="user-name">{{user.nickName}}</text>
+        <text class="user-id">ID: {{user.userId}}</text>
+      </view>
+      <view class="user-credits" bindtap="onRecharge">
+        <text class="credits-label">我的积分</text>
+        <text class="credits-num">{{user.credits}}</text>
+      </view>
+    </view>
+
+    <!-- 4宫格快捷入口 -->
+    <view class="quick-grid">
+      <view class="quick-item" data-page="recharge" bindtap="onQuickNav">
+        <view class="quick-icon" style="background: linear-gradient(135deg, #a8d8f8, #b0e6d0);">
+          <text class="quick-icon-text">💰</text>
+        </view>
+        <text class="quick-label">充值</text>
+      </view>
+      <view class="quick-item" data-page="checkin" bindtap="onQuickNav">
+        <view class="quick-icon" style="background: linear-gradient(135deg, #FFD4C8, #FFC8D6);">
+          <text class="quick-icon-text">📅</text>
+        </view>
+        <text class="quick-label">签到</text>
+      </view>
+      <view class="quick-item" data-page="membership" bindtap="onQuickNav">
+        <view class="quick-icon" style="background: linear-gradient(135deg, #D4C8F0, #B8A8E0);">
+          <text class="quick-icon-text">♛</text>
+        </view>
+        <text class="quick-label">会员</text>
+      </view>
+      <view class="quick-item" data-page="invite" bindtap="onQuickNav">
+        <view class="quick-icon" style="background: linear-gradient(135deg, #A3E4CC, #8BD8B8);">
+          <text class="quick-icon-text">👥</text>
+        </view>
+        <text class="quick-label">邀请</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 功能列表 -->
+  <view class="menu-card">
+    <view
+      wx:for="{{menuList}}"
+      wx:key="label"
+      class="menu-item"
+      data-item="{{item}}"
+      bindtap="onMenuTap"
+    >
+      <text class="menu-icon" style="color: {{item.color}};">{{item.icon}}</text>
+      <text class="menu-label">{{item.label}}</text>
+      <view wx:if="{{item.badge}}" class="menu-badge">{{item.badge}}</view>
+      <text class="menu-arrow">›</text>
+    </view>
+  </view>
+
+  <!-- 服务列表 -->
+  <view class="menu-card">
+    <view
+      wx:for="{{serviceList}}"
+      wx:key="label"
+      class="menu-item"
+      data-item="{{item}}"
+      bindtap="onServiceTap"
+    >
+      <text class="menu-icon" style="color: {{item.color}};">{{item.icon}}</text>
+      <text class="menu-label">{{item.label}}</text>
+      <text class="menu-arrow">›</text>
+    </view>
+  </view>
+
+</view>
+

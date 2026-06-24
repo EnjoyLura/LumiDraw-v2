@@ -1,0 +1,10 @@
+<!-- 用户作品 -->
+<view class="admin-page">
+  <text class="page-title">用户作品</text>
+  <view class="list-card">
+    <view wx:for="{{works}}" wx:key="title" class="list-item">
+      <view class="li-info"><text class="li-title">{{item.title}}</text><text class="li-sub">♥ {{item.likes}}</text></view>
+      <text class="li-badge {{item.status === '已发布' ? 'badge-green' : 'badge-gray'}}">{{item.status}}</text>
+    </view>
+  </view>
+</view>
