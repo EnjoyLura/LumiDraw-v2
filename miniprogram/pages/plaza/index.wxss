@@ -5,13 +5,20 @@
   height: 100vh;
 }
 
-/* ============ 顶部栏 ============ */
+/* ============ 顶部栏（毛玻璃） ============ */
 .plaza-topbar {
   display: flex;
   align-items: center;
   padding: 8rpx 32rpx;
   gap: 20rpx;
   flex-shrink: 0;
+  background: rgba(238, 244, 252, 0.72);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1rpx solid rgba(91, 159, 232, 0.10);
+  position: sticky;
+  top: 0;
+  z-index: 50;
 }
 
 .topbar-btn {
