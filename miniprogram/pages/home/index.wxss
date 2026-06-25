@@ -14,7 +14,7 @@
 /* ============ Banner ============ */
 .banner-wrap {
   position: relative;
-  margin: 0 32rpx 32rpx;
+  margin: 16rpx 32rpx 32rpx;
 }
 
 .banner-swiper {

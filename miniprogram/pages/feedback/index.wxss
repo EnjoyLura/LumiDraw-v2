@@ -1,22 +1,22 @@
 /* 意见反馈页样式 */
-.feedback-page { padding: 32rpx; min-height: 100vh; background: #EEF4FC; }
+.feedback-page { padding: 32rpx; background: #EEF4FC; }
 .section { margin-bottom: 36rpx; }
 .section-title { font-size: 28rpx; font-weight: 700; color: #0E1F3A; }
 .field-header { display: flex; align-items: baseline; gap: 8rpx; margin-bottom: 16rpx; }
 .field-hint { font-size: 24rpx; color: #8497B5; font-weight: 400; }
 .field-count { text-align: right; font-size: 22rpx; color: #8497B5; margin-top: 8rpx; display: block; }
 
-/* 反馈类型 - 增大标题与选项间距 */
+/* 反馈类型 */
 .type-row { display: flex; gap: 20rpx; margin-top: 20rpx; }
-.type-card { flex: 1; text-align: center; padding: 28rpx 0; border-radius: 24rpx; border: 4rpx solid rgba(91,159,232,0.14); background: #FFFFFF; transition: all 0.3s; }
+.type-card { flex: 1; text-align: center; padding: 28rpx 0; border-radius: 24rpx; border: 4rpx solid rgba(91,159,232,0.14); background: #FFFFFF; }
 .type-card.active { border-color: #5B9FE8; background: linear-gradient(180deg, rgba(91,159,232,0.06) 0%, transparent 100%); }
 .type-icon { font-size: 44rpx; display: block; margin-bottom: 12rpx; }
 .type-label { font-size: 26rpx; font-weight: 600; color: #445876; }
 .type-card.active .type-label { color: #3B7FC8; }
 
 /* 描述输入 */
-.desc-card { background: #FFFFFF; border: 2rpx solid rgba(91,159,232,0.14); border-radius: 24rpx; overflow: hidden; transition: border-color 0.3s, box-shadow 0.3s; }
-.desc-card.focused { border-color: #5B9FE8; background: linear-gradient(180deg, rgba(91,159,232,0.04) 0%, #FFFFFF 100%); }
+.desc-card { background: #FFFFFF; border: 2rpx solid rgba(91,159,232,0.14); border-radius: 24rpx; overflow: hidden; }
+.desc-card.focused { border-color: #5B9FE8; }
 .desc-input { width: 100%; min-height: 200rpx; padding: 24rpx 28rpx; font-size: 28rpx; color: #0E1F3A; line-height: 1.6; box-sizing: border-box; background: none; border: none; }
 
 /* 图片 */
@@ -29,8 +29,8 @@
 .add-text { font-size: 20rpx; color: #8497B5; }
 
 /* 微信号输入 */
-.wechat-input { width: 100%; height: 88rpx; background: #FFFFFF; border: 2rpx solid rgba(91,159,232,0.14); border-radius: 24rpx; padding: 0 28rpx; font-size: 28rpx; color: #0E1F3A; box-sizing: border-box; transition: border-color 0.3s, box-shadow 0.3s; }
-.wechat-input.focused { border-color: #5B9FE8; background: linear-gradient(180deg, rgba(91,159,232,0.04) 0%, #FFFFFF 100%); }
+.wechat-input { width: 100%; height: 88rpx; background: #FFFFFF; border: 2rpx solid rgba(91,159,232,0.14); border-radius: 24rpx; padding: 0 28rpx; font-size: 28rpx; color: #0E1F3A; box-sizing: border-box; }
+.wechat-input.focused { border-color: #5B9FE8; }
 
 /* 提交按钮 */
 .submit-btn { width: 100%; text-align: center; padding: 28rpx 0; border-radius: 28rpx; background: linear-gradient(135deg, #5B9FE8, #7BC4F0, #6FD4B0); color: white; font-size: 32rpx; font-weight: 700; margin-top: 16rpx; }

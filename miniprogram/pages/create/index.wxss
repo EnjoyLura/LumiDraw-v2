@@ -257,12 +257,10 @@
   border-radius: 24rpx;
   padding: 24rpx;
   box-sizing: border-box;
-  transition: border-color 0.3s;
 }
 
 .prompt-input-focused {
   border-color: #5B9FE8;
-  background: linear-gradient(180deg, rgba(91, 159, 232, 0.04) 0%, #FBFDFF 100%);
 }
 
 .prompt-footer {
