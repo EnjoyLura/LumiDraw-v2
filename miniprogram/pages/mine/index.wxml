@@ -1,5 +1,5 @@
 <!-- 我的页 -->
-<nav-bar transparent />
+<nav-bar title="我的" />
 <view class="mine-page {{tabEnterClass}}">
 
   <!-- 用户信息卡片 -->

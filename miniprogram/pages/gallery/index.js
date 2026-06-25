@@ -150,7 +150,8 @@ Page({
         const tab = res[0];
         const container = res[1];
         if (tab && container) {
-          const left = tab.left - container.left + (tab.width - 28) / 2;
+          const indicatorW = 14;
+          const left = tab.left - container.left + (tab.width - indicatorW) / 2;
           this.setData({
             tabIndicatorStyle: 'left:' + left + 'px;opacity:1;transition:left 0.3s cubic-bezier(0.16,1,0.3,1);'
           });

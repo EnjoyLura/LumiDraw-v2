@@ -1,5 +1,5 @@
 <!-- 画廊页 -->
-<nav-bar transparent />
+<nav-bar title="画廊" />
 <view class="gallery-page {{tabEnterClass}}">
 
   <!-- 整个页面可滚动 -->
