@@ -1,6 +1,14 @@
 /* 首页样式 */
+.home-page {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: 0;
+}
+
 .home-scroll {
-  height: 100vh;
+  flex: 1;
+  height: 0;
 }
 
 /* ============ Banner ============ */

@@ -2,7 +2,8 @@
 .plaza-page {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  flex: 1;
+  height: 0;
 }
 
 /* ============ 顶部栏（毛玻璃） ============ */

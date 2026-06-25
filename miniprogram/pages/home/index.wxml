@@ -1,6 +1,6 @@
 <!-- 首页 -->
 <nav-bar title="露米画板" />
-<view class="{{tabEnterClass}}">
+<view class="home-page {{tabEnterClass}}">
 <!-- 骨架屏 -->
 <skeleton wx:if="{{showSkeleton}}" type="home" />
 
