@@ -22,7 +22,7 @@
         <view class="banner-item" bindtap="onBannerTap" data-index="{{index}}">
           <view class="banner-bg" style="background: {{item.color}};"></view>
           <text class="banner-big-text">{{item.title}}</text>
-          <view class="banner-btn" catchtap="onBannerTap" data-index="{{index}}">前往创作</view>
+          <view class="banner-btn" catchtap="onGoCreate">前往创作</view>
           <view class="banner-overlay"></view>
         </view>
       </swiper-item>

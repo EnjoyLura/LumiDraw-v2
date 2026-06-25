@@ -102,6 +102,10 @@ Page({
     this.setData({ bannerIndex: e.detail.current });
   },
 
+  onGoCreate() {
+    wx.switchTab({ url: '/pages/create/index' });
+  },
+
   onBannerTap(e) {
     const idx = e.currentTarget.dataset.index;
     const banner = this.data.banners[idx];
