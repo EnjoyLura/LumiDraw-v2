@@ -141,6 +141,7 @@ Page({
   },
 
   onWorkItemTap(e) { wx.navigateTo({ url: '/pages/workDetail/index?id=' + e.detail.id }); },
+  onWorkUserTap(e) { wx.navigateTo({ url: '/pages/userProfile/index?userId=' + e.detail.userId }); },
   onWorkLikeTap(e) {
     const id = e.detail.id;
     const likedMap = Object.assign({}, this.data.likedMap);
