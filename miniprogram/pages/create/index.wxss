@@ -62,14 +62,18 @@
 /* ============ 通用区块 ============ */
 .section {
   padding: 0 32rpx;
-  margin-bottom: 28rpx;
+  margin-bottom: 24rpx;
+}
+
+.section:first-child {
+  margin-top: 20rpx;
 }
 
 .section-title {
   font-size: 32rpx;
   font-weight: 700;
   color: #0E1F3A;
-  margin-bottom: 20rpx;
+  margin-bottom: 16rpx;
 }
 
 .section-title-row {
@@ -207,11 +211,6 @@
   border: 3rpx solid rgba(91, 159, 232, 0.14);
   border-radius: 28rpx;
   padding: 28rpx;
-  transition: border-color 0.3s, box-shadow 0.3s;
-}
-
-.prompt-card.focused {
-  border-color: #5B9FE8;
 }
 
 .prompt-header {
@@ -257,10 +256,10 @@
   border-radius: 24rpx;
   padding: 24rpx;
   box-sizing: border-box;
-  transition: border-color 0.3s, box-shadow 0.3s;
+  transition: border-color 0.3s;
 }
 
-.prompt-input:focus {
+.prompt-input-focused {
   border-color: #5B9FE8;
 }
 
@@ -565,7 +564,11 @@
   border: 8rpx solid transparent;
   border-top-color: #5B9FE8;
   border-right-color: #5B9FE8;
-  transition: transform 0.5s ease;
+  animation: ringSpin 1s linear infinite;
+}
+
+@keyframes ringSpin {
+  to { transform: rotate(360deg); }
 }
 
 .gen-percent {
@@ -627,8 +630,9 @@
 .gen-failed {
   width: 100%;
   height: 100%;
-  background: #F5F9FE;
-  border: 3rpx dashed #FFA8B8;
+  background: #FFF5F5;
+  border: 2rpx solid rgba(232, 93, 117, 0.25);
+  border-radius: 28rpx;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -640,13 +644,13 @@
 
 .gen-fail-icon {
   font-size: 48rpx;
-  color: #FFA8B8;
+  color: #E85D75;
   line-height: 1;
 }
 
 .gen-fail-msg {
   font-size: 22rpx;
-  color: #FFA8B8;
+  color: #E85D75;
   text-align: center;
   line-height: 1.4;
 }
@@ -654,9 +658,9 @@
 .gen-retry-btn {
   padding: 8rpx 24rpx;
   border-radius: 999rpx;
-  background: rgba(255, 168, 184, 0.2);
+  background: rgba(232, 93, 117, 0.12);
   font-size: 22rpx;
-  color: #FFA8B8;
+  color: #E85D75;
   font-weight: 600;
 }
 
@@ -763,6 +767,17 @@
 .gen-action-btn.primary:active {
   background: #4A8FD8;
 }
+
+/* ============ 结果详情抽屉 ============ */
+.result-sheet { padding: 8rpx 40rpx 48rpx; }
+.result-sheet-img { width: 100%; aspect-ratio: 1; border-radius: 24rpx; margin-bottom: 24rpx; }
+.result-sheet-meta { display: flex; flex-wrap: wrap; gap: 20rpx; padding: 16rpx 0; margin-bottom: 20rpx; border-top: 1rpx solid rgba(91,159,232,0.10); border-bottom: 1rpx solid rgba(91,159,232,0.10); }
+.rsm-item { font-size: 24rpx; color: #8497B5; }
+.result-sheet-actions { display: flex; gap: 16rpx; }
+.rsa-btn { flex: 1; text-align: center; padding: 24rpx 0; border-radius: 24rpx; font-size: 28rpx; font-weight: 600; background: #FFFFFF; border: 2rpx solid rgba(91,159,232,0.20); color: #0E1F3A; }
+.rsa-btn:active { background: rgba(91,159,232,0.04); }
+.rsa-btn.primary { background: #5B9FE8; border: none; color: white; }
+.rsa-btn.primary:active { background: #4A8FD8; }
 
 .gen-action-btn.saving {
   opacity: 0.8;

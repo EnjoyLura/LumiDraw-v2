@@ -40,7 +40,7 @@
 
     <!-- 描述你想要的画面 -->
     <view class="section">
-      <view class="prompt-card {{promptFocused ? 'focused' : ''}}">
+      <view class="prompt-card">
         <view class="prompt-header">
           <text class="prompt-title">描述你想要的画面</text>
           <view class="prompt-reverse" bindtap="onReversePrompt">
@@ -49,7 +49,7 @@
           </view>
         </view>
         <textarea
-          class="prompt-input"
+          class="prompt-input {{promptFocused ? 'prompt-input-focused' : ''}}"
           value="{{prompt}}"
           placeholder="描述你想要生成的图片，越详细效果越好..."
           maxlength="500"
@@ -175,7 +175,7 @@
         <view class="gen-ring-wrap">
           <view class="gen-ring">
             <view class="gen-ring-bg"></view>
-            <view class="gen-ring-fill" style="transform: rotate({{genProgress * 3.6 - 90}}deg);"></view>
+            <view class="gen-ring-fill"></view>
             <text class="gen-percent">{{genProgress}}%</text>
           </view>
         </view>
@@ -206,7 +206,7 @@
               </view>
             </view>
             <!-- 成功 -->
-            <view wx:else class="gen-success" style="background: {{item.color}};">
+            <view wx:else class="gen-success" style="background: {{item.color}};" data-index="{{item.index}}" data-color="{{item.color}}" bindtap="onResultTap">
             </view>
           </view>
         </view>
@@ -342,10 +342,29 @@
   </view>
 </bottom-sheet>
 
+<!-- 生成结果详情抽屉 -->
+<bottom-sheet visible="{{showResultSheet}}" bind:close="onCloseResultSheet">
+  <view class="result-sheet">
+    <view class="result-sheet-img" style="background: {{resultSheetColor}};" bindtap="onResultSheetPreview"></view>
+    <view class="result-sheet-meta" wx:if="{{genMeta}}">
+      <text class="rsm-item">⏱ {{genMeta.genTime}}s</text>
+      <text class="rsm-item">📐 {{genMeta.resW}}×{{genMeta.resH}}</text>
+      <text class="rsm-item">📄 {{genMeta.fileSize}}MB</text>
+      <text class="rsm-item">🎨 {{genMeta.modelName}}</text>
+    </view>
+    <view class="result-sheet-actions">
+      <view class="rsa-btn" bindtap="onResultSheetSave">💾 保存到相册</view>
+      <view class="rsa-btn primary" bindtap="onResultSheetPublish">📤 发布作品</view>
+    </view>
+  </view>
+</bottom-sheet>
+
 <!-- 图片预览 -->
 <image-preview
   visible="{{showImgPreview}}"
   src="{{previewImgSrc}}"
+  showSave="{{previewShowSave}}"
   bind:close="onCloseImgPreview"
+  bind:save="onPreviewSave"
 />
 

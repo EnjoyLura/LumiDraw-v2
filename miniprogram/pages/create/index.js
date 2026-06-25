@@ -352,6 +352,34 @@ Page({
     }, 2000);
   },
 
+  // 点击成功结果图
+  onResultTap(e) {
+    const color = e.currentTarget.dataset.color;
+    this.setData({ showResultSheet: true, resultSheetColor: color });
+  },
+
+  onCloseResultSheet() {
+    this.setData({ showResultSheet: false });
+  },
+
+  onResultSheetPreview() {
+    this.setData({ showImgPreview: true, previewImgSrc: '', previewShowSave: true });
+  },
+
+  onResultSheetSave() {
+    this.setData({ showResultSheet: false });
+    util.showToast('已保存到相册');
+  },
+
+  onResultSheetPublish() {
+    this.setData({ showResultSheet: false });
+    wx.navigateTo({ url: '/pages/publish/index' });
+  },
+
+  onPreviewSave(e) {
+    util.showToast('已保存到相册');
+  },
+
   // 发布作品
   onPublishResult() {
     wx.navigateTo({ url: '/pages/publish/index' });
