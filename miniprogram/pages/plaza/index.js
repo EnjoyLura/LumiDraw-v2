@@ -54,6 +54,7 @@ Page({
     filterModels: ['GPT Image 2', 'Nano Banana 2', 'Nano Banana Pro', 'Seedream 4.5'],
     filterRatios: ['1:1', '3:4', '4:3', '16:9', '9:16'],
     filterQualities: ['全高清1K', '超清2K', '超高清4K'],
+    selectedFilterCategories: [],
     selectedFilterModels: [],
     selectedFilterRatios: [],
     selectedFilterQualities: [],
@@ -145,6 +146,30 @@ Page({
     else wx.navigateTo({ url: '/pages/' + page + '/index' });
   },
 
+  onTouchStart(e) {
+    this._touchStartX = e.changedTouches[0].clientX;
+    this._touchStartY = e.changedTouches[0].clientY;
+  },
+
+  onTouchEnd(e) {
+    const dx = e.changedTouches[0].clientX - this._touchStartX;
+    const dy = e.changedTouches[0].clientY - this._touchStartY;
+    if (Math.abs(dx) < 80 || Math.abs(dx) < Math.abs(dy)) return;
+    const keys = this.data.tabList.map(t => t.key);
+    const curIdx = keys.indexOf(this.data.currentTab);
+    const nextIdx = dx < 0 ? curIdx + 1 : curIdx - 1;
+    if (nextIdx < 0 || nextIdx >= keys.length) return;
+    this.onSwitchTab({ currentTarget: { dataset: { tab: keys[nextIdx] } } });
+  },
+
+  onFilterCategoryTap(e) {
+    const val = e.currentTarget.dataset.value;
+    const arr = this.data.selectedFilterCategories.slice();
+    const idx = arr.indexOf(val);
+    if (idx >= 0) arr.splice(idx, 1); else arr.push(val);
+    this.setData({ selectedFilterCategories: arr });
+  },
+
   onFilterModelTap(e) {
     const val = e.currentTarget.dataset.value;
     const arr = this.data.selectedFilterModels.slice();
@@ -167,7 +192,7 @@ Page({
     this.setData({ selectedFilterQualities: arr });
   },
   onResetFilter() {
-    this.setData({ selectedFilterModels: [], selectedFilterRatios: [], selectedFilterQualities: [] });
+    this.setData({ selectedFilterCategories: [], selectedFilterModels: [], selectedFilterRatios: [], selectedFilterQualities: [] });
   },
   onApplyFilter() {
     this.setData({ showFilterSheet: false });

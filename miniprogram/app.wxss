@@ -100,11 +100,5 @@ button::after {
 .anim-heartbeat { animation: heartbeat 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
 .anim-spin { animation: spin 0.7s linear infinite; }
 
-/* Tab页切换入场动画（仅透明度，不移动位置） */
-@keyframes tabPageEnter {
-  from { opacity: 0.4; }
-  to { opacity: 1; }
-}
-.tab-page-enter {
-  animation: tabPageEnter 0.2s ease-out;
-}
+/* Tab页切换（不使用动画，避免闪烁） */
+.tab-page-enter {}

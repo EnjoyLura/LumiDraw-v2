@@ -24,7 +24,7 @@
   </view>
 
   <!-- 整体可滚动区域（分类chips + 瀑布流一起滚动） -->
-  <scroll-view scroll-y class="plaza-scroll" enhanced show-scrollbar="{{false}}">
+  <scroll-view scroll-y class="plaza-scroll" enhanced show-scrollbar="{{false}}" bindtouchstart="onTouchStart" bindtouchend="onTouchEnd">
 
     <!-- 分类chips + 筛选按钮 -->
     <view class="category-bar">
@@ -147,9 +147,9 @@
       <view
         wx:for="{{categories}}"
         wx:key="index"
-        class="filter-chip {{selectedFilterModels.indexOf(item) >= 0 ? 'active' : ''}}"
+        class="filter-chip {{selectedFilterCategories.indexOf(item) >= 0 ? 'active' : ''}}"
         data-value="{{item}}"
-        bindtap="onFilterModelTap"
+        bindtap="onFilterCategoryTap"
       >{{item}}</view>
     </view>
     <view class="filter-section-title">模型</view>
