@@ -1,4 +1,5 @@
 <!-- 用户详情 -->
+<nav-bar title="用户详情" back />
 <view class="admin-page">
   <view class="list-card" style="padding:24rpx;text-align:center;">
     <view class="avatar-sm" style="background: {{user.color}};width:128rpx;height:128rpx;font-size:56rpx;margin:0 auto 16rpx;"><text>{{user.avatar}}</text></view>

@@ -1,9 +1,40 @@
 <!-- 编辑Banner -->
+<nav-bar title="编辑Banner" back />
 <view class="admin-page">
-  <view class="field-row"><text class="field-label">标题</text><input class="field-input" value="{{title}}" data-field="title" bindinput="onInput" placeholder="请输入Banner标题" /></view>
-  <view class="field-row"><text class="field-label">跳转链接</text><input class="field-input" value="{{link}}" data-field="link" bindinput="onInput" placeholder="请输入跳转页面" /></view>
-  <view class="field-row"><text class="field-label">排序</text><input class="field-input" type="number" value="{{sort}}" data-field="sort" bindinput="onInput" placeholder="数字越小越靠前" /></view>
-  <view class="field-row"><text class="field-label">开始日期</text><input class="field-input" type="date" value="{{startDate}}" data-field="startDate" bindinput="onInput" /></view>
-  <view class="field-row"><text class="field-label">结束日期</text><input class="field-input" type="date" value="{{endDate}}" data-field="endDate" bindinput="onInput" /></view>
-  <view class="action-btn btn-primary" bindtap="onSave">保存</view>
+  <!-- 图片上传区 -->
+  <view class="upload-card" bindtap="onUploadImage">
+    <view class="upload-area">
+      <text class="upload-icon">🖼</text>
+      <text class="upload-text">上传Banner图片</text>
+    </view>
+  </view>
+
+  <!-- 基本信息 -->
+  <text class="section-title">基本信息</text>
+  <view class="form-card">
+    <view class="field-row">
+      <text class="field-label">标题</text>
+      <input class="field-input" value="{{title}}" data-field="title" bindinput="onInput" placeholder="请输入Banner标题" />
+    </view>
+    <view class="field-row">
+      <text class="field-label">跳转链接</text>
+      <input class="field-input" value="{{link}}" data-field="link" bindinput="onInput" placeholder="请输入跳转页面" />
+    </view>
+    <view class="field-row">
+      <text class="field-label">排序</text>
+      <input class="field-input" type="number" value="{{sort}}" data-field="sort" bindinput="onInput" placeholder="数字越小越靠前" />
+    </view>
+    <view class="date-row">
+      <view class="date-field">
+        <text class="field-label">开始日期</text>
+        <input class="field-input" type="date" value="{{startDate}}" data-field="startDate" bindinput="onInput" />
+      </view>
+      <view class="date-field">
+        <text class="field-label">结束日期</text>
+        <input class="field-input" type="date" value="{{endDate}}" data-field="endDate" bindinput="onInput" />
+      </view>
+    </view>
+  </view>
+
+  <view class="action-btn btn-primary" bindtap="onSave">✓ 保存</view>
 </view>

@@ -1,4 +1,5 @@
 <!-- 编辑模型 -->
+<nav-bar title="编辑模型" back />
 <view class="admin-page">
   <view class="field-row"><text class="field-label">模型名称</text><input class="field-input" value="{{name}}" data-field="name" bindinput="onInput" placeholder="请输入模型名称" /></view>
   <view class="field-row"><text class="field-label">模型描述</text><input class="field-input" value="{{desc}}" data-field="desc" bindinput="onInput" placeholder="请输入简要描述" /></view>

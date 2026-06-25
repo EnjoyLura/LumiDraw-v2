@@ -1,4 +1,5 @@
 <!-- 审核设置 -->
+<nav-bar title="审核设置" back />
 <view class="admin-page">
   <text class="page-title">审核设置</text>
   <text class="section-title">自动审核</text>

@@ -1,4 +1,5 @@
 <!-- 作品管理 -->
+<nav-bar title="作品管理" back />
 <view class="admin-page">
   <text class="page-title">作品管理</text>
   <view class="stat-row">

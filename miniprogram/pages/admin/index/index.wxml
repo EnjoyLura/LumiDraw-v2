@@ -1,4 +1,5 @@
 <!-- 管理后台首页 -->
+<nav-bar title="管理后台" back />
 <view class="admin-page">
   <text class="page-title">数据概览</text>
   <view class="stat-grid">

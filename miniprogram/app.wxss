@@ -7,7 +7,6 @@ page {
   font-size: 28rpx;
   line-height: 1.5;
   height: 100%;
-  overflow: hidden;
 }
 
 /* 重置 */

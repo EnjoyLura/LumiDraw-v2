@@ -1,5 +1,5 @@
 /* 管理后台首页 */
-.admin-page { padding: 32rpx; min-height: 100vh; background: #EEF4FC; }
+.admin-page { padding: 208rpx 32rpx 32rpx; min-height: 100vh; background: #EEF4FC; }
 .page-title { font-size: 32rpx; font-weight: 700; color: #0E1F3A; margin-bottom: 20rpx; display: block; }
 .stat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16rpx; margin-bottom: 32rpx; }
 .stat-card { background: #FFFFFF; border: 1rpx solid rgba(91,159,232,0.14); border-radius: 24rpx; padding: 24rpx; }

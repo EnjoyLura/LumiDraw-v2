@@ -1,4 +1,5 @@
 <!-- 用户统计 -->
+<nav-bar title="用户统计" back />
 <view class="admin-page">
   <text class="page-title">用户统计</text>
   <view class="stat-row"><view wx:for="{{stats}}" wx:key="label" class="mini-stat"><text class="ms-num">{{item.value}}</text><text class="ms-label">{{item.label}}</text></view></view>
