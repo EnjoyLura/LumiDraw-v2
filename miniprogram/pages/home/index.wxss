@@ -1,6 +1,7 @@
 /* 首页样式 */
 .home-scroll {
   height: 100vh;
+  padding-top: 8rpx;
 }
 
 /* ============ Banner ============ */

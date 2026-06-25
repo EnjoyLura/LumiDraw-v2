@@ -2,7 +2,8 @@ Component({
   properties: {
     title: { type: String, value: '' },
     back: { type: Boolean, value: false },
-    transparent: { type: Boolean, value: false }
+    transparent: { type: Boolean, value: false },
+    overlay: { type: Boolean, value: false }
   },
   data: {
     statusBarHeight: 20,

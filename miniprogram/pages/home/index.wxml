@@ -1,5 +1,5 @@
 <!-- 首页 -->
-<nav-bar title="露米画板" />
+<nav-bar title="露米画板" overlay />
 <view class="{{tabEnterClass}}">
 <!-- 骨架屏 -->
 <skeleton wx:if="{{showSkeleton}}" type="home" />
