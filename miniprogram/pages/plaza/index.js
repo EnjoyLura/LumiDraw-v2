@@ -57,10 +57,14 @@ Page({
     selectedFilterModels: [],
     selectedFilterRatios: [],
     selectedFilterQualities: [],
+    tabIndicatorStyle: '',
     genTasks: []
   },
 
-  onLoad() { this._loadWorks('recommend'); },
+  onLoad() {
+    this._loadWorks('recommend');
+    this._updateTabIndicator('recommend');
+  },
   onShow() {
     const app = getApp();
     this.setData({
@@ -70,9 +74,28 @@ Page({
     setTimeout(() => this.setData({ tabEnterClass: '' }), 350);
   },
 
+  _updateTabIndicator(tabKey) {
+    setTimeout(() => {
+      const query = wx.createSelectorQuery().in(this);
+      query.select('#ptab-' + tabKey).boundingClientRect();
+      query.select('#plazaTabs').boundingClientRect();
+      query.exec(res => {
+        const tab = res[0];
+        const container = res[1];
+        if (tab && container) {
+          const left = tab.left - container.left + (tab.width - 16) / 2;
+          this.setData({
+            tabIndicatorStyle: 'left:' + left + 'px;opacity:1;transition:left 0.3s cubic-bezier(0.16,1,0.3,1);'
+          });
+        }
+      });
+    }, 50);
+  },
+
   onSwitchTab(e) {
     const tab = e.currentTarget.dataset.tab;
     if (tab === this.data.currentTab) return;
+    this._updateTabIndicator(tab);
     const tabOrder = { recommend: 0, hot: 1, new: 2 };
     const dir = tabOrder[tab] > tabOrder[this.data.currentTab] ? 'left' : 'right';
     this.setData({ currentTab: tab, showTabLoading: true, wfAnimClass: '' });
@@ -95,8 +118,19 @@ Page({
   },
 
   onCategoryTap(e) {
-    this.setData({ currentCategory: parseInt(e.currentTarget.dataset.index) });
-    this._loadWorks(this.data.currentTab);
+    const idx = parseInt(e.currentTarget.dataset.index);
+    if (idx === this.data.currentCategory) return;
+    const dir = idx > this.data.currentCategory ? 'left' : 'right';
+    this.setData({ currentCategory: idx, showTabLoading: true, wfAnimClass: '' });
+    setTimeout(() => {
+      this.setData({
+        works: getMockWorks(this.data.currentTab),
+        showTabLoading: false,
+        loadMoreStatus: 'noMore',
+        wfAnimClass: dir === 'left' ? 'wf-slide-left' : 'wf-slide-right'
+      });
+      setTimeout(() => this.setData({ wfAnimClass: '' }), 400);
+    }, 300);
   },
 
   onOpenLeftDrawer() { this.setData({ showLeftDrawer: true }); },

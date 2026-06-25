@@ -55,16 +55,15 @@
   color: #5B9FE8;
 }
 
-.topbar-tab.active::after {
-  content: '';
+.topbar-tab-indicator {
   position: absolute;
   bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 48rpx;
+  width: 32rpx;
   height: 6rpx;
   border-radius: 999rpx;
   background: #5B9FE8;
+  opacity: 0;
+  transition: left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* ============ 分类栏 ============ */
@@ -72,7 +71,6 @@
   display: flex;
   align-items: center;
   margin-bottom: 12rpx;
-  flex-shrink: 0;
 }
 
 .category-scroll-wrap {
@@ -145,10 +143,15 @@
   width: 22rpx;
 }
 
-/* ============ 瀑布流区域 ============ */
+/* ============ 滚动区域（分类 + 瀑布流一起滚动） ============ */
 .plaza-scroll {
   flex: 1;
   height: 0;
+}
+
+.category-bar + .waterfall-area,
+.waterfall-area {
+  min-height: 400rpx;
 }
 
 .waterfall-area {
