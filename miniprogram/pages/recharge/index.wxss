@@ -39,7 +39,7 @@
 .custom-input-row { display: flex; align-items: center; gap: 20rpx; margin-bottom: 16rpx; }
 .custom-yen { font-size: 48rpx; font-weight: 700; color: #5B9FE8; }
 .custom-input { flex: 1; font-size: 36rpx; font-weight: 600; height: 96rpx; padding: 0 24rpx; background: #FBFDFF; border: 3rpx solid rgba(91,159,232,0.14); border-radius: 24rpx; color: #0E1F3A; box-sizing: border-box; transition: border-color 0.3s, box-shadow 0.3s; }
-.custom-input.focused { border-color: #5B9FE8; box-shadow: none; }
+.custom-input.focused { border-color: #5B9FE8; background: linear-gradient(180deg, rgba(91,159,232,0.04) 0%, #FBFDFF 100%); }
 .custom-hint { font-size: 22rpx; color: #8497B5; margin-bottom: 28rpx; }
 .custom-preview { background: rgba(91,159,232,0.06); border: 2rpx solid rgba(91,159,232,0.10); border-radius: 24rpx; padding: 28rpx; margin-bottom: 32rpx; }
 .cp-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16rpx; }

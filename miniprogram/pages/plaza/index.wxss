@@ -376,7 +376,7 @@
 }
 
 .filter-chip.active {
-  background: rgba(91, 159, 232, 0.12);
+  background: linear-gradient(180deg, rgba(91, 159, 232, 0.06) 0%, transparent 100%);
   border-color: #5B9FE8;
   color: #3B7FC8;
   font-weight: 600;

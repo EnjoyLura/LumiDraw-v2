@@ -12,7 +12,7 @@
 .milestone-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16rpx; margin-bottom: 32rpx; }
 .milestone-card { background: #FFFFFF; border: 2rpx solid rgba(91,159,232,0.14); border-radius: 24rpx; padding: 24rpx 16rpx; text-align: center; transition: all 0.3s; }
 .milestone-card.claimed { border-color: rgba(111,212,176,0.3); }
-.milestone-card.claimable { border-color: #5B9FE8; }
+.milestone-card.claimable { border-color: #5B9FE8; background: linear-gradient(180deg, rgba(91,159,232,0.06) 0%, transparent 100%); }
 .ms-days { font-size: 22rpx; color: #8497B5; display: block; }
 .ms-reward { font-size: 32rpx; font-weight: 700; color: #5B9FE8; display: block; margin: 8rpx 0; }
 .milestone-card.claimed .ms-reward { color: #6FD4B0; }

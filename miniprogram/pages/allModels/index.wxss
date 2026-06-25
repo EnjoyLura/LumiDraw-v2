@@ -1,7 +1,7 @@
 /* 全部模型页 */
 .models-page { padding: 32rpx; min-height: 100vh; background: #EEF4FC; }
 .model-card { display: flex; align-items: center; gap: 24rpx; background: #FFFFFF; border: 4rpx solid rgba(91,159,232,0.14); border-radius: 28rpx; padding: 28rpx; margin-bottom: 20rpx; transition: all 0.2s; }
-.model-card.selected { border-color: #5B9FE8; background: rgba(91,159,232,0.06); }
+.model-card.selected { border-color: #5B9FE8; background: linear-gradient(180deg, rgba(91,159,232,0.06) 0%, transparent 100%); }
 .model-card:active { transform: scale(0.98); }
 .model-cover { width: 112rpx; height: 112rpx; border-radius: 24rpx; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .cover-text { color: white; font-size: 40rpx; font-weight: 700; }
