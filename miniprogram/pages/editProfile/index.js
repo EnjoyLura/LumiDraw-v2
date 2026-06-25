@@ -16,10 +16,14 @@ Page({
   onNickInput(e) {
     this.setData({ nickName: e.detail.value, nickCount: e.detail.value.length });
   },
+  onNickFocus() { this.setData({ nickFocused: true }); },
+  onNickBlur() { this.setData({ nickFocused: false }); },
 
   onSignInput(e) {
     this.setData({ signature: e.detail.value, signCount: e.detail.value.length });
   },
+  onSignFocus() { this.setData({ signFocused: true }); },
+  onSignBlur() { this.setData({ signFocused: false }); },
 
   onSelectGender(e) {
     this.setData({ gender: e.currentTarget.dataset.gender });

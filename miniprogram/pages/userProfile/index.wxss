@@ -5,12 +5,24 @@
 .profile-info { flex: 1; min-width: 0; }
 .profile-name { font-size: 36rpx; font-weight: 700; color: #0E1F3A; display: block; }
 .profile-id { font-size: 26rpx; color: #8497B5; display: block; margin-top: 6rpx; }
-.follow-btn { padding: 12rpx 32rpx; border-radius: 999rpx; background: #5B9FE8; color: white; font-size: 26rpx; font-weight: 600; flex-shrink: 0; }
-.follow-btn.following { background: rgba(91,159,232,0.12); color: #8497B5; }
+
+/* 性别标签 */
+.gender-tag { display: inline-flex; align-items: center; font-size: 24rpx; padding: 4rpx 16rpx; border-radius: 999rpx; margin-top: 8rpx; }
+.gender-tag.female { background: rgba(255, 168, 184, 0.22); color: #FFA8B8; }
+.gender-tag.male { background: rgba(91, 159, 232, 0.12); color: #5B9FE8; }
+
 .profile-bio { font-size: 28rpx; color: #445876; line-height: 1.5; padding: 0 32rpx; display: block; }
-.profile-stats { display: flex; gap: 56rpx; padding: 32rpx; }
-.stat { text-align: center; }
-.stat-num { font-size: 36rpx; font-weight: 700; display: block; }
+
+/* 数据统计行（stats + 关注按钮对齐） */
+.profile-stats-row { display: flex; align-items: center; padding: 32rpx; }
+.profile-stats { flex: 1; display: flex; gap: 28rpx; }
+.stat { display: flex; align-items: baseline; gap: 6rpx; }
+.stat-num { font-size: 36rpx; font-weight: 700; }
 .stat-label { font-size: 26rpx; color: #8497B5; }
+
+.follow-btn { padding: 14rpx 36rpx; border-radius: 999rpx; background: #5B9FE8; color: white; font-size: 26rpx; font-weight: 600; flex-shrink: 0; }
+.follow-btn:active { opacity: 0.85; }
+.follow-btn.following { background: rgba(91,159,232,0.12); color: #8497B5; }
+
 .works-title { font-size: 28rpx; font-weight: 600; color: #0E1F3A; padding: 0 32rpx 16rpx; }
 .works-area { padding: 0 24rpx; }

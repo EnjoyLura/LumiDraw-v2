@@ -14,7 +14,7 @@ Page({
   data: { gameplays: GAMEPLAYS },
   onTap(e) {
     const name = e.currentTarget.dataset.name;
+    getApp().globalData.pendingNotify = '已套用「' + name + '」模板';
     wx.switchTab({ url: '/pages/create/index' });
-    util.showToast('已套用「' + name + '」模板');
   }
 });

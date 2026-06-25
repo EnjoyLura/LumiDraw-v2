@@ -1,25 +1,28 @@
 <!-- 作品详情页 -->
+<nav-bar title="作品详情" back />
 <view class="detail-page" wx:if="{{work}}">
-  <!-- 图片 -->
-  <view class="detail-image" bindtap="onPreviewImage">
-    <view class="image-placeholder" style="background: {{work._cardColor}};">
-      <text class="image-title">{{work.title}}</text>
-    </view>
-  </view>
-
   <scroll-view scroll-y class="detail-scroll">
+    <!-- 图片（随内容滚动） -->
+    <view class="detail-image" bindtap="onPreviewImage">
+      <view class="image-placeholder" style="background: {{work._cardColor}};">
+        <text class="image-title">{{work.title}}</text>
+      </view>
+    </view>
+
     <view class="detail-body">
       <!-- 用户信息 -->
-      <view class="user-row" bindtap="onUserTap">
-        <view class="user-avatar" style="background: {{work.userColor}};">
+      <view class="user-row">
+        <view class="user-avatar" style="background: {{work.userColor}};" bindtap="onUserTap">
           <text>{{work.userAvatar}}</text>
         </view>
-        <view class="user-info">
+        <view class="user-info" bindtap="onUserTap">
           <text class="user-name">{{work.userName}}</text>
           <text class="user-meta">{{work.likes}}赞 · {{work.favorites}}收藏</text>
         </view>
-        <view wx:if="{{!isOwn}}" class="follow-btn">+ 关注</view>
-        <view wx:else class="follow-btn secondary">管理</view>
+        <view wx:if="{{!isOwn}}" class="follow-btn {{isFollowing ? 'following' : ''}}" catchtap="onToggleFollow">
+          <text>{{isFollowing ? '已关注' : '+ 关注'}}</text>
+        </view>
+        <view wx:else class="follow-btn secondary" bindtap="onUserTap">管理</view>
       </view>
 
       <!-- 标题 + 描述 -->
@@ -101,3 +104,10 @@
     </view>
   </view>
 </view>
+
+<!-- 图片预览 -->
+<image-preview
+  visible="{{showImgPreview}}"
+  src="{{previewImgSrc}}"
+  bind:close="onClosePreview"
+/>

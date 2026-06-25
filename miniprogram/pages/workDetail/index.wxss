@@ -1,9 +1,9 @@
 /* 作品详情页样式 */
 .detail-page { display: flex; flex-direction: column; height: 100vh; background: #EEF4FC; position: relative; }
+.detail-scroll { flex: 1; height: 0; }
 .detail-image { width: 100%; aspect-ratio: 4/3; overflow: hidden; }
 .image-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
 .image-title { color: rgba(255,255,255,0.6); font-size: 48rpx; font-weight: 700; text-shadow: 0 4rpx 8rpx rgba(0,0,0,0.3); }
-.detail-scroll { flex: 1; height: 0; }
 .detail-body { padding: 32rpx; }
 .user-row { display: flex; align-items: center; gap: 20rpx; margin-bottom: 24rpx; }
 .user-avatar { width: 80rpx; height: 80rpx; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 32rpx; font-weight: 700; flex-shrink: 0; }
@@ -11,6 +11,8 @@
 .user-name { font-size: 30rpx; font-weight: 700; color: #0E1F3A; display: block; }
 .user-meta { font-size: 22rpx; color: #8497B5; display: block; margin-top: 4rpx; }
 .follow-btn { padding: 12rpx 32rpx; border-radius: 999rpx; background: #5B9FE8; color: white; font-size: 26rpx; font-weight: 600; flex-shrink: 0; }
+.follow-btn:active { opacity: 0.85; }
+.follow-btn.following { background: rgba(91,159,232,0.12); color: #8497B5; }
 .follow-btn.secondary { background: rgba(91,159,232,0.12); color: #445876; }
 .detail-title { font-size: 36rpx; font-weight: 700; color: #0E1F3A; display: block; margin-bottom: 16rpx; }
 .detail-desc { font-size: 28rpx; color: #445876; line-height: 1.7; display: block; margin-bottom: 28rpx; }
@@ -44,5 +46,5 @@
 .fav-icon.liked { color: #FFE08A; }
 .fav-num { font-size: 28rpx; font-weight: 600; color: #8497B5; }
 .fav-num.liked { color: #FFE08A; }
-.remake-btn { flex: 1; text-align: center; padding: 24rpx 0; border-radius: 28rpx; background: linear-gradient(135deg, #5B9FE8, #7BC4F0, #6FD4B0); color: white; font-size: 30rpx; font-weight: 700; box-shadow: 0 8rpx 28rpx rgba(91,159,232,0.35); }
+.remake-btn { flex: 1; text-align: center; padding: 24rpx 0; border-radius: 28rpx; background: linear-gradient(135deg, #5B9FE8, #7BC4F0, #6FD4B0); color: white; font-size: 30rpx; font-weight: 700; }
 .remake-btn:active { opacity: 0.85; }

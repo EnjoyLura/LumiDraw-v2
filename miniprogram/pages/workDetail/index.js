@@ -6,12 +6,14 @@ Page({
     work: null,
     liked: false,
     favorited: false,
-    isOwn: false
+    isOwn: false,
+    isFollowing: false,
+    showImgPreview: false,
+    previewImgSrc: ''
   },
 
   onLoad(options) {
     const id = options.id;
-    // Mock作品数据
     const mockWork = {
       id: parseInt(id) || 1,
       imageUrl: '',
@@ -43,14 +45,14 @@ Page({
     const liked = !this.data.liked;
     const work = Object.assign({}, this.data.work);
     work.likes += liked ? 1 : -1;
-    this.setData({ liked: liked, work: work });
+    this.setData({ liked, work });
   },
 
   onFavTap() {
     const favorited = !this.data.favorited;
     const work = Object.assign({}, this.data.work);
     work.favorites += favorited ? 1 : -1;
-    this.setData({ favorited: favorited, work: work });
+    this.setData({ favorited, work });
   },
 
   onCopyPrompt() {
@@ -66,11 +68,31 @@ Page({
     wx.navigateTo({ url: '/pages/userProfile/index?userId=' + this.data.work.userId });
   },
 
+  onToggleFollow() {
+    if (this.data.isFollowing) {
+      wx.showModal({
+        title: '取消关注',
+        content: '确定不再关注 ' + this.data.work.userName + ' 吗？',
+        confirmColor: '#FF6B8A',
+        success: (res) => {
+          if (res.confirm) {
+            this.setData({ isFollowing: false });
+            util.showToast('已取消关注');
+          }
+        }
+      });
+    } else {
+      this.setData({ isFollowing: true });
+      util.showToast('已关注');
+    }
+  },
+
   onPreviewImage() {
-    wx.previewImage({
-      urls: [this.data.work.imageUrl || ''],
-      current: 0
-    });
+    this.setData({ showImgPreview: true, previewImgSrc: this.data.work.imageUrl || '' });
+  },
+
+  onClosePreview() {
+    this.setData({ showImgPreview: false });
   },
 
   onSave() {

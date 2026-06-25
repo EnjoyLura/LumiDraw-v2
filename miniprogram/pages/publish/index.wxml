@@ -1,19 +1,24 @@
 <!-- 发布作品页 -->
+<nav-bar title="发布作品" back />
 <view class="publish-page">
   <view class="section">
     <text class="section-label">选择作品</text>
     <view class="draft-picker" bindtap="onOpenDraftPicker">
       <block wx:if="{{selectedDraft}}">
-        <view class="draft-preview" style="background: {{selectedDraft.color}};"></view>
+        <view class="draft-preview" style="background: {{selectedDraft.color}};" catchtap="onPreviewDraft"></view>
         <view class="draft-info">
           <text class="draft-title">{{selectedDraft.title}}</text>
-          <text class="draft-meta">{{selectedDraft.model}} · {{selectedDraft.ratio}}</text>
+          <text class="draft-meta">{{selectedDraft.model}} · {{selectedDraft.resolution}}</text>
+          <text class="draft-meta">{{selectedDraft.ratio}} · {{selectedDraft.style || '默认风格'}}</text>
         </view>
       </block>
       <block wx:else>
         <view class="draft-empty">
-          <text class="de-icon">📁</text>
-          <text class="de-text">从草稿箱选择</text>
+          <text class="de-icon">🖼</text>
+        </view>
+        <view class="draft-empty-info">
+          <text class="de-title">从草稿箱选择</text>
+          <text class="de-hint">点击浏览全部草稿作品</text>
         </view>
       </block>
       <text class="picker-arrow">›</text>
@@ -21,12 +26,12 @@
   </view>
   <view class="section">
     <text class="section-label">作品标题</text>
-    <input class="field-input" value="{{title}}" maxlength="30" bindinput="onTitleInput" placeholder="给作品起个名字" />
+    <input class="field-input {{titleFocused ? 'focused' : ''}}" value="{{title}}" maxlength="30" bindinput="onTitleInput" bindfocus="onTitleFocus" bindblur="onTitleBlur" placeholder="给作品起个名字" />
     <text class="field-count">{{titleCount}}/30</text>
   </view>
   <view class="section">
     <text class="section-label">作品描述</text>
-    <textarea class="field-textarea" value="{{desc}}" maxlength="200" bindinput="onDescInput" placeholder="介绍一下你的创作灵感吧~" />
+    <textarea class="field-textarea {{descFocused ? 'focused' : ''}}" value="{{desc}}" maxlength="200" bindinput="onDescInput" bindfocus="onDescFocus" bindblur="onDescBlur" placeholder="介绍一下你的创作灵感吧~" />
     <text class="field-count">{{descCount}}/200</text>
   </view>
   <view class="section">
@@ -35,9 +40,10 @@
       <text class="tag-hint">最多选5个</text>
     </view>
     <view class="tag-grid">
-      <view wx:for="{{allTags}}" wx:key="*this"
-        class="tag-chip {{selectedTags.indexOf(item) >= 0 ? 'active' : ''}}"
-        data-tag="{{item}}" bindtap="onToggleTag">{{item}}</view>
+      <view wx:for="{{tagItems}}" wx:key="name"
+        class="tag-chip {{item.selected ? 'active' : ''}}"
+        style="{{item.selected ? 'background:' + item.bg + ';color:' + item.color + ';border-color:' + item.color + ';' : ''}}"
+        data-tag="{{item.name}}" bindtap="onToggleTag">{{item.name}}</view>
     </view>
   </view>
   <view class="publish-btn" bindtap="onPublish">📤 发布作品</view>
@@ -45,13 +51,25 @@
 
 <bottom-sheet visible="{{showDraftPicker}}" bind:close="onCloseDraftPicker">
   <view class="draft-sheet">
-    <view class="sheet-handle"></view>
     <text class="sheet-title">选择草稿作品</text>
     <view class="draft-grid">
-      <view wx:for="{{drafts}}" wx:key="id" class="draft-item" data-id="{{item.id}}" bindtap="onSelectDraft">
-        <view class="draft-thumb" style="background: {{item.color}};"></view>
-        <text class="draft-name">{{item.title}}</text>
+      <view wx:for="{{drafts}}" wx:key="id" class="draft-item {{selectedDraft.id === item.id ? 'selected' : ''}}" data-id="{{item.id}}" bindtap="onSelectDraft">
+        <view class="draft-thumb-wrap">
+          <view class="draft-thumb" style="background: {{item.color}};" catchtap="onPreviewDraftImage" data-color="{{item.color}}"></view>
+          <view wx:if="{{selectedDraft.id === item.id}}" class="draft-check">✓</view>
+        </view>
+        <view class="draft-item-info">
+          <text class="draft-name">{{item.title}}</text>
+          <text class="draft-res">{{item.resolution}}</text>
+        </view>
       </view>
     </view>
   </view>
 </bottom-sheet>
+
+<!-- 图片预览 -->
+<image-preview
+  visible="{{showImgPreview}}"
+  src="{{previewImgSrc}}"
+  bind:close="onCloseImgPreview"
+/>

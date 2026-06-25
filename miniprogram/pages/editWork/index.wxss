@@ -15,5 +15,5 @@
 .tag-grid { display: flex; flex-wrap: wrap; gap: 16rpx; }
 .tag-chip { padding: 12rpx 28rpx; border-radius: 999rpx; background: #FBFDFF; font-size: 26rpx; color: #445876; border: 2rpx solid transparent; transition: all 0.2s; }
 .tag-chip.active { background: rgba(91,159,232,0.12); color: #3B7FC8; border-color: #5B9FE8; font-weight: 600; }
-.save-btn { text-align: center; padding: 28rpx 0; border-radius: 28rpx; background: linear-gradient(135deg, #5B9FE8, #7BC4F0, #6FD4B0); color: white; font-size: 32rpx; font-weight: 700; margin-top: 16rpx; box-shadow: 0 8rpx 28rpx rgba(91,159,232,0.35); }
+.save-btn { text-align: center; padding: 28rpx 0; border-radius: 28rpx; background: linear-gradient(135deg, #5B9FE8, #7BC4F0, #6FD4B0); color: white; font-size: 32rpx; font-weight: 700; margin-top: 16rpx; }
 .save-btn:active { opacity: 0.85; }

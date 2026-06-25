@@ -5,7 +5,7 @@
 .streak-num-row { display: flex; align-items: baseline; justify-content: center; gap: 8rpx; margin: 16rpx 0 32rpx; }
 .streak-num { font-size: 112rpx; font-weight: 700; color: #5B9FE8; font-family: Georgia, serif; line-height: 1; }
 .streak-unit { font-size: 40rpx; color: #8497B5; }
-.checkin-btn { padding: 28rpx 0; border-radius: 28rpx; background: linear-gradient(135deg, #5B9FE8, #7BC4F0, #6FD4B0); color: white; font-size: 30rpx; font-weight: 700; box-shadow: 0 8rpx 28rpx rgba(91,159,232,0.35); }
+.checkin-btn { padding: 28rpx 0; border-radius: 28rpx; background: linear-gradient(135deg, #5B9FE8, #7BC4F0, #6FD4B0); color: white; font-size: 30rpx; font-weight: 700; }
 .checkin-btn:active { opacity: 0.85; }
 .checkin-btn.done { background: #FFFFFF; border: 2rpx solid rgba(91,159,232,0.14); color: #445876; box-shadow: none; }
 .section-title { font-size: 32rpx; font-weight: 700; color: #0E1F3A; margin-bottom: 20rpx; }

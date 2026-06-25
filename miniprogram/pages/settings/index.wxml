@@ -1,4 +1,5 @@
 <!-- 设置页 -->
+<nav-bar title="设置" back />
 <view class="settings-page">
   <!-- 账号 -->
   <view class="section-label">账号</view>

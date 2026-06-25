@@ -232,6 +232,8 @@
   position: relative;
   padding-bottom: 12rpx;
   transition: color 0.3s;
+  flex-shrink: 0;
+  line-height: 1;
 }
 
 .gallery-tab.active {
@@ -239,16 +241,15 @@
   color: #5B9FE8;
 }
 
-.gallery-tab.active::after {
-  content: '';
+.gallery-tab-indicator {
   position: absolute;
   bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 40rpx;
+  width: 28rpx;
   height: 6rpx;
   border-radius: 999rpx;
   background: #5B9FE8;
+  opacity: 0;
+  transition: left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .manage-btn {

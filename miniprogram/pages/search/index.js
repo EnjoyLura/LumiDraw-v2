@@ -23,9 +23,7 @@ Page({
   onInput(e) {
     const val = e.detail.value;
     this.setData({ keyword: val });
-    if (val.trim()) {
-      this._doSearch(val.trim());
-    } else {
+    if (!val.trim()) {
       this.setData({ showResult: false });
     }
   },

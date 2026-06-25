@@ -1,4 +1,6 @@
 {
   "navigationBarTitleText": "作品详情",
-  "usingComponents": {}
+  "usingComponents": {
+    "image-preview": "/components/image-preview/index"
+  }
 }

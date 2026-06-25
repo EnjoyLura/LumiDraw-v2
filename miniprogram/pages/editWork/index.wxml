@@ -1,4 +1,5 @@
 <!-- 编辑作品页 -->
+<nav-bar title="编辑作品" back />
 <view class="edit-page">
   <view class="section">
     <text class="section-label">作品预览</text>

@@ -26,7 +26,12 @@ Page({
   onLoad() {},
 
   onShow() {
-    // 后续从云端刷新用户信息和未读数
+    this.setData({ tabEnterClass: 'tab-page-enter' });
+    setTimeout(() => this.setData({ tabEnterClass: '' }), 350);
+  },
+
+  onEditProfile() {
+    wx.navigateTo({ url: '/pages/editProfile/index' });
   },
 
   // ============ 导航 ============

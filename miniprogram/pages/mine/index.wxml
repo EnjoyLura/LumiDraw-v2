@@ -1,14 +1,15 @@
 <!-- 我的页 -->
-<view class="mine-page">
+<nav-bar transparent />
+<view class="mine-page {{tabEnterClass}}">
 
   <!-- 用户信息卡片 -->
   <view class="user-card">
     <!-- 头像 + 信息 + 积分 -->
     <view class="user-row">
-      <view class="user-avatar" style="background: {{user.avatarColor}}; box-shadow: 0 8rpx 24rpx rgba(91,159,232,0.35);">
+      <view class="user-avatar" style="background: {{user.avatarColor}};" bindtap="onEditProfile">
         <text>{{user.avatarText}}</text>
       </view>
-      <view class="user-info">
+      <view class="user-info" bindtap="onEditProfile">
         <text class="user-name">{{user.nickName}}</text>
         <text class="user-id">ID: {{user.userId}}</text>
       </view>

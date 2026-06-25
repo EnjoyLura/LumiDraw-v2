@@ -182,18 +182,21 @@
 
 /* ============ Tab切换 ============ */
 .tab-switcher {
-  display: flex;
+  display: inline-flex;
   gap: 32rpx;
   position: relative;
+  align-items: center;
 }
 
 .tab-item {
   font-size: 28rpx;
   font-weight: 500;
   color: #8497B5;
-  padding-bottom: 8rpx;
+  padding-bottom: 12rpx;
   position: relative;
   transition: color 0.3s;
+  flex-shrink: 0;
+  line-height: 1;
 }
 
 .tab-item.active {
@@ -207,7 +210,7 @@
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 40rpx;
+  width: 28rpx;
   height: 6rpx;
   border-radius: 999rpx;
   background: #5B9FE8;

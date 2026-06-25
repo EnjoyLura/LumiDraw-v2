@@ -25,11 +25,14 @@
   flex-direction: column;
   align-items: center;
   width: 100%;
+  max-height: 100%;
+  padding: 0 32rpx;
+  box-sizing: border-box;
 }
 
 .preview-img {
-  max-width: 90%;
-  max-height: 80vh;
+  max-width: 100%;
+  max-height: 70vh;
   border-radius: 24rpx;
   transform: scale(0.8);
   opacity: 0;
@@ -42,17 +45,19 @@
 }
 
 .preview-save-btn {
-  margin-top: 32rpx;
+  margin-top: 48rpx;
   display: flex;
   align-items: center;
   gap: 12rpx;
-  padding: 20rpx 48rpx;
+  padding: 24rpx 56rpx;
   border-radius: 999rpx;
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.18);
   backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   color: white;
   font-size: 28rpx;
   font-weight: 600;
+  flex-shrink: 0;
 }
 
 .preview-save-btn:active {

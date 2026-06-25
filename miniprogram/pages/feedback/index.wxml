@@ -1,4 +1,5 @@
 <!-- 意见反馈页 -->
+<nav-bar title="意见反馈" back />
 <view class="feedback-page">
   <!-- 反馈类型 -->
   <view class="section">
@@ -23,8 +24,8 @@
       <text class="section-title">反馈描述</text>
       <text class="field-hint">（选填）</text>
     </view>
-    <view class="desc-card">
-      <textarea class="desc-input" value="{{description}}" maxlength="500" bindinput="onDescInput" placeholder="请详细描述您遇到的问题或建议…" />
+    <view class="desc-card {{descFocused ? 'focused' : ''}}">
+      <textarea class="desc-input" value="{{description}}" maxlength="500" bindinput="onDescInput" bindfocus="onDescFocus" bindblur="onDescBlur" placeholder="请详细描述您遇到的问题或建议…" />
     </view>
     <text class="field-count">{{descCount}}/500</text>
   </view>
@@ -53,12 +54,9 @@
       <text class="section-title">微信号</text>
       <text class="field-hint">（选填）</text>
     </view>
-    <view class="wechat-card">
-      <input class="wechat-input" value="{{wechatId}}" maxlength="30" bindinput="onWechatInput" placeholder="方便我们联系您" />
-    </view>
+    <input class="wechat-input {{wechatFocused ? 'focused' : ''}}" value="{{wechatId}}" maxlength="30" bindinput="onWechatInput" bindfocus="onWechatFocus" bindblur="onWechatBlur" placeholder="方便我们联系您" />
   </view>
 
   <!-- 提交按钮 -->
   <view class="submit-btn" bindtap="onSubmit">📤 提交反馈</view>
 </view>
-

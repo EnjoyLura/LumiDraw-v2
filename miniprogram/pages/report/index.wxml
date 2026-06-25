@@ -1,4 +1,5 @@
 <!-- 举报页 -->
+<nav-bar title="举报" back />
 <view class="report-page">
   <text class="page-title">请选择举报原因</text>
   <view class="reason-list">

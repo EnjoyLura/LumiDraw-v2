@@ -1,4 +1,5 @@
 <!-- 浏览记录页 -->
+<nav-bar title="浏览记录" back />
 <view class="history-page">
   <view class="clear-row" wx:if="{{!cleared}}"><view class="clear-btn" bindtap="onClear">清空记录</view></view>
   <block wx:if="{{cleared}}">

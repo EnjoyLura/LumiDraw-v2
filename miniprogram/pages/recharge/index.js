@@ -17,10 +17,12 @@ Page({
       { title: '生成「霞虹都市」', model: 'GPT Image 2', time: '06-18 16:20', amount: '-15' },
       { title: '生成「山水之间」', model: 'Nano Banana 2', time: '06-17 20:15', amount: '-8' }
     ],
+    recordAnimClass: '',
     showCustomSheet: false,
     customAmount: '',
     customCredits: 0,
-    customBonus: 0
+    customBonus: 0,
+    customFocused: false
   },
 
   onSelectTier(e) {
@@ -33,7 +35,11 @@ Page({
   },
 
   onSwitchTab(e) {
-    this.setData({ currentTab: e.currentTarget.dataset.tab });
+    const tab = e.currentTarget.dataset.tab;
+    if (tab === this.data.currentTab) return;
+    const dir = tab === 'spend' ? 'left' : 'right';
+    this.setData({ currentTab: tab, recordAnimClass: dir === 'left' ? 'anim-slide-left' : 'anim-slide-right' });
+    setTimeout(() => this.setData({ recordAnimClass: '' }), 350);
   },
 
   onOpenCustom() {
@@ -43,6 +49,9 @@ Page({
   onCloseCustom() {
     this.setData({ showCustomSheet: false });
   },
+
+  onCustomFocus() { this.setData({ customFocused: true }); },
+  onCustomBlur() { this.setData({ customFocused: false }); },
 
   onCustomInput(e) {
     const val = parseFloat(e.detail.value) || 0;

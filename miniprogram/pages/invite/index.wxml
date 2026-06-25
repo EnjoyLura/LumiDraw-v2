@@ -1,4 +1,5 @@
 <!-- 邀请好友页 -->
+<nav-bar title="邀请有礼" back />
 <view class="invite-page">
   <view class="invite-hero">
     <text class="hero-icon">🎁</text>

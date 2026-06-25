@@ -17,7 +17,7 @@
 .custom-icon { font-size: 44rpx; color: #5B9FE8; }
 .custom-text { font-size: 26rpx; font-weight: 600; color: #5B9FE8; }
 .custom-sub { font-size: 22rpx; color: #8497B5; margin-top: 4rpx; }
-.recharge-btn { text-align: center; padding: 28rpx 0; border-radius: 28rpx; background: linear-gradient(135deg, #5B9FE8, #7BC4F0, #6FD4B0); color: white; font-size: 30rpx; font-weight: 700; margin-bottom: 32rpx; box-shadow: 0 8rpx 28rpx rgba(91,159,232,0.35); }
+.recharge-btn { text-align: center; padding: 28rpx 0; border-radius: 28rpx; background: linear-gradient(135deg, #5B9FE8, #7BC4F0, #6FD4B0); color: white; font-size: 30rpx; font-weight: 700; margin-bottom: 32rpx; }
 .recharge-btn:active { opacity: 0.85; }
 .record-tabs { display: flex; background: rgba(91,159,232,0.08); border-radius: 24rpx; padding: 8rpx; margin-bottom: 20rpx; }
 .record-tab { flex: 1; text-align: center; padding: 14rpx 0; border-radius: 20rpx; font-size: 26rpx; font-weight: 600; color: #445876; transition: all 0.3s; }
@@ -34,17 +34,21 @@
 .record-amount { font-size: 28rpx; font-weight: 700; flex-shrink: 0; }
 .record-amount.earn { color: #6FD4B0; }
 .record-amount.spend { color: #FFA8B8; }
-.custom-sheet { padding: 0 40rpx 48rpx; }
-.sheet-handle { width: 72rpx; height: 8rpx; border-radius: 4rpx; background: rgba(91,159,232,0.32); margin: 20rpx auto 24rpx; }
+.custom-sheet { padding: 8rpx 40rpx 48rpx; }
 .sheet-title { font-size: 36rpx; font-weight: 700; color: #0E1F3A; text-align: center; margin-bottom: 40rpx; }
-.custom-input-row { display: flex; align-items: center; gap: 20rpx; margin-bottom: 32rpx; }
+.custom-input-row { display: flex; align-items: center; gap: 20rpx; margin-bottom: 16rpx; }
 .custom-yen { font-size: 48rpx; font-weight: 700; color: #5B9FE8; }
-.custom-input { flex: 1; font-size: 36rpx; font-weight: 600; padding: 20rpx 24rpx; background: #FBFDFF; border: 2rpx solid rgba(91,159,232,0.14); border-radius: 24rpx; color: #0E1F3A; }
-.custom-preview { background: rgba(91,159,232,0.08); border-radius: 24rpx; padding: 28rpx; margin-bottom: 32rpx; }
-.cp-row { display: flex; justify-content: space-between; align-items: center; font-size: 26rpx; color: #445876; margin-bottom: 12rpx; }
+.custom-input { flex: 1; font-size: 36rpx; font-weight: 600; height: 96rpx; padding: 0 24rpx; background: #FBFDFF; border: 3rpx solid rgba(91,159,232,0.14); border-radius: 24rpx; color: #0E1F3A; box-sizing: border-box; transition: border-color 0.3s, box-shadow 0.3s; }
+.custom-input.focused { border-color: #5B9FE8; box-shadow: 0 0 0 6rpx rgba(91,159,232,0.12); }
+.custom-hint { font-size: 22rpx; color: #8497B5; margin-bottom: 28rpx; }
+.custom-preview { background: rgba(91,159,232,0.06); border: 2rpx solid rgba(91,159,232,0.10); border-radius: 24rpx; padding: 28rpx; margin-bottom: 32rpx; }
+.cp-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16rpx; }
 .cp-row:last-child { margin-bottom: 0; }
+.cp-label { font-size: 26rpx; color: #445876; }
 .cp-num { font-size: 36rpx; font-weight: 700; color: #5B9FE8; }
 .cp-bonus { font-size: 28rpx; font-weight: 600; color: #6FD4B0; }
 .custom-actions { display: flex; gap: 20rpx; }
 .custom-cancel { flex: 1; text-align: center; padding: 28rpx 0; border-radius: 28rpx; background: #FFFFFF; border: 2rpx solid rgba(91,159,232,0.32); font-size: 30rpx; font-weight: 600; color: #0E1F3A; }
+.custom-cancel:active { background: rgba(91,159,232,0.06); }
 .custom-confirm { flex: 1; text-align: center; padding: 28rpx 0; border-radius: 28rpx; background: linear-gradient(135deg, #5B9FE8, #7BC4F0, #6FD4B0); color: white; font-size: 30rpx; font-weight: 700; }
+.custom-confirm:active { opacity: 0.85; }

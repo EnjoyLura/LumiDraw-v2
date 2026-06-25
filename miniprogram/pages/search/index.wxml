@@ -1,4 +1,5 @@
 <!-- 搜索页 -->
+<nav-bar title="搜索" back />
 <view class="search-page">
   <!-- 搜索栏 -->
   <view class="search-bar">
@@ -28,7 +29,7 @@
       </view>
       <view class="hot-list">
         <view wx:for="{{hotSearches}}" wx:key="*this" class="hot-item" data-kw="{{item}}" bindtap="onHotTap">
-          <text class="hot-rank {{index < 3 ? 'top' : ''}}">{{index + 1}}</text>
+          <text class="hot-rank {{index === 0 ? 'top1' : index === 1 ? 'top2' : index === 2 ? 'top3' : ''}}">{{index + 1}}</text>
           <text class="hot-text">{{item}}</text>
         </view>
       </view>

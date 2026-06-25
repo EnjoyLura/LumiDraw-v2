@@ -1,9 +1,57 @@
+/* ============ 顶部通知 ============ */
+.top-notify {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+  padding: 24rpx 32rpx;
+  padding-top: calc(env(safe-area-inset-top) + 24rpx);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1rpx solid rgba(91, 159, 232, 0.14);
+  box-shadow: 0 4rpx 24rpx rgba(60, 120, 200, 0.1);
+  animation: notifySlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.top-notify.out {
+  animation: notifySlideOut 0.3s ease forwards;
+}
+
+@keyframes notifySlideIn {
+  from { opacity: 0; transform: translateY(-100%); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes notifySlideOut {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(-100%); }
+}
+
+.top-notify-icon {
+  font-size: 32rpx;
+  color: #6FD4B0;
+  font-weight: 700;
+}
+
+.top-notify-text {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #0E1F3A;
+}
+
 /* 创作页样式 */
 .create-page {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100%;
   position: relative;
+  overflow: hidden;
 }
 
 .create-scroll {
@@ -56,8 +104,9 @@
   gap: 24rpx;
   padding: 24rpx;
   background: #FFFFFF;
-  border: 1rpx solid rgba(91, 159, 232, 0.14);
+  border: 3rpx solid rgba(91, 159, 232, 0.20);
   border-radius: 28rpx;
+  box-shadow: 0 4rpx 16rpx rgba(91, 159, 232, 0.08);
 }
 
 .model-cover {
@@ -124,7 +173,7 @@
 
 .model-right {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 4rpx;
   flex-shrink: 0;
   align-self: center;
@@ -133,7 +182,7 @@
 .model-cost-area {
   display: flex;
   align-items: baseline;
-  gap: 2rpx;
+  gap: 4rpx;
 }
 
 .model-cost {
@@ -156,16 +205,15 @@
 /* ============ 提示词输入 ============ */
 .prompt-card {
   background: #FFFFFF;
-  border: 2rpx solid rgba(91, 159, 232, 0.14);
+  border: 3rpx solid rgba(91, 159, 232, 0.14);
   border-radius: 28rpx;
   padding: 28rpx;
   transition: border-color 0.3s, box-shadow 0.3s;
 }
 
-.prompt-card:focus-within,
-.prompt-card:active {
+.prompt-card.focused {
   border-color: #5B9FE8;
-  box-shadow: 0 0 0 4rpx rgba(91, 159, 232, 0.15);
+  box-shadow: 0 0 0 6rpx rgba(91, 159, 232, 0.12), 0 4rpx 20rpx rgba(91, 159, 232, 0.15);
 }
 
 .prompt-header {
@@ -298,15 +346,13 @@
   aspect-ratio: 1;
   border-radius: 24rpx;
   overflow: hidden;
-  border: 4rpx solid transparent;
+  border: 5rpx solid transparent;
   transition: all 0.3s;
 }
 
 .style-card.selected {
   border-color: #5B9FE8;
-  box-shadow: 0 8rpx 28rpx rgba(91, 159, 232, 0.35);
-  border-width: 4rpx;
-  border-style: solid;
+  box-shadow: 0 0 0 4rpx rgba(91, 159, 232, 0.18), 0 8rpx 28rpx rgba(91, 159, 232, 0.35);
 }
 
 .style-bg {
@@ -368,16 +414,17 @@
   font-size: 28rpx;
   font-weight: 500;
   color: #0E1F3A;
-  border: 4rpx solid rgba(91, 159, 232, 0.14);
+  border: 5rpx solid rgba(91, 159, 232, 0.14);
   background: #FFFFFF;
   transition: all 0.3s;
 }
 
 .quality-item.selected {
   border-color: #5B9FE8;
-  background: rgba(91, 159, 232, 0.12);
+  background: rgba(91, 159, 232, 0.10);
   color: #5B9FE8;
-  box-shadow: 0 4rpx 16rpx rgba(91, 159, 232, 0.25);
+  font-weight: 600;
+  box-shadow: 0 0 0 4rpx rgba(91, 159, 232, 0.15), 0 4rpx 16rpx rgba(91, 159, 232, 0.30);
 }
 
 /* ============ 比例 ============ */
@@ -395,15 +442,15 @@
   gap: 8rpx;
   padding: 16rpx 8rpx;
   border-radius: 24rpx;
-  border: 4rpx solid rgba(91, 159, 232, 0.14);
+  border: 5rpx solid rgba(91, 159, 232, 0.14);
   background: #FFFFFF;
   transition: all 0.3s;
 }
 
 .ratio-card.active {
   border-color: #5B9FE8;
-  background: rgba(91, 159, 232, 0.12);
-  box-shadow: 0 4rpx 16rpx rgba(91, 159, 232, 0.25);
+  background: rgba(91, 159, 232, 0.10);
+  box-shadow: 0 0 0 4rpx rgba(91, 159, 232, 0.15), 0 4rpx 16rpx rgba(91, 159, 232, 0.30);
 }
 
 .ratio-shape {
@@ -442,7 +489,7 @@
   align-items: center;
   justify-content: center;
   border-radius: 24rpx;
-  border: 4rpx solid rgba(91, 159, 232, 0.14);
+  border: 5rpx solid rgba(91, 159, 232, 0.14);
   background: #FFFFFF;
   font-size: 26rpx;
   color: #445876;
@@ -451,10 +498,10 @@
 
 .count-card.selected {
   border-color: #5B9FE8;
-  background: rgba(91, 159, 232, 0.12);
+  background: rgba(91, 159, 232, 0.10);
   color: #3B7FC8;
   font-weight: 600;
-  box-shadow: 0 4rpx 16rpx rgba(91, 159, 232, 0.25);
+  box-shadow: 0 0 0 4rpx rgba(91, 159, 232, 0.15), 0 4rpx 16rpx rgba(91, 159, 232, 0.30);
 }
 
 /* ============ 生成结果占位 ============ */
@@ -717,11 +764,34 @@
   background: #5B9FE8;
   color: white;
   border: none;
-  box-shadow: 0 4rpx 16rpx rgba(91, 159, 232, 0.35);
 }
 
 .gen-action-btn.primary:active {
   background: #4A8FD8;
+}
+
+.gen-action-btn.saving {
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+.save-progress-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.save-spinner {
+  width: 32rpx;
+  height: 32rpx;
+  border: 4rpx solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: saveSpin 0.7s linear infinite;
+}
+
+@keyframes saveSpin {
+  to { transform: rotate(360deg); }
 }
 
 /* ============ 底部创作栏 ============ */
@@ -778,7 +848,6 @@
   height: 96rpx;
   border-radius: 28rpx;
   background: linear-gradient(135deg, #5B9FE8 0%, #7BC4F0 45%, #6FD4B0 100%);
-  box-shadow: 0 8rpx 28rpx rgba(91, 159, 232, 0.35);
 }
 
 .create-btn:active {
@@ -826,7 +895,7 @@
   gap: 24rpx;
   padding: 28rpx;
   background: #FFFFFF;
-  border: 4rpx solid rgba(91, 159, 232, 0.14);
+  border: 5rpx solid rgba(91, 159, 232, 0.14);
   border-radius: 28rpx;
   transition: all 0.2s;
 }
@@ -834,6 +903,7 @@
 .model-sheet-item.selected {
   border-color: #5B9FE8;
   background: linear-gradient(180deg, rgba(91, 159, 232, 0.06) 0%, transparent 100%);
+  box-shadow: 0 0 0 4rpx rgba(91, 159, 232, 0.15), 0 4rpx 16rpx rgba(91, 159, 232, 0.20);
 }
 
 .msi-cover {
@@ -945,13 +1015,13 @@
   aspect-ratio: 1;
   border-radius: 24rpx;
   overflow: hidden;
-  border: 4rpx solid transparent;
+  border: 5rpx solid transparent;
   transition: all 0.3s;
 }
 
 .style-sheet-card.selected {
   border-color: #5B9FE8;
-  box-shadow: 0 8rpx 28rpx rgba(91, 159, 232, 0.35);
+  box-shadow: 0 0 0 4rpx rgba(91, 159, 232, 0.18), 0 8rpx 28rpx rgba(91, 159, 232, 0.35);
 }
 
 .ssc-bg {
@@ -1015,14 +1085,15 @@
   gap: 12rpx;
   padding: 24rpx 16rpx;
   border-radius: 24rpx;
-  border: 4rpx solid rgba(91, 159, 232, 0.14);
+  border: 5rpx solid rgba(91, 159, 232, 0.14);
   background: #FFFFFF;
   transition: all 0.3s;
 }
 
 .ratio-sheet-card.selected {
   border-color: #5B9FE8;
-  background: rgba(91, 159, 232, 0.12);
+  background: rgba(91, 159, 232, 0.10);
+  box-shadow: 0 0 0 4rpx rgba(91, 159, 232, 0.15), 0 4rpx 16rpx rgba(91, 159, 232, 0.25);
 }
 
 .rsc-shape {

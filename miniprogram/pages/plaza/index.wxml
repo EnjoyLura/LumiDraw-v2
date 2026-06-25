@@ -1,5 +1,6 @@
 <!-- 广场页 -->
-<view class="plaza-page">
+<nav-bar transparent />
+<view class="plaza-page {{tabEnterClass}}">
 
   <!-- 顶部栏：菜单 + Tab + 搜索 -->
   <view class="plaza-topbar">

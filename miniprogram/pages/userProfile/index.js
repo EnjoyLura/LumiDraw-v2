@@ -3,7 +3,7 @@ const util = require('../../utils/util');
 const CARD_COLORS = ['linear-gradient(135deg,#a8d8f8,#b0e6d0)','linear-gradient(135deg,#FFD4C8,#FFC8D6)','linear-gradient(135deg,#D4C8F0,#B8A8E0)'];
 Page({
   data: {
-    user: { name: '星辰大海', avatar: '星', color: '#6FD4B0', id: 'LUMI0002', bio: '探索AI的无限可能', works: 36, followers: 215, likes: 890 },
+    user: { name: '星辰大海', avatar: '星', color: '#6FD4B0', id: 'LUMI0002', bio: '探索AI的无限可能', gender: 'male', works: 36, followers: 215, likes: 890 },
     isFollowing: false,
     works: []
   },
@@ -14,6 +14,23 @@ Page({
     }
     this.setData({ works });
   },
-  onToggleFollow() { this.setData({ isFollowing: !this.data.isFollowing }); util.showToast(this.data.isFollowing ? '已关注' : '已取消关注'); },
+  onToggleFollow() {
+    if (this.data.isFollowing) {
+      wx.showModal({
+        title: '取消关注',
+        content: '确定不再关注 ' + this.data.user.name + ' 吗？',
+        confirmColor: '#FF6B8A',
+        success: (res) => {
+          if (res.confirm) {
+            this.setData({ isFollowing: false });
+            util.showToast('已取消关注');
+          }
+        }
+      });
+    } else {
+      this.setData({ isFollowing: true });
+      util.showToast('已关注');
+    }
+  },
   onWorkTap(e) { wx.navigateTo({ url: '/pages/workDetail/index?id=' + e.detail.id }); }
 });

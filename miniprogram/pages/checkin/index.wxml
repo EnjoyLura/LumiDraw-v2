@@ -1,4 +1,5 @@
 <!-- 每日签到页 -->
+<nav-bar title="每日签到" back />
 <view class="checkin-page">
   <!-- 连续签到卡片 -->
   <view class="streak-card">

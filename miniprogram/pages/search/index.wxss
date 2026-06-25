@@ -16,7 +16,9 @@
 .hot-item { display: flex; align-items: center; gap: 20rpx; padding: 20rpx 0; }
 .hot-item:active { background: rgba(91,159,232,0.04); }
 .hot-rank { font-size: 32rpx; font-weight: 700; color: #8497B5; width: 48rpx; text-align: center; font-family: Georgia, serif; }
-.hot-rank.top { color: #FF6B8A; }
+.hot-rank.top1 { color: #E03050; }
+.hot-rank.top2 { color: #E87040; }
+.hot-rank.top3 { color: #F0A060; }
 .hot-text { font-size: 30rpx; color: #0E1F3A; }
 .result-area { padding: 0; }
 .result-waterfall { padding: 0; }

@@ -51,13 +51,23 @@ Page({
     wfAnimClass: '',
     showLeftDrawer: false,
     showFilterSheet: false,
+    filterModels: ['GPT Image 2', 'Nano Banana 2', 'Nano Banana Pro', 'Seedream 4.5'],
+    filterRatios: ['1:1', '3:4', '4:3', '16:9', '9:16'],
+    filterQualities: ['全高清1K', '超清2K', '超高清4K'],
+    selectedFilterModels: [],
+    selectedFilterRatios: [],
+    selectedFilterQualities: [],
     genTasks: []
   },
 
   onLoad() { this._loadWorks('recommend'); },
   onShow() {
     const app = getApp();
-    this.setData({ genTasks: app.globalData.generatingTasks || [] });
+    this.setData({
+      genTasks: app.globalData.generatingTasks || [],
+      tabEnterClass: 'tab-page-enter'
+    });
+    setTimeout(() => this.setData({ tabEnterClass: '' }), 350);
   },
 
   onSwitchTab(e) {
@@ -99,6 +109,35 @@ Page({
     this.setData({ showLeftDrawer: false });
     if (page === 'create') wx.switchTab({ url: '/pages/create/index' });
     else wx.navigateTo({ url: '/pages/' + page + '/index' });
+  },
+
+  onFilterModelTap(e) {
+    const val = e.currentTarget.dataset.value;
+    const arr = this.data.selectedFilterModels.slice();
+    const idx = arr.indexOf(val);
+    if (idx >= 0) arr.splice(idx, 1); else arr.push(val);
+    this.setData({ selectedFilterModels: arr });
+  },
+  onFilterRatioTap(e) {
+    const val = e.currentTarget.dataset.value;
+    const arr = this.data.selectedFilterRatios.slice();
+    const idx = arr.indexOf(val);
+    if (idx >= 0) arr.splice(idx, 1); else arr.push(val);
+    this.setData({ selectedFilterRatios: arr });
+  },
+  onFilterQualityTap(e) {
+    const val = e.currentTarget.dataset.value;
+    const arr = this.data.selectedFilterQualities.slice();
+    const idx = arr.indexOf(val);
+    if (idx >= 0) arr.splice(idx, 1); else arr.push(val);
+    this.setData({ selectedFilterQualities: arr });
+  },
+  onResetFilter() {
+    this.setData({ selectedFilterModels: [], selectedFilterRatios: [], selectedFilterQualities: [] });
+  },
+  onApplyFilter() {
+    this.setData({ showFilterSheet: false });
+    this._loadWorks(this.data.currentTab);
   },
 
   onWorkItemTap(e) { wx.navigateTo({ url: '/pages/workDetail/index?id=' + e.detail.id }); },

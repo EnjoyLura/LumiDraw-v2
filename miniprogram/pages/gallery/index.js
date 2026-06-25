@@ -88,28 +88,75 @@ Page({
     bgGradients: BG_GRADIENTS,
     currentBgValue: '#EEF4FC',
     showLeftDrawer: false,
-    genTasks: []
+    genTasks: [],
+    showTabLoading: false,
+    wfAnimClass: '',
+    tabIndicatorStyle: '',
+    likesDisplay: '1.2k'
   },
 
-  onLoad() { this._loadWorks('all'); },
+  onLoad() {
+    this._loadWorks('all');
+    this._updateTabIndicator('all');
+  },
 
   onShow() {
     const app = getApp();
-    this.setData({ genTasks: app.globalData.generatingTasks || [] });
+    this.setData({
+      genTasks: app.globalData.generatingTasks || [],
+      tabEnterClass: 'tab-page-enter'
+    });
+    setTimeout(() => this.setData({ tabEnterClass: '' }), 350);
   },
 
   onSwitchTab(e) {
     const tab = e.currentTarget.dataset.tab;
     if (tab === this.data.currentTab) return;
-    this.setData({ currentTab: tab, manageMode: false, selectedItems: {}, selectedCount: 0 });
-    this._loadWorks(tab);
+    const tabKeys = this.data.tabList.map(t => t.key);
+    const oldIdx = tabKeys.indexOf(this.data.currentTab);
+    const newIdx = tabKeys.indexOf(tab);
+    const dir = newIdx > oldIdx ? 'left' : 'right';
+    this.setData({
+      currentTab: tab,
+      manageMode: false,
+      selectedItems: {},
+      selectedCount: 0,
+      showTabLoading: true,
+      wfAnimClass: ''
+    });
+    this._updateTabIndicator(tab);
+    this._loadWorks(tab, dir);
   },
 
-  _loadWorks(filter) {
-    this.setData({ loadMoreStatus: 'loading' });
+  _loadWorks(filter, dir) {
+    this.setData({ showTabLoading: true, loadMoreStatus: 'loading' });
     setTimeout(() => {
-      this.setData({ works: getMockWorks(filter), loadMoreStatus: 'noMore' });
+      this.setData({
+        works: getMockWorks(filter),
+        loadMoreStatus: 'noMore',
+        showTabLoading: false,
+        wfAnimClass: dir === 'left' ? 'wf-slide-left' : dir === 'right' ? 'wf-slide-right' : ''
+      });
+      setTimeout(() => this.setData({ wfAnimClass: '' }), 400);
     }, 300);
+  },
+
+  _updateTabIndicator(tabKey) {
+    setTimeout(() => {
+      const query = wx.createSelectorQuery().in(this);
+      query.select('#gtab-' + tabKey).boundingClientRect();
+      query.select('#galleryTabs').boundingClientRect();
+      query.exec(res => {
+        const tab = res[0];
+        const container = res[1];
+        if (tab && container) {
+          const left = tab.left - container.left + (tab.width - 28) / 2;
+          this.setData({
+            tabIndicatorStyle: 'left:' + left + 'px;opacity:1;transition:left 0.3s cubic-bezier(0.16,1,0.3,1);'
+          });
+        }
+      });
+    }, 50);
   },
 
   onToggleManage() {

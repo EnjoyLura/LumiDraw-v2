@@ -1,5 +1,6 @@
 <!-- 画廊页 -->
-<view class="gallery-page">
+<nav-bar transparent />
+<view class="gallery-page {{tabEnterClass}}">
 
   <!-- 整个页面可滚动 -->
   <scroll-view scroll-y class="gallery-scroll" enhanced show-scrollbar="{{false}}">
@@ -68,14 +69,16 @@
 
     <!-- 子标签页 + 管理按钮 -->
     <view class="tab-manage-row">
-      <view class="gallery-tabs">
+      <view class="gallery-tabs" id="galleryTabs">
         <view
           wx:for="{{tabList}}"
           wx:key="key"
           class="gallery-tab {{currentTab === item.key ? 'active' : ''}}"
           data-tab="{{item.key}}"
           bindtap="onSwitchTab"
+          id="gtab-{{item.key}}"
         >{{item.label}}</view>
+        <view class="gallery-tab-indicator" style="{{tabIndicatorStyle}}"></view>
       </view>
       <view class="manage-btn {{manageMode ? 'active' : ''}}" bindtap="onToggleManage">
         <text class="manage-icon">☰</text>

@@ -1,5 +1,12 @@
 <!-- 创作页 -->
-<view class="create-page">
+<nav-bar title="创作" />
+<!-- 顶部通知 -->
+<view wx:if="{{topNotify}}" class="top-notify {{topNotifyOut ? 'out' : ''}}">
+  <text class="top-notify-icon">✓</text>
+  <text class="top-notify-text">{{topNotify}}</text>
+</view>
+
+<view class="create-page {{tabEnterClass}}">
 
   <!-- 滚动内容区 -->
   <scroll-view scroll-y class="create-scroll">
@@ -33,7 +40,7 @@
 
     <!-- 描述你想要的画面 -->
     <view class="section">
-      <view class="prompt-card">
+      <view class="prompt-card {{promptFocused ? 'focused' : ''}}">
         <view class="prompt-header">
           <text class="prompt-title">描述你想要的画面</text>
           <view class="prompt-reverse" bindtap="onReversePrompt">
@@ -47,6 +54,8 @@
           placeholder="描述你想要生成的图片，越详细效果越好..."
           maxlength="500"
           bindinput="onPromptInput"
+          bindfocus="onPromptFocus"
+          bindblur="onPromptBlur"
           auto-height="{{false}}"
         />
         <view class="prompt-footer">
@@ -89,7 +98,7 @@
           <view class="style-label">{{item}}</view>
         </view>
         <!-- 更多按钮 -->
-        <view class="style-card more-card {{selectedStyle && styles.indexOf(selectedStyle) > 6 ? 'selected' : ''}}" bindtap="onOpenStyleSheet">
+        <view class="style-card more-card {{selectedStyleInMore ? 'selected' : ''}}" bindtap="onOpenStyleSheet">
           <view class="style-bg" style="background: {{STYLE_COLORS[7]}};"></view>
           <view class="style-overlay dark"></view>
           <text class="style-more-text">+{{styles.length - 7}}</text>
@@ -130,7 +139,7 @@
           data-index="{{index}}"
           bindtap="onSelectRatio"
         >
-          <view class="ratio-shape" style="width: {{item.w > item.h ? 56 : item.w === item.h ? 44 : 36}}rpx; height: {{item.h > item.w ? 56 : item.w === item.h ? 44 : 36}}rpx;"></view>
+          <view class="ratio-shape" style="width: {{item.sw}}rpx; height: {{item.sh}}rpx;"></view>
           <text class="ratio-name">{{item.label}}</text>
         </view>
       </view>
@@ -221,8 +230,12 @@
           <view class="gen-action-btn" bindtap="onPublishResult">
             <text>📤 发布作品</text>
           </view>
-          <view class="gen-action-btn primary" bindtap="onSaveAll">
-            <text>💾 全部保存</text>
+          <view class="gen-action-btn primary {{savingAll ? 'saving' : ''}}" bindtap="onSaveAll">
+            <view wx:if="{{savingAll}}" class="save-progress-wrap">
+              <view class="save-spinner"></view>
+              <text>保存中...</text>
+            </view>
+            <text wx:else>💾 全部保存</text>
           </view>
         </view>
       </view>
@@ -322,10 +335,17 @@
         data-index="{{index}}"
         bindtap="onSelectRatio"
       >
-        <view class="rsc-shape" style="width: {{item.w > item.h ? 64 : item.w === item.h ? 48 : 36}}rpx; height: {{item.h > item.w ? 64 : item.w === item.h ? 48 : 36}}rpx;"></view>
+        <view class="rsc-shape" style="width: {{item.sw}}rpx; height: {{item.sh}}rpx;"></view>
         <text class="rsc-name">{{item.label}}</text>
       </view>
     </view>
   </view>
 </bottom-sheet>
+
+<!-- 图片预览 -->
+<image-preview
+  visible="{{showImgPreview}}"
+  src="{{previewImgSrc}}"
+  bind:close="onCloseImgPreview"
+/>
 

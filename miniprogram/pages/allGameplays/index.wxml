@@ -1,4 +1,5 @@
 <!-- 全部玩法页 -->
+<nav-bar title="全部玩法" back />
 <view class="gameplays-page">
   <view class="gameplay-grid">
     <view wx:for="{{gameplays}}" wx:key="name" class="gameplay-card" data-name="{{item.name}}" bindtap="onTap">

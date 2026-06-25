@@ -8,5 +8,5 @@
 .reason-check { font-size: 36rpx; color: #5B9FE8; font-weight: 700; }
 .desc-label { font-size: 30rpx; font-weight: 600; color: #0E1F3A; display: block; margin-bottom: 16rpx; }
 .desc-input { width: 100%; min-height: 160rpx; background: #FBFDFF; border: 2rpx solid rgba(91,159,232,0.14); border-radius: 24rpx; padding: 20rpx 28rpx; font-size: 28rpx; color: #0E1F3A; line-height: 1.6; box-sizing: border-box; margin-bottom: 32rpx; }
-.submit-btn { text-align: center; padding: 28rpx 0; border-radius: 28rpx; background: linear-gradient(135deg, #5B9FE8, #7BC4F0, #6FD4B0); color: white; font-size: 32rpx; font-weight: 700; box-shadow: 0 8rpx 28rpx rgba(91,159,232,0.35); }
+.submit-btn { text-align: center; padding: 28rpx 0; border-radius: 28rpx; background: linear-gradient(135deg, #5B9FE8, #7BC4F0, #6FD4B0); color: white; font-size: 32rpx; font-weight: 700; }
 .submit-btn:active { opacity: 0.85; }

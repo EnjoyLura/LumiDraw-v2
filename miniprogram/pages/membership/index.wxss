@@ -22,7 +22,7 @@
 .plan-right { text-align: right; flex-shrink: 0; }
 .plan-price { font-size: 40rpx; font-weight: 700; color: #0E1F3A; display: block; }
 .plan-daily { font-size: 20rpx; color: #8497B5; display: block; }
-.subscribe-btn { text-align: center; padding: 28rpx 0; border-radius: 28rpx; background: linear-gradient(135deg, #5B9FE8, #7BC4F0, #6FD4B0); color: white; font-size: 32rpx; font-weight: 700; margin-bottom: 32rpx; box-shadow: 0 8rpx 28rpx rgba(91,159,232,0.35); }
+.subscribe-btn { text-align: center; padding: 28rpx 0; border-radius: 28rpx; background: linear-gradient(135deg, #5B9FE8, #7BC4F0, #6FD4B0); color: white; font-size: 32rpx; font-weight: 700; margin-bottom: 32rpx; }
 .subscribe-btn:active { opacity: 0.85; }
 .benefit-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20rpx; margin-bottom: 32rpx; }
 .benefit-card { background: #FFFFFF; border: 1rpx solid rgba(91,159,232,0.14); border-radius: 24rpx; padding: 28rpx; display: flex; align-items: flex-start; gap: 20rpx; }

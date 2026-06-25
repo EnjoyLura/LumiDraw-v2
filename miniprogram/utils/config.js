@@ -50,13 +50,13 @@ module.exports = {
     { label: '超高清4K', desc: '4096px' }
   ],
 
-  // 画面比例
+  // 画面比例 (sw/sh = shape preview size in rpx)
   RATIOS: [
-    { label: '1:1', w: 1, h: 1 },
-    { label: '3:4', w: 3, h: 4 },
-    { label: '4:3', w: 4, h: 3 },
-    { label: '16:9', w: 16, h: 9 },
-    { label: '9:16', w: 9, h: 16 }
+    { label: '1:1', w: 1, h: 1, sw: 44, sh: 44 },
+    { label: '3:4', w: 3, h: 4, sw: 36, sh: 48 },
+    { label: '4:3', w: 4, h: 3, sw: 48, sh: 36 },
+    { label: '16:9', w: 16, h: 9, sw: 60, sh: 34 },
+    { label: '9:16', w: 9, h: 16, sw: 28, sh: 50 }
   ],
 
   // 生成数量

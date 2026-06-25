@@ -1,4 +1,5 @@
 <!-- 编辑资料页 -->
+<nav-bar title="编辑资料" back />
 <view class="edit-page">
   <!-- 头像 -->
   <view class="avatar-section" bindtap="onChangeAvatar">
@@ -12,7 +13,7 @@
   <!-- 昵称 -->
   <view class="field">
     <text class="field-label">昵称</text>
-    <input class="field-input" value="{{nickName}}" maxlength="20" bindinput="onNickInput" placeholder="请输入昵称" />
+    <input class="field-input {{nickFocused ? 'focused' : ''}}" value="{{nickName}}" maxlength="20" bindinput="onNickInput" bindfocus="onNickFocus" bindblur="onNickBlur" placeholder="请输入昵称" />
     <text class="field-count">{{nickCount}}/20</text>
   </view>
 
@@ -28,7 +29,7 @@
   <!-- 个性签名 -->
   <view class="field">
     <text class="field-label">个性签名</text>
-    <textarea class="field-textarea" value="{{signature}}" maxlength="100" bindinput="onSignInput" placeholder="写一句个性签名吧" />
+    <textarea class="field-textarea {{signFocused ? 'focused' : ''}}" value="{{signature}}" maxlength="100" bindinput="onSignInput" bindfocus="onSignFocus" bindblur="onSignBlur" placeholder="写一句个性签名吧" />
     <text class="field-count">{{signCount}}/100</text>
   </view>
 

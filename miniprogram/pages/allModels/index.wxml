@@ -1,4 +1,5 @@
 <!-- 全部模型页 -->
+<nav-bar title="全部模型" back />
 <view class="models-page">
   <view wx:for="{{models}}" wx:key="id" class="model-card {{selectedIndex === index ? 'selected' : ''}}" data-index="{{index}}" bindtap="onSelect">
     <view class="model-cover" style="background: linear-gradient(135deg, {{item.badgeColor || '#5B9FE8'}}, {{item.badgeColor || '#6FD4B0'}}88);">

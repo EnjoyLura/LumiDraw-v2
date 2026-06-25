@@ -60,6 +60,25 @@ Page({
     this._updateCost();
   },
 
+  onShow() {
+    if (!this._suppressAnim) {
+      this.setData({ tabEnterClass: 'tab-page-enter' });
+      setTimeout(() => this.setData({ tabEnterClass: '' }), 350);
+    }
+    this._suppressAnim = false;
+
+    const app = getApp();
+    const msg = app.globalData.pendingNotify;
+    if (msg) {
+      app.globalData.pendingNotify = '';
+      this.setData({ topNotify: msg, topNotifyOut: false });
+      setTimeout(() => {
+        this.setData({ topNotifyOut: true });
+        setTimeout(() => this.setData({ topNotify: '' }), 300);
+      }, 2000);
+    }
+  },
+
   // ============ 模型选择 ============
   onOpenModelSheet() {
     this.setData({ showModelSheet: true });
@@ -89,6 +108,14 @@ Page({
     });
   },
 
+  onPromptFocus() {
+    this.setData({ promptFocused: true });
+  },
+
+  onPromptBlur() {
+    this.setData({ promptFocused: false });
+  },
+
   onClearPrompt() {
     this.setData({
       prompt: '',
@@ -98,6 +125,7 @@ Page({
   },
 
   onUploadPromptImage() {
+    this._suppressAnim = true;
     util.chooseImage(1).then(paths => {
       this.setData({
         promptImage: paths[0],
@@ -105,6 +133,19 @@ Page({
       });
       util.showToast('图片已上传');
     }).catch(() => {});
+  },
+
+  onPreviewPromptImage() {
+    if (this.data.promptImage) {
+      this.setData({
+        showImgPreview: true,
+        previewImgSrc: this.data.promptImage
+      });
+    }
+  },
+
+  onCloseImgPreview() {
+    this.setData({ showImgPreview: false });
   },
 
   onRemovePromptImage() {
@@ -121,8 +162,10 @@ Page({
   // ============ 风格选择 ============
   onSelectStyle(e) {
     const style = e.currentTarget.dataset.style;
+    const idx = this.data.styles.indexOf(style);
     this.setData({
       selectedStyle: style,
+      selectedStyleInMore: idx >= 7,
       showStyleSheet: false
     });
   },
@@ -316,7 +359,12 @@ Page({
 
   // 全部保存
   onSaveAll() {
-    util.showToast('全部图片已保存到相册和草稿箱');
+    if (this.data.savingAll) return;
+    this.setData({ savingAll: true });
+    setTimeout(() => {
+      this.setData({ savingAll: false });
+      util.showToast('全部图片已保存到相册和草稿箱');
+    }, 1500);
   },
 
   // ============ 查看全部模型 ============

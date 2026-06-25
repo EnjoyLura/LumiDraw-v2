@@ -1,4 +1,5 @@
 <!-- 积分充值页 -->
+<nav-bar title="积分充值" back />
 <view class="recharge-page">
   <!-- 余额卡片 -->
   <view class="balance-card">
@@ -35,8 +36,8 @@
     <view class="record-tab {{currentTab === 'spend' ? 'active' : ''}}" data-tab="spend" bindtap="onSwitchTab">积分消耗</view>
   </view>
 
-  <!-- 记录列表 -->
-  <view class="record-list">
+  <!-- 记录列表（带切换动画） -->
+  <view class="record-list {{recordAnimClass}}">
     <block wx:if="{{currentTab === 'earn'}}">
       <view wx:for="{{earnRecords}}" wx:key="title" class="record-item">
         <view class="record-icon earn">+</view>
@@ -63,15 +64,15 @@
 <!-- 自定义充值弹窗 -->
 <bottom-sheet visible="{{showCustomSheet}}" bind:close="onCloseCustom">
   <view class="custom-sheet">
-    <view class="sheet-handle"></view>
     <view class="sheet-title">自定义充值</view>
     <view class="custom-input-row">
       <text class="custom-yen">¥</text>
-      <input class="custom-input" type="digit" value="{{customAmount}}" bindinput="onCustomInput" placeholder="最低1元" />
+      <input class="custom-input {{customFocused ? 'focused' : ''}}" type="digit" value="{{customAmount}}" bindinput="onCustomInput" bindfocus="onCustomFocus" bindblur="onCustomBlur" placeholder="最低1元" />
     </view>
+    <view class="custom-hint">1元 = 10积分，满50元额外赠送5%</view>
     <view class="custom-preview">
-      <view class="cp-row"><text>可获得积分</text><text class="cp-num">{{customCredits}}</text></view>
-      <view class="cp-row"><text>额外赠送</text><text class="cp-bonus">+{{customBonus}}</text></view>
+      <view class="cp-row"><text class="cp-label">可获得积分</text><text class="cp-num">{{customCredits}}</text></view>
+      <view class="cp-row"><text class="cp-label">额外赠送</text><text class="cp-bonus">+{{customBonus}}</text></view>
     </view>
     <view class="custom-actions">
       <view class="custom-cancel" bindtap="onCloseCustom">取消</view>

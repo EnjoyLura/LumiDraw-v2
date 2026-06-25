@@ -1,4 +1,6 @@
 <!-- 首页 -->
+<nav-bar title="露米画板" />
+<view class="{{tabEnterClass}}">
 <!-- 骨架屏 -->
 <skeleton wx:if="{{showSkeleton}}" type="home" />
 
@@ -102,6 +104,8 @@
   <load-more status="{{loadMoreStatus}}" />
 
 </scroll-view>
+
+</view>
 
 <!-- 长按操作菜单 -->
 <bottom-sheet visible="{{showLongPressSheet}}" bind:close="onCloseLongPressSheet">

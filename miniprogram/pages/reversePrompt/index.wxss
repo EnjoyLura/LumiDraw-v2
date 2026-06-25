@@ -7,7 +7,7 @@
 .upload-hint { font-size: 24rpx; color: #8497B5; }
 .preview-area { margin-bottom: 24rpx; }
 .preview-img { width: 100%; height: 400rpx; border-radius: 24rpx; }
-.analyze-btn { padding: 24rpx 0; border-radius: 24rpx; background: linear-gradient(135deg, #5B9FE8, #7BC4F0, #6FD4B0); color: white; font-size: 30rpx; font-weight: 700; }
+.analyze-btn { padding: 24rpx 0; border-radius: 24rpx; background: linear-gradient(135deg, #5B9FE8, #7BC4F0, #6FD4B0); color: white; font-size: 30rpx; font-weight: 700; margin-top: 32rpx; }
 .analyze-btn.loading { background: #E1EBF8; color: #8497B5; }
 .analyze-btn:active { opacity: 0.85; }
 .section-title { font-size: 32rpx; font-weight: 700; color: #0E1F3A; margin-bottom: 20rpx; display: block; }

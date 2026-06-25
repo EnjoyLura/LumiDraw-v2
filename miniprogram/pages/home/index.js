@@ -71,6 +71,11 @@ Page({
     this._startBannerTimer();
   },
 
+  onShow() {
+    this.setData({ tabEnterClass: 'tab-page-enter' });
+    setTimeout(() => this.setData({ tabEnterClass: '' }), 350);
+  },
+
   onUnload() {
     if (this._bannerTimer) clearInterval(this._bannerTimer);
   },
@@ -108,8 +113,8 @@ Page({
 
   onGameplayTap(e) {
     const name = e.currentTarget.dataset.name;
+    getApp().globalData.pendingNotify = '已套用「' + name + '」模板';
     wx.switchTab({ url: '/pages/create/index' });
-    util.showToast('已套用「' + name + '」模板');
   },
 
   onViewAllGameplays() {

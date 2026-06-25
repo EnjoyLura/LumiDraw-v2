@@ -8,6 +8,11 @@ Page({
     version: 'v1.0.0'
   },
 
+  onLoad() {
+    const app = getApp();
+    this.setData({ darkMode: app.globalData.theme === 'dark' });
+  },
+
   onEditProfile() {
     wx.navigateTo({ url: '/pages/editProfile/index' });
   },
@@ -16,8 +21,20 @@ Page({
     util.showToast('手机号已绑定');
   },
 
-  onToggleDark() {
-    this.setData({ darkMode: !this.data.darkMode });
+  onToggleDark(e) {
+    const isDark = e.detail.value;
+    this.setData({ darkMode: isDark });
+    const app = getApp();
+    app.globalData.theme = isDark ? 'dark' : 'light';
+    wx.setNavigationBarColor({
+      frontColor: isDark ? '#ffffff' : '#000000',
+      backgroundColor: isDark ? '#0A1428' : '#FFFFFF',
+      animation: { duration: 300, timingFunc: 'easeIn' }
+    });
+    wx.setBackgroundColor({
+      backgroundColor: isDark ? '#0A1428' : '#EEF4FC'
+    });
+    util.showToast(isDark ? '已切换为深色模式' : '已切换为浅色模式');
   },
 
   onAgreement() {
@@ -34,10 +51,10 @@ Page({
 
   onClearCache() {
     util.showToast('缓存已清除');
+    this.setData({ cacheSize: '0MB' });
   },
 
   onVersion() {
-    // 隐藏入口：连续点击5次进入管理后台
     if (!this._versionTaps) this._versionTaps = 0;
     this._versionTaps++;
     if (this._versionTaps >= 5) {

@@ -11,8 +11,10 @@ Page({
     selectedType: 'bug',
     description: '',
     descCount: 0,
+    descFocused: false,
     images: [],
-    wechatId: ''
+    wechatId: '',
+    wechatFocused: false
   },
 
   onSelectType(e) {
@@ -22,6 +24,8 @@ Page({
   onDescInput(e) {
     this.setData({ description: e.detail.value, descCount: e.detail.value.length });
   },
+  onDescFocus() { this.setData({ descFocused: true }); },
+  onDescBlur() { this.setData({ descFocused: false }); },
 
   onAddImage() {
     if (this.data.images.length >= 2) return;
@@ -40,6 +44,8 @@ Page({
   onWechatInput(e) {
     this.setData({ wechatId: e.detail.value });
   },
+  onWechatFocus() { this.setData({ wechatFocused: true }); },
+  onWechatBlur() { this.setData({ wechatFocused: false }); },
 
   onSubmit() {
     util.showToast('感谢您的反馈！');

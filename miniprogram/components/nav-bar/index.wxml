@@ -1,0 +1,9 @@
+<view class="nav-bar {{transparent ? 'transparent' : ''}}" style="padding-top: {{statusBarHeight}}px;">
+  <view class="nav-content" style="height: {{navBarHeight}}px;">
+    <view wx:if="{{back}}" class="nav-back" bindtap="onBack">
+      <text class="back-arrow">‹</text>
+    </view>
+    <text class="nav-title">{{title}}</text>
+  </view>
+</view>
+<view class="nav-placeholder" style="height: {{statusBarHeight + navBarHeight}}px;"></view>
