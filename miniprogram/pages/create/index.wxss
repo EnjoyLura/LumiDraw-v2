@@ -349,6 +349,7 @@
 
 .style-card.selected {
   border-color: #5B9FE8;
+  background: linear-gradient(180deg, rgba(91, 159, 232, 0.06) 0%, transparent 100%);
 }
 
 .style-bg {
@@ -417,7 +418,7 @@
 
 .quality-item.selected {
   border-color: #5B9FE8;
-  background: rgba(91, 159, 232, 0.10);
+  background: linear-gradient(180deg, rgba(91, 159, 232, 0.06) 0%, transparent 100%);
   color: #5B9FE8;
   font-weight: 600;
 }
@@ -444,7 +445,7 @@
 
 .ratio-card.active {
   border-color: #5B9FE8;
-  background: rgba(91, 159, 232, 0.10);
+  background: linear-gradient(180deg, rgba(91, 159, 232, 0.06) 0%, transparent 100%);
 }
 
 .ratio-shape {
@@ -492,7 +493,7 @@
 
 .count-card.selected {
   border-color: #5B9FE8;
-  background: rgba(91, 159, 232, 0.10);
+  background: linear-gradient(180deg, rgba(91, 159, 232, 0.06) 0%, transparent 100%);
   color: #3B7FC8;
   font-weight: 600;
 }
@@ -1013,6 +1014,7 @@
 
 .style-sheet-card.selected {
   border-color: #5B9FE8;
+  background: linear-gradient(180deg, rgba(91, 159, 232, 0.06) 0%, transparent 100%);
 }
 
 .ssc-bg {
@@ -1083,7 +1085,7 @@
 
 .ratio-sheet-card.selected {
   border-color: #5B9FE8;
-  background: rgba(91, 159, 232, 0.10);
+  background: linear-gradient(180deg, rgba(91, 159, 232, 0.06) 0%, transparent 100%);
 }
 
 .rsc-shape {

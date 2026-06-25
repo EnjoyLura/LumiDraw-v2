@@ -5,7 +5,7 @@
       wx:if="{{src}}"
       class="preview-img {{visible ? 'show' : ''}}"
       src="{{src}}"
-      mode="widthFix"
+      mode="aspectFit"
       bindtap="onClose"
     />
     <view wx:if="{{showSave}}" class="preview-save-btn" catchtap="onSave">
