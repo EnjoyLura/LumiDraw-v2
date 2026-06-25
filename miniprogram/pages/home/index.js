@@ -69,6 +69,7 @@ Page({
   onLoad() {
     this._loadData();
     this._startBannerTimer();
+    this._updateTabIndicator('recommend');
   },
 
   onShow() {
@@ -125,9 +126,28 @@ Page({
     wx.navigateTo({ url: '/pages/allGameplays/index' });
   },
 
+  _updateTabIndicator(tabKey) {
+    setTimeout(() => {
+      const query = wx.createSelectorQuery().in(this);
+      query.select('#htab-' + tabKey).boundingClientRect();
+      query.select('#homeTabs').boundingClientRect();
+      query.exec(res => {
+        const tab = res[0];
+        const container = res[1];
+        if (tab && container) {
+          const left = tab.left - container.left + (tab.width - 14) / 2;
+          this.setData({
+            tabIndicatorStyle: 'left:' + left + 'px;opacity:1;transition:left 0.3s cubic-bezier(0.16,1,0.3,1);'
+          });
+        }
+      });
+    }, 50);
+  },
+
   onSwitchTab(e) {
     const tab = e.currentTarget.dataset.tab;
     if (tab === this.data.currentTab) return;
+    this._updateTabIndicator(tab);
     this.setData({ currentTab: tab, showTabLoading: true, wfAnimClass: '' });
     const dir = (tab === 'new' && this.data.currentTab === 'recommend') ? 'left' : 'right';
     setTimeout(() => {

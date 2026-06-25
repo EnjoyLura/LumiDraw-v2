@@ -68,17 +68,20 @@
   <!-- 精选作品 -->
   <view class="section-header">
     <text class="section-title">精选作品</text>
-    <view class="tab-switcher">
+    <view class="tab-switcher" id="homeTabs">
       <view
         class="tab-item {{currentTab === 'recommend' ? 'active' : ''}}"
         data-tab="recommend"
+        id="htab-recommend"
         bindtap="onSwitchTab"
       >推荐</view>
       <view
         class="tab-item {{currentTab === 'new' ? 'active' : ''}}"
         data-tab="new"
+        id="htab-new"
         bindtap="onSwitchTab"
       >最新</view>
+      <view class="tab-indicator" style="{{tabIndicatorStyle}}"></view>
     </view>
   </view>
 
