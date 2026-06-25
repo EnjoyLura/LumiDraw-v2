@@ -23,35 +23,33 @@
     </view>
   </view>
 
-  <!-- 整体可滚动区域（分类chips + 瀑布流一起滚动） -->
-  <scroll-view scroll-y class="plaza-scroll" enhanced show-scrollbar="{{false}}" bindtouchstart="onTouchStart" bindtouchend="onTouchEnd">
-
-    <!-- 分类chips + 筛选按钮 -->
-    <view class="category-bar">
-      <view class="category-scroll-wrap">
-        <scroll-view scroll-x class="category-scroll" enhanced show-scrollbar="{{false}}">
-          <view class="category-list">
-            <view
-              wx:for="{{categories}}"
-              wx:key="index"
-              class="category-chip {{currentCategory === index ? 'active' : ''}}"
-              data-index="{{index}}"
-              bindtap="onCategoryTap"
-            >{{item}}</view>
-          </view>
-        </scroll-view>
-        <view class="category-fade"></view>
-      </view>
-      <view class="filter-btn" bindtap="onOpenFilter">
-        <view class="filter-icon-lines">
-          <view class="filter-line"></view>
-          <view class="filter-line short"></view>
-          <view class="filter-line"></view>
+  <!-- 分类chips + 筛选按钮（固定不随滚动消失） -->
+  <view class="category-bar">
+    <view class="category-scroll-wrap">
+      <scroll-view scroll-x class="category-scroll" enhanced show-scrollbar="{{false}}">
+        <view class="category-list">
+          <view
+            wx:for="{{categories}}"
+            wx:key="index"
+            class="category-chip {{currentCategory === index ? 'active' : ''}}"
+            data-index="{{index}}"
+            bindtap="onCategoryTap"
+          >{{item}}</view>
         </view>
+      </scroll-view>
+      <view class="category-fade"></view>
+    </view>
+    <view class="filter-btn" bindtap="onOpenFilter">
+      <view class="filter-icon-lines">
+        <view class="filter-line"></view>
+        <view class="filter-line short"></view>
+        <view class="filter-line"></view>
       </view>
     </view>
+  </view>
 
-    <!-- 瀑布流区域 -->
+  <!-- 瀑布流区域 -->
+  <scroll-view scroll-y class="plaza-scroll" enhanced show-scrollbar="{{false}}" bindtouchstart="onTouchStart" bindtouchend="onTouchEnd">
     <view class="waterfall-area {{wfAnimClass}}">
       <view wx:if="{{showTabLoading}}" class="tab-loading">
         <view class="tab-spinner"></view>
