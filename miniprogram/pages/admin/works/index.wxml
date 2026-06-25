@@ -1,17 +1,23 @@
 <!-- 作品管理 -->
 <nav-bar title="作品管理" back />
 <view class="admin-page">
-  <text class="page-title">作品管理</text>
   <view class="stat-row">
     <view class="mini-stat"><text class="ms-num">22</text><text class="ms-label">全部</text></view>
-    <view class="mini-stat"><text class="ms-num">18</text><text class="ms-label">已发布</text></view>
-    <view class="mini-stat"><text class="ms-num">4</text><text class="ms-label">未发布</text></view>
+    <view class="mini-stat"><text class="ms-num" style="color:#6FD4B0;">18</text><text class="ms-label">已发布</text></view>
+    <view class="mini-stat"><text class="ms-num" style="color:#8497B5;">4</text><text class="ms-label">未发布</text></view>
   </view>
-  <view class="list-card">
-    <view wx:for="{{works}}" wx:key="id" class="list-item" data-id="{{item.id}}" bindtap="onDetail">
-      <view class="li-info"><text class="li-title">{{item.title}}</text><text class="li-sub">{{item.user}} · {{item.time}} · ♥{{item.likes}}</text></view>
-      <text class="li-badge {{item.status === '已发布' ? 'badge-green' : 'badge-gray'}}">{{item.status}}</text>
-      <text class="li-arrow">›</text>
+  <view class="filter-row">
+    <view class="filter-tab {{filter === 'all' ? 'active' : ''}}" data-f="all" bindtap="onFilter">全部</view>
+    <view class="filter-tab {{filter === '已发布' ? 'active' : ''}}" data-f="已发布" bindtap="onFilter">已发布</view>
+    <view class="filter-tab {{filter === '未发布' ? 'active' : ''}}" data-f="未发布" bindtap="onFilter">未发布</view>
+  </view>
+  <view wx:for="{{filteredWorks}}" wx:key="id" class="work-card" data-id="{{item.id}}" bindtap="onDetail">
+    <view class="wk-thumb" style="background: {{item.color}};"></view>
+    <view class="wk-info">
+      <text class="wk-title">{{item.title}}</text>
+      <text class="wk-meta">{{item.user}} · {{item.time}} · ♥{{item.likes}}</text>
     </view>
+    <text class="wk-status {{item.status === '已发布' ? 'status-green' : 'status-gray'}}">{{item.status}}</text>
+    <text class="wk-arrow">›</text>
   </view>
 </view>

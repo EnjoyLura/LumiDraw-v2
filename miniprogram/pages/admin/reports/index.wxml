@@ -1,17 +1,26 @@
 <!-- 举报队列 -->
 <nav-bar title="举报队列" back />
 <view class="admin-page">
-  <text class="page-title">举报队列</text>
   <view class="stat-row">
-    <view class="mini-stat"><text class="ms-num" style="color:#FFA8B8;">3</text><text class="ms-label">待处理</text></view>
-    <view class="mini-stat"><text class="ms-num" style="color:#6FD4B0;">4</text><text class="ms-label">已处理</text></view>
-    <view class="mini-stat"><text class="ms-num">1</text><text class="ms-label">已驳回</text></view>
+    <view class="mini-stat"><text class="ms-num" style="color:#FFA8B8;">{{pendingCount}}</text><text class="ms-label">待处理</text></view>
+    <view class="mini-stat"><text class="ms-num" style="color:#6FD4B0;">{{processedCount}}</text><text class="ms-label">已处理</text></view>
+    <view class="mini-stat"><text class="ms-num">{{rejectedCount}}</text><text class="ms-label">已驳回</text></view>
   </view>
-  <view class="list-card">
-    <view wx:for="{{reports}}" wx:key="id" class="list-item" data-id="{{item.id}}" bindtap="onDetail">
-      <view class="li-info"><text class="li-title">{{item.title}}</text><text class="li-sub">{{item.reporter}} · {{item.reason}} · {{item.time}}</text></view>
-      <text class="li-badge {{item.status === '待处理' ? 'badge-red' : 'badge-green'}}">{{item.status}}</text>
-      <text class="li-arrow">›</text>
+  <view class="filter-row">
+    <view class="filter-tab {{filter === 'all' ? 'active' : ''}}" data-f="all" bindtap="onFilter">全部</view>
+    <view class="filter-tab {{filter === '待处理' ? 'active' : ''}}" data-f="待处理" bindtap="onFilter">待处理</view>
+    <view class="filter-tab {{filter === '已处理' ? 'active' : ''}}" data-f="已处理" bindtap="onFilter">已处理</view>
+    <view class="filter-tab {{filter === '已驳回' ? 'active' : ''}}" data-f="已驳回" bindtap="onFilter">已驳回</view>
+  </view>
+  <view wx:for="{{filteredReports}}" wx:key="id" class="report-card" data-id="{{item.id}}" bindtap="onDetail">
+    <view class="rp-thumb" style="background: linear-gradient(135deg, #FFD4C8, #FFC8D6);"></view>
+    <view class="rp-info">
+      <view class="rp-title-row">
+        <text class="rp-title">{{item.title}}</text>
+        <text class="rp-status {{item.status === '待处理' ? 'status-red' : item.status === '已处理' ? 'status-green' : 'status-gray'}}">{{item.status}}</text>
+      </view>
+      <text class="rp-meta">⚠ {{item.reason}} · {{item.time}}</text>
     </view>
+    <text class="rp-arrow">›</text>
   </view>
 </view>

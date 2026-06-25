@@ -1,14 +1,20 @@
 <!-- 用户列表 -->
 <nav-bar title="用户列表" back />
 <view class="admin-page">
-  <text class="page-title">用户列表</text>
-  <view class="list-card">
-    <view wx:for="{{users}}" wx:key="id" class="list-item" data-id="{{item.id}}" bindtap="onDetail">
-      <view class="avatar-sm" style="background: {{item.color}};"><text>{{item.avatar}}</text></view>
-      <view class="li-info"><text class="li-title">{{item.name}}</text><text class="li-sub">作品{{item.works}} · 注册{{item.date}}</text></view>
-      <text wx:if="{{item.vip}}" class="li-badge badge-green">VIP</text>
-      <text class="li-badge {{item.status === '正常' ? 'badge-green' : 'badge-red'}}">{{item.status}}</text>
-      <text class="li-arrow">›</text>
+  <view class="search-box">
+    <text class="search-icon">⌕</text>
+    <input class="search-input" placeholder="搜索用户名或ID" bindinput="onSearch" />
+  </view>
+  <view wx:for="{{filteredUsers}}" wx:key="id" class="user-card" data-id="{{item.id}}" bindtap="onDetail">
+    <view class="uc-avatar" style="background: {{item.color}};">
+      <text>{{item.avatar}}</text>
     </view>
+    <view class="uc-info">
+      <text class="uc-name">{{item.name}}</text>
+      <text class="uc-meta">作品{{item.works}} · 注册{{item.date}}</text>
+    </view>
+    <text wx:if="{{item.vip}}" class="uc-badge badge-vip">VIP</text>
+    <text class="uc-badge {{item.status === '正常' ? 'badge-ok' : 'badge-ban'}}">{{item.status}}</text>
+    <text class="uc-arrow">›</text>
   </view>
 </view>
