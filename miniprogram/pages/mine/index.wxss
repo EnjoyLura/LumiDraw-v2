@@ -1,6 +1,7 @@
 /* 我的页样式 */
 .mine-page {
   padding: 32rpx;
+  padding-top: 208rpx;
   background: #EEF4FC;
 }
 

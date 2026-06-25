@@ -1,5 +1,5 @@
 /* 积分充值页 */
-.recharge-page { padding: 32rpx; min-height: 100vh; background: #EEF4FC; }
+.recharge-page { padding: 208rpx 32rpx 32rpx; min-height: 100vh; background: #EEF4FC; }
 .balance-card { background: linear-gradient(135deg, #5B9FE8, #7BC4F0, #6FD4B0); border-radius: 28rpx; padding: 40rpx 32rpx; margin-bottom: 32rpx; position: relative; overflow: hidden; }
 .balance-label { font-size: 26rpx; color: rgba(255,255,255,0.75); display: block; margin-bottom: 16rpx; }
 .balance-num { font-size: 64rpx; font-weight: 700; color: white; }

@@ -2,8 +2,9 @@
 .plaza-page {
   display: flex;
   flex-direction: column;
-  flex: 1;
-  height: 0;
+  height: 100%;
+  padding-top: 176rpx;
+  box-sizing: border-box;
 }
 
 /* ============ 顶部栏（毛玻璃） ============ */

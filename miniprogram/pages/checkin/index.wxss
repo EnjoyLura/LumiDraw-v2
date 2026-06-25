@@ -1,5 +1,5 @@
 /* 每日签到页 */
-.checkin-page { padding: 32rpx; min-height: 100vh; background: #EEF4FC; }
+.checkin-page { padding: 208rpx 32rpx 32rpx; min-height: 100vh; background: #EEF4FC; }
 .streak-card { background: linear-gradient(180deg, #E1EBF8, #F5F9FE); border: 1rpx solid rgba(91,159,232,0.14); border-radius: 28rpx; padding: 48rpx 32rpx; text-align: center; margin-bottom: 32rpx; }
 .streak-label { font-size: 26rpx; color: #8497B5; display: block; }
 .streak-num-row { display: flex; align-items: baseline; justify-content: center; gap: 8rpx; margin: 16rpx 0 32rpx; }

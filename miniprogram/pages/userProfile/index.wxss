@@ -1,5 +1,5 @@
 /* 用户主页 */
-.profile-page { min-height: 100vh; background: #EEF4FC; }
+.profile-page { padding-top: 176rpx; min-height: 100vh; background: #EEF4FC; }
 .profile-header { display: flex; align-items: flex-start; gap: 28rpx; padding: 32rpx; }
 .profile-avatar { width: 144rpx; height: 144rpx; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 56rpx; font-weight: 700; flex-shrink: 0; }
 .profile-info { flex: 1; min-width: 0; }

@@ -1,5 +1,5 @@
 /* 编辑资料页样式 */
-.edit-page { padding: 48rpx 32rpx 32rpx; background: #EEF4FC; }
+.edit-page { padding: 224rpx 32rpx 32rpx; background: #EEF4FC; }
 .avatar-section { text-align: center; margin-bottom: 48rpx; position: relative; }
 .avatar { width: 160rpx; height: 160rpx; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: white; font-size: 64rpx; font-weight: 700; }
 .avatar-camera { position: absolute; bottom: 40rpx; right: calc(50% - 80rpx - 10rpx); width: 56rpx; height: 56rpx; border-radius: 50%; background: #5B9FE8; display: flex; align-items: center; justify-content: center; border: 4rpx solid #EEF4FC; font-size: 28rpx; }

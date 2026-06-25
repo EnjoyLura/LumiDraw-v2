@@ -1,5 +1,5 @@
 /* 设置页样式 */
-.settings-page { padding: 24rpx 32rpx; min-height: 100vh; background: #EEF4FC; }
+.settings-page { padding: 200rpx 32rpx 24rpx; min-height: 100vh; background: #EEF4FC; }
 .section-label { font-size: 28rpx; font-weight: 700; color: #0E1F3A; margin: 20rpx 0 16rpx; }
 .card { background: #FFFFFF; border: 1rpx solid rgba(91,159,232,0.14); border-radius: 28rpx; overflow: hidden; margin-bottom: 32rpx; }
 .list-row { display: flex; align-items: center; gap: 24rpx; padding: 28rpx 32rpx; }

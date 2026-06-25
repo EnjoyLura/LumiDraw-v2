@@ -1,5 +1,5 @@
 /* 邀请好友页 */
-.invite-page { padding: 32rpx; min-height: 100vh; background: #EEF4FC; }
+.invite-page { padding: 208rpx 32rpx 32rpx; min-height: 100vh; background: #EEF4FC; }
 .invite-hero { background: linear-gradient(135deg, #B8A5E3, #5B9FE8 50%, #6FD4B0); border-radius: 28rpx; padding: 48rpx 32rpx; text-align: center; margin-bottom: 32rpx; }
 .hero-icon { font-size: 80rpx; display: block; margin-bottom: 16rpx; }
 .hero-title { font-size: 40rpx; font-weight: 700; color: white; display: block; margin-bottom: 12rpx; }

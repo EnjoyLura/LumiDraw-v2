@@ -1,5 +1,5 @@
 /* 编辑作品页 */
-.edit-page { padding: 32rpx; min-height: 100vh; background: #EEF4FC; }
+.edit-page { padding: 208rpx 32rpx 32rpx; min-height: 100vh; background: #EEF4FC; }
 .section { margin-bottom: 36rpx; }
 .section-label { font-size: 28rpx; font-weight: 700; color: #0E1F3A; margin-bottom: 16rpx; display: block; }
 .preview-card { display: flex; align-items: center; gap: 24rpx; background: #FFFFFF; border: 1rpx solid rgba(91,159,232,0.14); border-radius: 28rpx; padding: 28rpx; }

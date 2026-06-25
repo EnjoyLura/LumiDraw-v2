@@ -1,5 +1,5 @@
 /* 意见反馈页样式 */
-.feedback-page { padding: 32rpx; background: #EEF4FC; }
+.feedback-page { padding: 208rpx 32rpx 32rpx; background: #EEF4FC; }
 .section { margin-bottom: 36rpx; }
 .section-title { font-size: 28rpx; font-weight: 700; color: #0E1F3A; }
 .field-header { display: flex; align-items: baseline; gap: 8rpx; margin-bottom: 16rpx; }

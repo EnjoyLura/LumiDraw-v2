@@ -1,5 +1,5 @@
 /* 全部玩法页 */
-.gameplays-page { padding: 24rpx; min-height: 100vh; background: #EEF4FC; }
+.gameplays-page { padding: 200rpx 24rpx 24rpx; min-height: 100vh; background: #EEF4FC; }
 .gameplay-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16rpx; }
 .gameplay-card { background: #FFFFFF; border: 1rpx solid rgba(91,159,232,0.14); border-radius: 24rpx; overflow: hidden; transition: transform 0.2s; }
 .gameplay-card:active { transform: scale(0.96); }

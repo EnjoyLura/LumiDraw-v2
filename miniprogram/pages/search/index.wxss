@@ -1,5 +1,5 @@
 /* 搜索页样式 */
-.search-page { padding: 24rpx 32rpx; min-height: 100vh; background: #EEF4FC; }
+.search-page { padding: 200rpx 32rpx 24rpx; min-height: 100vh; background: #EEF4FC; }
 .search-bar { display: flex; align-items: center; gap: 20rpx; margin-bottom: 32rpx; }
 .search-input-wrap { flex: 1; display: flex; align-items: center; gap: 12rpx; background: #FBFDFF; border: 2rpx solid rgba(91,159,232,0.14); border-radius: 24rpx; padding: 16rpx 24rpx; }
 .search-icon { font-size: 36rpx; color: #8497B5; flex-shrink: 0; }

@@ -1,5 +1,5 @@
 /* 发布作品页 */
-.publish-page { padding: 32rpx; min-height: 100vh; background: #EEF4FC; }
+.publish-page { padding: 208rpx 32rpx 32rpx; min-height: 100vh; background: #EEF4FC; }
 .section { margin-bottom: 36rpx; }
 .section-label { font-size: 28rpx; font-weight: 700; color: #0E1F3A; margin-bottom: 16rpx; display: block; }
 

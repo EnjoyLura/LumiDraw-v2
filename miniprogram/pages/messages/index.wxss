@@ -1,5 +1,5 @@
 /* 消息中心页 */
-.messages-page { padding: 24rpx 32rpx; min-height: 100vh; background: #EEF4FC; }
+.messages-page { padding: 200rpx 32rpx 24rpx; min-height: 100vh; background: #EEF4FC; }
 .msg-card { display: flex; align-items: center; gap: 28rpx; background: #FFFFFF; border: 1rpx solid rgba(91,159,232,0.14); border-radius: 28rpx; padding: 28rpx 32rpx; margin-bottom: 20rpx; transition: transform 0.2s; }
 .msg-card:active { transform: scale(0.98); }
 .msg-icon { width: 96rpx; height: 96rpx; border-radius: 28rpx; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 8rpx 24rpx rgba(0,0,0,0.08); }

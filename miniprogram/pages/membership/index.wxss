@@ -1,5 +1,5 @@
 /* 会员中心页 */
-.member-page { padding: 32rpx; min-height: 100vh; background: #EEF4FC; }
+.member-page { padding: 208rpx 32rpx 32rpx; min-height: 100vh; background: #EEF4FC; }
 .vip-card { background: linear-gradient(135deg, #1a1a2e, #16213e 40%, #0f3460); border-radius: 28rpx; padding: 48rpx 32rpx; margin-bottom: 32rpx; position: relative; overflow: hidden; }
 .vip-header { display: flex; align-items: center; gap: 24rpx; margin-bottom: 32rpx; }
 .vip-icon { width: 88rpx; height: 88rpx; border-radius: 50%; background: linear-gradient(135deg, #B8A5E3, #FFD700); display: flex; align-items: center; justify-content: center; font-size: 44rpx; color: #1a1a2e; }

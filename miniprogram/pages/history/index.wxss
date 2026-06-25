@@ -1,5 +1,5 @@
 /* 浏览记录页 */
-.history-page { padding: 32rpx; min-height: 100vh; background: #EEF4FC; }
+.history-page { padding: 208rpx 32rpx 32rpx; min-height: 100vh; background: #EEF4FC; }
 .clear-row { display: flex; justify-content: flex-end; margin-bottom: 20rpx; }
 .clear-btn { font-size: 26rpx; color: #8497B5; padding: 8rpx 20rpx; }
 .date-label { font-size: 28rpx; font-weight: 700; color: #0E1F3A; display: block; margin-bottom: 16rpx; }

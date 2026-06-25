@@ -2,19 +2,21 @@ Component({
   properties: {
     title: { type: String, value: '' },
     back: { type: Boolean, value: false },
-    transparent: { type: Boolean, value: false },
-    overlay: { type: Boolean, value: false }
+    transparent: { type: Boolean, value: false }
   },
   data: {
     statusBarHeight: 20,
-    navBarHeight: 44
+    navBarHeight: 44,
+    totalHeight: 64
   },
   lifetimes: {
     attached() {
       const sys = wx.getSystemInfoSync();
+      const sbh = sys.statusBarHeight || 20;
       this.setData({
-        statusBarHeight: sys.statusBarHeight || 20,
-        navBarHeight: 44
+        statusBarHeight: sbh,
+        navBarHeight: 44,
+        totalHeight: sbh + 44
       });
     }
   },
