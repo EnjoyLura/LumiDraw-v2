@@ -106,7 +106,6 @@
   background: #FFFFFF;
   border: 3rpx solid rgba(91, 159, 232, 0.20);
   border-radius: 28rpx;
-  box-shadow: 0 4rpx 16rpx rgba(91, 159, 232, 0.08);
 }
 
 .model-cover {
@@ -213,7 +212,6 @@
 
 .prompt-card.focused {
   border-color: #5B9FE8;
-  box-shadow: 0 0 0 6rpx rgba(91, 159, 232, 0.12), 0 4rpx 20rpx rgba(91, 159, 232, 0.15);
 }
 
 .prompt-header {
@@ -264,7 +262,6 @@
 
 .prompt-input:focus {
   border-color: #5B9FE8;
-  box-shadow: 0 0 0 4rpx rgba(91, 159, 232, 0.15);
 }
 
 .prompt-footer {
@@ -352,7 +349,6 @@
 
 .style-card.selected {
   border-color: #5B9FE8;
-  box-shadow: 0 0 0 4rpx rgba(91, 159, 232, 0.18), 0 8rpx 28rpx rgba(91, 159, 232, 0.35);
 }
 
 .style-bg {
@@ -424,7 +420,6 @@
   background: rgba(91, 159, 232, 0.10);
   color: #5B9FE8;
   font-weight: 600;
-  box-shadow: 0 0 0 4rpx rgba(91, 159, 232, 0.15), 0 4rpx 16rpx rgba(91, 159, 232, 0.30);
 }
 
 /* ============ 比例 ============ */
@@ -450,7 +445,6 @@
 .ratio-card.active {
   border-color: #5B9FE8;
   background: rgba(91, 159, 232, 0.10);
-  box-shadow: 0 0 0 4rpx rgba(91, 159, 232, 0.15), 0 4rpx 16rpx rgba(91, 159, 232, 0.30);
 }
 
 .ratio-shape {
@@ -501,7 +495,6 @@
   background: rgba(91, 159, 232, 0.10);
   color: #3B7FC8;
   font-weight: 600;
-  box-shadow: 0 0 0 4rpx rgba(91, 159, 232, 0.15), 0 4rpx 16rpx rgba(91, 159, 232, 0.30);
 }
 
 /* ============ 生成结果占位 ============ */
@@ -903,7 +896,6 @@
 .model-sheet-item.selected {
   border-color: #5B9FE8;
   background: linear-gradient(180deg, rgba(91, 159, 232, 0.06) 0%, transparent 100%);
-  box-shadow: 0 0 0 4rpx rgba(91, 159, 232, 0.15), 0 4rpx 16rpx rgba(91, 159, 232, 0.20);
 }
 
 .msi-cover {
@@ -1021,7 +1013,6 @@
 
 .style-sheet-card.selected {
   border-color: #5B9FE8;
-  box-shadow: 0 0 0 4rpx rgba(91, 159, 232, 0.18), 0 8rpx 28rpx rgba(91, 159, 232, 0.35);
 }
 
 .ssc-bg {
@@ -1093,7 +1084,6 @@
 .ratio-sheet-card.selected {
   border-color: #5B9FE8;
   background: rgba(91, 159, 232, 0.10);
-  box-shadow: 0 0 0 4rpx rgba(91, 159, 232, 0.15), 0 4rpx 16rpx rgba(91, 159, 232, 0.25);
 }
 
 .rsc-shape {
