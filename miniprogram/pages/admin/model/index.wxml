@@ -1,12 +1,31 @@
 <!-- 模型管理 -->
 <nav-bar title="模型管理" back />
 <view class="admin-page">
-  <view class="header-row"><text class="page-title">模型管理</text><view class="add-btn" bindtap="onAdd">+ 新增</view></view>
-  <view class="list-card">
-    <view wx:for="{{models}}" wx:key="name" class="list-item" data-idx="{{index}}" bindtap="onEdit">
-      <view class="li-info"><text class="li-title">{{item.name}}</text><text class="li-sub">{{item.desc}} · {{item.cost}}积分</text></view>
-      <text wx:if="{{item.badge}}" class="li-badge badge-green">{{item.badge}}</text>
-      <text class="li-arrow">›</text>
+  <view class="header-row">
+    <text class="count-text">共 {{models.length}} 个模型</text>
+    <view class="add-btn" bindtap="onAdd">+ 新增</view>
+  </view>
+  <view wx:for="{{models}}" wx:key="name" class="model-card">
+    <view class="mc-cover" style="background: {{item.color || 'linear-gradient(135deg, #5B9FE8, #6FD4B0)'}};">
+      <text class="mc-cover-text">{{item.name[0]}}</text>
+    </view>
+    <view class="mc-info">
+      <view class="mc-name-row">
+        <text class="mc-name">{{item.name}}</text>
+        <text wx:if="{{item.badge}}" class="mc-badge" style="color: {{item.badgeColor || '#5B9FE8'}}; background: {{item.badgeColor || '#5B9FE8'}}18;">{{item.badge}}</text>
+      </view>
+      <text class="mc-desc">{{item.desc}}</text>
+      <view class="mc-tags">
+        <text wx:for="{{item.tags}}" wx:for-item="tag" wx:key="*this" class="mc-tag">{{tag}}</text>
+      </view>
+    </view>
+    <view class="mc-right">
+      <text class="mc-cost">{{item.cost}}</text>
+      <text class="mc-unit">积分</text>
+      <view class="mc-ops">
+        <view class="mc-edit-btn" data-idx="{{index}}" catchtap="onEdit">✎</view>
+        <switch checked="{{item.enabled}}" data-idx="{{index}}" bindchange="onToggle" color="#5B9FE8" style="transform: scale(0.7);" />
+      </view>
     </view>
   </view>
 </view>

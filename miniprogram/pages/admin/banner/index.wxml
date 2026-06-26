@@ -2,17 +2,26 @@
 <nav-bar title="Banner管理" back />
 <view class="admin-page">
   <view class="header-row">
-    <text class="page-title">Banner管理</text>
+    <text class="count-text">共 {{banners.length}} 个Banner</text>
     <view class="add-btn" bindtap="onAdd">+ 新增</view>
   </view>
-  <view class="list-card">
-    <view wx:for="{{banners}}" wx:key="id" class="list-item">
-      <view class="li-info">
-        <text class="li-title">{{item.title}}</text>
-        <text class="li-sub">排序{{item.sort}} · {{item.date}}</text>
+  <view wx:for="{{banners}}" wx:key="id" class="banner-card">
+    <view class="bc-cover" style="background: {{item.gradient}};"></view>
+    <view class="bc-body">
+      <view class="bc-title-row">
+        <text class="bc-title">{{item.title}}</text>
+        <text class="bc-status {{item.status === '上架中' ? 'status-green' : 'status-gray'}}">{{item.status}}</text>
       </view>
-      <text class="li-badge {{item.status === '上架中' ? 'badge-green' : 'badge-gray'}}">{{item.status}}</text>
-      <view class="add-btn" style="font-size:22rpx;padding:6rpx 16rpx;" data-id="{{item.id}}" bindtap="onEdit">编辑</view>
+      <view class="bc-meta">
+        <text>🔗 {{item.link}}</text>
+        <text>↕ 排序 {{item.sort}}</text>
+        <text>📅 {{item.date}}</text>
+      </view>
+      <view class="bc-actions">
+        <view class="bc-btn bc-btn-edit" data-id="{{item.id}}" bindtap="onEdit">编辑</view>
+        <view class="bc-btn {{item.status === '上架中' ? 'bc-btn-off' : 'bc-btn-on'}}" data-id="{{item.id}}" catchtap="onToggle">{{item.status === '上架中' ? '下架' : '上架'}}</view>
+        <view class="bc-btn bc-btn-del" data-id="{{item.id}}" catchtap="onDelete">🗑</view>
+      </view>
     </view>
   </view>
 </view>

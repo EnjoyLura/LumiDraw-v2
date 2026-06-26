@@ -1,11 +1,24 @@
 <!-- 玩法管理 -->
 <nav-bar title="玩法管理" back />
 <view class="admin-page">
-  <view class="header-row"><text class="page-title">玩法管理</text><view class="add-btn" bindtap="onAdd">+ 新增</view></view>
-  <view class="list-card">
-    <view wx:for="{{gameplays}}" wx:key="name" class="list-item" data-idx="{{index}}" bindtap="onEdit">
-      <view class="li-info"><text class="li-title">{{item.name}}</text><text class="li-sub">排序{{item.sort}} · 使用{{item.usage}}次</text></view>
-      <text class="li-arrow">›</text>
+  <view class="header-row">
+    <text class="count-text">共 {{gameplays.length}} 个玩法</text>
+    <view class="add-btn" bindtap="onAdd">+ 新增</view>
+  </view>
+  <view wx:for="{{gameplays}}" wx:key="name" class="gp-card">
+    <view class="gp-cover" style="background: {{item.color}};">
+      <text class="gp-cover-text">{{item.name[0]}}</text>
+    </view>
+    <view class="gp-info">
+      <text class="gp-name">{{item.name}}</text>
+      <view class="gp-meta">
+        <text>排序 {{item.sort}}</text>
+        <text>使用 {{item.usage}} 次</text>
+      </view>
+    </view>
+    <view class="gp-ops">
+      <view class="gp-edit" data-idx="{{index}}" catchtap="onEdit">✎</view>
+      <switch checked="{{item.enabled}}" data-idx="{{index}}" bindchange="onToggle" color="#5B9FE8" style="transform: scale(0.7);" />
     </view>
   </view>
 </view>
