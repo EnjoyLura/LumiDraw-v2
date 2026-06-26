@@ -162,7 +162,7 @@ i.tab-icon{font-size:24px;line-height:1;width:auto;height:auto;}
 .btn-soft{background:var(--accent-soft);color:var(--accent-deep);}
 .btn-ghost{background:transparent;color:var(--fg-secondary);}
 .btn-sm{padding:6px 14px;font-size:12px;border-radius:10px;}
-.btn-lg{padding:14px 24px;font-size:15px;border-radius:14px;}
+.btn-lg{padding:8px 24px;font-size:15px;border-radius:14px;}
 .btn:disabled{opacity:0.45;cursor:not-allowed;transform:none!important;}
 .tag{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;font-size:11px;font-weight:600;
   border-radius:999px;transition:all 0.3s;}
@@ -202,6 +202,24 @@ textarea.input{resize:none;line-height:1.6;}
 .h-scroll{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding:0 0 0 16px;}
 .h-scroll::after{content:'';display:block;width:16px;flex-shrink:0;}
 .h-scroll::-webkit-scrollbar{display:none;}
+/* 玩法模板卡片 */
+.gp-card{position:relative;flex-shrink:0;width:90px;height:120px;border-radius:14px;overflow:hidden;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,0.1);}
+.gp-card img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.4s cubic-bezier(0.16,1,0.3,1);}
+.gp-card:active img{transform:scale(1.05);}
+.gp-card .gp-overlay{position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,0.65) 0%,rgba(0,0,0,0.1) 50%,transparent 100%);pointer-events:none;}
+.gp-card .gp-info{position:absolute;bottom:0;left:0;right:0;padding:10px;pointer-events:none;}
+.gp-card .gp-name{font-size:13px;font-weight:700;color:white;text-shadow:0 1px 4px rgba(0,0,0,0.3);margin-bottom:2px;}
+.gp-card .gp-uses{font-size:10px;color:rgba(255,255,255,0.75);display:flex;align-items:center;gap:3px;}
+.gp-hot{position:absolute;top:8px;right:8px;background:linear-gradient(135deg,#ff6b6b,#ee5a24);color:white;font-size:9px;font-weight:700;padding:2px 6px;border-radius:6px;box-shadow:0 2px 8px rgba(238,90,36,0.35);z-index:2;}
+/* 全部玩法卡片 */
+.gp-grid-card{position:relative;border-radius:14px;overflow:hidden;cursor:pointer;background:var(--bg-card);border:1px solid var(--border);transition:transform 0.3s cubic-bezier(0.16,1,0.3,1);}
+.gp-grid-card:active{transform:scale(0.97);}
+.gp-grid-card img{width:100%;aspect-ratio:1;object-fit:cover;display:block;}
+.gp-grid-card .gp-grid-overlay{display:none;}
+.gp-grid-card .gp-grid-info{padding:10px;}
+.gp-grid-card .gp-grid-name{font-size:14px;font-weight:700;color:var(--fg-primary);margin-bottom:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.gp-grid-card .gp-grid-meta{display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--fg-muted);}
+.gp-grid-card .gp-grid-icon{display:none;}
 /* 骨架屏 */
 .skeleton{background:linear-gradient(90deg,var(--bg-soft) 25%,var(--bg-elevated) 50%,var(--bg-soft) 75%);
   background-size:200% 100%;animation:shimmer 2.5s ease-in-out infinite;border-radius:8px;}
@@ -340,6 +358,9 @@ textarea.input{resize:none;line-height:1.6;}
 .list-row:active{transform:scale(0.99);}
 /* ============ 深色模式卡片阴影 ============ */
 [data-theme="dark"] .card{box-shadow:0 2px 8px rgba(0,0,0,0.25),0 1px 3px rgba(0,0,0,0.15);}
+[data-theme="dark"] .gp-card{box-shadow:0 4px 16px rgba(0,0,0,0.3);}
+[data-theme="dark"] .gp-grid-card{border-color:rgba(123,184,240,0.12);box-shadow:none;}
+[data-theme="dark"] .gp-hot{box-shadow:0 2px 8px rgba(238,90,36,0.5);}
 /* ============ 图片淡入加载 ============ */
 .wf-item img,.detail-carousel img{opacity:0;transition:opacity 0.35s ease;}
 .wf-item img.loaded,.detail-carousel img.loaded{opacity:1;}
@@ -413,7 +434,7 @@ textarea.input{resize:none;line-height:1.6;}
     <div class="section-title" style="padding:0 16px;">
       <span>热门玩法</span><span class="more" onclick="navigateTo('allGameplays')" style="color:var(--accent);font-size:14px;font-weight:600;display:flex;align-items:center;gap:2px;">全部 <i class="ri-arrow-right-s-line" style="font-size:18px;"></i></span>
     </div>
-    <div class="h-scroll" style="margin-bottom:18px;" id="gameplayScroll"></div>
+    <div class="h-scroll" style="margin-bottom:18px;gap:12px;" id="gameplayScroll"></div>
     <div class="section-title" style="padding:0 16px;">
       <span>精选作品</span>
       <div style="display:flex;gap:16px;position:relative;padding-bottom:4px;">
@@ -457,27 +478,27 @@ textarea.input{resize:none;line-height:1.6;}
 <!-- ============ 创作 ============ -->
 <div class="page" id="page-create" data-title="创作" data-show-tab="true" data-no-scroll="true">
   <div style="overflow-y:auto;flex:1;" id="createScroll">
-    <div style="padding:12px 0 8px;">
-      <div class="section-title" style="padding:0 16px;margin-bottom:10px;">
+    <div style="padding:10px 16px 6px;">
+      <div id="gameplayCard"></div>
+    </div>
+    <div style="padding:0 0 6px;">
+      <div class="section-title" style="padding:0 16px;margin-bottom:8px;">
         <span style="font-size:16px;font-weight:700;">选择模型</span>
       </div>
       <div style="padding:0 16px;" id="modelCard"></div>
     </div>
-    <div style="padding:0 16px;margin-bottom:14px;">
-      <div class="card" style="padding:14px;border:1.5px solid var(--border);">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
-          <span style="font-size:16px;font-weight:700;">描述你想要的画面</span>
-          <span class="tag tag-lavender" onclick="navigateTo('reversePrompt')" style="cursor:pointer;">
-            <i class="ri-image-edit-line" style="font-size:12px;"></i>反推提示词
-          </span>
+    <div style="margin-bottom:12px;">
+      <div class="section-title" style="padding:0 16px;margin-bottom:8px;font-size:16px;"><span>描述画面</span></div>
+      <div style="padding:0 16px;">
+        <div style="position:relative;">
+          <textarea id="promptInput" class="input" style="min-height:150px;font-size:14px;line-height:1.6;border-radius:12px;padding:12px;padding-bottom:28px;resize:none;" placeholder="描述你想要生成的图片，越详细效果越好..." maxlength="500" oninput="updatePromptCount()"></textarea>
+          <span id="promptCount" style="position:absolute;right:12px;bottom:10px;font-size:11px;color:var(--fg-muted);pointer-events:none;">0/500</span>
         </div>
-        <textarea id="promptInput" class="input" style="min-height:160px;font-size:14px;line-height:1.6;border-radius:12px;padding:12px;resize:none;" placeholder="描述你想要生成的图片，越详细效果越好..." maxlength="500" oninput="updatePromptCount()"></textarea>
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px;">
-          <span id="promptCount" style="font-size:12px;color:var(--fg-muted);">0/500</span>
-          <div style="display:flex;align-items:center;gap:8px;">
-            <div id="clearBtn" onclick="clearPrompt()" style="display:none;align-items:center;gap:3px;cursor:pointer;font-size:12px;color:var(--fg-secondary);"><i class="ri-delete-back-2-line" style="font-size:14px;line-height:1;"></i>清除</div>
-            <div onclick="uploadPromptImg()" style="display:flex;align-items:center;gap:3px;cursor:pointer;font-size:12px;color:var(--accent);"><i class="ri-image-add-line" style="font-size:14px;"></i>上传图片</div>
-          </div>
+        <div style="display:flex;align-items:center;gap:6px;margin-top:8px;">
+          <div onclick="navigateTo('reversePrompt')" style="display:flex;align-items:center;gap:4px;cursor:pointer;font-size:12px;font-weight:500;color:var(--lavender);background:var(--lavender-soft);padding:5px 10px;border-radius:8px;transition:opacity 0.2s;"><i class="ri-image-edit-line" style="font-size:14px;"></i>反推提示词</div>
+          <div onclick="uploadPromptImg()" style="display:flex;align-items:center;gap:4px;cursor:pointer;font-size:12px;font-weight:500;color:var(--accent);background:var(--accent-soft);padding:5px 10px;border-radius:8px;transition:opacity 0.2s;"><i class="ri-image-add-line" style="font-size:14px;"></i>上传图片</div>
+          <div style="flex:1;"></div>
+          <div id="clearBtn" onclick="clearPrompt()" style="display:none;align-items:center;gap:4px;cursor:pointer;font-size:12px;font-weight:500;color:var(--fg-muted);background:var(--bg-soft);padding:5px 10px;border-radius:8px;transition:opacity 0.2s;"><i class="ri-delete-back-2-line" style="font-size:14px;line-height:1;"></i>清除</div>
         </div>
         <div id="promptImgPreview" style="display:none;margin-top:8px;position:relative;">
           <img id="promptImg" src="" style="width:80px;height:80px;border-radius:10px;object-fit:cover;cursor:pointer;" onclick="previewImage(this.src)"/>
@@ -485,20 +506,20 @@ textarea.input{resize:none;line-height:1.6;}
         </div>
       </div>
     </div>
-    <div style="margin-bottom:14px;">
-      <div class="section-title" style="padding:0 16px;margin-bottom:10px;font-size:16px;"><span>风格类型</span></div>
-      <div style="padding:0 16px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;" id="styleGrid"></div>
+    <div style="margin-bottom:12px;">
+      <div class="section-title" style="padding:0 16px;margin-bottom:8px;font-size:16px;"><span>风格类型</span></div>
+      <div style="padding:0 16px;display:grid;grid-template-columns:repeat(4,1fr);gap:6px;" id="styleGrid"></div>
     </div>
-    <div style="margin-bottom:14px;">
-      <div class="section-title" style="padding:0 16px;margin-bottom:10px;font-size:16px;"><span>图片精度</span></div>
+    <div style="margin-bottom:12px;">
+      <div class="section-title" style="padding:0 16px;margin-bottom:8px;font-size:16px;"><span>图片精度</span></div>
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:0 16px;" id="qualityScroll"></div>
     </div>
-    <div style="margin-bottom:14px;">
-      <div class="section-title" style="padding:0 16px;margin-bottom:10px;font-size:16px;"><span>画面比例</span><span class="more" onclick="openRatioSheet()" style="color:var(--accent);font-size:14px;font-weight:600;display:flex;align-items:center;gap:2px;">全部尺寸 <i class="ri-arrow-right-s-line" style="font-size:18px;"></i></span></div>
+    <div style="margin-bottom:12px;">
+      <div class="section-title" style="padding:0 16px;margin-bottom:8px;font-size:16px;"><span>画面比例</span><span class="more" onclick="openRatioSheet()" style="color:var(--accent);font-size:14px;font-weight:600;display:flex;align-items:center;gap:2px;">全部尺寸 <i class="ri-arrow-right-s-line" style="font-size:18px;"></i></span></div>
       <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:0 16px;" id="ratioScroll"></div>
     </div>
-    <div style="margin-bottom:14px;">
-      <div class="section-title" style="padding:0 16px;margin-bottom:10px;font-size:16px;"><span>生成数量</span></div>
+    <div style="margin-bottom:12px;">
+      <div class="section-title" style="padding:0 16px;margin-bottom:8px;font-size:16px;"><span>生成数量</span></div>
       <div style="display:flex;gap:8px;padding:0 16px;" id="countScroll"></div>
     </div>
     <div id="resultArea" style="padding:0 16px;margin-bottom:14px;">
@@ -734,6 +755,12 @@ textarea.input{resize:none;line-height:1.6;}
         <i class="ri-arrow-right-s-line lr-arrow" style="font-size:18px;color:var(--fg-muted);"></i>
       </div>
 
+      <div class="list-row" onclick="navigateTo('drafts')">
+        <div class="lr-icon" style="color:var(--lemon);"><i class="ri-draft-line" style="font-size:22px;"></i></div>
+        <div class="lr-text">草稿箱</div><span style="width:8px;height:8px;border-radius:50%;background:var(--rose);display:inline-block;"></span>
+        <i class="ri-arrow-right-s-line lr-arrow" style="font-size:18px;color:var(--fg-muted);"></i>
+      </div>
+
       <div class="list-row" onclick="navigateTo('followList','following')">
         <div class="lr-icon" style="color:var(--peach);"><i class="ri-user-heart-line" style="font-size:22px;"></i></div>
         <div class="lr-text">我的关注</div>
@@ -797,7 +824,7 @@ textarea.input{resize:none;line-height:1.6;}
 
 <!-- ============ 搜索 ============ -->
 <div class="page" id="page-allGameplays" data-title="全部玩法">
-  <div style="padding:12px;"><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;" id="allGameplaysGrid"></div></div>
+  <div style="padding:12px 16px;"><div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;" id="allGameplaysGrid"></div></div>
 </div>
 
 <div class="page" id="page-search" data-title="搜索">
@@ -1205,6 +1232,11 @@ textarea.input{resize:none;line-height:1.6;}
 </div>
 
 <!-- ============ 浏览记录 ============ -->
+<!-- ============ 草稿箱 ============ -->
+<div class="page" id="page-drafts" data-title="草稿箱">
+  <div style="padding:0 12px;"><div class="waterfall" id="draftsWaterfall"></div><div id="draftsLoadMore"></div></div>
+</div>
+
 <div class="page" id="page-history" data-title="浏览记录">
   <div style="padding:12px 16px;display:flex;justify-content:flex-end;">
     <button class="btn btn-ghost btn-sm" onclick="clearHistory()">清空记录</button>
@@ -1361,6 +1393,16 @@ textarea.input{resize:none;line-height:1.6;}
     <div style="font-size:16px;font-weight:600;margin-bottom:4px;color:var(--fg-primary)">切换模型</div>
     <div style="font-size:12px;color:var(--fg-muted);margin-bottom:14px;" id="modelDrawerCount"></div>
     <div id="modelDrawerList" style="display:flex;flex-direction:column;gap:10px;"></div>
+  </div>
+</div>
+
+<!-- ============ 玩法模板选择抽屉 ============ -->
+<div class="overlay" id="gameplayOverlay" onclick="closeGameplayDrawer()"></div>
+<div class="bottom-sheet" id="gameplaySheet">
+  <div class="sheet-handle"></div>
+  <div style="padding:8px 20px 20px;max-height:65vh;overflow-y:auto;">
+    <div style="font-size:16px;font-weight:600;margin-bottom:14px;color:var(--fg-primary)">选择玩法模板</div>
+    <div id="gameplayDrawerGrid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;"></div>
   </div>
 </div>
 
@@ -1535,10 +1577,14 @@ const BANNERS=[
   {img:'https://picsum.photos/seed/b4/700/300',title:'社区精选'}
 ];
 const GAMEPLAYS=[
-  {name:'人物美颜',img:'https://picsum.photos/seed/gp1/120/120'},{name:'证件照',img:'https://picsum.photos/seed/gp2/120/120'},
-  {name:'宠物头像',img:'https://picsum.photos/seed/gp3/120/120'},{name:'古风国潮',img:'https://picsum.photos/seed/gp4/120/120'},
-  {name:'Q版头像',img:'https://picsum.photos/seed/gp5/120/120'},{name:'Logo设计',img:'https://picsum.photos/seed/gp6/120/120'},
-  {name:'壁纸',img:'https://picsum.photos/seed/gp7/120/120'},{name:'表情包',img:'https://picsum.photos/seed/gp8/120/120'}
+  {name:'人物美颜',img:'https://picsum.photos/seed/gp1/300/400',icon:'ri-user-smile-line',uses:'12.6w',hot:true},
+  {name:'证件照',img:'https://picsum.photos/seed/gp2/300/400',icon:'ri-id-card-line',uses:'8.3w',hot:true},
+  {name:'宠物头像',img:'https://picsum.photos/seed/gp3/300/400',icon:'ri-bear-smile-line',uses:'5.1w',hot:false},
+  {name:'古风国潮',img:'https://picsum.photos/seed/gp4/300/400',icon:'ri-ancient-gate-line',uses:'4.8w',hot:false},
+  {name:'Q版头像',img:'https://picsum.photos/seed/gp5/300/400',icon:'ri-emotion-happy-line',uses:'6.2w',hot:true},
+  {name:'Logo设计',img:'https://picsum.photos/seed/gp6/300/400',icon:'ri-pen-nib-line',uses:'3.9w',hot:false},
+  {name:'壁纸',img:'https://picsum.photos/seed/gp7/300/400',icon:'ri-landscape-line',uses:'7.5w',hot:false},
+  {name:'表情包',img:'https://picsum.photos/seed/gp8/300/400',icon:'ri-emoji-sticker-line',uses:'9.0w',hot:true}
 ];
 const CATEGORIES=['全部','二次元','风景','建筑','表情包','写实','国风','人像','动物','抽象'];
 const USERS=[
@@ -1585,7 +1631,7 @@ const MSGS={
   service:[{content:'感谢使用Lumi-Draw，有任何问题随时联系我们',time:'3天前',unread:false},{content:'您好，有什么可以帮您？',time:'5天前',unread:false}]
 };
 // ============ 状态 ============
-let pageStack=[];let currentTab='home';let selectedModel=0;let selectedStyle=null;let selectedQuality=0;let selectedRatio=0;let selectedCount=0;let promptHasImg=false;let bannerIdx=0;let bannerTimer=null;let isFollowing={};let savedScrollPositions={};
+let pageStack=[];let currentTab='home';let selectedModel=0;let selectedStyle=null;let selectedQuality=0;let selectedRatio=0;let selectedCount=0;let selectedGameplay=-1;let promptHasImg=false;let bannerIdx=0;let bannerTimer=null;let isFollowing={};let savedScrollPositions={};
 var QUALITIES=[{label:'全高清1K',desc:'1024px',icon:'ri-hd-line'},{label:'超清2K',desc:'2048px',icon:'ri-hd-fill'},{label:'超高清4K',desc:'4096px',icon:'ri-4k-fill'}];
 // ============ 工具函数 ============
 function showToast(msg){const t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>{t.classList.add('out');setTimeout(()=>t.remove(),300)},2000)}
@@ -1630,6 +1676,7 @@ function navigateTo(pageId,param){
   if(pageId==='followList')renderFollowList(param);
   if(pageId==='allModels')renderAllModels();
   if(pageId==='allGameplays')renderAllGameplays();
+  if(pageId==='drafts')renderDrafts();
   if(pageId==='report')renderReportReasons();
   if(pageId==='msgDetail')renderMsgDetail(param);
   if(pageId==='publish')renderPublish();
@@ -1748,11 +1795,11 @@ function initBanner(){
 }
 function updateBanner(){var bw=$('bannerBox').offsetWidth;$('bannerTrack').style.transform='translateX(-'+bannerIdx*bw+'px)';$('bannerDots').querySelectorAll('span').forEach((d,i)=>{if(i===bannerIdx){d.style.width='20px';d.style.borderRadius='999px';d.style.background='var(--accent)'}else{d.style.width='6px';d.style.borderRadius='50%';d.style.background='var(--accent-soft)'}})}
 // ============ 渲染热门玩法 ============
-function renderGameplay(){const sc=$('gameplayScroll');GAMEPLAYS.forEach(g=>{const card=createEl('div',null,'<img src="'+g.img+'" style="width:80px;height:80px;border-radius:14px;object-fit:cover"/><div style="font-size:11px;text-align:center;margin-top:4px;color:var(--fg-secondary)">'+g.name+'</div>');card.style.cssText='flex-shrink:0;cursor:pointer;';card.onclick=()=>{switchTab('create');showToast('已套用「'+g.name+'」模板')};sc.appendChild(card)})}
-function renderAllGameplays(){var c=$('allGameplaysGrid');if(!c)return;c.innerHTML='';GAMEPLAYS.forEach(function(g){var card=createEl('div','card');card.style.cssText='cursor:pointer;overflow:hidden';card.innerHTML='<img src="'+g.img+'" style="width:100%;aspect-ratio:1;object-fit:cover"/><div style="padding:6px;text-align:center"><div style="font-size:13px;font-weight:600;color:var(--fg-primary)">'+g.name+'</div></div>';card.onclick=function(){navigateBack();switchTab('create');showToast('已套用「'+g.name+'」模板')};c.appendChild(card)})}
+function renderGameplay(){const sc=$('gameplayScroll');GAMEPLAYS.forEach(g=>{const card=createEl('div','gp-card','<img src="'+g.img+'"/><div class="gp-overlay"></div>'+(g.hot?'<div class="gp-hot">HOT</div>':'')+'<div class="gp-info"><div class="gp-name">'+g.name+'</div><div class="gp-uses"><i class="ri-fire-line" style="font-size:11px;"></i>'+g.uses+'人用过</div></div>');card.onclick=()=>{selectedGameplay=GAMEPLAYS.indexOf(g);switchTab('create');renderCreatePage();showToast('已套用「'+g.name+'」模板')};sc.appendChild(card)})}
+function renderAllGameplays(){var c=$('allGameplaysGrid');if(!c)return;c.innerHTML='';GAMEPLAYS.forEach(function(g){var card=createEl('div','gp-grid-card');card.innerHTML='<img src="'+g.img+'"/><div class="gp-grid-overlay"></div>'+(g.hot?'<div class="gp-hot" style="top:10px;right:10px;">HOT</div>':'')+'<div class="gp-grid-info"><div class="gp-grid-name">'+g.name+'</div><div class="gp-grid-meta"><span><i class="ri-fire-line" style="font-size:12px;"></i> '+g.uses+'人用过</span><span><i class="ri-arrow-right-s-line" style="font-size:14px;"></i></span></div></div>';card.onclick=function(){selectedGameplay=GAMEPLAYS.indexOf(g);navigateBack();switchTab('create');renderCreatePage();showToast('已套用「'+g.name+'」模板')};c.appendChild(card)})}
 // ============ 渲染瀑布流 ============
 function getAspectRatio(ratio){var map={'1:1':'1/1','3:4':'3/4','4:3':'4/3','2:3':'2/3','3:2':'4/3','9:16':'9/16','16:9':'4/3'};return map[ratio]||'3/4'}
-function renderWaterfall(containerId,works,showPublished){var c=$(containerId);if(!c)return;c.innerHTML='';works.forEach(function(w){var u=USERS.find(function(x){return x.id===w.userId});var liked=likedWorks[w.id];var item=createEl('div','wf-item');var ar=getAspectRatio(w.ratio);var displayTitle=w.title||(w.prompt?w.prompt.substring(0,20):'未命名作品');var badge=showPublished?'<div style="position:absolute;top:8px;right:8px;background:rgba(255,255,255,0.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:var(--accent);font-size:10px;font-weight:600;padding:3px 8px;border-radius:8px;z-index:5;display:flex;align-items:center;gap:3px;box-shadow:0 2px 8px rgba(0,0,0,0.08);"><i class="ri-check-line" style="font-size:12px;line-height:1;"></i><span style="line-height:1;">已发布</span></div>':'';item.innerHTML='<div class="card" style="position:relative;">'+badge+'<div style="width:100%;aspect-ratio:'+ar+';overflow:hidden;"><img src="'+w.img+'" style="width:100%;height:100%;object-fit:cover;display:block;cursor:pointer" onclick="navigateTo(\'workDetail\','+w.id+')"/></div><div style="padding:10px 10px 6px"><div style="font-size:13px;font-weight:600;color:var(--fg-primary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:4px">'+displayTitle+'</div><div style="display:flex;align-items:center;gap:6px"><div onclick="navigateTo(\'userProfile\','+u.id+')" style="display:flex;align-items:center;gap:6px;flex:1;overflow:hidden;cursor:pointer"><div class="avatar" style="width:20px;height:20px;font-size:10px;background:'+u.color+'">'+u.avatar+'</div><span style="font-size:11px;color:var(--fg-secondary);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+u.name+'</span></div><div onclick="toggleLike(event,'+w.id+')" style="display:flex;align-items:center;gap:3px;cursor:pointer;padding:2px 4px;border-radius:8px;transition:background 0.2s" onmouseover="this.style.background=\'var(--accent-soft)\'" onmouseout="this.style.background=\'transparent\'"><i class="'+(liked?'ri-heart-fill':'ri-heart-line')+'" style="font-size:16px;color:'+(liked?'var(--rose)':'var(--fg-muted)')+';transition:all 0.3s;"></i><span style="font-size:13px;font-weight:600;color:'+(liked?'var(--rose)':'var(--fg-muted)')+'">'+w.likes+'</span></div></div></div></div>';var card=item.querySelector('.card');bindLongPress(card,w);c.appendChild(item)});setTimeout(observeImages,50)}
+function renderWaterfall(containerId,works,showPublished,hideLikes){var c=$(containerId);if(!c)return;c.innerHTML='';works.forEach(function(w){var u=USERS.find(function(x){return x.id===w.userId});var liked=likedWorks[w.id];var item=createEl('div','wf-item');var ar=getAspectRatio(w.ratio);var displayTitle=w.title||(w.prompt?w.prompt.substring(0,20):'未命名作品');var badge=showPublished?'<div style="position:absolute;top:8px;right:8px;background:rgba(255,255,255,0.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:var(--accent);font-size:10px;font-weight:600;padding:3px 8px;border-radius:8px;z-index:5;display:flex;align-items:center;gap:3px;box-shadow:0 2px 8px rgba(0,0,0,0.08);"><i class="ri-check-line" style="font-size:12px;line-height:1;"></i><span style="line-height:1;">已发布</span></div>':'';var likeHtml=hideLikes?'':'<div onclick="toggleLike(event,'+w.id+')" style="display:flex;align-items:center;gap:3px;cursor:pointer;padding:2px 4px;border-radius:8px;transition:background 0.2s" onmouseover="this.style.background=\'var(--accent-soft)\'" onmouseout="this.style.background=\'transparent\'"><i class="'+(liked?'ri-heart-fill':'ri-heart-line')+'" style="font-size:16px;color:'+(liked?'var(--rose)':'var(--fg-muted)')+';transition:all 0.3s;"></i><span style="font-size:13px;font-weight:600;color:'+(liked?'var(--rose)':'var(--fg-muted)')+'">'+w.likes+'</span></div>';item.innerHTML='<div class="card" style="position:relative;">'+badge+'<div style="width:100%;aspect-ratio:'+ar+';overflow:hidden;"><img src="'+w.img+'" style="width:100%;height:100%;object-fit:cover;display:block;cursor:pointer" onclick="navigateTo(\'workDetail\','+w.id+')"/></div><div style="padding:8px 10px 6px"><div style="font-size:13px;font-weight:600;color:var(--fg-primary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:2px">'+displayTitle+'</div><div style="display:flex;align-items:center;gap:6px"><div onclick="navigateTo(\'userProfile\','+u.id+')" style="display:flex;align-items:center;gap:5px;flex:1;overflow:hidden;cursor:pointer"><div class="avatar" style="width:22px;height:22px;font-size:10px;background:'+u.color+'">'+u.avatar+'</div><span style="font-size:11px;color:var(--fg-secondary);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+u.name+'</span></div>'+likeHtml+'</div></div></div>';var card=item.querySelector('.card');bindLongPress(card,w);c.appendChild(item)});setTimeout(observeImages,50)}
 setTimeout(observeImages,50);
 var _lpTimer=null;var _lpWork=null;
 function bindLongPress(el,work){var timer=null;var moved=false;el.addEventListener('touchstart',function(e){moved=false;timer=setTimeout(function(){if(!moved){e.preventDefault();openWorkManage(work)}},500)},{passive:false});el.addEventListener('touchmove',function(){moved=true;clearTimeout(timer)},{passive:true});el.addEventListener('touchend',function(){clearTimeout(timer)},{passive:true});el.addEventListener('touchcancel',function(){clearTimeout(timer)},{passive:true});el.addEventListener('contextmenu',function(e){e.preventDefault();openWorkManage(work)})}
@@ -1762,6 +1809,9 @@ function closeWorkManage(){$('workManageOverlay').classList.remove('show');$('wo
 function workManageAction(action){var w=_manageWork;closeWorkManage();if(!w)return;if(action==='publish'){navigateTo('publish')}else if(action==='edit'){navigateTo('workDetail',w.id)}else if(action==='remake'){switchTab('create');showToast('已载入「'+w.title+'」参数，可直接生成同款')}else if(action==='download'){showToast('「'+w.title+'」已保存到相册')}else if(action==='delete'){showConfirmDelete('确定要删除「'+w.title+'」吗？删除后不可恢复。',function(){showToast('「'+w.title+'」已删除')})}}
 // ============ 创作页渲染 ============
 function renderCreatePage(){
+  // 玩法模板
+  var gc=$('gameplayCard');
+  if(selectedGameplay===-1){gc.innerHTML='<div class="card" style="padding:10px;display:flex;align-items:center;gap:10px;cursor:pointer;border:1.5px dashed var(--border-strong);" onclick="openGameplayDrawer()"><div style="width:44px;height:44px;border-radius:10px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="ri-apps-line" style="font-size:20px;color:var(--accent);"></i></div><div style="flex:1;"><div style="font-size:14px;font-weight:600;color:var(--fg-secondary);">选择玩法模板</div><div style="font-size:12px;color:var(--fg-muted);margin-top:2px;">一键应用热门玩法的参数配置</div></div><i class="ri-arrow-right-s-line" style="font-size:20px;color:var(--fg-muted);flex-shrink:0;"></i></div>'}else{var g=GAMEPLAYS[selectedGameplay];gc.innerHTML='<div class="card" style="padding:10px;display:flex;align-items:center;gap:10px;border:1.5px solid var(--accent);background:linear-gradient(180deg,rgba(91,159,232,0.06) 0%,transparent 100%);" onclick="openGameplayDrawer()"><img src="'+g.img+'" style="width:44px;height:44px;border-radius:10px;object-fit:cover;flex-shrink:0;"/><div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:700;color:var(--fg-primary);">'+g.name+'</div><div style="font-size:11px;color:var(--fg-muted);margin-top:2px;display:flex;align-items:center;gap:3px;"><i class="ri-fire-line" style="font-size:11px;"></i>'+g.uses+'人用过</div></div><div onclick="event.stopPropagation();selectedGameplay=-1;renderCreatePage();showToast(\'已取消玩法模板\')" style="width:28px;height:28px;border-radius:50%;background:var(--bg-soft);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;"><i class="ri-close-line" style="font-size:16px;color:var(--fg-muted);"></i></div><i class="ri-arrow-right-s-line" style="font-size:20px;color:var(--fg-muted);flex-shrink:0;"></i></div>'}
   // 模型（单卡片）
   var mc=$('modelCard');var m=MODELS[selectedModel];
   var mcBadge=m.badge?'<span style="font-size:8px;font-weight:600;color:'+m.badgeColor+';background:color-mix(in srgb,'+m.badgeColor+' 12%,transparent);padding:1px 4px;border-radius:3px;position:relative;top:-6px;margin-left:2px;white-space:nowrap;line-height:1;">'+m.badge+'</span>':'';mc.innerHTML='<div class="card" style="padding:12px;display:flex;align-items:center;gap:12px;cursor:pointer;" onclick="openModelDrawer()"><img src="'+m.img+'" style="width:56px;height:56px;border-radius:12px;object-fit:cover;flex-shrink:0;"/><div style="flex:1;min-width:0;"><div><span style="font-size:15px;font-weight:700;color:var(--fg-primary);">'+m.name+'</span>'+mcBadge+'</div><div style="font-size:12px;color:var(--fg-muted);margin-top:2px;">'+m.desc+'</div><div style="display:flex;gap:4px;margin-top:4px;">'+m.tags.map(function(t){return'<span class="tag tag-accent" style="font-size:10px;padding:2px 6px;">'+t+'</span>'}).join('')+'</div></div><div style="display:flex;align-items:center;gap:2px;flex-shrink:0;"><span style="font-size:18px;font-weight:700;color:var(--accent);">'+m.cost+'</span><span style="font-size:10px;color:var(--fg-muted);">积分起</span></div><i class="ri-arrow-right-s-line" style="font-size:20px;color:var(--fg-muted);flex-shrink:0;"></i></div>'
@@ -1771,7 +1821,7 @@ function renderCreatePage(){
   const moreCard=createEl('div','style-card');var moreSelected=selectedStyle&&STYLES.indexOf(selectedStyle)>6;moreCard.style.cssText='position:relative;overflow:hidden;cursor:pointer'+(moreSelected?';border:2px solid var(--accent)':'');moreCard.innerHTML='<img src="'+STYLE_IMGS[STYLES[7]]+'" style="width:100%;height:100%;object-fit:cover;position:absolute"/><div class="sc-overlay"></div><div style="position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,'+(moreSelected?'0.5':'0.4')+');display:flex;align-items:center;justify-content:center;color:white;font-size:18px;font-weight:700">+8</div><div class="sc-label">更多</div>';moreCard.onclick=()=>openAllStyles();sg.appendChild(moreCard);
   // 精度
   var qs=$('qualityScroll');qs.innerHTML='';
-  QUALITIES.forEach(function(q,i){var sel=i===selectedQuality;var card=createEl('div','');card.style.cssText='height:38px;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;border:2px solid '+(sel?'var(--accent)':'var(--border)')+';background:'+(sel?'var(--accent-soft)':'var(--bg-card)')+';transition:all 0.3s;';card.innerHTML='<span style="font-size:14px;font-weight:500;color:'+(sel?'var(--accent)':'var(--fg-primary)')+';">'+q.label+'</span>';card.onclick=function(){selectedQuality=i;renderCreatePage();updateCost()};qs.appendChild(card)});
+  QUALITIES.forEach(function(q,i){var card=createEl('div','ratio-card'+(i===selectedQuality?' selected':''));card.style.flex='1';card.innerHTML='<i class="'+q.icon+'" style="font-size:16px;color:'+(i===selectedQuality?'var(--accent)':'var(--fg-muted)')+';"></i><div class="ratio-name">'+q.label+'</div>';card.onclick=function(){selectedQuality=i;renderCreatePage();updateCost()};qs.appendChild(card)});
   // 比例
   const rs=$('ratioScroll');rs.innerHTML='';
   RATIOS.forEach(function(r,i){var card=createEl('div','ratio-card'+(i===selectedRatio?' active':''));var sw,sh;if(r.label==='1:1'){sw=28;sh=28}else if(r.label==='3:4'){sw=24;sh=32}else if(r.label==='4:3'||r.label==='16:9'){sw=36;sh=20}else{sw=20;sh=36}card.innerHTML='<div class="ratio-shape" style="width:'+sw+'px;height:'+sh+'px"></div><div class="ratio-name">'+r.label+'</div>';card.onclick=function(){selectedRatio=i;renderCreatePage()};rs.appendChild(card)})
@@ -1784,6 +1834,9 @@ function updateCost(){const m=MODELS[selectedModel];const total=m.cost*COUNTS[se
 // ============ 模型选择抽屉 ============
 function openModelDrawer(){var c=$('modelDrawerList');c.innerHTML='';$('modelDrawerCount').textContent='共 '+MODELS.length+' 款模型可选';MODELS.forEach(function(m,i){var isSelected=i===selectedModel;var badgeHtml=m.badge?'<span style="font-size:8px;font-weight:600;color:'+m.badgeColor+';background:color-mix(in srgb,'+m.badgeColor+' 12%,transparent);padding:1px 4px;border-radius:3px;position:relative;top:-6px;margin-left:2px;white-space:nowrap;line-height:1;">'+m.badge+'</span>':'';var card=createEl('div','card');card.style.cssText='padding:14px;display:flex;gap:12px;align-items:center;cursor:pointer;border:2px solid '+(isSelected?'var(--accent)':'var(--border)')+';transition:all 0.2s;'+(isSelected?'background:linear-gradient(180deg,rgba(91,159,232,0.06) 0%,transparent 100%)':'');card.innerHTML='<img src="'+m.img+'" style="width:52px;height:52px;border-radius:12px;object-fit:cover;flex-shrink:0;"/><div style="flex:1;min-width:0;"><div><span style="font-size:15px;font-weight:700;color:var(--fg-primary);">'+m.name+'</span>'+badgeHtml+'</div><div style="font-size:12px;color:var(--fg-muted);margin-top:2px;">'+m.desc+'</div><div style="display:flex;gap:4px;margin-top:4px;">'+m.tags.map(function(t){return'<span class="tag tag-accent" style="font-size:10px;padding:2px 6px;">'+t+'</span>'}).join('')+'</div></div><div style="display:flex;align-items:center;gap:2px;flex-shrink:0;"><span style="font-size:16px;font-weight:700;color:var(--accent);">'+m.cost+'</span><span style="font-size:10px;color:var(--fg-muted);">积分起</span></div>'+(isSelected?'<i class="ri-checkbox-circle-fill" style="font-size:22px;color:var(--accent);flex-shrink:0;"></i>':'');card.onclick=function(){selectedModel=i;closeModelDrawer();renderCreatePage();updateCost();showToast('已选择'+m.name)};c.appendChild(card)});$('modelOverlay').classList.add('show');$('modelSheet').classList.add('show')}
 function closeModelDrawer(){$('modelOverlay').classList.remove('show');$('modelSheet').classList.remove('show')}
+// ============ 玩法模板选择抽屉 ============
+function openGameplayDrawer(){var c=$('gameplayDrawerGrid');c.innerHTML='';var clearCard=createEl('div','');clearCard.style.cssText='display:flex;align-items:center;justify-content:center;aspect-ratio:1;border-radius:12px;border:1.5px dashed var(--border-strong);cursor:pointer;background:var(--bg-soft);';clearCard.innerHTML='<div style="text-align:center;"><i class="ri-close-line" style="font-size:22px;color:var(--fg-muted);"></i><div style="font-size:11px;color:var(--fg-muted);margin-top:2px;">不使用</div></div>';clearCard.onclick=function(){selectedGameplay=-1;closeGameplayDrawer();renderCreatePage();showToast('已取消玩法模板')};c.appendChild(clearCard);GAMEPLAYS.forEach(function(g,i){var sel=i===selectedGameplay;var card=createEl('div','');card.style.cssText='position:relative;border-radius:12px;overflow:hidden;cursor:pointer;border:2px solid '+(sel?'var(--accent)':'transparent')+';';card.innerHTML='<img src="'+g.img+'" style="width:100%;aspect-ratio:1;object-fit:cover;display:block;"/><div style="position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,0.55) 0%,transparent 60%);pointer-events:none;"></div><div style="position:absolute;bottom:0;left:0;right:0;padding:8px;"><div style="font-size:12px;font-weight:600;color:white;">'+g.name+'</div><div style="font-size:10px;color:rgba(255,255,255,0.7);"><i class="ri-fire-line" style="font-size:10px;"></i> '+g.uses+'</div></div>'+(sel?'<div style="position:absolute;top:6px;right:6px;"><i class="ri-checkbox-circle-fill" style="font-size:18px;color:var(--accent);filter:drop-shadow(0 1px 2px rgba(0,0,0,0.3));"></i></div>':'');card.onclick=function(){selectedGameplay=i;closeGameplayDrawer();renderCreatePage();showToast('已套用「'+g.name+'」模板')};c.appendChild(card)});$('gameplayOverlay').classList.add('show');$('gameplaySheet').classList.add('show')}
+function closeGameplayDrawer(){$('gameplayOverlay').classList.remove('show');$('gameplaySheet').classList.remove('show')}
 // ============ 提示词 ============
 function updatePromptCount(){var v=$('promptInput').value;$('promptCount').textContent=v.length+'/500';var cb=$('clearBtn');if(cb)cb.style.display=v.length>0?'flex':'none'}
 function clearPrompt(){$('promptInput').value='';updatePromptCount();$('promptInput').focus()}
@@ -1924,9 +1977,9 @@ var isOwn=w.userId===CURRENT_USER_ID;var isPub=!!w.published;var imgs=w.images&&
 var html='<div style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch">';
 if(imgs.length>1&&isOwn&&!isPub){html+='<div class="detail-carousel" id="detailCarousel"><div class="detail-carousel-track" id="detailTrack">';for(var ci=0;ci<imgs.length;ci++){html+='<img src="'+imgs[ci]+'" onclick="previewImage(this.src,true)"/>';}html+='</div></div><div class="detail-dots" id="detailDots">';for(var di=0;di<imgs.length;di++){html+='<div class="detail-dot'+(di===0?' active':'')+'"></div>';}html+='</div>';}else if(isOwn){html+='<img src="'+w.img+'" style="width:100%;max-height:400px;object-fit:cover;display:block" onclick="previewImage(this.src,true)"/>';}else{html+='<img src="'+w.img+'" style="width:100%;max-height:400px;object-fit:cover;display:block" onclick="if(!longPressTriggered)previewImage(this.src)" ontouchstart="startLongPress('+id+')" ontouchend="cancelLongPress()" onmousedown="startLongPress('+id+')" onmouseup="cancelLongPress()"/>';}
 html+='<div style="padding:16px">';
-if(isOwn){html+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:16px"><div style="display:flex;align-items:center;gap:10px;flex:1"><div class="avatar" style="width:40px;height:40px;font-size:16px;background:'+u.color+'">'+u.avatar+'</div><div style="flex:1;min-width:0"><div style="font-size:15px;font-weight:700">'+u.name+'</div><div style="font-size:11px;color:var(--fg-muted)">'+u.works+'作品 · '+u.likes+'获赞</div></div></div><button onclick="openDetailManage('+id+')" style="border:none;border-radius:999px;padding:6px 16px;font-size:13px;font-weight:600;cursor:pointer;flex-shrink:0;background:var(--bg-soft);color:var(--fg-secondary)"><i class="ri-settings-3-line" style="margin-right:4px;"></i>管理</button></div>';}else{html+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:16px"><div style="display:flex;align-items:center;gap:10px;flex:1;cursor:pointer" onclick="navigateTo(\'userProfile\','+u.id+')"><div class="avatar" style="width:40px;height:40px;font-size:16px;background:'+u.color+'">'+u.avatar+'</div><div style="flex:1;min-width:0"><div style="font-size:15px;font-weight:700">'+u.name+'</div><div style="font-size:11px;color:var(--fg-muted)">'+u.works+'作品 · '+u.likes+'获赞</div></div></div><button onclick="toggleFollow(this,'+u.id+')" style="border:none;border-radius:999px;padding:6px 16px;font-size:13px;font-weight:600;cursor:pointer;flex-shrink:0;'+(isFollowing[u.id]?'background:var(--bg-soft);color:var(--fg-muted)':'background:var(--accent);color:white')+'">'+(isFollowing[u.id]?'已关注':'+ 关注')+'</button></div>';}
+if(isOwn){html+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px"><div style="display:flex;align-items:center;gap:10px;flex:1"><div class="avatar" style="width:40px;height:40px;font-size:16px;background:'+u.color+'">'+u.avatar+'</div><div style="flex:1;min-width:0"><div style="font-size:15px;font-weight:700">'+u.name+'</div><div style="font-size:11px;color:var(--fg-muted)">'+u.works+'作品 · '+u.likes+'获赞</div></div></div><button onclick="openDetailManage('+id+')" style="border:none;border-radius:999px;padding:6px 16px;font-size:13px;font-weight:600;cursor:pointer;flex-shrink:0;background:var(--bg-soft);color:var(--fg-secondary)"><i class="ri-settings-3-line" style="margin-right:4px;"></i>管理</button></div>';}else{html+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px"><div style="display:flex;align-items:center;gap:10px;flex:1;cursor:pointer" onclick="navigateTo(\'userProfile\','+u.id+')"><div class="avatar" style="width:40px;height:40px;font-size:16px;background:'+u.color+'">'+u.avatar+'</div><div style="flex:1;min-width:0"><div style="font-size:15px;font-weight:700">'+u.name+'</div><div style="font-size:11px;color:var(--fg-muted)">'+u.works+'作品 · '+u.likes+'获赞</div></div></div><button onclick="toggleFollow(this,'+u.id+')" style="border:none;border-radius:999px;padding:6px 16px;font-size:13px;font-weight:600;cursor:pointer;flex-shrink:0;'+(isFollowing[u.id]?'background:var(--bg-soft);color:var(--fg-muted)':'background:var(--accent);color:white')+'">'+(isFollowing[u.id]?'已关注':'+ 关注')+'</button></div>';}
 html+='<div style="font-size:18px;font-weight:700;margin-bottom:8px">'+autoTitle+'</div>';
-if(isPub){html+='<div style="font-size:14px;color:var(--fg-secondary);line-height:1.7;margin-bottom:14px">'+(w.desc||'')+'</div>';html+='<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px"><span class="tag tag-accent">'+m.name+'</span><span class="tag tag-mint">'+w.ratio+'</span><span class="tag tag-lavender">'+w.style+'</span>'+w.tags.map(function(t){return'<span class="tag tag-peach">'+t+'</span>'}).join('')+'</div>';}
+if(isPub){html+='<div style="font-size:14px;color:var(--fg-secondary);line-height:1.5;margin-bottom:14px">'+(w.desc||'')+'</div>';html+='<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px"><span class="tag tag-accent">'+m.name+'</span><span class="tag tag-mint">'+w.ratio+'</span><span class="tag tag-lavender">'+w.style+'</span>'+w.tags.map(function(t){return'<span class="tag tag-peach">'+t+'</span>'}).join('')+'</div>';}
 html+='<div class="card" style="padding:12px;margin-bottom:14px"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px"><span style="font-size:13px;font-weight:600;color:var(--fg-secondary)">提示词</span><button class="btn btn-ghost btn-sm" onclick="copyText(\''+w.prompt.replace(/'/g,'')+'\')" style="padding:2px 8px;color:var(--accent)"><i class="ri-file-copy-line" style="font-size:14px;margin-right:2px;"></i>复制</button></div><div style="font-size:13px;color:var(--fg-primary);line-height:1.6">'+w.prompt+'</div></div>';
 html+='<div style="font-size:12px;color:var(--fg-muted);margin-bottom:14px">生成于 '+w.time+'</div>';
 if(isPub){html+='<div style="display:flex;gap:16px;padding:12px 0;border-top:0.5px solid var(--border);border-bottom:0.5px solid var(--border);margin-bottom:14px"><div style="text-align:center;flex:1"><div style="font-size:18px;font-weight:700;color:var(--rose)">'+w.likes+'</div><div style="font-size:11px;color:var(--fg-muted)">点赞</div></div><div style="text-align:center;flex:1"><div style="font-size:18px;font-weight:700;color:var(--accent)">'+w.favorites+'</div><div style="font-size:11px;color:var(--fg-muted)">收藏</div></div><div style="text-align:center;flex:1"><div style="font-size:18px;font-weight:700;color:var(--lavender)">'+w.remakes+'</div><div style="font-size:11px;color:var(--fg-muted)">同款</div></div></div>';}
@@ -1982,13 +2035,12 @@ function refreshGalleryGenCards(){
     html+='<div class="gen-task-card" style="margin-bottom:10px;"><div class="shimmer-bg"></div>'
       +'<div style="position:relative;padding:14px;">'
       +'<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">'
-      +'<img src="'+t.modelImg+'" style="width:36px;height:36px;border-radius:10px;object-fit:cover;flex-shrink:0;"/>'
       +'<div style="flex:1;min-width:0;">'
-      +'<div style="font-size:13px;font-weight:600;color:var(--fg-primary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+t.prompt.substring(0,24)+(t.prompt.length>24?'...':'')+'</div>'
+      +'<div style="font-size:13px;font-weight:600;color:var(--fg-primary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+t.prompt.substring(0,28)+(t.prompt.length>28?'...':'')+'</div>'
       +'<div style="font-size:11px;color:var(--fg-muted);margin-top:2px;">'+t.model+' · '+t.count+'张 · '+t.ratio+'</div>'
       +'</div>'
       +'<div style="text-align:right;flex-shrink:0;">'
-      +'<div style="font-size:18px;font-weight:700;color:var(--accent);line-height:1;">'+pct+'%</div>'
+      +'<div style="font-size:14px;font-weight:700;color:var(--accent);line-height:1;">'+pct+'%</div>'
       +'<div style="font-size:10px;color:var(--fg-muted);margin-top:1px;">'+elapsed+'s</div>'
       +'</div>'
       +'</div>'
@@ -2012,7 +2064,7 @@ var _galleryEmptyMap={
   draft:{icon:'ri-draft-line',text:'暂无草稿',sub:'生成的作品会自动保存到草稿箱'},
   favorite:{icon:'ri-heart-line',text:'暂无收藏',sub:'浏览广场时收藏喜欢的作品吧',btn:'去广场',action:'navigateBack();switchTab(\'home\')'}
 };
-function switchGalleryTab(el,tab){var idx=parseInt(el.dataset.idx);el.parentElement.querySelectorAll('.gallery-tab').forEach(t=>{t.style.fontWeight='500';t.style.color='var(--fg-muted)'});el.style.fontWeight='700';el.style.color='var(--accent)';var indicator=$('galleryTabIndicator');if(indicator){indicator.style.left=el.offsetLeft+el.offsetWidth/2-10+'px'}var c=$('galleryContent');c.innerHTML='<div style="display:flex;justify-content:center;padding:20px 0"><div style="width:28px;height:28px;border:2.5px solid var(--accent-soft);border-top-color:var(--accent);border-radius:50%;animation:spin 0.7s linear infinite"></div></div>';var slideDir=idx>lastGalleryTabIdx?'wf-slide-left':'wf-slide-right';lastGalleryTabIdx=idx;setTimeout(function(){c.innerHTML='<div id="galleryGenCards" style="display:none;margin-bottom:6px;"></div><div class="waterfall" id="galleryWaterfall"></div><div id="galleryLoadMore"></div>';refreshGalleryGenCards();var myWorks=WORKS.filter(function(w){return w.userId===CURRENT_USER_ID});var filtered;if(tab==='all'){filtered=myWorks}else if(tab==='published'){filtered=myWorks.filter(function(w){return w.published})}else if(tab==='draft'){filtered=myWorks.filter(function(w){return !w.published})}else{filtered=WORKS.filter(function(w){return favoritedWorks[w.id]})}if(filtered.length===0){var em=_galleryEmptyMap[tab]||_galleryEmptyMap.all;var btnHtml=em.btn?'<button class="btn btn-soft btn-sm" style="margin-top:8px;" onclick="'+em.action+'"><i class="ri-arrow-right-line" style="margin-right:4px;"></i>'+em.btn+'</button>':'';$('galleryWaterfall').innerHTML='<div class="empty-state" style="grid-column:1/-1;"><div class="empty-state-icon"><i class="'+em.icon+'" style="font-size:28px;color:var(--accent);"></i></div><div class="empty-state-text">'+em.text+'</div><div style="font-size:12px;color:var(--fg-muted);">'+em.sub+'</div>'+btnHtml+'</div>'}else{renderWaterfall('galleryWaterfall',filtered,tab==='published')}addLoadMoreBtn('galleryLoadMore');c.classList.remove('wf-slide-left','wf-slide-right');void c.offsetWidth;c.classList.add(slideDir);setTimeout(function(){c.classList.remove('wf-slide-left','wf-slide-right')},450)},300)}
+function switchGalleryTab(el,tab){var idx=parseInt(el.dataset.idx);el.parentElement.querySelectorAll('.gallery-tab').forEach(t=>{t.style.fontWeight='500';t.style.color='var(--fg-muted)'});el.style.fontWeight='700';el.style.color='var(--accent)';var indicator=$('galleryTabIndicator');if(indicator){indicator.style.left=el.offsetLeft+el.offsetWidth/2-10+'px'}var c=$('galleryContent');c.innerHTML='<div style="display:flex;justify-content:center;padding:20px 0"><div style="width:28px;height:28px;border:2.5px solid var(--accent-soft);border-top-color:var(--accent);border-radius:50%;animation:spin 0.7s linear infinite"></div></div>';var slideDir=idx>lastGalleryTabIdx?'wf-slide-left':'wf-slide-right';lastGalleryTabIdx=idx;setTimeout(function(){c.innerHTML='<div id="galleryGenCards" style="display:none;margin-bottom:6px;"></div><div class="waterfall" id="galleryWaterfall"></div><div id="galleryLoadMore"></div>';refreshGalleryGenCards();var myWorks=WORKS.filter(function(w){return w.userId===CURRENT_USER_ID});var filtered;if(tab==='all'){filtered=myWorks}else if(tab==='published'){filtered=myWorks.filter(function(w){return w.published})}else if(tab==='draft'){filtered=myWorks.filter(function(w){return !w.published})}else{filtered=WORKS.filter(function(w){return favoritedWorks[w.id]})}if(filtered.length===0){var em=_galleryEmptyMap[tab]||_galleryEmptyMap.all;var btnHtml=em.btn?'<button class="btn btn-soft btn-sm" style="margin-top:8px;" onclick="'+em.action+'"><i class="ri-arrow-right-line" style="margin-right:4px;"></i>'+em.btn+'</button>':'';$('galleryWaterfall').innerHTML='<div class="empty-state" style="grid-column:1/-1;"><div class="empty-state-icon"><i class="'+em.icon+'" style="font-size:28px;color:var(--accent);"></i></div><div class="empty-state-text">'+em.text+'</div><div style="font-size:12px;color:var(--fg-muted);">'+em.sub+'</div>'+btnHtml+'</div>'}else{renderWaterfall('galleryWaterfall',filtered,tab==='published',tab==='draft')}addLoadMoreBtn('galleryLoadMore');c.classList.remove('wf-slide-left','wf-slide-right');void c.offsetWidth;c.classList.add(slideDir);setTimeout(function(){c.classList.remove('wf-slide-left','wf-slide-right')},450)},300)}
 function initGalleryTabIndicator(){var active=document.querySelector('.gallery-tab.active');var ind=$('galleryTabIndicator');if(active&&ind){ind.style.transition='none';ind.style.left=active.offsetLeft+active.offsetWidth/2-10+'px';ind.style.opacity='1';ind.offsetHeight;ind.style.transition='all 0.3s cubic-bezier(0.16,1,0.3,1)'}}
 let galleryManageMode=false;let gallerySelectedItems={};
 function toggleGalleryManage(){galleryManageMode=!galleryManageMode;gallerySelectedItems={};const btn=$('galleryManageBtn');const bar=$('galleryManageBar');if(galleryManageMode){btn.innerHTML='<i class="ri-check-line" style="font-size:14px;"></i>完成';btn.classList.remove('btn-ghost');btn.classList.add('btn-soft');addManageOverlays();updateGallerySelectedCount();requestAnimationFrame(function(){bar.style.maxHeight='60px';bar.style.padding='8px 16px';bar.style.opacity='1';bar.style.pointerEvents='auto';})}else{btn.innerHTML='<i class="ri-list-unordered" style="font-size:16px;"></i>管理';btn.classList.remove('btn-soft');btn.classList.add('btn-ghost');bar.style.maxHeight='0';bar.style.padding='0';bar.style.opacity='0';bar.style.pointerEvents='none';removeManageOverlays()}}
@@ -2261,15 +2313,18 @@ html+='<div style="text-align:center;"><span style="font-size:18px;font-weight:7
 html+='</div>';
 html+='<button onclick="toggleFollow(this,'+u.id+')" style="border:none;border-radius:999px;padding:6px 16px;font-size:13px;font-weight:600;cursor:pointer;flex-shrink:0;'+(isFollowing[u.id]?'background:var(--bg-soft);color:var(--fg-muted)':'background:var(--accent);color:white')+'">'+(isFollowing[u.id]?'已关注':'+ 关注')+'</button>';
 html+='</div></div>';
-html+='<div style="padding:12px 16px 6px;font-size:14px;font-weight:600;color:var(--fg-primary);">TA的作品 ('+works.length+')</div>';
+html+='<div style="padding:12px 16px 6px;display:flex;align-items:center;justify-content:space-between;"><span style="font-size:14px;font-weight:600;color:var(--fg-primary);">TA的作品 ('+works.length+')</span><div onclick="toggleUserSearch()" style="width:30px;height:30px;border-radius:8px;background:var(--bg-soft);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background 0.2s;"><i class="ri-search-line" style="font-size:16px;color:var(--fg-muted);"></i></div></div><div id="userSearchBar" style="display:none;padding:0 16px 8px;"><div style="position:relative;"><i class="ri-search-line" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:16px;color:var(--fg-muted);"></i><input class="input" id="userSearchInput" style="padding-left:34px;height:36px;font-size:13px;" placeholder="搜索TA的作品..." oninput="filterUserWorks('+u.id+')"/></div></div>';
 html+='<div style="padding:0 12px"><div class="waterfall" id="userWorks"></div><div id="userWorksLoadMore"></div></div>';
 $('userProfileContent').innerHTML=html;
 renderWaterfall('userWorks',works);addLoadMoreBtn('userWorksLoadMore')}
+function toggleUserSearch(){var bar=$('userSearchBar');if(!bar)return;if(bar.style.display==='none'){bar.style.display='block';var inp=$('userSearchInput');if(inp){inp.value='';inp.focus()}}else{bar.style.display='none';var inp=$('userSearchInput');if(inp){inp.value='';filterUserWorks()}}}
+function filterUserWorks(uid){var inp=$('userSearchInput');var q=inp?inp.value.trim().toLowerCase():'';var works=WORKS.filter(function(w){return uid?w.userId===uid:true});if(q){works=works.filter(function(w){var title=w.title||w.prompt||'';return title.toLowerCase().indexOf(q)!==-1})}renderWaterfall('userWorks',works)}
 // ============ 关注/粉丝列表 ============
 function renderFollowList(type){var c=$('followListContent');c.innerHTML='';var title=type==='following'?'我的关注':'我的粉丝';$('page-followList').dataset.title=title;$('navTitle').textContent=title;var list;if(type==='following'){list=USERS.filter(function(u){return u.id!==1&&isFollowing[u.id]})}else{list=USERS.filter(function(u){return u.id!==1})}if(list.length===0){var icon=type==='following'?'ri-user-heart-line':'ri-group-line';var text=type==='following'?'暂无关注':'暂无粉丝';var sub=type==='following'?'去广场发现有趣的创作者吧':'创作更多优秀作品来吸引粉丝';var btnHtml=type==='following'?'<button class="btn btn-soft btn-sm" style="margin-top:8px;" onclick="navigateBack();switchTab(\'home\')"><i class="ri-compass-3-line" style="margin-right:4px;"></i>去广场</button>':'';c.innerHTML='<div class="empty-state"><div class="empty-state-icon"><i class="'+icon+'" style="font-size:28px;color:var(--accent);"></i></div><div class="empty-state-text">'+text+'</div><div style="font-size:12px;color:var(--fg-muted);">'+sub+'</div>'+btnHtml+'</div>';return}list.forEach(function(u){var row=createEl('div','list-row');row.innerHTML='<div class="avatar" style="width:40px;height:40px;font-size:16px;background:'+u.color+';cursor:pointer;" onclick="navigateTo(\'userProfile\','+u.id+')">'+u.avatar+'</div><div class="lr-text" style="cursor:pointer;" onclick="navigateTo(\'userProfile\','+u.id+')"><div style="font-size:15px;font-weight:600">'+u.name+'</div><div style="font-size:12px;color:var(--fg-muted)">'+u.bio+'</div></div><button class="btn '+(isFollowing[u.id]?'btn-secondary':'btn-soft')+' btn-sm" onclick="toggleFollow(this,'+u.id+')">'+(isFollowing[u.id]?'已关注':'+ 关注')+'</button>';c.appendChild(row)})}
 // ============ 全部模型 ============
 function renderAllModels(){const c=$('allModelsContent');c.innerHTML='';MODELS.forEach((m,i)=>{const card=createEl('div','card');card.style.cssText='padding:14px;margin-bottom:10px;display:flex;gap:12px;align-items:center;cursor:pointer;'+(i===selectedModel?'border:2px solid var(--accent)':'');card.innerHTML='<img src="'+m.img+'" style="width:60px;height:60px;border-radius:12px;object-fit:cover"/><div style="flex:1"><div style="font-size:15px;font-weight:700">'+m.name+'</div><div style="font-size:12px;color:var(--fg-muted);margin-top:2px">'+m.desc+'</div><div style="display:flex;gap:4px;margin-top:4px">'+m.tags.map(t=>'<span class="tag tag-accent" style="font-size:10px;padding:2px 6px">'+t+'</span>').join('')+'</div></div><div style="text-align:right"><div style="font-size:16px;font-weight:700;color:var(--accent);font-family:Georgia,serif">'+m.cost+'</div><div style="font-size:10px;color:var(--fg-muted)">积分起</div></div>';card.onclick=()=>{selectedModel=i;renderCreatePage();updateCost();navigateBack();showToast('已选择'+m.name)};c.appendChild(card)})}
 // ============ 草稿箱 ============
+function renderDrafts(){var c=$('draftsWaterfall');if(!c)return;var drafts=WORKS.filter(function(w){return w.userId===CURRENT_USER_ID&&!w.published});if(drafts.length===0){c.innerHTML='<div class="empty-state" style="grid-column:1/-1;"><div class="empty-state-icon"><i class="ri-draft-line" style="font-size:28px;color:var(--accent);"></i></div><div class="empty-state-text">暂无草稿</div><div style="font-size:12px;color:var(--fg-muted);">生成的作品会自动保存到草稿箱</div><button class="btn btn-soft btn-sm" style="margin-top:8px;" onclick="navigateBack();switchTab(\'create\')"><i class="ri-add-line" style="margin-right:4px;"></i>去创作</button></div>'}else{renderWaterfall('draftsWaterfall',drafts,false,true)}addLoadMoreBtn('draftsLoadMore')}
 // ============ 浏览记录 ============
 var _historyCleared=false;
 function renderHistory(){var c=$('historyContent');if(_historyCleared){c.innerHTML='<div class="empty-state"><div class="empty-state-icon"><i class="ri-time-line" style="font-size:28px;color:var(--accent);"></i></div><div class="empty-state-text">暂无浏览记录</div><div style="font-size:12px;color:var(--fg-muted);">去广场逛逛，发现更多精彩作品</div><button class="btn btn-soft btn-sm" style="margin-top:8px;" onclick="navigateBack();switchTab(\'home\')"><i class="ri-compass-3-line" style="margin-right:4px;"></i>去逛逛</button></div>';return}c.innerHTML='<div class="section-title"><span>今天</span></div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px">'+WORKS.slice(0,6).map(w=>'<div class="card" style="cursor:pointer"><img src="'+w.img+'" style="width:100%;aspect-ratio:1;object-fit:cover" onclick="navigateTo(\'workDetail\','+w.id+')"/></div>').join('')+'</div><div class="section-title"><span>昨天</span></div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">'+WORKS.slice(6,9).map(w=>'<div class="card" style="cursor:pointer"><img src="'+w.img+'" style="width:100%;aspect-ratio:1;object-fit:cover" onclick="navigateTo(\'workDetail\','+w.id+')"/></div>').join('')+'</div>'}
@@ -2308,7 +2363,7 @@ function init(){
       _homeFirstLoad=false;
       hideHomeSkeleton();
       var pageDiv=$('page-home').querySelector('div');
-      pageDiv.innerHTML='<div style="padding:0 16px;margin-bottom:16px;"><div class="card" style="height:150px;position:relative;overflow:hidden;cursor:pointer;" id="bannerBox"><div id="bannerTrack" style="display:flex;transition:transform 0.5s cubic-bezier(0.16,1,0.3,1);height:100%;"></div><div id="bannerDots" style="position:absolute;bottom:8px;left:0;right:0;display:flex;justify-content:center;gap:6px;"></div></div></div><div class="section-title" style="padding:0 16px;"><span>热门玩法</span><span class="more" onclick="navigateTo(\'allGameplays\')" style="color:var(--accent);font-size:14px;font-weight:600;display:flex;align-items:center;gap:2px;">全部 <i class="ri-arrow-right-s-line" style="font-size:18px;"></i></span></div><div class="h-scroll" style="margin-bottom:18px;" id="gameplayScroll"></div><div class="section-title" style="padding:0 16px;"><span>精选作品</span><div style="display:flex;gap:16px;position:relative;padding-bottom:4px;"><span class="home-tab active" data-idx="0" onclick="switchHomeTab(this,\'recommend\')" style="font-size:14px;font-weight:700;color:var(--accent);cursor:pointer;transition:color 0.3s;">推荐</span><span class="home-tab" data-idx="1" onclick="switchHomeTab(this,\'new\')" style="font-size:14px;font-weight:500;color:var(--fg-muted);cursor:pointer;transition:color 0.3s;">最新</span><div id="homeTabIndicator" style="position:absolute;bottom:0;width:20px;height:3px;border-radius:999px;background:var(--accent);transition:none;opacity:0;"></div></div></div><div style="padding:0 12px;"><div class="waterfall" id="homeWaterfall"></div><div id="homeLoadMore"></div></div>';
+      pageDiv.innerHTML='<div style="padding:0 16px;margin-bottom:16px;"><div class="card" style="height:150px;position:relative;overflow:hidden;cursor:pointer;" id="bannerBox"><div id="bannerTrack" style="display:flex;transition:transform 0.5s cubic-bezier(0.16,1,0.3,1);height:100%;"></div><div id="bannerDots" style="position:absolute;bottom:8px;left:0;right:0;display:flex;justify-content:center;gap:6px;"></div></div></div><div class="section-title" style="padding:0 16px;"><span>热门玩法</span><span class="more" onclick="navigateTo(\'allGameplays\')" style="color:var(--accent);font-size:14px;font-weight:600;display:flex;align-items:center;gap:2px;">全部 <i class="ri-arrow-right-s-line" style="font-size:18px;"></i></span></div><div class="h-scroll" style="margin-bottom:18px;gap:12px;" id="gameplayScroll"></div><div class="section-title" style="padding:0 16px;"><span>精选作品</span><div style="display:flex;gap:16px;position:relative;padding-bottom:4px;"><span class="home-tab active" data-idx="0" onclick="switchHomeTab(this,\'recommend\')" style="font-size:14px;font-weight:700;color:var(--accent);cursor:pointer;transition:color 0.3s;">推荐</span><span class="home-tab" data-idx="1" onclick="switchHomeTab(this,\'new\')" style="font-size:14px;font-weight:500;color:var(--fg-muted);cursor:pointer;transition:color 0.3s;">最新</span><div id="homeTabIndicator" style="position:absolute;bottom:0;width:20px;height:3px;border-radius:999px;background:var(--accent);transition:none;opacity:0;"></div></div></div><div style="padding:0 12px;"><div class="waterfall" id="homeWaterfall"></div><div id="homeLoadMore"></div></div>';
       initBanner();
       renderGameplay();
       renderWaterfall('homeWaterfall',WORKS.slice(0,8));
