@@ -1128,7 +1128,7 @@ textarea.input{resize:none;line-height:1.6;}
 
       <div class="list-row" onclick="showToast('清除缓存')"><div class="lr-icon"><i class="ri-delete-bin-line" style="font-size:22px;"></i></div><div class="lr-text">清除缓存</div><span style="font-size:12px;color:var(--fg-muted);margin-right:6px;">12.5MB</span><i class="ri-arrow-right-s-line lr-arrow" style="font-size:18px;color:var(--fg-muted);"></i></div>
 
-      <div class="list-row" onclick="showToast('当前版本 v1.0.0')" style="cursor:pointer;"><div class="lr-icon"><i class="ri-information-line" style="font-size:22px;"></i></div><div class="lr-text">当前版本</div><span style="font-size:12px;color:var(--fg-muted);">v1.0.0</span><i class="ri-arrow-right-s-line lr-arrow" style="font-size:18px;color:var(--fg-muted);"></i></div>
+      <div class="list-row" onclick="navigateTo('changelog')" style="cursor:pointer;"><div class="lr-icon"><i class="ri-information-line" style="font-size:22px;"></i></div><div class="lr-text">当前版本</div><span style="font-size:12px;color:var(--fg-muted);">v1.0.0</span><i class="ri-arrow-right-s-line lr-arrow" style="font-size:18px;color:var(--fg-muted);"></i></div>
     </div>
     <button class="btn" style="width:100%;height:44px;margin-top:8px;background:var(--bg-elevated);color:var(--rose);border:1px solid var(--border);font-size:15px;" onclick="showToast('已退出登录')"><i class="ri-logout-box-r-line" style="margin-right:6px;font-size:18px;"></i>退出登录</button>
   </div>
@@ -1235,6 +1235,58 @@ textarea.input{resize:none;line-height:1.6;}
 <!-- ============ 草稿箱 ============ -->
 <div class="page" id="page-drafts" data-title="草稿箱">
   <div style="padding:0 12px;"><div class="waterfall" id="draftsWaterfall"></div><div id="draftsLoadMore"></div></div>
+</div>
+
+<!-- ============ 更新日志 ============ -->
+<div class="page" id="page-changelog" data-title="更新日志">
+  <div style="padding:16px;">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+      <div style="width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,var(--accent),#4ECBA0);display:flex;align-items:center;justify-content:center;">
+        <span style="font-size:22px;font-weight:800;color:white;">L</span>
+      </div>
+      <div>
+        <div style="font-size:18px;font-weight:700;">Lumi-Draw</div>
+        <div style="font-size:13px;color:var(--fg-muted);">当前版本 v1.0.0</div>
+      </div>
+    </div>
+
+    <div class="card" style="padding:16px;margin-bottom:12px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+        <div style="font-size:16px;font-weight:700;">v1.0.0</div>
+        <span class="tag tag-accent">最新版本</span>
+      </div>
+      <div style="font-size:11px;color:var(--fg-muted);margin-bottom:10px;">2025-06-25</div>
+      <div style="font-size:13px;color:var(--fg-secondary);line-height:1.8;">
+        <div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:4px;"><span class="tag tag-mint" style="font-size:9px;flex-shrink:0;margin-top:2px;">新增</span>创作页玩法模板功能，一键套用热门玩法</div>
+        <div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:4px;"><span class="tag tag-mint" style="font-size:9px;flex-shrink:0;margin-top:2px;">新增</span>草稿箱页面，方便管理未发布作品</div>
+        <div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:4px;"><span class="tag tag-accent" style="font-size:9px;flex-shrink:0;margin-top:2px;">优化</span>创作页界面布局，各区块间距更紧凑</div>
+        <div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:4px;"><span class="tag tag-accent" style="font-size:9px;flex-shrink:0;margin-top:2px;">优化</span>提示词输入区域，字数统计移至输入框内</div>
+        <div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:4px;"><span class="tag tag-accent" style="font-size:9px;flex-shrink:0;margin-top:2px;">优化</span>图片精度选择器统一为卡片风格</div>
+        <div style="display:flex;gap:8px;align-items:flex-start;"><span class="tag tag-peach" style="font-size:9px;flex-shrink:0;margin-top:2px;">修复</span>暗色模式下部分组件显示异常</div>
+      </div>
+    </div>
+
+    <div class="card" style="padding:16px;margin-bottom:12px;">
+      <div style="font-size:16px;font-weight:700;margin-bottom:4px;">v0.9.0</div>
+      <div style="font-size:11px;color:var(--fg-muted);margin-bottom:10px;">2025-06-10</div>
+      <div style="font-size:13px;color:var(--fg-secondary);line-height:1.8;">
+        <div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:4px;"><span class="tag tag-mint" style="font-size:9px;flex-shrink:0;margin-top:2px;">新增</span>广场分类筛选与排序功能</div>
+        <div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:4px;"><span class="tag tag-mint" style="font-size:9px;flex-shrink:0;margin-top:2px;">新增</span>作品详情一键同款生成</div>
+        <div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:4px;"><span class="tag tag-accent" style="font-size:9px;flex-shrink:0;margin-top:2px;">优化</span>瀑布流加载性能，滚动更流畅</div>
+        <div style="display:flex;gap:8px;align-items:flex-start;"><span class="tag tag-peach" style="font-size:9px;flex-shrink:0;margin-top:2px;">修复</span>部分机型图片上传失败问题</div>
+      </div>
+    </div>
+
+    <div class="card" style="padding:16px;margin-bottom:12px;">
+      <div style="font-size:16px;font-weight:700;margin-bottom:4px;">v0.8.0</div>
+      <div style="font-size:11px;color:var(--fg-muted);margin-bottom:10px;">2025-05-20</div>
+      <div style="font-size:13px;color:var(--fg-secondary);line-height:1.8;">
+        <div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:4px;"><span class="tag tag-mint" style="font-size:9px;flex-shrink:0;margin-top:2px;">新增</span>会员体系，月卡/季卡/年卡</div>
+        <div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:4px;"><span class="tag tag-mint" style="font-size:9px;flex-shrink:0;margin-top:2px;">新增</span>每日签到与连续签到里程碑奖励</div>
+        <div style="display:flex;gap:8px;align-items:flex-start;"><span class="tag tag-accent" style="font-size:9px;flex-shrink:0;margin-top:2px;">优化</span>个人主页界面与画廊管理功能</div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class="page" id="page-history" data-title="浏览记录">
@@ -1491,6 +1543,28 @@ textarea.input{resize:none;line-height:1.6;}
     <div style="font-size:15px;font-weight:600;margin-bottom:8px;color:var(--fg-primary)">补充描述（选填）</div>
     <textarea class="input" id="reportDesc" style="min-height:80px;margin-bottom:20px;resize:none" placeholder="请描述具体问题..."></textarea>
     <button class="btn btn-gradient btn-lg" style="width:100%" onclick="submitReport()">提交举报</button>
+  </div>
+</div>
+
+<!-- ============ 公告弹窗 ============ -->
+<div class="overlay" id="announcementOverlay" onclick="closeAnnouncement()" style="z-index:400;"></div>
+<div id="announcementPopup" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0.85);width:calc(100% - 64px);max-width:300px;z-index:401;opacity:0;visibility:hidden;transition:all 0.4s cubic-bezier(0.16,1,0.3,1);">
+  <div class="card" style="overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.15);">
+    <div style="position:relative;">
+      <img src="https://picsum.photos/seed/announce1/600/280" style="width:100%;height:180px;object-fit:cover;display:block;"/>
+      <div style="position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,0.5) 0%,transparent 60%);"></div>
+      <div style="position:absolute;bottom:12px;left:16px;right:16px;">
+        <div style="font-size:17px;font-weight:700;color:white;text-shadow:0 1px 4px rgba(0,0,0,0.3);">夏日创作季活动</div>
+      </div>
+    </div>
+    <div style="padding:16px;">
+      <div style="font-size:13px;color:var(--fg-secondary);line-height:1.7;margin-bottom:14px;">活动期间创作作品即可参与抽奖，有机会获得<span style="color:var(--accent);font-weight:600;">1000积分</span>大奖！活动时间：6月25日 - 7月10日</div>
+      <button onclick="closeAnnouncement();switchTab('create')" style="width:100%;padding:11px;border-radius:10px;border:none;background:var(--accent);color:white;font-size:14px;font-weight:600;cursor:pointer;margin-bottom:8px;">前往参与</button>
+      <div onclick="dismissAnnouncementWeek()" style="text-align:center;font-size:12px;color:var(--fg-muted);cursor:pointer;padding:4px;">本周不再弹出</div>
+    </div>
+  </div>
+  <div onclick="closeAnnouncement()" style="width:36px;height:36px;border-radius:50%;border:2px solid rgba(255,255,255,0.5);display:flex;align-items:center;justify-content:center;margin:16px auto 0;cursor:pointer;">
+    <i class="ri-close-line" style="font-size:18px;color:rgba(255,255,255,0.7);"></i>
   </div>
 </div>
 
@@ -1787,7 +1861,7 @@ function toggleLike(e,id){e.stopPropagation();var w=WORKS.find(function(x){retur
 function initBanner(){
   const track=$('bannerTrack'),dots=$('bannerDots');
   var box=$('bannerBox');
-  BANNERS.forEach((b,i)=>{const slide=createEl('div',null,'<img src="'+b.img+'" style="width:100%;height:150px;object-fit:cover"/><div style="position:absolute;bottom:0;left:0;right:0;padding:20px 16px;background:linear-gradient(transparent,rgba(0,0,0,0.5));color:white;font-size:16px;font-weight:600">'+b.title+'</div><button onclick="event.stopPropagation();switchTab(\'create\')" style="position:absolute;right:20px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.18);backdrop-filter:blur(12px) saturate(180%);-webkit-backdrop-filter:blur(12px) saturate(180%);border:1px solid rgba(255,255,255,0.35);color:white;border-radius:999px;padding:7px 14px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,0.15)">前往创作</button>');slide.style.position='relative';slide.style.width=box.offsetWidth+'px';slide.style.height='150px';slide.style.flexShrink='0';slide.style.overflow='hidden';slide.style.borderRadius='20px';track.appendChild(slide);const dot=createEl('span',null,'');dot.style.cssText='height:6px;border-radius:'+(i===0?'999px':'50%')+';background:'+(i===0?'var(--accent)':'var(--accent-soft)')+';transition:all 0.3s;display:inline-block';if(i===0)dot.style.width='20px';else dot.style.width='6px';dot.dataset.idx=i;dots.appendChild(dot)});
+  BANNERS.forEach((b,i)=>{const slide=createEl('div',null,'<img src="'+b.img+'" style="width:100%;height:150px;object-fit:cover"/><div style="position:absolute;bottom:0;left:0;right:0;padding:20px 16px;background:linear-gradient(transparent,rgba(0,0,0,0.5));color:white;font-size:16px;font-weight:600">'+b.title+'</div><button onclick="event.stopPropagation();switchTab(\'create\')" style="position:absolute;right:20px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.18);backdrop-filter:blur(12px) saturate(180%);-webkit-backdrop-filter:blur(12px) saturate(180%);border:1px solid rgba(255,255,255,0.35);color:white;border-radius:999px;padding:7px 20px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,0.15)">前往</button>');slide.style.position='relative';slide.style.width=box.offsetWidth+'px';slide.style.height='150px';slide.style.flexShrink='0';slide.style.overflow='hidden';slide.style.borderRadius='20px';track.appendChild(slide);const dot=createEl('span',null,'');dot.style.cssText='height:6px;border-radius:'+(i===0?'999px':'50%')+';background:'+(i===0?'var(--accent)':'var(--accent-soft)')+';transition:all 0.3s;display:inline-block';if(i===0)dot.style.width='20px';else dot.style.width='6px';dot.dataset.idx=i;dots.appendChild(dot)});
   bannerTimer=setInterval(()=>{bannerIdx=(bannerIdx+1)%BANNERS.length;updateBanner()},4000);
   box.addEventListener('click',()=>{clearInterval(bannerTimer);bannerIdx=(bannerIdx+1)%BANNERS.length;updateBanner();bannerTimer=setInterval(()=>{bannerIdx=(bannerIdx+1)%BANNERS.length;updateBanner()},4000)});
   box.addEventListener('touchstart',()=>{clearInterval(bannerTimer)},{passive:true});
@@ -2345,6 +2419,12 @@ function observeImages(){
   });
 }
 // ============ 骨架屏 ============
+// ============ 公告弹窗 ============
+var _announcementShown=false;
+function showAnnouncement(){if(_announcementShown)return;_announcementShown=true;$('announcementOverlay').classList.add('show');var popup=$('announcementPopup');popup.style.visibility='visible';popup.style.opacity='1';popup.style.transform='translate(-50%,-50%) scale(1)'}
+function closeAnnouncement(){$('announcementOverlay').classList.remove('show');var popup=$('announcementPopup');popup.style.opacity='0';popup.style.transform='translate(-50%,-50%) scale(0.85)';setTimeout(function(){popup.style.visibility='hidden'},400)}
+function dismissAnnouncementWeek(){closeAnnouncement();showToast('本周将不再弹出此公告')}
+
 var _homeFirstLoad=true;
 function showHomeSkeleton(){
   var c=$('page-home').querySelector('div');
@@ -2369,6 +2449,7 @@ function init(){
       renderWaterfall('homeWaterfall',WORKS.slice(0,8));
       addLoadMoreBtn('homeLoadMore');
       setTimeout(function(){initHomeTabIndicator();observeImages()},100);
+      setTimeout(function(){showAnnouncement()},1200);
     },800);
   }else{
     initBanner();
